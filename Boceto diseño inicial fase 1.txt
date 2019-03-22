@@ -1,0 +1,25 @@
+Boceto general de diseño y desarrollo:
+
+Inicialización:
+   1) Obtención de parametros: carga ubicación del archivo de configuración (tener en cuenta que puede ser nulo y en posteriores entregas pueden pedir mas parámetros).
+   2) Generación de Debug: sin levantar la configuración ya deberiamos tener algunos registros de error al no poder levantar el archivo de configuración por ejemplo. Podríamos buscar alguna librería. Podemos armar un esquema de códigos para trabajar más facil y poder crear nuevos directamente. Podríamos informar registros con los siguientes datos:
+          -Tipo: Error, Info o Debug
+          -Código: Número único de identificación.
+          -Fecha
+          -Detalle: Detalle del error con el bloque al que corresponde.
+          -Modulo: (solo se muestra en tipo Debug) muestra el nombre el proceso que esté ejecutando.
+   3) Parser de archivo de configuración cargado.
+   4) Parser de archivo de configuración por defecto.
+   5) Validación de la información de configuración. Si hay error se reemplaza directamente por el valor parseado del archivo por defecto.
+   6) Inicialización de pantalla con fondo.
+   7) Inicialización de personajes. Tener en cuenta la posibilidad de seleccionar 2 veces el mismo personaje, hay que controlar los colores.
+   8) Definición de controles. Inicialmente ambos teclado, luego agregar joystick.
+   
+Juego:
+   9) Generación de los movimientos posibles para cada personaje.
+   10) Cambio de personajes. Tener en cuenta que para la proxima entrega no solo cambiara la imagen sino todos los atributos futuros.
+   11) Animación de los movimientos generales.
+   12) Animación del intercambio. Se podría realizar como si fuera un salto hacia atras del personaje actual y un salto hacia adelante con el otro personaje.
+   13) Movimientos entre imagenes de fondo (formato parallax). Entiendo que existen funciones para determinar el tamaño de las imagenes, luego con algun calculo proporcional para manejar las distintas velocidades y no tener problemas si nos carga cualquier valor.
+Se debe incluir el movimiento de scrol con los margenes.
+   
