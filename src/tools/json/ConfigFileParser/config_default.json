@@ -1,0 +1,43 @@
+{
+	"debug":"ERROR",
+	"battlefield": [
+		{
+			"background": {
+				"filepath":"file3.png",
+				"zindex":3
+			}
+		},
+		{
+			"background": {
+				"filepath":"file2.png",
+				"zindex":2
+			}
+		},
+		{
+			"background": {
+				"filepath":"file1.png",
+				"zindex":1
+			}
+		}
+	],
+	"characters": [
+		{
+			"name":"ryu",
+			"filepath":"ryu.png",
+			"height":45,
+			"width":20,
+			"zindex":99
+		},
+		{
+			"name":"spiderman",
+			"filepath":"spiderman.png",
+			"height":45,
+			"width":20,
+			"zindex":99
+		}
+	],
+	"window": {
+		"height":800,
+		"width":600
+	}
+}
