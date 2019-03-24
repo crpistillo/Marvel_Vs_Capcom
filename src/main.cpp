@@ -19,6 +19,7 @@ json parseConfigFile() {
 
 int main() {
 	json config = parseConfigFile();
+	cout << config.dump(4) << endl;
 
 	return 0;
 }

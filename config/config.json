@@ -22,8 +22,8 @@
 	],
 	"characters": [
 		{
-			"name": "ryu",
-			"filepath": "ryu.png",
+			"name": "batman",
+			"filepath": "batman.png",
 			"height": 45,
 			"width": 20,
 			"zindex": 99
@@ -37,7 +37,7 @@
 		}
 	],
 	"window": {
-		"height": 800,
-		"width": 600
+		"height": 1200,
+		"width": 800
 	}
 }

@@ -11,7 +11,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <array>
 #include "../json.hpp"
 
 using json = nlohmann::json;
@@ -24,6 +23,10 @@ private:
 	bool fileExists(string path);
 	void validateLogLevel(json defaultConfig);
 	void validateBattlefield(json defaultConfig);
+	void validateCharacters(json defaultConfig);
+	void validateWindow(json defaultConfig);
+	void logError(string key, string errorMsg);
+	void replaceByDefault(string key, json defaultConfig, string subKey);
 
 public:
 	ConfigFileParser();
