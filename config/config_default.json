@@ -1,21 +1,21 @@
 {
-	"debug":"ERROR",
+	"log":"ERROR",
 	"battlefield": [
 		{
 			"background": {
-				"filepath":"file3.png",
+				"filepath":"camino.png",
 				"zindex":3
 			}
 		},
 		{
 			"background": {
-				"filepath":"file2.png",
+				"filepath":"montanas.png",
 				"zindex":2
 			}
 		},
 		{
 			"background": {
-				"filepath":"file1.png",
+				"filepath":"fondo.png",
 				"zindex":1
 			}
 		}
