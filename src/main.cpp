@@ -12,7 +12,7 @@
 using namespace std;
 
 json parseConfigFile() {
-	ConfigFileParser parser = ConfigFileParser();
+	ConfigFileParser parser = ConfigFileParser("config/config.json");
 	parser.parse();
 	return parser.getConfig();
 }
