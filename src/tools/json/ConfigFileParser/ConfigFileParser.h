@@ -12,6 +12,7 @@
 #include <fstream>
 #include <string>
 #include "../json.hpp"
+#include "../../logger/Logger.h"
 
 using json = nlohmann::json;
 using namespace std;
@@ -20,6 +21,7 @@ class ConfigFileParser {
 private:
 	string filePath;
 	json config;
+	Logger* logger;
 	bool fileExists(string path);
 	void validateLogLevel(json defaultConfig);
 	void validateBattlefield(json defaultConfig);
@@ -29,8 +31,8 @@ private:
 	void replaceByDefault(string key, json defaultConfig, string subKey);
 
 public:
-	ConfigFileParser();
-	ConfigFileParser(string path);
+	ConfigFileParser(Logger* logger);
+	ConfigFileParser(string path, Logger* logger);
 	void parse();
 	json getConfig();
 };

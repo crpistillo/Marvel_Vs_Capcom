@@ -8,18 +8,25 @@
 
 #include <iostream>
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
+#include "tools/logger/Logger.h"
 
 using namespace std;
 
-json parseConfigFile() {
-	ConfigFileParser parser = ConfigFileParser("config/config.json");
-	parser.parse();
-	return parser.getConfig();
+json parseConfigFile(Logger* logger) {
+	ConfigFileParser* parser = new ConfigFileParser("config/config.json", logger);
+	parser->parse();
+	json config = parser->getConfig();
+	delete parser;
+	return config;
 }
 
 int main() {
-	json config = parseConfigFile();
+	Logger* logger = new Logger("marvel-vs-capcom.log");
+	logger->startSession();
+	json config = parseConfigFile(logger);
 	cout << config.dump(4) << endl;
 
+	logger->finishSession();
+	delete logger;
 	return 0;
 }

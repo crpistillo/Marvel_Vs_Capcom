@@ -25,4 +25,5 @@ C_DEPS :=
 SUBDIRS := \
 src \
 src/tools/json/ConfigFileParser \
+src/tools/logger \
 

@@ -35,3 +35,6 @@
 *.app
 .idea/
 src/CMakeLists.txt
+
+# Logs
+*.log
