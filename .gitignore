@@ -34,7 +34,8 @@
 *.out
 *.app
 .idea/
-src/CMakeLists.txt
 
 # Logs
 *.log
+/CMakeLists.txt
+/cmake-build-debug/
