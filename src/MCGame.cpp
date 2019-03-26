@@ -6,8 +6,15 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <iostream>
+#include "LTexture.h"
 
 using namespace std;
+
+
+
+//Scene textures
+
+LTexture g_BackgroundTexture;
 
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -24,16 +31,14 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 printf("Fallo al crear Renderer");
                 return false;
             } else {
-                SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+                SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
                 int imgFlags = IMG_INIT_PNG;
                 if (!(IMG_Init(imgFlags) & imgFlags)) {
-                   // printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                    // printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
                     return false;
                 }
-
-                SDL_Surface *gTempSurface = IMG_Load("images/SpiderMan397.png");
-                m_Texture = SDL_CreateTextureFromSurface(m_Renderer, gTempSurface);
-                SDL_FreeSurface(gTempSurface);
+                m_Texture.loadFromFile("images/SpiderMan397.png", m_Renderer);
+                g_BackgroundTexture.loadFromFile("images/background.png", m_Renderer);
             }
         }
     }
@@ -45,12 +50,15 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 
 void MCGame::render() {
     SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
-    SDL_RenderCopy(m_Renderer, m_Texture, NULL, NULL);
-    SDL_RenderPresent(m_Renderer); // draw to the screen
+    g_BackgroundTexture.render(0, 0, m_Renderer);
 
+    m_Texture.render(240, 0, m_Renderer);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
 void MCGame::clean() {
+    m_Texture.free();
+    g_BackgroundTexture.free();
     std::cout << "cleaning game\n";
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
