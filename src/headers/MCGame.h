@@ -8,7 +8,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
-#include "../LTexture.h"
+#include "Texture.h"
 
 using namespace std;
 
@@ -18,7 +18,7 @@ private:
     bool m_Running;
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
-    LTexture m_Texture; // the new SDL_Texture variable
+    Texture m_Texture; // the new SDL_Texture variable
     SDL_Rect* m_sourceRectangle; // the first rectangle
     SDL_Rect* m_destinationRectangle; // another rectangle
 

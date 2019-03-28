@@ -2,8 +2,8 @@
 // Created by amaherok on 3/26/19.
 //
 
-#ifndef MARVEL_VS_CAPCOM_LTEXTURE_H
-#define MARVEL_VS_CAPCOM_LTEXTURE_H
+#ifndef MARVEL_VS_CAPCOM_TEXTURE_H
+#define MARVEL_VS_CAPCOM_TEXTURE_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -11,13 +11,13 @@
 #include <string>
 
 
-class LTexture {
+class Texture {
 public:
     //Initializes variables
-    LTexture();
+    Texture();
 
     //Deallocates memory
-    ~LTexture();
+    ~Texture();
 
     //Loads image at specified path
     bool loadFromFile(std::string path, SDL_Renderer *mRenderer);
@@ -43,4 +43,4 @@ private:
 };
 
 
-#endif //MARVEL_VS_CAPCOM_LTEXTURE_H
+#endif //MARVEL_VS_CAPCOM_TEXTURE_H

@@ -2,22 +2,22 @@
 // Created by amaherok on 3/26/19.
 //
 
-#include "LTexture.h"
+#include "headers/Texture.h"
 
 
-LTexture::LTexture() {
+Texture::Texture() {
     //Initialize
     mTexture = NULL;
     mWidth = 0;
     mHeight = 0;
 }
 
-LTexture::~LTexture() {
+Texture::~Texture() {
     //Deallocate
     free();
 }
 
-bool LTexture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
+bool Texture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
     //Get rid of preexisting texture
     free();
 
@@ -51,7 +51,7 @@ bool LTexture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
     return mTexture != NULL;
 }
 
-void LTexture::free() {
+void Texture::free() {
     //Free texture if it exists
     if (mTexture != NULL) {
         SDL_DestroyTexture(mTexture);
@@ -61,16 +61,16 @@ void LTexture::free() {
     }
 }
 
-void LTexture::render(int x, int y, SDL_Renderer *mRenderer) {
+void Texture::render(int x, int y, SDL_Renderer *mRenderer) {
     //Set rendering space and render to screen
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
     SDL_RenderCopy(mRenderer, mTexture, NULL, &renderQuad);
 }
 
-int LTexture::getWidth() {
+int Texture::getWidth() {
     return mWidth;
 }
 
-int LTexture::getHeight() {
+int Texture::getHeight() {
     return mHeight;
 }
