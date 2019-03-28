@@ -3,7 +3,7 @@
 //
 
 #include "headers/MCGame.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <iostream>
 #include "LTexture.h"
@@ -15,6 +15,7 @@ using namespace std;
 //Scene textures
 
 LTexture g_BackgroundTexture;
+LTexture g_Wolverine;
 
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -38,6 +39,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
                 m_Texture.loadFromFile("images/SpiderMan397.png", m_Renderer);
+                g_Wolverine.loadFromFile("images/Wolverine_373.png", m_Renderer);
                 g_BackgroundTexture.loadFromFile("images/background.png", m_Renderer);
             }
         }
@@ -51,7 +53,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 void MCGame::render() {
     SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer);
-
+    g_Wolverine.render(-100,-40,m_Renderer);
     m_Texture.render(240, 0, m_Renderer);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }

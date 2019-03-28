@@ -5,8 +5,8 @@
 #ifndef MARVEL_VS_CAPCOM_LTEXTURE_H
 #define MARVEL_VS_CAPCOM_LTEXTURE_H
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
 
