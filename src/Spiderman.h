@@ -6,7 +6,7 @@
 #define MARVEL_VS_CAPCOM_SPIDERMAN_H
 
 
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 #include "headers/Texture.h"
 
 class Spiderman {
@@ -16,7 +16,7 @@ public:
     static const int DOT_HEIGHT = 20;
 
     //Maximum axis velocity of the dot
-    static const int DOT_VEL = 50;
+    static const int DOT_VEL = 10;
 
     //Initializes the variables
     Spiderman();
@@ -24,7 +24,7 @@ public:
 
     void spidermanLoad(SDL_Renderer* renderer);
     //Takes key presses and adjusts the dot's velocity
-    void handleEvent(SDL_Event &e);
+    void handleEvent(SDL_Event &e, SDL_Renderer* renderer);
 
     //Moves the dot
     void move();

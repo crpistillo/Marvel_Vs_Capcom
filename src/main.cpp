@@ -33,7 +33,7 @@ int main() {
 	delete logger;
 */
     mcGame = new MCGame();
-    mcGame->init("Marvel vs Capcom", 100, 100, 640, 480, 0);
+    mcGame->init("Marvel vs Capcom", 100, 100, 800, 600, 0);
     while(mcGame->running()) {
         mcGame->handleEvents();
         mcGame->update();

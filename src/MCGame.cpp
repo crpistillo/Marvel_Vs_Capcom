@@ -41,7 +41,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 }
                 spiderman.spidermanLoad(m_Renderer);
                 g_Wolverine.loadFromFile("images/Wolverine_373.png", m_Renderer);
-                g_BackgroundTexture.loadFromFile("images/background.png", m_Renderer);
+                g_BackgroundTexture.loadFromFile("images/camino.png", m_Renderer);
             }
         }
     }
@@ -79,7 +79,7 @@ void MCGame::handleEvents() {
             default:
                 break;
         }
-        spiderman.handleEvent(event);
+        spiderman.handleEvent(event,m_Renderer);
         spiderman.move();
     }
 }
