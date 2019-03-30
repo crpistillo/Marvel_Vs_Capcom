@@ -35,11 +35,17 @@ public:
 private:
     //The X and Y offsets of the dot
     int mPosX, mPosY;
-
     //The velocity of the dot
     int mVelX, mVelY;
 
     Texture m_Texture;
+
+    bool isLookingLeft;
+
+    void renderStandSprite(SDL_Renderer *renderer);
+    void moveRight(SDL_Renderer *renderer);
+    void moveLeft(SDL_Renderer *renderer);
+    void jump(SDL_Renderer *renderer);
 };
 
 
