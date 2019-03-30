@@ -73,6 +73,5 @@ void MCGame::handleEvents() {
                 break;
         }
         spiderman.handleEvent(event, m_Renderer);
-//        spiderman.move();
     }
 }

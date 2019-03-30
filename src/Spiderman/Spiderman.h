@@ -40,6 +40,9 @@ private:
 
     Texture m_Texture;
 
+    int currentWalkingLeftSprite;
+    int currentWalkingRightSprite;
+    int currentJumpingSprite;
     bool isLookingLeft;
 
     void renderStandSprite(SDL_Renderer *renderer);

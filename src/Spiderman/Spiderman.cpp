@@ -14,23 +14,22 @@ const int INITIAL_POST_Y = 470;
 
 const int FIRST_WALKING_SPRITE = 170;
 const int LAST_WALKING_SPRITE = 180;
-int currentWalkingLeftSprite = 170;
-int currentWalkingRightSprite = 170;
 
 const int FIRST_JUMPING_SPRITE = 189;
 const int LAST_JUMPING_SPRITE = 196;
-int currentJumpingSprite = 189;
 
 Spiderman::Spiderman() {
     mPosX = INITIAL_POS_X;
     mPosY = INITIAL_POST_Y;
     mVelX = 0;
     mVelY = 0;
+    currentWalkingLeftSprite = 170;
+    currentWalkingRightSprite = 170;
+    currentJumpingSprite = 189;
     isLookingLeft = false;
 }
 
 void Spiderman::handleEvent(SDL_Event &e, SDL_Renderer *renderer) {
-	const Uint8* SDL_GetKeyboardState(int* numkeys);
     //If a key was pressed
     if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
@@ -52,7 +51,6 @@ void Spiderman::handleEvent(SDL_Event &e, SDL_Renderer *renderer) {
     else if (e.type == SDL_KEYUP) {
         switch (e.key.keysym.sym) {
             case SDLK_UP:
-            	//TODO
             	mPosY = INITIAL_POST_Y;
             	currentJumpingSprite = FIRST_JUMPING_SPRITE;
             	this->renderStandSprite(renderer);
@@ -139,28 +137,6 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 	}
 
 	++currentJumpingSprite;
-}
-
-void Spiderman::move() {
-    //Move the dot left or right
-    mPosX += mVelX;
-
-    //If the dot went too far to the left or right
-    if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
-    {
-        //Move back
-        mPosX -= mVelX;
-    }
-
-    //Move the dot up or down
-    mPosY += mVelY;
-
-    //If the dot went too far up or down
-    if( ( mPosY < 0 ) || ( mPosY + DOT_HEIGHT > LEVEL_HEIGHT ) )
-    {
-        //Move back
-        mPosY -= mVelY;
-    }
 }
 
 void Spiderman::render(SDL_Renderer *mRenderer) {
