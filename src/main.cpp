@@ -9,7 +9,7 @@
 #include <iostream>
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "tools/logger/Logger.h"
-#include "headers/MCGame.h"
+#include "MCGame/MCGame.h"
 
 using namespace std;
 

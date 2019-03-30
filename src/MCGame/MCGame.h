@@ -7,8 +7,10 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <stdio.h>
 #include <iostream>
-#include "Texture.h"
+#include "../Texture/Texture.h"
+#include "../Spiderman/Spiderman.h"
 
 using namespace std;
 

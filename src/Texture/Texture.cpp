@@ -2,7 +2,7 @@
 // Created by amaherok on 3/26/19.
 //
 
-#include "headers/Texture.h"
+#include "Texture.h"
 
 
 Texture::Texture() {

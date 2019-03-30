@@ -10,6 +10,9 @@ RM := rm -rf
 -include sources.mk
 -include src/tools/logger/subdir.mk
 -include src/tools/json/ConfigFileParser/subdir.mk
+-include src/Texture/subdir.mk
+-include src/Spiderman/subdir.mk
+-include src/MCGame/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

@@ -7,7 +7,7 @@
 
 
 #include <SDL2/SDL_events.h>
-#include "headers/Texture.h"
+#include "../Texture/Texture.h"
 
 class Spiderman {
 public:
