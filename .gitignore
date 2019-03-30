@@ -39,3 +39,12 @@
 *.log
 /CMakeLists.txt
 /cmake-build-debug/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+/Debug/makefile
+/Debug/marvel-vs-capcom/
+/Debug/sources.mk
