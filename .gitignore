@@ -39,3 +39,8 @@
 *.log
 /CMakeLists.txt
 /cmake-build-debug/
+
+# Eclipse
+.classpath
+.project
+.settings/
