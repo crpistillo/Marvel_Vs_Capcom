@@ -19,6 +19,8 @@ Spiderman spiderman;
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
+int distancia;
+int distancia2;
 
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -103,11 +105,15 @@ void MCGame::handleEvents() {
             default:
                 break;
         }
-        wolverine.handleEvent(event, m_Renderer);
-       spiderman.handleEvent(event, m_Renderer);
+        distancia = spiderman.getPosX()-wolverine.getPosX();
+        distancia2 = wolverine.getPosX()-spiderman.getPosX();
+        wolverine.handleEvent(event, m_Renderer, distancia2);
+        spiderman.handleEvent(event, m_Renderer, distancia);
+        wolverine.handleEvent(event, m_Renderer, distancia2);
+        spiderman.handleEvent(event, m_Renderer, distancia);
     }
     //Center the camera over the dot
-    camera.x = ( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
+    camera.x = (((( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) + ( wolverine.getPosX() + Wolverine::DOT_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2)+350;
     camera.y = ( spiderman.getPosY() + Spiderman::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 
     //Keep the camera in bounds

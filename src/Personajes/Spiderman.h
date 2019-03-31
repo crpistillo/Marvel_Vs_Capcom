@@ -24,7 +24,7 @@ public:
 
     void spidermanLoad(SDL_Renderer* renderer);
     //Takes key presses and adjusts the dot's velocity
-    void handleEvent(SDL_Event &e, SDL_Renderer* renderer);
+    void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distancia);
 
     //Moves the dot
     void move();
@@ -49,8 +49,8 @@ private:
     bool isLookingLeft;
 
     void renderStandSprite(SDL_Renderer *renderer);
-    void moveRight(SDL_Renderer *renderer);
-    void moveLeft(SDL_Renderer *renderer);
+    void moveRight(SDL_Renderer *renderer, int distancia);
+    void moveLeft(SDL_Renderer *renderer, int distancia);
     void jump(SDL_Renderer *renderer);
 };
 

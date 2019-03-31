@@ -29,7 +29,7 @@ Spiderman::Spiderman() {
     isLookingLeft = false;
 }
 
-void Spiderman::handleEvent(SDL_Event &e, SDL_Renderer *renderer) {
+void Spiderman::handleEvent(SDL_Event &e, SDL_Renderer *renderer, int distancia) {
     //If a key was pressed
     if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
@@ -40,10 +40,10 @@ void Spiderman::handleEvent(SDL_Event &e, SDL_Renderer *renderer) {
             	m_Texture.loadFromFile("images/MVC2_SpiderMan_432.png", renderer);
                 break;
             case SDLK_LEFT:
-            	this->moveLeft(renderer);
+            	this->moveLeft(renderer,distancia);
                 break;
             case SDLK_RIGHT:
-            	this->moveRight(renderer);
+            	this->moveRight(renderer,distancia);
                 break;
         }
     }
@@ -80,10 +80,12 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 	}
 }
 
-void Spiderman::moveLeft(SDL_Renderer *renderer) {
+void Spiderman::moveLeft(SDL_Renderer *renderer, int distancia) {
 	isLookingLeft = true;
 
-	if(mPosX - DOT_VEL <= 0) {
+	//Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
+	//La distancia es la distancia entre personajes.
+	if((mPosX - DOT_VEL <= -320) || (distancia<(-600))){
 		return;
 	}
 
@@ -110,10 +112,10 @@ void Spiderman::moveLeft(SDL_Renderer *renderer) {
 	    }
 }
 
-void Spiderman::moveRight(SDL_Renderer *renderer) {
+void Spiderman::moveRight(SDL_Renderer *renderer, int distancia) {
 	isLookingLeft = false;
 
-	if(mPosX + DOT_VEL >= LEVEL_WIDTH) {
+	if((mPosX + DOT_VEL >= (LEVEL_WIDTH-420)) || (distancia>600)) {
 		return;
 	}
 
@@ -133,7 +135,7 @@ void Spiderman::moveRight(SDL_Renderer *renderer) {
 	mPosX += DOT_VEL;
 
 	//If the dot went too far to the left or right
-		if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
+		if( ( mPosX < -320 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
 		    {
 		        //Move back
 				mPosX -= DOT_VEL;
