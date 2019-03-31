@@ -7,6 +7,10 @@
 
 using namespace std;
 
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
+
 //Scene textures
 
 Texture g_BackgroundTexture;
@@ -20,35 +24,55 @@ SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        printf("SDL no se pudo inicializar");
+
+    	this->logger->log("SDL no se pudo inicializar.", ERROR);
         return false;
+
     } else {
+    	this->logger->log("SDL Inicializó correctamente.", INFO);
+
         m_Window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
         if (m_Window == 0) {
-            printf("Fallo al crear ventana");
+
+        	this->logger->log("Fallo al crear ventana.", ERROR);
             return false;
+
         } else {
+        	this->logger->log("Ventana creada exitosamente.", INFO);
+
             m_Renderer = SDL_CreateRenderer(m_Window, -1, 0);
             if (m_Renderer == 0) {
-                printf("Fallo al crear Renderer");
+            	this->logger->log("Fallo al crear Renderer", ERROR);
+
                 return false;
             } else {
+            	this->logger->log("Renderer creado exitosamente.", INFO);
+
                 int imgFlags = IMG_INIT_PNG;
                 if (!(IMG_Init(imgFlags) & imgFlags)) {
-                    // printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                	this->logger->log("SDL_image no pudo inicializarse.", ERROR);
                     return false;
                 }
+
                 spiderman.spidermanLoad(m_Renderer);
                 wolverine.wolverineLoad(m_Renderer);
                 g_BackgroundTexture.loadFromFile("images/camino.png", m_Renderer);
             }
         }
     }
-    std::cout << "init success\n";
+
     m_Running = true; // everything inited successfully,
     return true;
 }
 
+MCGame::MCGame(Logger* log){
+	this->logger = log;
+	this->m_Window = NULL;
+	this->m_Renderer = NULL;
+	this->m_destinationRectangle = NULL;
+	this->m_sourceRectangle = NULL;
+	this->m_Running = false;
+}
 
 void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );

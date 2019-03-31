@@ -24,7 +24,7 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src/MCGame \
-src/Spiderman \
+src/Personajes \
 src/Texture \
 src \
 src/tools/json/ConfigFileParser \

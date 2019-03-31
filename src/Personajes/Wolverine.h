@@ -6,8 +6,8 @@
 #define MARVEL_VS_CAPCOM_WOLVERINE_H
 
 
-#include <SDL_events.h>
-#include <SDL_render.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_render.h>
 #include "../Texture/Texture.h"
 
 class Wolverine {
