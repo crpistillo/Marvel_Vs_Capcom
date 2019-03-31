@@ -9,8 +9,8 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = 400;
-const int INITIAL_POST_Y = 470;
+const int INITIAL_POS_X = 200;
+const int INITIAL_POST_Y = 200;
 
 const int FIRST_WALKING_SPRITE = 170;
 const int LAST_WALKING_SPRITE = 180;
