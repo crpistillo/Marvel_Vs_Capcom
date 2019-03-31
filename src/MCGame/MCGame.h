@@ -5,12 +5,11 @@
 #ifndef MARVEL_VS_CAPCOM_MCGAME_H
 #define MARVEL_VS_CAPCOM_MCGAME_H
 
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <iostream>
 #include "../Texture/Texture.h"
-#include "../Spiderman/Spiderman.h"
+#include "../Personajes/Spiderman.h"
 
 using namespace std;
 
@@ -20,6 +19,7 @@ private:
     bool m_Running;
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
+    SDL_Joystick* gGameController = NULL;
     Texture m_Texture; // the new SDL_Texture variable
     SDL_Rect* m_sourceRectangle; // the first rectangle
     SDL_Rect* m_destinationRectangle; // another rectangle

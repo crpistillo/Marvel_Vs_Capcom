@@ -2,6 +2,7 @@
 // Created by amaherok on 3/26/19.
 //
 
+#include "../Personajes/Wolverine.h"
 #include "MCGame.h"
 
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 //Scene textures
 
 Texture g_BackgroundTexture;
-Texture g_Wolverine;
+Wolverine wolverine;
 Spiderman spiderman;
 
 const int SCREEN_WIDTH = 800;
@@ -38,7 +39,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
                 spiderman.spidermanLoad(m_Renderer);
-                g_Wolverine.loadFromFile("images/Wolverine_373.png", m_Renderer);
+                wolverine.wolverineLoad(m_Renderer);
                 g_BackgroundTexture.loadFromFile("images/camino.png", m_Renderer);
             }
         }
@@ -53,7 +54,7 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
-    g_Wolverine.render(-100, -40, m_Renderer);
+    wolverine.render(m_Renderer,camera.x , camera.y);
     spiderman.render(m_Renderer, camera.x, camera.y);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
@@ -78,7 +79,8 @@ void MCGame::handleEvents() {
             default:
                 break;
         }
-        spiderman.handleEvent(event, m_Renderer);
+        wolverine.handleEvent(event, m_Renderer);
+       spiderman.handleEvent(event, m_Renderer);
     }
     //Center the camera over the dot
     camera.x = ( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;

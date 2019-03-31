@@ -9,8 +9,8 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = 200;
-const int INITIAL_POST_Y = 200;
+const int INITIAL_POS_X = 350;
+const int INITIAL_POST_Y = 270;
 
 const int FIRST_WALKING_SPRITE = 170;
 const int LAST_WALKING_SPRITE = 180;
@@ -103,7 +103,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer) {
 	mPosX -= DOT_VEL;
 
 	//If the dot went too far to the left or right
-	if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
+	if( ( mPosX < -3000 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
 	    {
 	        //Move back
 			mPosX += DOT_VEL;
