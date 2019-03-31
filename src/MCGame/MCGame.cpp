@@ -12,6 +12,11 @@ Texture g_BackgroundTexture;
 Texture g_Wolverine;
 Spiderman spiderman;
 
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         printf("SDL no se pudo inicializar");
@@ -45,10 +50,11 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 
 
 void MCGame::render() {
-    SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
-    g_BackgroundTexture.render(0, 0, m_Renderer);
+	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
+    g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
     g_Wolverine.render(-100, -40, m_Renderer);
-    spiderman.render(m_Renderer);
+    spiderman.render(m_Renderer, camera.x, camera.y);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
@@ -74,4 +80,26 @@ void MCGame::handleEvents() {
         }
         spiderman.handleEvent(event, m_Renderer);
     }
+    //Center the camera over the dot
+    camera.x = ( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) - SCREEN_WIDTH / 2;
+    camera.y = ( spiderman.getPosY() + Spiderman::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+
+    //Keep the camera in bounds
+    if ( (camera.x) < 0 )
+    {
+    	camera.x = 0;
+    }
+    if ( (camera.y) < 0 )
+    {
+        camera.y = 0;
+    }
+    if ( (camera.x) > 3200 - (camera.w) )
+    {
+        camera.x = 3200 - camera.w;
+    }
+    if ( (camera.y) > 600 - (camera.h) )
+    {
+        camera.y = 600 - camera.h;
+    }
+
 }

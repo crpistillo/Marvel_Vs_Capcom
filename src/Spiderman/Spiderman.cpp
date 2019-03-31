@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const int LEVEL_WIDTH = 695;
+const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
 const int INITIAL_POS_X = 400;
@@ -95,9 +95,19 @@ void Spiderman::moveLeft(SDL_Renderer *renderer) {
 	--currentWalkingLeftSprite;
 
 	//If the dot is inside the screen move
-	if(mPosX - DOT_VEL > 0) {
+	/*if(mPosX - DOT_VEL > 0) {
 		mPosX -= DOT_VEL;
-	}
+	}*/
+
+	//Move the dot left or right
+	mPosX -= DOT_VEL;
+
+	//If the dot went too far to the left or right
+	if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
+	    {
+	        //Move back
+			mPosX += DOT_VEL;
+	    }
 }
 
 void Spiderman::moveRight(SDL_Renderer *renderer) {
@@ -115,9 +125,20 @@ void Spiderman::moveRight(SDL_Renderer *renderer) {
 	++currentWalkingRightSprite;
 
 	//If the dot is inside the screen move
-	if( mPosX + DOT_VEL < LEVEL_WIDTH ) {
+	/*if( mPosX + DOT_VEL < LEVEL_WIDTH ) {
 		mPosX += DOT_VEL;
-	}
+	}*/
+
+	//Move the dot left or right
+	mPosX += DOT_VEL;
+
+	//If the dot went too far to the left or right
+		if( ( mPosX < 0 ) || ( mPosX + DOT_WIDTH > LEVEL_WIDTH ) )
+		    {
+		        //Move back
+				mPosX -= DOT_VEL;
+		    }
+
 }
 
 void Spiderman::jump(SDL_Renderer *renderer) {
@@ -139,8 +160,8 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 	++currentJumpingSprite;
 }
 
-void Spiderman::render(SDL_Renderer *mRenderer) {
-    m_Texture.render(mPosX, mPosY, mRenderer);
+void Spiderman::render(SDL_Renderer *mRenderer, int camX, int camY) {
+    m_Texture.render(mPosX - camX, mPosY - camY, mRenderer);
 }
 
 void Spiderman::spidermanLoad(SDL_Renderer *renderer) {
@@ -152,3 +173,12 @@ void Spiderman::free() {
 }
 
 
+int Spiderman::getPosX()
+{
+	return mPosX;
+}
+
+int Spiderman::getPosY()
+{
+	return mPosY;
+}

@@ -30,7 +30,10 @@ public:
     void move();
 
     //Shows the dot on the screen
-    void render(SDL_Renderer* mRenderer);
+    void render(SDL_Renderer* mRenderer, int camX, int camY);
+
+    int getPosX();
+    int getPosY();
 
 private:
     //The X and Y offsets of the dot
