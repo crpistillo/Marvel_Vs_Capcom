@@ -109,8 +109,6 @@ void MCGame::handleEvents() {
         distancia2 = wolverine.getPosX()-spiderman.getPosX();
         wolverine.handleEvent(event, m_Renderer, distancia2);
         spiderman.handleEvent(event, m_Renderer, distancia);
-        wolverine.handleEvent(event, m_Renderer, distancia2);
-        spiderman.handleEvent(event, m_Renderer, distancia);
     }
     //Center the camera over the dot
     camera.x = (((( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) + ( wolverine.getPosX() + Wolverine::DOT_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2)+350;
