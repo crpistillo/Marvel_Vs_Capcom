@@ -44,13 +44,12 @@ private:
     int mVelX, mVelY;
 
     Texture m_Texture;
-
     int currentWalkingLeftSprite;
     int currentStandingSprite;
     int currentWalkingRightSprite;
     int currentJumpingSprite;
     bool isLookingLeft;
-    bool isStanding+    ;
+    bool isStanding;
 
     void renderStandSprite(SDL_Renderer *renderer);
     void moveRight(SDL_Renderer *renderer, int distancia);

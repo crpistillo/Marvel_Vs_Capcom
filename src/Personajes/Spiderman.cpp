@@ -177,7 +177,7 @@ void Spiderman::render(SDL_Renderer *mRenderer, int camX, int camY) {
 }
 
 void Spiderman::spidermanLoad(SDL_Renderer *renderer) {
-    m_Texture.loadFromFile("images/spiderman_stand_right1.png", renderer);
+    m_Texture.loadFromFile("images/spiderman_stand_right/MVC2_SpiderMan_159.png", renderer);
 }
 
 void Spiderman::free() {
