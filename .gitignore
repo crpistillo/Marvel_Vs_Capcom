@@ -45,6 +45,4 @@
 .project
 .settings/
 
-/makefile
-/Debug/marvel-vs-capcom/
-/Debug/sources.mk
+*/Debug/*
