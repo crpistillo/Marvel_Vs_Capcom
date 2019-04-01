@@ -45,4 +45,4 @@
 .project
 .settings/
 
-*/Debug/*
+/Debug/makefile
