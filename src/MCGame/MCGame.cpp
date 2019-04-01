@@ -42,7 +42,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
         } else {
         	this->logger->log("Ventana creada exitosamente.", INFO);
 
-            m_Renderer = SDL_CreateRenderer(m_Window, -1, 0);
+            m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
             if (m_Renderer == 0) {
             	this->logger->log("Fallo al crear Renderer", ERROR);
 
@@ -132,4 +132,8 @@ void MCGame::handleEvents() {
         camera.y = 600 - camera.h;
     }
 
+}
+
+void MCGame::update() {
+    spiderman.cambioDeSprites();
 }

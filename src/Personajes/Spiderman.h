@@ -35,6 +35,8 @@ public:
     int getPosX();
     int getPosY();
 
+    void cambioDeSprites();
+
 private:
     //The X and Y offsets of the dot
     int mPosX, mPosY;
@@ -44,9 +46,11 @@ private:
     Texture m_Texture;
 
     int currentWalkingLeftSprite;
+    int currentStandingSprite;
     int currentWalkingRightSprite;
     int currentJumpingSprite;
     bool isLookingLeft;
+    bool isStanding+    ;
 
     void renderStandSprite(SDL_Renderer *renderer);
     void moveRight(SDL_Renderer *renderer, int distancia);
