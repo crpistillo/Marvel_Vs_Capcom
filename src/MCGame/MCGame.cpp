@@ -2,7 +2,6 @@
 // Created by amaherok on 3/26/19.
 //
 
-#include "../Personajes/Wolverine.h"
 #include "MCGame.h"
 
 using namespace std;
@@ -10,12 +9,6 @@ using namespace std;
 const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
-
-//Scene textures
-
-Texture g_BackgroundTexture;
-Wolverine wolverine;
-Spiderman spiderman;
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -56,8 +49,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                spiderman.spidermanLoad(m_Renderer);
-                wolverine.wolverineLoad(m_Renderer);
+                spiderman->load(m_Renderer);
+                wolverine->load(m_Renderer);
                 g_BackgroundTexture.loadFromFile("images/camino.png", m_Renderer);
             }
         }
@@ -67,29 +60,31 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     return true;
 }
 
-MCGame::MCGame(Logger* log){
-	this->logger = log;
+MCGame::MCGame(Logger* logger){
+	this->logger = logger;
 	this->m_Window = NULL;
 	this->m_Renderer = NULL;
 	this->m_destinationRectangle = NULL;
 	this->m_sourceRectangle = NULL;
 	this->m_Running = false;
+	spiderman = new Spiderman("Spiderman");
+	wolverine = new Wolverine("Wolverine");
 }
 
 void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
-    wolverine.render(m_Renderer,camera.x , camera.y);
-    spiderman.render(m_Renderer, camera.x, camera.y);
+    wolverine->render(m_Renderer,camera.x , camera.y);
+    spiderman->render(m_Renderer, camera.x, camera.y);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
 void MCGame::clean() {
     //m_Texture.free();
-    spiderman.free();
+    delete spiderman;
+    delete wolverine;
     g_BackgroundTexture.free();
-    std::cout << "cleaning game\n";
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
     SDL_Quit();
@@ -105,14 +100,14 @@ void MCGame::handleEvents() {
             default:
                 break;
         }
-        distancia = spiderman.getPosX()-wolverine.getPosX();
-        distancia2 = wolverine.getPosX()-spiderman.getPosX();
-        wolverine.handleEvent(event, m_Renderer, distancia2);
-        spiderman.handleEvent(event, m_Renderer, distancia);
+        distancia = spiderman->getPosX() - wolverine->getPosX();
+        distancia2 = wolverine->getPosX() - spiderman->getPosX();
+        wolverine->handleEvent(event, m_Renderer, distancia2);
+        spiderman->handleEvent(event, m_Renderer, distancia);
     }
     //Center the camera over the dot
-    camera.x = (((( spiderman.getPosX() + Spiderman::DOT_WIDTH / 2 ) + ( wolverine.getPosX() + Wolverine::DOT_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2)+290;
-    camera.y = ( spiderman.getPosY() + Spiderman::DOT_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+    camera.x = (((( spiderman->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( wolverine->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + 290;
+    camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 
     //Keep the camera in bounds
     if ( (camera.x) < 0 )
@@ -135,5 +130,5 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
-    spiderman.cambioDeSprites();
+    spiderman->update();
 }

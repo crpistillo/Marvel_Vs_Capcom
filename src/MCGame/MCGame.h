@@ -8,8 +8,10 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <iostream>
+
+#include "../Characters/Spiderman.h"
+#include "../Characters/Wolverine.h"
 #include "../Texture/Texture.h"
-#include "../Personajes/Spiderman.h"
 #include "../tools/logger/Logger.h"
 
 using namespace std;
@@ -24,10 +26,14 @@ private:
     Texture m_Texture; // the new SDL_Texture variable
     SDL_Rect* m_sourceRectangle; // the first rectangle
     SDL_Rect* m_destinationRectangle; // another rectangle
-    Logger *logger;
+    Logger* logger;
+    // Scene textures
+    Texture g_BackgroundTexture;
+    Spiderman* spiderman;
+    Wolverine* wolverine;
 
 public:
-    MCGame(Logger* log);
+    MCGame(Logger* logger);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
@@ -40,8 +46,6 @@ public:
     bool running() {
         return m_Running;
     }
-
-
 };
 
 
