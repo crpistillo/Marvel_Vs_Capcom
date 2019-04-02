@@ -131,4 +131,5 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
     spiderman->update();
+    wolverine->update();
 }

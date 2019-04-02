@@ -12,8 +12,8 @@ const int LEVEL_HEIGHT = 600;
 const int INITIAL_POS_X = (1600-314)-43+200;
 const int INITIAL_POS_Y = 270;
 
-const int FIRST_STANDING_SPRITE = 159;
-const int LAST_STANDING_SPRITE = 167;
+const int FIRST_STANDING_SPRITE = 21;
+const int LAST_STANDING_SPRITE = 37;
 
 const int FIRST_WALKING_SPRITE = 39;
 const int LAST_WALKING_SPRITE = 54;
@@ -51,16 +51,19 @@ void Wolverine::resetSpriteVariables() {
 }
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
-	m_Texture.loadFromFile("images/MVC2_Wolverine_432.png", renderer);
+	m_Texture.loadFromFile("images/MVC2_Wolverine_38.png", renderer);
 }
 
 void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 	this->resetSpriteVariables();
-	if (isLookingLeft) {
-        m_Texture.loadFromFile("images/wolverine_stand_left.png", renderer);
-    } else {
-        m_Texture.loadFromFile("images/wolverine_stand_right.png", renderer);
-    }
+	 if (isLookingLeft) {
+		m_Texture.loadFromFile("images/wolverine_stand_left.png", renderer);
+	} else {
+		if (currentStandingSprite > LAST_STANDING_SPRITE)
+			currentStandingSprite = FIRST_STANDING_SPRITE;
+		string imagePath = "images/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
 }
 
 void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
