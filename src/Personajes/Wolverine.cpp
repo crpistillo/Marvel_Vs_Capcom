@@ -9,7 +9,7 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = 0;
+const int INITIAL_POS_X = (1600-314)-43+200;
 const int INITIAL_POST_Y = 270;
 
 const int FIRST_WALKING_SPRITE = 39;

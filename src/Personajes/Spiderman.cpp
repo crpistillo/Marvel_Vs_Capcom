@@ -9,7 +9,9 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = 350;
+/*1600 es el centro de la pantalla, 278 la corrección por el tamaño que sobra de la imagen,
+ * 55 es la mitad del ancho del personaje, y 200 es el corrimiento a la izquierda*/
+const int INITIAL_POS_X = (1600-278)-55-200;
 const int INITIAL_POST_Y = 270;
 
 const int LAST_STANDING_SPRITE = 167;
@@ -186,7 +188,8 @@ void Spiderman::free() {
 
 
 int Spiderman::getPosX() {
-    return mPosX;
+    //243 es una corrección debida a que el ancho de la imagen es mas grande que el personaje
+	return mPosX;
 }
 
 int Spiderman::getPosY() {

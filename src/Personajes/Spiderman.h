@@ -12,7 +12,7 @@
 class Spiderman {
 public:
     //The dimensions of the dot
-    static const int DOT_WIDTH = 20;
+    static const int DOT_WIDTH = 110;
     static const int DOT_HEIGHT = 20;
 
     //Maximum axis velocity of the dot
