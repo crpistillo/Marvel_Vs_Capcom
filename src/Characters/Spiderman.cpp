@@ -3,6 +3,7 @@
 //
 
 #include "./Spiderman.h"
+#include "../InputTable.h"
 
 using namespace std;
 
@@ -33,10 +34,10 @@ Spiderman::Spiderman(string name)
 	FIRST_JUMPING_SPRITE,
 	false,
 	name,
-	SDLK_UP,
-	SDLK_DOWN,
-	SDLK_RIGHT,
-	SDLK_LEFT
+	KEY_UP,
+	KEY_DOWN,
+	KEY_RIGHT,
+	KEY_LEFT
 )
 {
 }
@@ -53,6 +54,7 @@ void Spiderman::resetSpriteVariables() {
 }
 
 void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
+	isStanding = true;
 	this->resetSpriteVariables();
     if (isLookingLeft) {
         m_Texture.loadFromFile("images/spiderman_stand_left.png", renderer);
@@ -65,10 +67,12 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
+	isStanding = false;
 	m_Texture.loadFromFile("images/MVC2_SpiderMan_432.png", renderer);
 }
 
 void Spiderman::moveLeft(SDL_Renderer *renderer, int distance) {
+	isStanding = false;
     isLookingLeft = true;
 
     //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
@@ -100,6 +104,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance) {
 }
 
 void Spiderman::moveRight(SDL_Renderer *renderer, int distance) {
+	isStanding = false;
     isLookingLeft = false;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - 420)) || (distance > 600)) {
@@ -130,6 +135,7 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance) {
 }
 
 void Spiderman::jump(SDL_Renderer *renderer) {
+	isStanding = false;
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
         currentJumpingSprite = FIRST_JUMPING_SPRITE;
         mPosY = INITIAL_POS_Y;
@@ -148,7 +154,7 @@ void Spiderman::jump(SDL_Renderer *renderer) {
     ++currentJumpingSprite;
 }
 
-void Spiderman::update() {
+void Spiderman::updateStand() {
     if (currentStandingSprite <= LAST_STANDING_SPRITE)
         currentStandingSprite++;
 }

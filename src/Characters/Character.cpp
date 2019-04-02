@@ -17,10 +17,10 @@ Character::Character(
 	int currentJumpingSprite,
 	bool isLookingLeft,
 	string name,
-	SDL_Keycode upKey,
-	SDL_Keycode downKey,
-	SDL_Keycode rightKey,
-	SDL_Keycode leftKey
+	int upKey,
+	int downKey,
+	int rightKey,
+	int leftKey
 ) {
 	this->mPosX = mPosX;
 	this->mPosY = mPosY;
@@ -39,41 +39,22 @@ Character::Character(
 }
 
 // Public:
-void Character::handleEvent(SDL_Event &e, SDL_Renderer *renderer, int distance) {
-    //If a key was pressed
-    if (e.type == SDL_KEYDOWN) {
-        isStanding = false;
-        SDL_Keycode key = e.key.keysym.sym;
-        if(key == this->upKey) {
-        	this->jump(renderer);
-        }
-        if(key == this->downKey) {
-        	this->renderDuckSprite(renderer);
-		}
-        if(key == this->leftKey) {
-        	this->moveLeft(renderer, distance);
-		}
-        if(key == this->rightKey) {
-        	this->moveRight(renderer, distance);
-		}
-    }
-        //If a key was released
-    else if (e.type == SDL_KEYUP) {
-        isStanding = true;
-        SDL_Keycode key = e.key.keysym.sym;
-		if(key == this->upKey) {
-			this->renderStandSprite(renderer);
-		}
-		if(key == this->downKey) {
-			this->renderStandSprite(renderer);
-		}
-		if(key == this->leftKey) {
-			this->renderStandSprite(renderer);
-		}
-		if(key == this->rightKey) {
-			this->renderStandSprite(renderer);
-		}
-    }
+void Character::update(SDL_Renderer* renderer, int distance) {
+	InputManager* inputManager = InputManager::getInstance();
+
+	if(inputManager->isKeyDown(upKey)) jump(renderer);
+	if(inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
+	if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance);
+	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance);
+
+	if(
+		inputManager->isKeyUp(upKey) ||
+		inputManager->isKeyUp(downKey) ||
+		inputManager->isKeyUp(rightKey) ||
+		inputManager->isKeyUp(leftKey)
+	) this->renderStandSprite(renderer);
+
+	updateStand();
 }
 
 void Character::render(SDL_Renderer *mRenderer, int camX, int camY) {

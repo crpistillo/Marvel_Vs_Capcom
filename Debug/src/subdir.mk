@@ -4,12 +4,18 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/InputManager.cpp \
+../src/MCGame.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/InputManager.o \
+./src/MCGame.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/InputManager.d \
+./src/MCGame.d \
 ./src/main.d 
 
 

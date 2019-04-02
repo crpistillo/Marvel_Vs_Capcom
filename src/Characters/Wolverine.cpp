@@ -3,6 +3,7 @@
 //
 
 #include "./Wolverine.h"
+#include "../InputTable.h"
 
 using namespace std;
 
@@ -31,10 +32,10 @@ Wolverine::Wolverine(string name)
 	FIRST_JUMPING_SPRITE,
 	false,
 	name,
-	SDLK_w,
-	SDLK_s,
-	SDLK_d,
-	SDLK_a
+	KEY_W,
+	KEY_S,
+	KEY_D,
+	KEY_A
 )
 {
 }
@@ -51,10 +52,12 @@ void Wolverine::resetSpriteVariables() {
 }
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
+	isStanding = false;
 	m_Texture.loadFromFile("images/MVC2_Wolverine_38.png", renderer);
 }
 
 void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
+	isStanding = true;
 	this->resetSpriteVariables();
 	 if (isLookingLeft) {
 		m_Texture.loadFromFile("images/wolverine_stand_left.png", renderer);
@@ -67,6 +70,7 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 }
 
 void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
+	isStanding = false;
     isLookingLeft = true;
 
     //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
@@ -97,6 +101,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
 }
 
 void Wolverine::moveRight(SDL_Renderer *renderer, int distance) {
+	isStanding = false;
     isLookingLeft = false;
 
 	if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-420)) || (distance > 600)) {
@@ -127,6 +132,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance) {
 }
 
 void Wolverine::jump(SDL_Renderer *renderer) {
+	isStanding = false;
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
         currentJumpingSprite = FIRST_JUMPING_SPRITE;
         mPosY = INITIAL_POS_Y;
@@ -145,7 +151,7 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     ++currentJumpingSprite;
 }
 
-void Wolverine::update() {
+void Wolverine::updateStand() {
     if (currentStandingSprite <= LAST_STANDING_SPRITE)
         currentStandingSprite++;
 }

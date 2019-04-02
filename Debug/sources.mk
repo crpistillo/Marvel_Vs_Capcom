@@ -24,9 +24,9 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src/Characters \
-src/MCGame \
-src/Texture \
 src \
+src/Texture \
+src/tools/FPSManager \
 src/tools/json/ConfigFileParser \
 src/tools/logger \
 

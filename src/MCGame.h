@@ -9,10 +9,12 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "../Characters/Spiderman.h"
-#include "../Characters/Wolverine.h"
-#include "../Texture/Texture.h"
-#include "../tools/logger/Logger.h"
+#include "Characters/Spiderman.h"
+#include "Characters/Wolverine.h"
+#include "tools/FPSManager/FPSManager.h"
+#include "Texture/Texture.h"
+#include "tools/logger/Logger.h"
+#include "InputManager.h"
 
 using namespace std;
 
@@ -38,14 +40,11 @@ public:
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
     height, int flags);
+    void run();
     void render();
     void update();
     void handleEvents();
     void clean();
-    // a function to access the private running variable
-    bool running() {
-        return m_Running;
-    }
 };
 
 

@@ -10,6 +10,8 @@
 
 #include <SDL2/SDL_events.h>
 #include "../Texture/Texture.h"
+#include "../InputTable.h"
+#include "../InputManager.h"
 
 using namespace std;
 
@@ -24,12 +26,12 @@ public:
 	void free();
 	virtual void load(SDL_Renderer* renderer) = 0;
 	//Takes key presses and adjusts the character's velocity
-	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
+//	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
 	//Shows the character on the screen
 	void render(SDL_Renderer* mRenderer, int camX, int camY);
 	int getPosX();
 	int getPosY();
-	virtual void update() = 0;
+	void update(SDL_Renderer* renderer, int distance);
 
 protected:
 	Character(
@@ -41,10 +43,10 @@ protected:
 		int currentJumpingSprite,
 		bool isLookingLeft,
 		string name,
-		SDL_Keycode upKey,
-		SDL_Keycode downKey,
-		SDL_Keycode rightKey,
-		SDL_Keycode leftKey
+		int upKey,
+		int downKey,
+		int rightKey,
+		int leftKey
 	);
 	~Character();
 
@@ -60,20 +62,20 @@ protected:
 	int currentJumpingSprite;
 	bool isLookingLeft;
 	bool isStanding;
+	int upKey;
+	int downKey;
+	int rightKey;
+	int leftKey;
 	string name;
 
 private:
-	SDL_Keycode upKey;
-	SDL_Keycode downKey;
-	SDL_Keycode rightKey;
-	SDL_Keycode leftKey;
-
 	virtual void resetSpriteVariables() = 0;
 	virtual void renderStandSprite(SDL_Renderer *renderer) = 0;
 	virtual void renderDuckSprite(SDL_Renderer *renderer) = 0;
 	virtual void moveRight(SDL_Renderer *renderer, int distance) = 0;
 	virtual void moveLeft(SDL_Renderer *renderer, int distance) = 0;
 	virtual void jump(SDL_Renderer *renderer) = 0;
+	virtual void updateStand() = 0;
 };
 
 #endif /* CHARACTERS_CHARACTER_H_ */

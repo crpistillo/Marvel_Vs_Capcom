@@ -9,7 +9,7 @@
 #include <iostream>
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "tools/logger/Logger.h"
-#include "MCGame/MCGame.h"
+#include "MCGame.h"
 
 using namespace std;
 
@@ -26,22 +26,15 @@ MCGame* mcGame = 0;
 int main() {
 	Logger* logger = new Logger("marvel-vs-capcom.log");
 	logger->startSession();
-	/*json config = parseConfigFile(logger);
-	cout << config.dump(4) << endl;
+	json config = parseConfigFile(logger);
 
-	logger->finishSession();
-	delete logger;
-*/
     mcGame = new MCGame(logger);
     mcGame->init("Marvel vs Capcom", 100, 100, 800, 600, 0);
-    while(mcGame->running()) {
-        mcGame->handleEvents();
-        mcGame->update();
-        mcGame->render();
-    }
-    mcGame->clean();
+    mcGame->run();
 
+    mcGame->clean();
     logger->finishSession();
     delete logger;
+    delete mcGame;
     return 0;
 }

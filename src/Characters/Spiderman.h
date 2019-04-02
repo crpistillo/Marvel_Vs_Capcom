@@ -15,7 +15,6 @@ public:
     //Initializes the variables
     Spiderman(string name);
     void load(SDL_Renderer* renderer);
-    void update();
 
 private:
     void resetSpriteVariables();
@@ -24,6 +23,7 @@ private:
     void moveRight(SDL_Renderer *renderer, int distance);
     void moveLeft(SDL_Renderer *renderer, int distance);
     void jump(SDL_Renderer *renderer);
+    void updateStand();
 };
 
 
