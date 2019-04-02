@@ -70,16 +70,16 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
     isLookingLeft = true;
 
     //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
-    if((mPosX - CHARACTER_VEL <= -320) || (distance<(-600))){
+    if((mPosX - CHARACTER_VEL <= -320) || (distance < (-600))){
 		return;
 	}
 
-    if (currentWalkingLeftSprite < FIRST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = LAST_WALKING_SPRITE;
+    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
+        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
     }
     string imagePath = "images/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
-    --currentWalkingLeftSprite;
+    ++currentWalkingLeftSprite;
 
     //If the dot is inside the screen move
     /*if(mPosX - DOT_VEL > 0) {
@@ -96,10 +96,10 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
     }
 }
 
-void Wolverine::moveRight(SDL_Renderer *renderer, int distancia) {
+void Wolverine::moveRight(SDL_Renderer *renderer, int distance) {
     isLookingLeft = false;
 
-	if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-420)) || (distancia > 600)) {
+	if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-420)) || (distance > 600)) {
 		return;
 	}
 

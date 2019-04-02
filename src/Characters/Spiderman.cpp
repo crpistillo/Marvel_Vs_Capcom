@@ -77,12 +77,12 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance) {
         return;
     }
 
-    if (currentWalkingLeftSprite < FIRST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = LAST_WALKING_SPRITE;
+    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
+        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
     }
     string imagePath = "images/spiderman_walking_left/MVC2_SpiderMan_" + to_string(currentWalkingLeftSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
-    --currentWalkingLeftSprite;
+    ++currentWalkingLeftSprite;
 
     //If the dot is inside the screen move
     /*if(mPosX - DOT_VEL > 0) {
