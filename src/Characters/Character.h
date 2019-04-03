@@ -28,10 +28,10 @@ public:
 	//Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
 	//Shows the character on the screen
-	void render(SDL_Renderer* mRenderer, int camX, int camY);
+	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
 	int getPosX();
 	int getPosY();
-	void update(SDL_Renderer* renderer, int distance);
+	void update(SDL_Renderer* renderer, int distance, int posContrincante);
 
 protected:
 	Character(
@@ -72,8 +72,8 @@ private:
 	virtual void resetSpriteVariables() = 0;
 	virtual void renderStandSprite(SDL_Renderer *renderer) = 0;
 	virtual void renderDuckSprite(SDL_Renderer *renderer) = 0;
-	virtual void moveRight(SDL_Renderer *renderer, int distance) = 0;
-	virtual void moveLeft(SDL_Renderer *renderer, int distance) = 0;
+	virtual void moveRight(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
+	virtual void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
 	virtual void jump(SDL_Renderer *renderer) = 0;
 	virtual void updateStand() = 0;
 };

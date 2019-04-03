@@ -30,7 +30,7 @@ Wolverine::Wolverine(string name)
 	FIRST_WALKING_SPRITE,
 	FIRST_STANDING_SPRITE,
 	FIRST_JUMPING_SPRITE,
-	false,
+	true,
 	name,
 	KEY_W,
 	KEY_S,
@@ -69,21 +69,30 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 	}
 }
 
-void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
+void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = true;
 
     //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
     if((mPosX - CHARACTER_VEL <= -320) || (distance < (-600))){
+    	isLookingLeft = false;
 		return;
 	}
 
-    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+    if (Wolverine::mPosX > posContrincante){
+    	/*Esta función animación la cree para Spiderman ya que la animación donde
+    	* camina para atras es la misma que la de para adelante, pero haciendo eso
+    	* con la forma de caminar de Wolverine no queda muy bien, por lo que esta
+    	* función si bien puede quedar no es necesaria. Particularmente esta de
+    	* abajo hace lo que corresponde aca.*/
+    	animacionLeft(renderer);
     }
-    string imagePath = "images/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
-    ++currentWalkingLeftSprite;
+    else {
+    	/*Esto debe ser corregido. Debe ir la animacion donde Wolverine camina hacia
+    	 * atras mirando a la derecha.*/
+    	animacionRight(renderer);
+    	isLookingLeft = false;
+    }
 
     //If the dot is inside the screen move
     /*if(mPosX - DOT_VEL > 0) {
@@ -100,20 +109,24 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance) {
     }
 }
 
-void Wolverine::moveRight(SDL_Renderer *renderer, int distance) {
+void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = false;
 
 	if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-420)) || (distance > 600)) {
+		isLookingLeft = true;
 		return;
 	}
 
-    if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
-        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+    if (Wolverine::mPosX < posContrincante){
+    	animacionRight(renderer);
     }
-    string imagePath = "images/wolverine_walking_right/MVC2_Wolverine_" + to_string(currentWalkingRightSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
-    ++currentWalkingRightSprite;
+    else {
+    	/*Esto debe ser corregido. Debe ir la animacion donde Wolverine camina hacia
+    	* atras mirando a la izquierda.*/
+    	animacionLeft(renderer);
+    	isLookingLeft = true;
+    }
 
     //If the dot is inside the screen move
     /*if( mPosX + DOT_VEL < LEVEL_WIDTH ) {
@@ -129,6 +142,30 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance) {
         mPosX -= CHARACTER_VEL;
     }
 
+}
+
+void Wolverine::animacionRight(SDL_Renderer *renderer){
+	string imagePath;
+
+    if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
+        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+    }
+
+    imagePath = "images/wolverine_walking_right/MVC2_Wolverine_" + to_string(currentWalkingRightSprite) + ".png";
+    m_Texture.loadFromFile(imagePath, renderer);
+    ++currentWalkingRightSprite;
+}
+
+void Wolverine::animacionLeft(SDL_Renderer *renderer){
+	string imagePath;
+
+    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
+        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+    }
+
+    imagePath = "images/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
+    m_Texture.loadFromFile(imagePath, renderer);
+    ++currentWalkingLeftSprite;
 }
 
 void Wolverine::jump(SDL_Renderer *renderer) {

@@ -39,13 +39,13 @@ Character::Character(
 }
 
 // Public:
-void Character::update(SDL_Renderer* renderer, int distance) {
+void Character::update(SDL_Renderer* renderer, int distance, int posContrincante) {
 	InputManager* inputManager = InputManager::getInstance();
 
 	if(inputManager->isKeyDown(upKey)) jump(renderer);
 	if(inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
-	if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance);
-	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance);
+	if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance, posContrincante);
+	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
 
 	if(
 		inputManager->isKeyUp(upKey) ||
@@ -57,8 +57,15 @@ void Character::update(SDL_Renderer* renderer, int distance) {
 	updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY) {
-    if (isStanding)
+void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+    if (Character::mPosX > posContrincante){
+    	isLookingLeft = true;
+    }
+    else {
+    	isLookingLeft = false;
+    }
+
+	if (isStanding)
         renderStandSprite(mRenderer);
     m_Texture.render(mPosX - camX, mPosY - camY, mRenderer);
 }

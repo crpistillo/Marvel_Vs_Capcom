@@ -92,8 +92,8 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
-    wolverine->render(m_Renderer, camera.x, camera.y);
-    spiderman->render(m_Renderer, camera.x, camera.y);
+    wolverine->render(m_Renderer, camera.x, camera.y, spiderman->getPosX());
+    spiderman->render(m_Renderer, camera.x, camera.y, wolverine->getPosX());
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
@@ -116,8 +116,8 @@ void MCGame::handleEvents() {
 void MCGame::update() {
 	distancia = spiderman->getPosX() - wolverine->getPosX();
 	distancia2 = wolverine->getPosX() - spiderman->getPosX();
-    spiderman->update(m_Renderer, distancia);
-    wolverine->update(m_Renderer, distancia2);
+    spiderman->update(m_Renderer, distancia, wolverine->getPosX());
+    wolverine->update(m_Renderer, distancia2, spiderman->getPosX());
 
     //Center the camera over the dot
 	camera.x = (((( spiderman->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( wolverine->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + 290;

@@ -68,25 +68,29 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
-	m_Texture.loadFromFile("images/MVC2_SpiderMan_432.png", renderer);
+	m_Texture.loadFromFile("images/MVC2_SpiderMan_219.png", renderer);
 }
 
-void Spiderman::moveLeft(SDL_Renderer *renderer, int distance) {
+void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = true;
 
     //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
     //La distancia es la distancia entre personajes.
     if ((mPosX - CHARACTER_VEL <= -320) || (distance < (-600))) {
+    	isLookingLeft = false;
         return;
     }
 
-    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+    animacionLeft(renderer);
+
+    if (Spiderman::mPosX > posContrincante){
+    	animacionLeft(renderer);
     }
-    string imagePath = "images/spiderman_walking_left/MVC2_SpiderMan_" + to_string(currentWalkingLeftSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
-    ++currentWalkingLeftSprite;
+    else {
+    	animacionRight(renderer);
+    	isLookingLeft = false;
+    }
 
     //If the dot is inside the screen move
     /*if(mPosX - DOT_VEL > 0) {
@@ -103,20 +107,23 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance) {
     }
 }
 
-void Spiderman::moveRight(SDL_Renderer *renderer, int distance) {
+void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = false;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - 420)) || (distance > 600)) {
+    	isLookingLeft = true;
         return;
     }
 
-    if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
-        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+    if (Spiderman::mPosX < posContrincante){
+    	animacionRight(renderer);
     }
-    string imagePath = "images/spiderman_walking_right/MVC2_SpiderMan_" + to_string(currentWalkingRightSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
-    ++currentWalkingRightSprite;
+    else {
+    	animacionLeft(renderer);
+    	isLookingLeft = true;
+    }
+
 
     //If the dot is inside the screen move
     /*if( mPosX + DOT_VEL < LEVEL_WIDTH ) {
@@ -132,6 +139,30 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance) {
         mPosX -= CHARACTER_VEL;
     }
 
+}
+
+void Spiderman::animacionRight(SDL_Renderer *renderer){
+	string imagePath;
+
+	if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
+        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+    }
+
+	imagePath = "images/spiderman_walking_right/MVC2_SpiderMan_" + to_string(currentWalkingRightSprite) + ".png";
+	m_Texture.loadFromFile(imagePath, renderer);
+	++currentWalkingRightSprite;
+}
+
+void Spiderman::animacionLeft(SDL_Renderer *renderer){
+	string imagePath;
+
+    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
+        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+    }
+
+    imagePath = "images/spiderman_walking_left/MVC2_SpiderMan_" + to_string(currentWalkingLeftSprite) + ".png";
+    m_Texture.loadFromFile(imagePath, renderer);
+    ++currentWalkingLeftSprite;
 }
 
 void Spiderman::jump(SDL_Renderer *renderer) {
