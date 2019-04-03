@@ -60,7 +60,10 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 	isStanding = true;
 	this->resetSpriteVariables();
 	 if (isLookingLeft) {
-		m_Texture.loadFromFile("images/wolverine_stand_left.png", renderer);
+		 if (currentStandingSprite > LAST_STANDING_SPRITE)
+		 	currentStandingSprite = FIRST_STANDING_SPRITE;
+		string imagePath = "images/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
 	} else {
 		if (currentStandingSprite > LAST_STANDING_SPRITE)
 			currentStandingSprite = FIRST_STANDING_SPRITE;
