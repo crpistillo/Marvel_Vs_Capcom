@@ -10,6 +10,7 @@
 InputManager* InputManager::instance = nullptr;
 
 InputManager::InputManager() {
+	this->quit = false;
 }
 
 InputManager* InputManager::getInstance() {
