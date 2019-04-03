@@ -19,6 +19,7 @@ public:
 private:
     void resetSpriteVariables();
     void renderStandSprite(SDL_Renderer *renderer);
+    void loadStandSprite(SDL_Renderer *renderer, char position);
     void renderDuckSprite(SDL_Renderer *renderer);
     void moveRight(SDL_Renderer *renderer, int distance, int posContrincante);
     void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante);

@@ -60,16 +60,23 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 	isStanding = true;
 	this->resetSpriteVariables();
 	 if (isLookingLeft) {
-		 if (currentStandingSprite > LAST_STANDING_SPRITE)
-		 	currentStandingSprite = FIRST_STANDING_SPRITE;
-		string imagePath = "images/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+		 this->loadStandSprite(renderer, 'l');
 	} else {
-		if (currentStandingSprite > LAST_STANDING_SPRITE)
-			currentStandingSprite = FIRST_STANDING_SPRITE;
-		string imagePath = "images/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+		this->loadStandSprite(renderer, 'r');
 	}
+}
+
+void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position){
+	string imagePath;
+	if (currentStandingSprite > LAST_STANDING_SPRITE)
+		currentStandingSprite = FIRST_STANDING_SPRITE;
+
+	if (position == 'r')
+		imagePath = "images/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+	else
+		imagePath = "images/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+	m_Texture.loadFromFile(imagePath, renderer);
+
 }
 
 void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {

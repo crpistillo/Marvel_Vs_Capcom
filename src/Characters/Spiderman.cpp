@@ -57,17 +57,23 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 	isStanding = true;
 	this->resetSpriteVariables();
     if (isLookingLeft) {
-    	if (currentStandingSprite > LAST_STANDING_SPRITE)
-    		currentStandingSprite = FIRST_STANDING_SPRITE;
-    	string imagePath = "images/spiderman_standing_left/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
-    	m_Texture.loadFromFile(imagePath, renderer);
-
+    	this->loadStandSprite(renderer, 'l');
     } else {
-        if (currentStandingSprite > LAST_STANDING_SPRITE)
-            currentStandingSprite = FIRST_STANDING_SPRITE;
-        string imagePath = "images/spiderman_standing_right/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+    	this->loadStandSprite(renderer, 'r');
     }
+}
+
+void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
+	string imagePath;
+	if (currentStandingSprite > LAST_STANDING_SPRITE)
+		currentStandingSprite = FIRST_STANDING_SPRITE;
+
+	if (position == 'r')
+		imagePath = "images/spiderman_standing_right/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
+	else
+		imagePath = "images/spiderman_standing_left/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
+	m_Texture.loadFromFile(imagePath, renderer);
+
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
