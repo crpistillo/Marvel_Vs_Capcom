@@ -19,8 +19,8 @@ const int LAST_STANDING_SPRITE = 37;
 const int FIRST_WALKING_SPRITE = 39;
 const int LAST_WALKING_SPRITE = 54;
 
-const int FIRST_JUMPING_SPRITE = 189;
-const int LAST_JUMPING_SPRITE = 196;
+const int FIRST_JUMPING_SPRITE = 79;
+const int LAST_JUMPING_SPRITE = 84;
 
 Wolverine::Wolverine(string name)
 : Character(
