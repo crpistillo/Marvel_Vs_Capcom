@@ -48,10 +48,12 @@ void Character::update(SDL_Renderer* renderer, int distance, int posContrincante
 	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
 
 	if(
-		inputManager->isKeyUp(upKey) ||
-		inputManager->isKeyUp(downKey) ||
-		inputManager->isKeyUp(rightKey) ||
-		inputManager->isKeyUp(leftKey)
+		(!inputManager->isKeyUp(upKey) &&
+		!inputManager->isKeyUp(downKey) &&
+		!inputManager->isKeyUp(rightKey) &&
+		!inputManager->isKeyUp(leftKey))
+		|| (inputManager->isKeyUp(rightKey) &&
+		inputManager->isKeyUp(leftKey))
 	) this->renderStandSprite(renderer);
 
 	updateStand();

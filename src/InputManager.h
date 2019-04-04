@@ -25,8 +25,6 @@ public:
 private:
 	static InputManager* instance;
 	const uint8_t* keyboard;
-	bool keyDown[KEYBOARD_SIZE];
-	bool keyUp[KEYBOARD_SIZE];
 	bool quit;
 };
 
