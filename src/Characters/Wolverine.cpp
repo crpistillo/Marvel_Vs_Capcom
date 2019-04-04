@@ -188,10 +188,10 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     string imagePath = "images/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
 
-    if (currentJumpingSprite < 193) {
+    if (currentJumpingSprite < 81) {
         mPosY -= CHARACTER_VEL;
     }
-    if (currentJumpingSprite > 193) {
+    if (currentJumpingSprite > 81) {
         mPosY += CHARACTER_VEL;
     }
 
