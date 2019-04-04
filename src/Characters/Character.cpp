@@ -31,6 +31,7 @@ Character::Character(
 	this->currentWalkingRightSprite = currentWalkingRightSprite;
 	this->currentStandingSprite = currentStandingSprite;
 	this->currentJumpingSprite = currentJumpingSprite;
+	this->currentJumpingRightSprite = currentJumpingRightSprite;
 	this->isLookingLeft = isLookingLeft;
 	this->isStanding = true;
 	this->upKey = upKey;
