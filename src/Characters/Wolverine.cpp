@@ -22,6 +22,9 @@ const int LAST_WALKING_SPRITE = 54;
 const int FIRST_JUMPING_SPRITE = 79;
 const int LAST_JUMPING_SPRITE = 84;
 
+const int FIRST_JUMPING_RIGHT_SPRITE = 198;
+const int LAST_JUMPING_RIGHT_SPRITE = 210;
+
 Wolverine::Wolverine(string name)
 : Character(
 	INITIAL_POS_X,
@@ -30,6 +33,7 @@ Wolverine::Wolverine(string name)
 	FIRST_WALKING_SPRITE,
 	FIRST_STANDING_SPRITE,
 	FIRST_JUMPING_SPRITE,
+	FIRST_JUMPING_RIGHT_SPRITE,
 	true,
 	name,
 	KEY_W,
@@ -196,6 +200,10 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     }
 
     ++currentJumpingSprite;
+}
+
+void Wolverine::jumpRight(SDL_Renderer *renderer){
+	jump(renderer);
 }
 
 void Wolverine::updateStand() {

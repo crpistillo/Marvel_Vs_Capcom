@@ -24,6 +24,9 @@ const int LAST_WALKING_SPRITE = 180;
 const int FIRST_JUMPING_SPRITE = 189;
 const int LAST_JUMPING_SPRITE = 196;
 
+const int FIRST_JUMPING_RIGHT_SPRITE = 198;
+const int LAST_JUMPING_RIGHT_SPRITE = 210;
+
 Spiderman::Spiderman(string name)
 : Character(
 	INITIAL_POS_X,
@@ -32,6 +35,7 @@ Spiderman::Spiderman(string name)
 	FIRST_WALKING_SPRITE,
 	FIRST_STANDING_SPRITE,
 	FIRST_JUMPING_SPRITE,
+	FIRST_JUMPING_RIGHT_SPRITE,
 	false,
 	name,
 	KEY_UP,
@@ -194,6 +198,28 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
     ++currentJumpingSprite;
 }
+
+void Spiderman::jumpRight(SDL_Renderer *renderer){
+	isStanding = false;
+	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {
+		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
+	    mPosY = INITIAL_POS_Y;
+	}
+
+	string imagePath = "images/spiderman_jumping_right/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + ".png";
+	m_Texture.loadFromFile(imagePath, renderer);
+
+	if (currentJumpingRightSprite < 204) {
+		mPosY -= CHARACTER_VEL;
+	}
+	if (currentJumpingRightSprite >= 204) {
+		mPosY += CHARACTER_VEL;
+	}
+
+	++currentJumpingRightSprite;
+}
+
+
 
 void Spiderman::updateStand() {
     if (currentStandingSprite <= LAST_STANDING_SPRITE)

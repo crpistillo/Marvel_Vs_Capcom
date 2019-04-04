@@ -15,6 +15,7 @@ Character::Character(
 	int currentWalkingRightSprite,
 	int currentStandingSprite,
 	int currentJumpingSprite,
+	int currentJumpingRightSprite,
 	bool isLookingLeft,
 	string name,
 	int upKey,
@@ -46,6 +47,8 @@ void Character::update(SDL_Renderer* renderer, int distance, int posContrincante
 	if(inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
 	if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance, posContrincante);
 	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
+
+	if(inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey)) jumpRight(renderer);
 
 	if(
 		(!inputManager->isKeyUp(upKey) &&
