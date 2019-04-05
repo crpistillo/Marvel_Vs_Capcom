@@ -119,9 +119,10 @@ void MCGame::update() {
     spiderman->update(m_Renderer, distancia, wolverine->getPosX());
     wolverine->update(m_Renderer, distancia2, spiderman->getPosX());
 
-    //Center the camera over the dot
-	camera.x = (((( spiderman->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( wolverine->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + 467;
-	camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+    //Centrar la camara sobre ambos personajes
+    camera.x = (((( spiderman->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( wolverine->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
+    //camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+	camera.y = 0;
 
 	//Keep the camera in bounds
 	if ((camera.x) < 0) camera.x = 0;

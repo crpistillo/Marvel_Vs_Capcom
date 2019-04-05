@@ -10,7 +10,7 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = (1600-502)-79+200;
+const int INITIAL_POS_X = ((LEVEL_WIDTH/2)-502)-(Wolverine::CHARACTER_WIDTH/2)+200;
 const int INITIAL_POS_Y = 50;
 
 const int FIRST_STANDING_SPRITE = 21;
@@ -87,10 +87,13 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
 	isStanding = false;
     isLookingLeft = true;
 
-    //502 es la distancia desde el comienzo de la imagen hasta el personaje
-    if((mPosX - CHARACTER_VEL <= -502) || (distance < (-600))){
+    //Mover
+    mPosX -= CHARACTER_VEL;
+
+    if((mPosX - CHARACTER_VEL <= -Wolverine::SOBRANTE) || (distance < (-600))){
     	isLookingLeft = false;
-		return;
+        //Move back
+        mPosX += CHARACTER_VEL;
 	}
 
     if (Wolverine::mPosX > posContrincante){
@@ -113,8 +116,6 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
         mPosX -= DOT_VEL;
     }*/
 
-    //Move the dot left or right
-    mPosX -= CHARACTER_VEL;
 //-3000
     //If the dot went too far to the left or right
     //if ((mPosX < -900) || (mPosX + 157 > LEVEL_WIDTH)) {
@@ -128,11 +129,13 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
 	isStanding = false;
     isLookingLeft = false;
 
-	//502 es la distancia desde el comienzo de la imagen hasta el personaje
-    //Y 157 es el ancho del personaje (Wolverine)
-    if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-502-157)) || (distance > 600)) {
+    //Mover
+    mPosX += CHARACTER_VEL;
+
+    if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-Wolverine::SOBRANTE-Wolverine::CHARACTER_WIDTH)) || (distance > 600)) {
 		isLookingLeft = true;
-		return;
+        //Move back
+        mPosX -= CHARACTER_VEL;
 	}
 
     if (Wolverine::mPosX < posContrincante){
@@ -150,8 +153,6 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
         mPosX += DOT_VEL;
     }*/
 
-    //Move the dot left or right
-    mPosX += CHARACTER_VEL;
 
     //Para que los personajes no se vayan del camino.png
     //502 es la distancia desde el comienzo de la imagen hasta el personaje

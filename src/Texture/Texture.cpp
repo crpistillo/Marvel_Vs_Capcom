@@ -65,8 +65,11 @@ void Texture::free() {
 void Texture::render(int x, int y, SDL_Renderer *mRenderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
 	//Set rendering space and render to screen
-	//SDL_Rect renderQuad = { x, y, mWidth+100, mHeight };
+	/*Todas las imagenes son de 640x480, por lo que si se desea cambiar el tamaño,
+	 * se debe mantener la relacion de aspecto (se calcula con una regla de tres)*/
 	SDL_Rect renderQuad = { x, y, 1153, 865 };
+	/*Si se cambia el tamaño acá, solo hay que actuaizar dos constantes en los .h de
+	 * los personajes: CHARACTER_WIDTH y SOBRANTE*/
 
 	//Set clip rendering dimensions
 	if( clip != NULL )

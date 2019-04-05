@@ -15,6 +15,10 @@ public:
     //Initializes the variables
 	Wolverine(string name);
     void load(SDL_Renderer* renderer);
+	static const int CHARACTER_WIDTH = 157;
+	static const int CHARACTER_HEIGHT = 20;
+
+	static const int SOBRANTE = 502;
 
 private:
     void resetSpriteVariables();

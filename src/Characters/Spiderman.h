@@ -16,6 +16,16 @@ public:
     Spiderman(string name);
     void load(SDL_Renderer* renderer);
 
+	/*Es la dimension del personaje sin contar el fondo magenta. Se mide "a mano" con un
+	 * editor de texto, asegurándose de, primero, haber llevado la imágen (en stand by)
+	 * a la resolucion especificada en el renderQuad*/
+	static const int CHARACTER_WIDTH = 198;
+	static const int CHARACTER_HEIGHT = 20;
+
+	/*Es el ancho entre el inicio de la imagen (a izquierda) hasta el personaje.
+	 * Tomarlas mismas precauciones para medir que con la dimension del personaje*/
+	static const int SOBRANTE = 437;
+
 private:
     void resetSpriteVariables();
     void renderStandSprite(SDL_Renderer *renderer);

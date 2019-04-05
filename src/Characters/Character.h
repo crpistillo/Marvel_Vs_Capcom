@@ -17,9 +17,6 @@ using namespace std;
 
 class Character {
 public:
-	//The dimensions of the character
-	static const int CHARACTER_WIDTH = 178;
-	static const int CHARACTER_HEIGHT = 20;
 	//Maximum axis velocity of the character
 	static const int CHARACTER_VEL = 10;
 
