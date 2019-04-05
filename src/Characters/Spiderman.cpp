@@ -82,7 +82,11 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
-	m_Texture.loadFromFile("images/MVC2_SpiderMan_219.png", renderer);
+	if (isLookingLeft){
+		m_Texture.loadFromFile("images/MVC2_SpiderMan_219_left.png", renderer);
+	}else{
+		m_Texture.loadFromFile("images/MVC2_SpiderMan_219.png", renderer);
+	}
 }
 
 void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {

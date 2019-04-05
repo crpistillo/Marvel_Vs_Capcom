@@ -57,7 +57,11 @@ void Wolverine::resetSpriteVariables() {
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
-	m_Texture.loadFromFile("images/MVC2_Wolverine_38.png", renderer);
+	if (isLookingLeft){
+		m_Texture.loadFromFile("images/MVC2_Wolverine_38_left.png", renderer);
+	}else{
+		m_Texture.loadFromFile("images/MVC2_Wolverine_38.png", renderer);
+	}
 }
 
 void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
