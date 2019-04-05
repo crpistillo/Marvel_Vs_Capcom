@@ -10,10 +10,10 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-/*1600 es el centro de la pantalla, 278 la corrección por el tamaño que sobra de la imagen,
- * 55 es la mitad del ancho del personaje, y 200 es el corrimiento a la izquierda*/
-const int INITIAL_POS_X = (1600-278)-55-200;
-const int INITIAL_POS_Y = 270;
+/*1600 es el centro de la pantalla, 437 es la distancia desde el comienzo de la imagen hasta el personaje,
+ * 99 es la mitad del ancho del personaje, y 200 es el corrimiento a la izquierda desde el centro*/
+const int INITIAL_POS_X = (1600-437)-99-200;
+const int INITIAL_POS_Y = 50;
 
 const int FIRST_STANDING_SPRITE = 159;
 const int LAST_STANDING_SPRITE = 167;
@@ -89,9 +89,9 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
 	isStanding = false;
     isLookingLeft = true;
 
-    //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
+    //437 es la distancia desde el comienzo de la imagen hasta el personaje
     //La distancia es la distancia entre personajes.
-    if ((mPosX - CHARACTER_VEL <= -320) || (distance < (-600))) {
+    if ((mPosX - CHARACTER_VEL <= -437) || (distance < (-600))) {
     	isLookingLeft = false;
         return;
     }
@@ -115,17 +115,19 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     mPosX -= CHARACTER_VEL;
 
     //If the dot went too far to the left or right
-    if ((mPosX < -3000) || (mPosX + CHARACTER_WIDTH > LEVEL_WIDTH)) {
+    /*if (mPosX < -900) {
         //Move back
         mPosX += CHARACTER_VEL;
-    }
+    }*/
 }
 
 void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = false;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - 420)) || (distance > 600)) {
+    //437 es la distancia desde el comienzo de la imagen hasta el personaje
+    //198 es el ancho de spiderman y 75 es un numero magico que corrige una pequeño error
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - 437 - 198 - 75)) || (distance > 600)) {
     	isLookingLeft = true;
         return;
     }
@@ -147,11 +149,14 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     //Move the dot left or right
     mPosX += CHARACTER_VEL;
 
-    //If the dot went too far to the left or right
-    if ((mPosX < -320) || (mPosX + CHARACTER_WIDTH > LEVEL_WIDTH)) {
+    //Para que los personajes no se vayan del camino.png
+    //437 es la distancia desde el comienzo de la imagen hasta el personaje
+    //y 198 el ancho del personaje
+    //if ((mPosX < -437) || (mPosX + 437 + 198 > LEVEL_WIDTH)) {
+    /*if (mPosX + 437 + 198 > LEVEL_WIDTH) {
         //Move back
         mPosX -= CHARACTER_VEL;
-    }
+    }*/
 
 }
 

@@ -10,8 +10,8 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = (1600-314)-43+200;
-const int INITIAL_POS_Y = 270;
+const int INITIAL_POS_X = (1600-502)-79+200;
+const int INITIAL_POS_Y = 50;
 
 const int FIRST_STANDING_SPRITE = 21;
 const int LAST_STANDING_SPRITE = 37;
@@ -87,8 +87,8 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
 	isStanding = false;
     isLookingLeft = true;
 
-    //Puse -320 en lugar de 0 porque la imagen del personaje es mas ancha que él.
-    if((mPosX - CHARACTER_VEL <= -320) || (distance < (-600))){
+    //502 es la distancia desde el comienzo de la imagen hasta el personaje
+    if((mPosX - CHARACTER_VEL <= -502) || (distance < (-600))){
     	isLookingLeft = false;
 		return;
 	}
@@ -115,19 +115,22 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
 
     //Move the dot left or right
     mPosX -= CHARACTER_VEL;
-
+//-3000
     //If the dot went too far to the left or right
-    if ((mPosX < -3000) || (mPosX + CHARACTER_WIDTH > LEVEL_WIDTH)) {
+    //if ((mPosX < -900) || (mPosX + 157 > LEVEL_WIDTH)) {
+    /*if (mPosX < -900) {
         //Move back
         mPosX += CHARACTER_VEL;
-    }
+    }*/
 }
 
 void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
 	isStanding = false;
     isLookingLeft = false;
 
-	if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-420)) || (distance > 600)) {
+	//502 es la distancia desde el comienzo de la imagen hasta el personaje
+    //Y 157 es el ancho del personaje (Wolverine)
+    if((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH-502-157)) || (distance > 600)) {
 		isLookingLeft = true;
 		return;
 	}
@@ -150,11 +153,14 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     //Move the dot left or right
     mPosX += CHARACTER_VEL;
 
-    //If the dot went too far to the left or right
-    if ((mPosX < -320) || (mPosX + CHARACTER_WIDTH > LEVEL_WIDTH)) {
+    //Para que los personajes no se vayan del camino.png
+    //502 es la distancia desde el comienzo de la imagen hasta el personaje
+    //y 157 el ancho del personaje
+    // if ((mPosX < -502) || (mPosX + 502 + 157 > LEVEL_WIDTH)) {
+    /*if (mPosX + 502 + 157 > LEVEL_WIDTH) {
         //Move back
         mPosX -= CHARACTER_VEL;
-    }
+    }*/
 
 }
 
