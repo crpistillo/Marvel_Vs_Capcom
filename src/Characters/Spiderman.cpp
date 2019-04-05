@@ -12,7 +12,7 @@ const int LEVEL_HEIGHT = 600;
 
 /*437 es la distancia desde el comienzo de la imagen hasta el personaje,
  * y 200 es el corrimiento a la izquierda desde el centro*/
-const int INITIAL_POS_X = ((LEVEL_WIDTH/2)-437)-(Spiderman::CHARACTER_WIDTH/2)-200;
+const int INITIAL_POS_X = ((LEVEL_WIDTH/2)-Spiderman::SOBRANTE)-(Spiderman::CHARACTER_WIDTH/2)-200;
 const int INITIAL_POS_Y = 50;
 
 const int FIRST_STANDING_SPRITE = 159;
