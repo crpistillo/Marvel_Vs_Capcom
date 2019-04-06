@@ -215,10 +215,16 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer){
 void Wolverine::jump(SDL_Renderer *renderer) {
 	isStanding = false;
 	isJumpingVertical = true;
+	string imagePath;
 
-
-    string imagePath = "images/wolverine/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
+	if(isLookingLeft){
+		imagePath = "images/wolverine/wolverine_jumping_inverted/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+	else{
+		imagePath = "images/wolverine/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
 
     if (currentJumpingSprite < 83) {
         mPosY -= CHARACTER_VEL;

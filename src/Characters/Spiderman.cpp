@@ -201,9 +201,17 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
 void Spiderman::jump(SDL_Renderer *renderer) {
 	isStanding = false;
 	isJumpingVertical = true;
+	string imagePath;
 
-    string imagePath = "images/spiderman/spiderman_jumping/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
+	if(isLookingLeft){
+		imagePath = "images/spiderman/spiderman_jumping_inverted/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+	else{
+		imagePath = "images/spiderman/spiderman_jumping/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+
+	}
 
     if (currentJumpingSprite < 193) {
         mPosY -= CHARACTER_VEL;
