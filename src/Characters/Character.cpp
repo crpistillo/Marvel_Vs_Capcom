@@ -126,4 +126,9 @@ Character::~Character() {
 	this->free();
 }
 
+void Character::positionUpdate(int x, int y) {
+    mPosX = x;
+    mPosX = y;
+}
+
 

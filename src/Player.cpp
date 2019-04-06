@@ -13,7 +13,10 @@ Player::Player(Character *first, Character *second) {
 
 
 void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
-    currentCharacter->update(renderer, distance, posContrincante);
+    InputManager* inputManager = InputManager::getInstance();
+    //if(inputManager->isKeyDown(changeKey));
+        //changeCharacter();
+     currentCharacter->update(renderer, distance, posContrincante);
 }
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
@@ -26,10 +29,15 @@ void Player::free() {
 }
 
 void Player::changeCharacter() {
+    int updateX = currentCharacter->getPosX();
+    int updateY = currentCharacter->getPosY();
+
     if(currentCharacter == firstCharacter)
         currentCharacter = secondCharacter;
     else
         currentCharacter = firstCharacter;
+
+    currentCharacter->positionUpdate(updateX, updateY);
 
     //hay que setear las mismas posiciones y tecla de cambio
     //animacion
