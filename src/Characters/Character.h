@@ -39,6 +39,7 @@ protected:
 		int currentStandingSprite,
 		int currentJumpingSprite,
 		int currentJumpingRightSprite,
+		int currentJumpingLeftSprite,
 		int currentWalkbackLeftSprite,
 		int currentWalkbackRightSprite,
 		bool isLookingLeft,
@@ -61,12 +62,14 @@ protected:
 	int currentWalkingRightSprite;
 	int currentJumpingSprite;
 	int currentJumpingRightSprite;
+	int currentJumpingLeftSprite;
 	int currentWalkbackLeftSprite;
 	int currentWalkbackRightSprite;
 	bool isLookingLeft;
 	bool isStanding;
 	bool isJumpingVertical;
 	bool isJumpingRight;
+	bool isJumpingLeft;
 	int upKey;
 	int downKey;
 	int rightKey;
@@ -82,6 +85,7 @@ private:
 	virtual void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
 	virtual void jump(SDL_Renderer *renderer) = 0;
 	virtual void jumpRight(SDL_Renderer *renderer) = 0;
+	virtual void jumpLeft(SDL_Renderer *renderer) = 0;
 	virtual void updateStand() = 0;
 };
 

@@ -35,6 +35,7 @@ private:
     void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante);
     void jump(SDL_Renderer *renderer);
     void jumpRight(SDL_Renderer *renderer);
+    void jumpLeft(SDL_Renderer *renderer);
     void updateStand();
     void animacionRight(SDL_Renderer *renderer);
     void animacionLeft(SDL_Renderer *renderer);

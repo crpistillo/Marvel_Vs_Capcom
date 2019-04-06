@@ -26,6 +26,9 @@ const int LAST_JUMPING_SPRITE = 196;
 const int FIRST_JUMPING_RIGHT_SPRITE = 198;
 const int LAST_JUMPING_RIGHT_SPRITE = 210;
 
+const int FIRST_JUMPING_LEFT_SPRITE = 198;
+const int LAST_JUMPING_LEFT_SPRITE = 210;
+
 Spiderman::Spiderman(string name)
 : Character(
 	INITIAL_POS_X,
@@ -35,6 +38,7 @@ Spiderman::Spiderman(string name)
 	FIRST_STANDING_SPRITE,
 	FIRST_JUMPING_SPRITE,
 	FIRST_JUMPING_RIGHT_SPRITE,
+	FIRST_JUMPING_LEFT_SPRITE,
 	0,//Spiderman no necesita animacion para ir marcha atras
 	0,
 	false,
@@ -249,6 +253,39 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 
 	    isStanding = true;
 	    isJumpingRight = false;
+	}
+}
+
+void Spiderman::jumpLeft(SDL_Renderer* renderer){
+
+	isStanding = false;
+	isJumpingLeft = true;
+
+	string imagePath;
+
+	if(isLookingLeft){
+		imagePath = "images/spiderman_jumping_left/MVC2_SpiderMan_" + to_string(currentJumpingLeftSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+
+	else{
+		imagePath = "images/spiderman_jumping_left_inverted/MVC2_SpiderMan_" + to_string(currentJumpingLeftSprite) + "a" + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+	if (currentJumpingLeftSprite < 204) {
+		mPosY -= CHARACTER_VEL;
+	}
+	if (currentJumpingLeftSprite >= 204) {
+		mPosY += CHARACTER_VEL;
+	}
+	++currentJumpingLeftSprite;
+
+	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
+		currentJumpingLeftSprite = FIRST_JUMPING_LEFT_SPRITE;
+	    mPosY = INITIAL_POS_Y;
+
+	    isStanding = true;
+	    isJumpingLeft = false;
 	}
 }
 

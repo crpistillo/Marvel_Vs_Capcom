@@ -16,6 +16,7 @@ Character::Character(
 	int currentStandingSprite,
 	int currentJumpingSprite,
 	int currentJumpingRightSprite,
+	int currentJumpingLeftSprite,
 	int currentWalkbackLeftSprite,
 	int currentWalkbackRightSprite,
 	bool isLookingLeft,
@@ -36,10 +37,12 @@ Character::Character(
 	this->currentWalkbackRightSprite = currentWalkingRightSprite;
 	this->currentJumpingSprite = currentJumpingSprite;
 	this->currentJumpingRightSprite = currentJumpingRightSprite;
+	this->currentJumpingLeftSprite = currentJumpingLeftSprite;
 	this->isLookingLeft = isLookingLeft;
 	this->isStanding = true;
 	this->isJumpingVertical = false;
 	this->isJumpingRight = false;
+	this->isJumpingLeft = false;
 	this->upKey = upKey;
 	this->downKey = downKey;
 	this->rightKey = rightKey;
@@ -62,8 +65,16 @@ void Character::update(SDL_Renderer* renderer, int distance, int posContrincante
 		return;
 	}
 
+	if(isJumpingLeft){
+
+		moveLeft(renderer, distance, posContrincante);
+		jumpLeft(renderer);
+		return;
+	}
+
 	//Acciones de dos teclas primero
 	if(inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey)) jumpRight(renderer);
+	else if(inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey)) jumpLeft(renderer);
 
 	//Acciones de una sola tecla
 	else if(inputManager->isKeyDown(upKey)) jump(renderer);
