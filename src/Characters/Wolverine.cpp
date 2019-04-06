@@ -54,7 +54,7 @@ Wolverine::Wolverine(string name)
 }
 
 void Wolverine::load(SDL_Renderer* renderer) {
-	m_Texture.loadFromFile("images/wolverine_stand_right.png", renderer);
+	m_Texture.loadFromFile("images/wolverine/wolverine_stand_right.png", renderer);
 }
 
 void Wolverine::resetSpriteVariables() {
@@ -69,9 +69,9 @@ void Wolverine::resetSpriteVariables() {
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
 	if (isLookingLeft){
-		m_Texture.loadFromFile("images/MVC2_Wolverine_38_left.png", renderer);
+		m_Texture.loadFromFile("images/wolverine/wolverine_duck/MVC2_Wolverine_38_left.png", renderer);
 	}else{
-		m_Texture.loadFromFile("images/MVC2_Wolverine_38.png", renderer);
+		m_Texture.loadFromFile("images/wolverine/wolverine_duck/MVC2_Wolverine_38.png", renderer);
 	}
 }
 
@@ -91,9 +91,9 @@ void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position){
 		currentStandingSprite = FIRST_STANDING_SPRITE;
 
 	if (position == 'r')
-		imagePath = "images/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+		imagePath = "images/wolverine/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
 	else
-		imagePath = "images/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+		imagePath = "images/wolverine/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
 	m_Texture.loadFromFile(imagePath, renderer);
 
 }
@@ -124,7 +124,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
             currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
         }
 
-        string imagePath = "images/wolverine_walkbackwards_right/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
+        string imagePath = "images/wolverine/wolverine_walkbackwards_right/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
         m_Texture.loadFromFile(imagePath, renderer);
         ++currentWalkbackRightSprite;
     	isLookingLeft = false;
@@ -165,7 +165,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
             currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
         }
 
-        string imagePath = "images/wolverine_walkbackwards_left/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
+        string imagePath = "images/wolverine/wolverine_walkbackwards_left/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
         m_Texture.loadFromFile(imagePath, renderer);
         ++currentWalkbackRightSprite;
     	isLookingLeft = true;
@@ -195,7 +195,7 @@ void Wolverine::animacionRight(SDL_Renderer *renderer){
         currentWalkingRightSprite = FIRST_WALKING_SPRITE;
     }
 
-    imagePath = "images/wolverine_walking_right/MVC2_Wolverine_" + to_string(currentWalkingRightSprite) + ".png";
+    imagePath = "images/wolverine/wolverine_walking_right/MVC2_Wolverine_" + to_string(currentWalkingRightSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
     ++currentWalkingRightSprite;
 }
@@ -207,7 +207,7 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer){
         currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
     }
 
-    imagePath = "images/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
+    imagePath = "images/wolverine/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
     ++currentWalkingLeftSprite;
 }
@@ -217,7 +217,7 @@ void Wolverine::jump(SDL_Renderer *renderer) {
 	isJumpingVertical = true;
 
 
-    string imagePath = "images/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
+    string imagePath = "images/wolverine/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
 
     if (currentJumpingSprite < 81) {
@@ -245,12 +245,12 @@ void Wolverine::jumpRight(SDL_Renderer *renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		imagePath = "images/wolverine_jumping_right_inverted/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) + "a" + ".png";
+		imagePath = "images/wolverine/wolverine_jumping_right_inverted/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) + "a" + ".png";
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
 	else{
-		imagePath = "images/wolverine_jumping_right/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) + ".png";
+		imagePath = "images/wolverine/wolverine_jumping_right/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) + ".png";
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
@@ -278,12 +278,12 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		imagePath = "images/wolverine_jumping_left/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + ".png";
+		imagePath = "images/wolverine/wolverine_jumping_left/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + ".png";
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
 	else{
-		imagePath = "images/wolverine_jumping_left_inverted/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + "a" + ".png";
+		imagePath = "images/wolverine/wolverine_jumping_left_inverted/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + "a" + ".png";
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
