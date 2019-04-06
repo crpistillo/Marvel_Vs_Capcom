@@ -84,8 +84,6 @@ void Character::update(SDL_Renderer* renderer, int distance, int posContrincante
 
 
 
-
-
 	if(
 		(!inputManager->isKeyUp(upKey) &&
 		!inputManager->isKeyUp(downKey) &&

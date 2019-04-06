@@ -20,13 +20,13 @@ const int FIRST_WALKING_SPRITE = 39;
 const int LAST_WALKING_SPRITE = 54;
 
 const int FIRST_JUMPING_SPRITE = 79;
-const int LAST_JUMPING_SPRITE = 84;
+const int LAST_JUMPING_SPRITE = 86;
 
 const int FIRST_JUMPING_RIGHT_SPRITE = 85;
-const int LAST_JUMPING_RIGHT_SPRITE = 92;
+const int LAST_JUMPING_RIGHT_SPRITE = 98;
 
 const int FIRST_JUMPING_LEFT_SPRITE = 85;
-const int LAST_JUMPING_LEFT_SPRITE = 92;
+const int LAST_JUMPING_LEFT_SPRITE = 98;
 
 const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
@@ -220,10 +220,10 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     string imagePath = "images/wolverine/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
 
-    if (currentJumpingSprite < 81) {
+    if (currentJumpingSprite < 83) {
         mPosY -= CHARACTER_VEL;
     }
-    if (currentJumpingSprite > 81) {
+    if (currentJumpingSprite >= 83) {
         mPosY += CHARACTER_VEL;
     }
 
@@ -254,10 +254,10 @@ void Wolverine::jumpRight(SDL_Renderer *renderer){
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
-	if (currentJumpingRightSprite < 204) {
+	if (currentJumpingRightSprite < 92) {
 		mPosY -= CHARACTER_VEL;
 	}
-	if (currentJumpingRightSprite >= 204) {
+	if (currentJumpingRightSprite >= 92) {
 		mPosY += CHARACTER_VEL;
 	}
 
@@ -287,10 +287,10 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer){
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
-	if (currentJumpingLeftSprite < 204) {
+	if (currentJumpingLeftSprite < 92) {
 		mPosY -= CHARACTER_VEL;
 	}
-	if (currentJumpingLeftSprite >= 204) {
+	if (currentJumpingLeftSprite >= 92) {
 		mPosY += CHARACTER_VEL;
 	}
 	++currentJumpingLeftSprite;
