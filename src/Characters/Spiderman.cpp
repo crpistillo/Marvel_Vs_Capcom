@@ -204,12 +204,16 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 	string imagePath;
 
 	if(isLookingLeft){
-		imagePath = "images/spiderman/spiderman_jumping_inverted/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_inverted/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
+						renderer, &m_Texture);
+
 	}
 	else{
-		imagePath = "images/spiderman/spiderman_jumping/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
+								renderer, &m_Texture);
+
 
 	}
 
@@ -237,13 +241,13 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		imagePath = "images/spiderman/spiderman_jumping_right_inverted/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + "a"+ ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_right_inverted/", "MVC2_SpiderMan_", currentJumpingRightSprite, "a.png",
+				renderer, &m_Texture);
 	}
 
 	else{
-		imagePath = "images/spiderman/spiderman_jumping_right/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_right/", "MVC2_SpiderMan_", currentJumpingRightSprite, ".png",
+				renderer, &m_Texture);
 	}
 
 	this->repositionHeightAfterJump('r');
@@ -267,13 +271,15 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		imagePath = "images/spiderman/spiderman_jumping_left/MVC2_SpiderMan_" + to_string(currentJumpingLeftSprite) + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_left/", "MVC2_SpiderMan_", currentJumpingLeftSprite, ".png",
+						renderer, &m_Texture);
 	}
 
 	else{
-		imagePath = "images/spiderman/spiderman_jumping_left_inverted/MVC2_SpiderMan_" + to_string(currentJumpingLeftSprite) + "a" + ".png";
-		m_Texture.loadFromFile(imagePath, renderer);
+
+		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_left_inverted/", "MVC2_SpiderMan_", currentJumpingLeftSprite, "a.png",
+						renderer, &m_Texture);
 	}
 
 	this->repositionHeightAfterJump('l');

@@ -27,6 +27,9 @@ public:
 	static const int SOBRANTE = 437;
 
 private:
+
+	ImageLoader loader;
+
     void resetSpriteVariables();
     void renderStandSprite(SDL_Renderer *renderer);
     void loadStandSprite(SDL_Renderer *renderer, char position);

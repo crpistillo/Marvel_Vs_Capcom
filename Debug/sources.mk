@@ -27,6 +27,7 @@ src/Characters \
 src \
 src/Texture \
 src/tools/FPSManager \
+src/tools/ImageLoader \
 src/tools/json/ConfigFileParser \
 src/tools/logger \
 

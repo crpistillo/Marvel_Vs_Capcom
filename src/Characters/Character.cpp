@@ -47,6 +47,7 @@ Character::Character(
 	this->downKey = downKey;
 	this->rightKey = rightKey;
 	this->leftKey = leftKey;
+	this->loader = new ImageLoader();
 }
 
 // Public:

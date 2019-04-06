@@ -12,6 +12,7 @@
 #include "../Texture/Texture.h"
 #include "../InputTable.h"
 #include "../InputManager.h"
+#include "../tools/ImageLoader/ImageLoader.h"
 
 using namespace std;
 
@@ -57,6 +58,8 @@ protected:
 	int mVelX, mVelY;
 
 	Texture m_Texture;
+	ImageLoader* loader;
+
 	int currentWalkingLeftSprite;
 	int currentStandingSprite;
 	int currentWalkingRightSprite;
