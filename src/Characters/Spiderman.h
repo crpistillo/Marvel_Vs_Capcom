@@ -39,6 +39,7 @@ private:
     void updateStand();
     void animacionRight(SDL_Renderer *renderer);
     void animacionLeft(SDL_Renderer *renderer);
+    void repositionHeightAfterJump(char direction);
 };
 
 

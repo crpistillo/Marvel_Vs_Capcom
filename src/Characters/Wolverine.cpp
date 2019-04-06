@@ -260,12 +260,7 @@ void Wolverine::jumpRight(SDL_Renderer *renderer){
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
-	if (currentJumpingRightSprite < 92) {
-		mPosY -= CHARACTER_VEL;
-	}
-	if (currentJumpingRightSprite >= 92) {
-		mPosY += CHARACTER_VEL;
-	}
+	this->repositionHeightAfterJump('r');
 
 	++currentJumpingRightSprite;
 
@@ -293,12 +288,9 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer){
 		m_Texture.loadFromFile(imagePath, renderer);
 	}
 
-	if (currentJumpingLeftSprite < 92) {
-		mPosY -= CHARACTER_VEL;
-	}
-	if (currentJumpingLeftSprite >= 92) {
-		mPosY += CHARACTER_VEL;
-	}
+
+	this->repositionHeightAfterJump('l');
+
 	++currentJumpingLeftSprite;
 
 	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
@@ -307,6 +299,27 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer){
 
 	    isStanding = true;
 	    isJumpingLeft = false;
+	}
+}
+
+void Wolverine::repositionHeightAfterJump(char direction){
+
+	if(direction == 'r'){
+		if (currentJumpingRightSprite < ((FIRST_JUMPING_RIGHT_SPRITE + LAST_JUMPING_RIGHT_SPRITE) / 2)) {
+			mPosY -= CHARACTER_VEL;
+		}
+		else{
+			mPosY += CHARACTER_VEL;
+		}
+	}
+	else{
+		if (currentJumpingLeftSprite < ((FIRST_JUMPING_LEFT_SPRITE + LAST_JUMPING_LEFT_SPRITE) / 2)) {
+			mPosY -= CHARACTER_VEL;
+		}
+		else{
+			mPosY += CHARACTER_VEL;
+		}
+
 	}
 }
 
