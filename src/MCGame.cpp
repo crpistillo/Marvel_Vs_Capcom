@@ -51,8 +51,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                spiderman->load(m_Renderer);
-                wolverine->load(m_Renderer);
+                player1->loads(m_Renderer);
+                player2->loads(m_Renderer);
                 g_BackgroundTexture.loadFromFile("images/camino.png", m_Renderer);
             }
         }
@@ -69,8 +69,15 @@ MCGame::MCGame(Logger* logger){
 	m_destinationRectangle = NULL;
 	m_sourceRectangle = NULL;
 	m_Running = false;
-	spiderman = new Spiderman("Spiderman");
-	wolverine = new Wolverine("Wolverine");
+
+	Character* character1 = new Spiderman("Spiderman");
+    Character* character2 = new Wolverine("Wolverine");
+
+    Character* character3 = new Wolverine("Wolverine");
+    Character* character4 = new Spiderman("Spiderman");
+
+    player1 = new Player(character1, character2);
+    player2 = new Player(character3, character4);
 }
 
 void MCGame::run() {
@@ -92,15 +99,15 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
-    wolverine->render(m_Renderer, camera.x, camera.y, spiderman->getPosX());
-    spiderman->render(m_Renderer, camera.x, camera.y, wolverine->getPosX());
+    player2->render(m_Renderer, camera.x, camera.y, player1->getPosX());
+    player1->render(m_Renderer, camera.x, camera.y, player2->getPosX());
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
 void MCGame::clean() {
     //m_Texture.free();
-    delete spiderman;
-    delete wolverine;
+    delete player1;
+    delete player2;
     g_BackgroundTexture.free();
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
@@ -114,13 +121,13 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
-	distancia = spiderman->getPosX() - wolverine->getPosX();
-	distancia2 = wolverine->getPosX() - spiderman->getPosX();
-    spiderman->update(m_Renderer, distancia, wolverine->getPosX());
-    wolverine->update(m_Renderer, distancia2, spiderman->getPosX());
+	distancia = player1->getPosX() - player2->getPosX();
+	distancia2 = player2->getPosX() - player1->getPosX();
+    player1->update(m_Renderer, distancia, player2->getPosX());
+    player2->update(m_Renderer, distancia2, player1->getPosX());
 
     //Centrar la camara sobre ambos personajes
-    camera.x = (((( spiderman->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( wolverine->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
+    camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
     //camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 	camera.y = 0;
 

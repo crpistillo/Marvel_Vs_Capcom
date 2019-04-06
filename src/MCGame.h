@@ -15,6 +15,7 @@
 #include "Texture/Texture.h"
 #include "tools/logger/Logger.h"
 #include "InputManager.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ private:
     Logger* logger;
     // Scene textures
     Texture g_BackgroundTexture;
+    Player* player1;
+    Player* player2;
     Spiderman* spiderman;
     Wolverine* wolverine;
 
