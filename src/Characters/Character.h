@@ -39,6 +39,8 @@ protected:
 		int currentStandingSprite,
 		int currentJumpingSprite,
 		int currentJumpingRightSprite,
+		int currentWalkbackLeftSprite,
+		int currentWalkbackRightSprite,
 		bool isLookingLeft,
 		string name,
 		int upKey,
@@ -59,6 +61,8 @@ protected:
 	int currentWalkingRightSprite;
 	int currentJumpingSprite;
 	int currentJumpingRightSprite;
+	int currentWalkbackLeftSprite;
+	int currentWalkbackRightSprite;
 	bool isLookingLeft;
 	bool isStanding;
 	int upKey;

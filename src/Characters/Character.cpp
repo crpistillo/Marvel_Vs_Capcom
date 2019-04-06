@@ -16,6 +16,8 @@ Character::Character(
 	int currentStandingSprite,
 	int currentJumpingSprite,
 	int currentJumpingRightSprite,
+	int currentWalkbackLeftSprite,
+	int currentWalkbackRightSprite,
 	bool isLookingLeft,
 	string name,
 	int upKey,
@@ -30,6 +32,8 @@ Character::Character(
 	this->currentWalkingLeftSprite = currentWalkingLeftSprite;
 	this->currentWalkingRightSprite = currentWalkingRightSprite;
 	this->currentStandingSprite = currentStandingSprite;
+	this->currentWalkbackLeftSprite = currentWalkingLeftSprite;
+	this->currentWalkbackRightSprite = currentWalkingRightSprite;
 	this->currentJumpingSprite = currentJumpingSprite;
 	this->currentJumpingRightSprite = currentJumpingRightSprite;
 	this->isLookingLeft = isLookingLeft;
@@ -81,7 +85,6 @@ void Character::free() {
 }
 
 int Character::getPosX() {
-    //243 es una corrección debida a que el ancho de la imagen es mas grande que el personaje
 	return mPosX;
 }
 

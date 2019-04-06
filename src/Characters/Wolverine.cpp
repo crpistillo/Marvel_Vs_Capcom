@@ -25,6 +25,9 @@ const int LAST_JUMPING_SPRITE = 84;
 const int FIRST_JUMPING_RIGHT_SPRITE = 85;
 const int LAST_JUMPING_RIGHT_SPRITE = 92;
 
+const int FIRST_WALKBACK_SPRITE = 55;
+const int LAST_WALKBACK_SPRITE = 70;
+
 Wolverine::Wolverine(string name)
 : Character(
 	INITIAL_POS_X,
@@ -34,6 +37,8 @@ Wolverine::Wolverine(string name)
 	FIRST_STANDING_SPRITE,
 	FIRST_JUMPING_SPRITE,
 	FIRST_JUMPING_RIGHT_SPRITE,
+	FIRST_WALKBACK_SPRITE,
+	FIRST_WALKBACK_SPRITE,
 	true,
 	name,
 	KEY_W,
@@ -53,6 +58,8 @@ void Wolverine::resetSpriteVariables() {
 	currentJumpingSprite = FIRST_JUMPING_SPRITE;
 	currentWalkingRightSprite = FIRST_WALKING_SPRITE;
 	currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+	currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
+	currentWalkbackLeftSprite = FIRST_WALKBACK_SPRITE;
 }
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
@@ -109,9 +116,13 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     	animacionLeft(renderer);
     }
     else {
-    	/*Esto debe ser corregido. Debe ir la animacion donde Wolverine camina hacia
-    	 * atras mirando a la derecha.*/
-    	animacionRight(renderer);
+        if (currentWalkbackRightSprite > LAST_WALKBACK_SPRITE) {
+            currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
+        }
+
+        string imagePath = "images/wolverine_walkbackwards_right/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
+        m_Texture.loadFromFile(imagePath, renderer);
+        ++currentWalkbackRightSprite;
     	isLookingLeft = false;
     }
 
@@ -146,9 +157,13 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     	animacionRight(renderer);
     }
     else {
-    	/*Esto debe ser corregido. Debe ir la animacion donde Wolverine camina hacia
-    	* atras mirando a la izquierda.*/
-    	animacionLeft(renderer);
+        if (currentWalkbackRightSprite > LAST_WALKBACK_SPRITE) {
+            currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
+        }
+
+        string imagePath = "images/wolverine_walkbackwards_left/MVC2_Wolverine_" + to_string(currentWalkbackRightSprite) + ".png";
+        m_Texture.loadFromFile(imagePath, renderer);
+        ++currentWalkbackRightSprite;
     	isLookingLeft = true;
     }
 
