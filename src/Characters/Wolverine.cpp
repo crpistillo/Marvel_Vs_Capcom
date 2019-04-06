@@ -266,7 +266,36 @@ void Wolverine::jumpRight(SDL_Renderer *renderer){
 }
 
 void Wolverine::jumpLeft(SDL_Renderer *renderer){
+	isStanding = false;
+	isJumpingLeft = true;
 
+	string imagePath;
+
+	if(isLookingLeft){
+		imagePath = "images/wolverine_jumping_left/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+
+	else{
+		imagePath = "images/wolverine_jumping_left_inverted/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) + "a" + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+
+	if (currentJumpingLeftSprite < 204) {
+		mPosY -= CHARACTER_VEL;
+	}
+	if (currentJumpingLeftSprite >= 204) {
+		mPosY += CHARACTER_VEL;
+	}
+	++currentJumpingLeftSprite;
+
+	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
+		currentJumpingLeftSprite = FIRST_JUMPING_LEFT_SPRITE;
+	    mPosY = INITIAL_POS_Y;
+
+	    isStanding = true;
+	    isJumpingLeft = false;
+	}
 }
 
 void Wolverine::updateStand() {
