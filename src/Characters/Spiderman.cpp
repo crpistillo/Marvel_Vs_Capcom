@@ -194,10 +194,7 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
 
 void Spiderman::jump(SDL_Renderer *renderer) {
 	isStanding = false;
-    if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
-        currentJumpingSprite = FIRST_JUMPING_SPRITE;
-        mPosY = INITIAL_POS_Y;
-    }
+	isJumpingVertical = true;
 
     string imagePath = "images/spiderman_jumping/MVC2_SpiderMan_" + to_string(currentJumpingSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
@@ -210,14 +207,18 @@ void Spiderman::jump(SDL_Renderer *renderer) {
     }
 
     ++currentJumpingSprite;
+
+    if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
+        currentJumpingSprite = FIRST_JUMPING_SPRITE;
+        mPosY = INITIAL_POS_Y;
+        isStanding = true;
+        isJumpingVertical = false;
+    }
 }
 
 void Spiderman::jumpRight(SDL_Renderer *renderer){
 	isStanding = false;
-	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {
-		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
-	    mPosY = INITIAL_POS_Y;
-	}
+	isJumpingRight = true;
 
 	string imagePath = "images/spiderman_jumping_right/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + ".png";
 	m_Texture.loadFromFile(imagePath, renderer);
@@ -230,6 +231,14 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	}
 
 	++currentJumpingRightSprite;
+
+	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
+		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
+	    mPosY = INITIAL_POS_Y;
+
+	    isStanding = true;
+	    isJumpingRight = false;
+	}
 }
 
 

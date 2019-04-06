@@ -210,10 +210,8 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer){
 
 void Wolverine::jump(SDL_Renderer *renderer) {
 	isStanding = false;
-    if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
-        currentJumpingSprite = FIRST_JUMPING_SPRITE;
-        mPosY = INITIAL_POS_Y;
-    }
+	isJumpingVertical = true;
+
 
     string imagePath = "images/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
     m_Texture.loadFromFile(imagePath, renderer);
@@ -226,15 +224,20 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     }
 
     ++currentJumpingSprite;
+
+    if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
+        currentJumpingSprite = FIRST_JUMPING_SPRITE;
+        mPosY = INITIAL_POS_Y;
+
+        isStanding = true;
+        isJumpingVertical = false;
+    }
 }
 
 void Wolverine::jumpRight(SDL_Renderer *renderer){
-
 	isStanding = false;
-	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {
-		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
-		mPosY = INITIAL_POS_Y;
-	}
+	isJumpingRight = true;
+
 
 	string imagePath = "images/wolverine_jumping_right/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) + ".png";
 	m_Texture.loadFromFile(imagePath, renderer);
@@ -247,6 +250,15 @@ void Wolverine::jumpRight(SDL_Renderer *renderer){
 	}
 
 	++currentJumpingRightSprite;
+
+
+	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {
+		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
+		mPosY = INITIAL_POS_Y;
+
+		isStanding = true;
+		isJumpingRight = false;
+	}
 }
 
 void Wolverine::updateStand() {

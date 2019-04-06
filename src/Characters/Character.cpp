@@ -38,6 +38,8 @@ Character::Character(
 	this->currentJumpingRightSprite = currentJumpingRightSprite;
 	this->isLookingLeft = isLookingLeft;
 	this->isStanding = true;
+	this->isJumpingVertical = false;
+	this->isJumpingRight = false;
 	this->upKey = upKey;
 	this->downKey = downKey;
 	this->rightKey = rightKey;
@@ -48,12 +50,30 @@ Character::Character(
 void Character::update(SDL_Renderer* renderer, int distance, int posContrincante) {
 	InputManager* inputManager = InputManager::getInstance();
 
-	if(inputManager->isKeyDown(upKey)) jump(renderer);
-	if(inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
-	if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance, posContrincante);
-	if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
+	if(isJumpingVertical){    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
+		jump(renderer);
+		return;
+	}
 
+	if(isJumpingRight){		//Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
+
+		moveRight(renderer, distance, posContrincante);
+		jumpRight(renderer);
+		return;
+	}
+
+	//Acciones de dos teclas primero
 	if(inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey)) jumpRight(renderer);
+
+	//Acciones de una sola tecla
+	else if(inputManager->isKeyDown(upKey)) jump(renderer);
+	else if(inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
+	else if(inputManager->isKeyDown(rightKey)) moveRight(renderer, distance, posContrincante);
+	else if(inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
+
+
+
+
 
 	if(
 		(!inputManager->isKeyUp(upKey) &&

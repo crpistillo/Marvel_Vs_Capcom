@@ -65,6 +65,8 @@ protected:
 	int currentWalkbackRightSprite;
 	bool isLookingLeft;
 	bool isStanding;
+	bool isJumpingVertical;
+	bool isJumpingRight;
 	int upKey;
 	int downKey;
 	int rightKey;
