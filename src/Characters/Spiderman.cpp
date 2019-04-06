@@ -82,7 +82,7 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
-	isStanding = false;
+	//isStanding = false;
 	if (isLookingLeft){
 		m_Texture.loadFromFile("images/MVC2_SpiderMan_219_left.png", renderer);
 	}else{
@@ -91,6 +91,7 @@ void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 }
 
 void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
+
 	isStanding = false;
     isLookingLeft = true;
 
@@ -129,6 +130,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
 }
 
 void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
+
 	isStanding = false;
     isLookingLeft = false;
 
@@ -220,8 +222,17 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	isStanding = false;
 	isJumpingRight = true;
 
-	string imagePath = "images/spiderman_jumping_right/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + ".png";
-	m_Texture.loadFromFile(imagePath, renderer);
+	string imagePath;
+
+	if(isLookingLeft){
+		imagePath = "images/spiderman_jumping_right_inverted/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + "a"+ ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
+
+	else{
+		imagePath = "images/spiderman_jumping_right/MVC2_SpiderMan_" + to_string(currentJumpingRightSprite) + ".png";
+		m_Texture.loadFromFile(imagePath, renderer);
+	}
 
 	if (currentJumpingRightSprite < 204) {
 		mPosY -= CHARACTER_VEL;
