@@ -13,7 +13,7 @@
 class Wolverine final: public Character {
 public:
     //Initializes the variables
-	Wolverine(string name);
+	Wolverine(string name, int PosX);
     void load(SDL_Renderer* renderer);
 	static const int CHARACTER_WIDTH = 157;
 	static const int CHARACTER_HEIGHT = 20;

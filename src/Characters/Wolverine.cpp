@@ -10,8 +10,7 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_X = ((LEVEL_WIDTH/2)-Wolverine::SOBRANTE)-(Wolverine::CHARACTER_WIDTH/2)+200;
-const int INITIAL_POS_Y = 41;
+const int INITIAL_POS_Y = 20;
 
 const int FIRST_STANDING_SPRITE = 21;
 const int LAST_STANDING_SPRITE = 37;
@@ -31,9 +30,9 @@ const int LAST_JUMPING_LEFT_SPRITE = 98;
 const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
 
-Wolverine::Wolverine(string name)
+Wolverine::Wolverine(string name, int PosX)
 : Character(
-	INITIAL_POS_X,
+	PosX,
 	INITIAL_POS_Y,
 	FIRST_WALKING_SPRITE,
 	FIRST_WALKING_SPRITE,

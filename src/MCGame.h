@@ -26,16 +26,12 @@ private:
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
     SDL_Joystick* gGameController = NULL;
-    Texture m_Texture; // the new SDL_Texture variable
-    SDL_Rect* m_sourceRectangle; // the first rectangle
-    SDL_Rect* m_destinationRectangle; // another rectangle
     Logger* logger;
     // Scene textures
     Texture g_BackgroundTexture;
     Player* player1;
     Player* player2;
-    Spiderman* spiderman;
-    Wolverine* wolverine;
+
 
 public:
     MCGame(Logger* logger);

@@ -4,18 +4,20 @@
 
 #include "Player.h"
 
-Player::Player(Character *first, Character *second) {
+Player::Player(Character *first, Character *second, int Key) {
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
+    changeKey = Key;
+
 }
 
 
 
 void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     InputManager* inputManager = InputManager::getInstance();
-    //if(inputManager->isKeyDown(changeKey));
-        //changeCharacter();
+    if(inputManager->isKeyDown(changeKey))
+        changeCharacter();
      currentCharacter->update(renderer, distance, posContrincante);
 }
 
@@ -36,9 +38,7 @@ void Player::changeCharacter() {
         currentCharacter = secondCharacter;
     else
         currentCharacter = firstCharacter;
-
-    currentCharacter->positionUpdate(updateX, updateY);
-
+    currentCharacter->positionUpdate(&updateX, &updateY);
     //hay que setear las mismas posiciones y tecla de cambio
     //animacion
 

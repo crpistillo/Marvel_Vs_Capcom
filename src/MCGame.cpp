@@ -6,11 +6,17 @@
 
 using namespace std;
 
+/*200 es el corrimiento a la izquierda desde el centro*/
+//((LEVEL_WIDTH/2)-Spiderman::SOBRANTE)-(Spiderman::CHARACTER_WIDTH/2)-200;
+const int INITIAL_POS_X_PLAYER_ONE = 864;
+const int INITIAL_POS_X_PLAYER_TWO = 1222;
+
+
 const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-const int SCREEN_FPS = 25;
+const int SCREEN_FPS = 30;
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -66,18 +72,16 @@ MCGame::MCGame(Logger* logger){
 	this->logger = logger;
 	m_Window = NULL;
 	m_Renderer = NULL;
-	m_destinationRectangle = NULL;
-	m_sourceRectangle = NULL;
 	m_Running = false;
 
-	Character* character1 = new Spiderman("Spiderman");
-    Character* character2 = new Wolverine("Wolverine");
+	Character* character1 = new Spiderman("Spiderman", INITIAL_POS_X_PLAYER_ONE);
+    Character* character2 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_ONE);
 
-    Character* character3 = new Wolverine("Wolverine");
-    Character* character4 = new Spiderman("Spiderman");
+    Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO);
+    Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO);
 
-    player1 = new Player(character1, character2);
-    player2 = new Player(character3, character4);
+    player1 = new Player(character1, character2, KEY_1);
+    player2 = new Player(character3, character4, KEY_2);
 }
 
 void MCGame::run() {

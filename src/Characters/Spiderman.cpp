@@ -10,9 +10,7 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-/*200 es el corrimiento a la izquierda desde el centro*/
-const int INITIAL_POS_X = ((LEVEL_WIDTH/2)-Spiderman::SOBRANTE)-(Spiderman::CHARACTER_WIDTH/2)-200;
-const int INITIAL_POS_Y = 50;
+const int INITIAL_POS_Y = 20;
 
 const int FIRST_STANDING_SPRITE = 159;
 const int LAST_STANDING_SPRITE = 167;
@@ -29,9 +27,9 @@ const int LAST_JUMPING_RIGHT_SPRITE = 210;
 const int FIRST_JUMPING_LEFT_SPRITE = 198;
 const int LAST_JUMPING_LEFT_SPRITE = 210;
 
-Spiderman::Spiderman(string name)
+Spiderman::Spiderman(string name, int PosX)
 : Character(
-	INITIAL_POS_X,
+	PosX,
 	INITIAL_POS_Y,
 	FIRST_WALKING_SPRITE,
 	FIRST_WALKING_SPRITE,

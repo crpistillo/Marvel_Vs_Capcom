@@ -29,7 +29,7 @@ public:
 	int getPosX();
 	int getPosY();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
-    void positionUpdate(int x, int y);
+    void positionUpdate(int* x, int* y);
 
 
 protected:

@@ -10,11 +10,12 @@
 
 class Player {
 public:
-    Player(Character* first, Character* second);
+    Player(Character* first, Character* second, int Key);
     void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
     void changeCharacter();
+    int changeKey;
 
 
     void loads(SDL_Renderer *pRenderer);
