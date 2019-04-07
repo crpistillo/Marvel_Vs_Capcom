@@ -13,6 +13,7 @@ RM := rm -rf
 -include src/tools/ImageLoader/subdir.mk
 -include src/tools/FPSManager/subdir.mk
 -include src/Texture/subdir.mk
+-include src/Controls/subdir.mk
 -include src/Characters/subdir.mk
 -include src/subdir.mk
 -include subdir.mk

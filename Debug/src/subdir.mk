@@ -6,16 +6,19 @@
 CPP_SRCS += \
 ../src/InputManager.cpp \
 ../src/MCGame.cpp \
+../src/Player.cpp \
 ../src/main.cpp 
 
 OBJS += \
 ./src/InputManager.o \
 ./src/MCGame.o \
+./src/Player.o \
 ./src/main.o 
 
 CPP_DEPS += \
 ./src/InputManager.d \
 ./src/MCGame.d \
+./src/Player.d \
 ./src/main.d 
 
 
