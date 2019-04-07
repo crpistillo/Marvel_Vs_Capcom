@@ -40,11 +40,7 @@ Spiderman::Spiderman(string name, int PosX)
 	0,//Spiderman no necesita animacion para ir marcha atras
 	0,
 	false,
-	name,
-	KEY_UP,
-	KEY_DOWN,
-	KEY_RIGHT,
-	KEY_LEFT
+	name
 )
 {
 }

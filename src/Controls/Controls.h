@@ -7,11 +7,15 @@
 
 
 class Controls {
+public:
     int upKey;
     int downKey;
     int rightKey;
     int leftKey;
     int changeKey;
+
+protected:
+    Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey);
 };
 
 

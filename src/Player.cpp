@@ -4,12 +4,15 @@
 
 #include "Player.h"
 
-Player::Player(Character *first, Character *second, int Key) {
+Player::Player(Character *first, Character *second, Controls* controls) {
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
-    changeKey = Key;
 
+
+    changeKey = controls->changeKey;
+    firstCharacter->setControls(controls);
+    secondCharacter->setControls(controls);
 }
 
 

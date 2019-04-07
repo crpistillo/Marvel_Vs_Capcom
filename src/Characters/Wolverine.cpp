@@ -43,11 +43,7 @@ Wolverine::Wolverine(string name, int PosX)
 	FIRST_WALKBACK_SPRITE,
 	FIRST_WALKBACK_SPRITE,
 	true,
-	name,
-	KEY_W,
-	KEY_S,
-	KEY_D,
-	KEY_A
+	name
 )
 {
 }

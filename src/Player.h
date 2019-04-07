@@ -7,16 +7,15 @@
 
 
 #include "Characters/Character.h"
+#include "Controls/Controls.h"
 
 class Player {
 public:
-    Player(Character* first, Character* second, int Key);
+    Player(Character* first, Character* second, Controls* controls);
     void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
     void changeCharacter();
-    int changeKey;
-
 
     void loads(SDL_Renderer *pRenderer);
 
@@ -26,6 +25,7 @@ private:
     Character* currentCharacter;
     Character* firstCharacter;
     Character* secondCharacter;
+    int changeKey;
 
 };
 

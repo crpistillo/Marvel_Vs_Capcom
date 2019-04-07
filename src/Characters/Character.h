@@ -13,6 +13,7 @@
 #include "../InputTable.h"
 #include "../InputManager.h"
 #include "../tools/ImageLoader/ImageLoader.h"
+#include "../Controls/Controls.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ public:
 	int getPosY();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void positionUpdate(int* x, int* y);
+    void setControls(Controls* controls);
 
 
 protected:
@@ -45,11 +47,7 @@ protected:
 		int currentWalkbackLeftSprite,
 		int currentWalkbackRightSprite,
 		bool isLookingLeft,
-		string name,
-		int upKey,
-		int downKey,
-		int rightKey,
-		int leftKey
+		string name
 	);
 	~Character();
 
@@ -74,10 +72,7 @@ protected:
 	bool isJumpingVertical;
 	bool isJumpingRight;
 	bool isJumpingLeft;
-	int upKey;
-	int downKey;
-	int rightKey;
-	int leftKey;
+    Controls* characterControls;
 	string name;
 
 private:

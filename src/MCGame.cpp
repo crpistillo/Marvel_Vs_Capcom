@@ -3,6 +3,8 @@
 //
 
 #include "MCGame.h"
+#include "Controls/WASDControls.h"
+#include "Controls/ArrowControls.h"
 
 using namespace std;
 
@@ -80,8 +82,11 @@ MCGame::MCGame(Logger* logger){
     Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO);
     Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO);
 
-    player1 = new Player(character1, character2, KEY_1);
-    player2 = new Player(character3, character4, KEY_2);
+    Controls* controlPlayer2 = new WASDControls();
+    Controls* controlPlayer1 = new ArrowControls();
+
+    player1 = new Player(character1, character2, controlPlayer1);
+    player2 = new Player(character3, character4, controlPlayer2);
 }
 
 void MCGame::run() {

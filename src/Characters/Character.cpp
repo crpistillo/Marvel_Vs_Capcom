@@ -20,11 +20,7 @@ Character::Character(
         int currentWalkbackLeftSprite,
         int currentWalkbackRightSprite,
         bool isLookingLeft,
-        string name,
-        int upKey,
-        int downKey,
-        int rightKey,
-        int leftKey
+        string name
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -43,11 +39,8 @@ Character::Character(
     this->isJumpingVertical = false;
     this->isJumpingRight = false;
     this->isJumpingLeft = false;
-    this->upKey = upKey;
-    this->downKey = downKey;
-    this->rightKey = rightKey;
-    this->leftKey = leftKey;
     this->loader = new ImageLoader();
+
 }
 
 // Public:
@@ -74,23 +67,23 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     }
 
     //Acciones de dos teclas primero
-    if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey)) jumpRight(renderer);
-    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey)) jumpLeft(renderer);
+    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey)) jumpRight(renderer);
+    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey)) jumpLeft(renderer);
 
         //Acciones de una sola tecla
-    else if (inputManager->isKeyDown(upKey)) jump(renderer);
-    else if (inputManager->isKeyDown(downKey)) renderDuckSprite(renderer);
-    else if (inputManager->isKeyDown(rightKey)) moveRight(renderer, distance, posContrincante);
-    else if (inputManager->isKeyDown(leftKey)) moveLeft(renderer, distance, posContrincante);
+    else if (inputManager->isKeyDown(characterControls->upKey)) jump(renderer);
+    else if (inputManager->isKeyDown(characterControls->downKey)) renderDuckSprite(renderer);
+    else if (inputManager->isKeyDown(characterControls->rightKey)) moveRight(renderer, distance, posContrincante);
+    else if (inputManager->isKeyDown(characterControls->leftKey)) moveLeft(renderer, distance, posContrincante);
 
 
     if (
-            (!inputManager->isKeyUp(upKey) &&
-             !inputManager->isKeyUp(downKey) &&
-             !inputManager->isKeyUp(rightKey) &&
-             !inputManager->isKeyUp(leftKey))
-            || (inputManager->isKeyUp(rightKey) &&
-                inputManager->isKeyUp(leftKey))
+            (!inputManager->isKeyUp(characterControls->upKey) &&
+             !inputManager->isKeyUp(characterControls->downKey) &&
+             !inputManager->isKeyUp(characterControls->rightKey) &&
+             !inputManager->isKeyUp(characterControls->leftKey))
+            || (inputManager->isKeyUp(characterControls->rightKey) &&
+                inputManager->isKeyUp(characterControls->leftKey))
             )
         this->renderStandSprite(renderer);
 
@@ -128,6 +121,10 @@ Character::~Character() {
 void Character::positionUpdate(int* x, int* y) {
     mPosX = *x;
     mPosY = *y;
+}
+
+void Character::setControls(Controls* controls) {
+    characterControls = controls;
 }
 
 
