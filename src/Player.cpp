@@ -42,7 +42,6 @@ void Player::changeCharacter() {
     else
         currentCharacter = firstCharacter;
     currentCharacter->positionUpdate(&updateX, &updateY);
-    //hay que setear las mismas posiciones y tecla de cambio
     //animacion
 
 }
