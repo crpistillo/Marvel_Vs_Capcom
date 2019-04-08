@@ -24,6 +24,8 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
         setCharacterToChanging();
         isChanging = true;
     }
+    if(!currentCharacter->isMakingIntro)
+        isChanging = false;
     currentCharacter->update(renderer, distance, posContrincante);
 }
 

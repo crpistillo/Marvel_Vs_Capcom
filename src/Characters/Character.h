@@ -33,7 +33,7 @@ public:
     void positionUpdate(int* x, int* y);
     void setControls(Controls* controls);
     void startIntro();
-
+    bool isMakingIntro;
 
 protected:
 	Character(
@@ -75,7 +75,6 @@ protected:
 	bool isJumpingVertical;
 	bool isJumpingRight;
 	bool isJumpingLeft;
-	bool isMakingIntro;
     Controls* characterControls;
 	string name;
 
