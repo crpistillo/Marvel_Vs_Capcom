@@ -294,6 +294,7 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 	isMakingIntro = true;
+	isStanding = false;
 
 	this->loader.loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
 						renderer, &m_Texture);
@@ -304,6 +305,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 		currentIntroSprite = FIRST_INTRO_SPRITE;
 
 		isMakingIntro = false;
+		isStanding = true;
 	}
 
 }
