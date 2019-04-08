@@ -31,7 +31,7 @@ const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
 
 const int FIRST_INTRO_SPRITE = 0;
-const int LAST_INTRO_SPRITE = 0;
+const int LAST_INTRO_SPRITE = 171;
 
 Wolverine::Wolverine(string name, int PosX)
         : Character(
@@ -309,7 +309,20 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
 }
 
 void Wolverine::makeIntro(SDL_Renderer* renderer){
-	isMakingIntro = false;
+    isMakingIntro = true;
+    isStanding = false;
+
+    this->loader->loadActionSprite("images/wolverine/wolverine_intro/", "MVC2_Wolverine_", currentIntroSprite, ".png",
+                                  renderer, &m_Texture);
+
+    ++currentIntroSprite;
+
+    if(currentIntroSprite > LAST_INTRO_SPRITE){
+        currentIntroSprite = FIRST_INTRO_SPRITE;
+
+        isMakingIntro = false;
+        isStanding = true;
+    }
 }
 
 void Wolverine::repositionHeightAfterJump(char direction) {
