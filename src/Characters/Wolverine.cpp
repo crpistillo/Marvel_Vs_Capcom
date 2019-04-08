@@ -37,15 +37,6 @@ Wolverine::Wolverine(string name, int PosX)
         : Character(
         	PosX,
         	INITIAL_POS_Y,
-        	FIRST_WALKING_SPRITE,
-       		FIRST_WALKING_SPRITE,
-      		FIRST_STANDING_SPRITE,
-        	FIRST_JUMPING_SPRITE,
-        	FIRST_JUMPING_RIGHT_SPRITE,
-        	FIRST_JUMPING_LEFT_SPRITE,
-        	FIRST_WALKING_SPRITE,
-        	FIRST_WALKING_SPRITE,
-        	FIRST_INTRO_SPRITE,
         	false,
         	name
 ) {

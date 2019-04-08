@@ -14,6 +14,7 @@ class Spiderman final: public Character {
 public:
     //Initializes the variables
     Spiderman(string name, int PosX);
+    ~Spiderman();
     void load(SDL_Renderer* renderer);
 
 	/*Es la dimension del personaje sin contar el fondo magenta. Se mide "a mano" con un

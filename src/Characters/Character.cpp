@@ -11,15 +11,6 @@
 Character::Character(
         int mPosX,
         int mPosY,
-        int currentWalkingLeftSprite,
-        int currentWalkingRightSprite,
-        int currentStandingSprite,
-        int currentJumpingSprite,
-        int currentJumpingRightSprite,
-        int currentJumpingLeftSprite,
-        int currentWalkbackLeftSprite,
-        int currentWalkbackRightSprite,
-		int currentIntroSprite,
         bool isLookingLeft,
         string name
 ) {
@@ -27,15 +18,15 @@ Character::Character(
     this->mPosY = mPosY;
     this->mVelX = 0;
     this->mVelY = 0;
-    this->currentWalkingLeftSprite = currentWalkingLeftSprite;
-    this->currentWalkingRightSprite = currentWalkingRightSprite;
-    this->currentStandingSprite = currentStandingSprite;
-    this->currentWalkbackLeftSprite = currentWalkingLeftSprite;
-    this->currentWalkbackRightSprite = currentWalkingRightSprite;
-    this->currentJumpingSprite = currentJumpingSprite;
-    this->currentJumpingRightSprite = currentJumpingRightSprite;
-    this->currentJumpingLeftSprite = currentJumpingLeftSprite;
-    this->currentIntroSprite = currentIntroSprite;
+    this->currentWalkingLeftSprite = 0;
+    this->currentWalkingRightSprite = 0;
+    this->currentStandingSprite = 0;
+    this->currentWalkbackLeftSprite = 0;
+    this->currentWalkbackRightSprite = 0;
+    this->currentJumpingSprite = 0;
+    this->currentJumpingRightSprite = 0;
+    this->currentJumpingLeftSprite = 0;
+    this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
     this->isStanding = true;
     this->isJumpingVertical = false;

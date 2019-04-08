@@ -39,15 +39,6 @@ protected:
 	Character(
 		int mPosX,
 		int mPosY,
-		int currentWalkingLeftSprite,
-		int currentWalkingRightSprite,
-		int currentStandingSprite,
-		int currentJumpingSprite,
-		int currentJumpingRightSprite,
-		int currentJumpingLeftSprite,
-		int currentWalkbackLeftSprite,
-		int currentWalkbackRightSprite,
-		int currentIntroSprite,
 		bool isLookingLeft,
 		string name
 	);
