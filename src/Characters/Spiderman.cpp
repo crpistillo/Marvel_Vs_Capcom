@@ -28,7 +28,7 @@ const int FIRST_JUMPING_LEFT_SPRITE = 198;
 const int LAST_JUMPING_LEFT_SPRITE = 210;
 
 const int FIRST_INTRO_SPRITE = 315;
-const int LAST_INTRO_SPRITE = 330;
+const int LAST_INTRO_SPRITE = 332;
 
 unsigned int lastTime = SDL_GetTicks();
 
