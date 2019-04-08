@@ -130,8 +130,8 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
-	distancia = player1->getPosX() - player2->getPosX();
-	distancia2 = player2->getPosX() - player1->getPosX();
+	distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
+	distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
     player1->update(m_Renderer, distancia, player2->getPosX());
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
