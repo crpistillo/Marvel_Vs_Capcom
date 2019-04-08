@@ -8,7 +8,7 @@ Player::Player(Character *first, Character *second, Controls* controls) {
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
-
+    isChanging = false;
 
     changeKey = controls->changeKey;
     firstCharacter->setControls(controls);
@@ -19,9 +19,12 @@ Player::Player(Character *first, Character *second, Controls* controls) {
 
 void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     InputManager* inputManager = InputManager::getInstance();
-    if(inputManager->isKeyDown(changeKey))
+    if(inputManager->isKeyDown(changeKey) && !isChanging){
         changeCharacter();
-     currentCharacter->update(renderer, distance, posContrincante);
+        setCharacterToChanging();
+        isChanging = true;
+    }
+    currentCharacter->update(renderer, distance, posContrincante);
 }
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
@@ -44,6 +47,10 @@ void Player::changeCharacter() {
     currentCharacter->positionUpdate(&updateX, &updateY);
     //animacion
 
+}
+
+void Player::setCharacterToChanging(){
+	currentCharacter->startIntro();
 }
 
 void Player::loads(SDL_Renderer *pRenderer) {

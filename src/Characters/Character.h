@@ -32,6 +32,7 @@ public:
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void positionUpdate(int* x, int* y);
     void setControls(Controls* controls);
+    void startIntro();
 
 
 protected:
@@ -46,6 +47,7 @@ protected:
 		int currentJumpingLeftSprite,
 		int currentWalkbackLeftSprite,
 		int currentWalkbackRightSprite,
+		int currentIntroSprite,
 		bool isLookingLeft,
 		string name
 	);
@@ -67,11 +69,13 @@ protected:
 	int currentJumpingLeftSprite;
 	int currentWalkbackLeftSprite;
 	int currentWalkbackRightSprite;
+	int currentIntroSprite;
 	bool isLookingLeft;
 	bool isStanding;
 	bool isJumpingVertical;
 	bool isJumpingRight;
 	bool isJumpingLeft;
+	bool isMakingIntro;
     Controls* characterControls;
 	string name;
 
@@ -86,6 +90,7 @@ private:
 	virtual void jumpRight(SDL_Renderer *renderer) = 0;
 	virtual void jumpLeft(SDL_Renderer *renderer) = 0;
 	virtual void updateStand() = 0;
+	virtual void makeIntro(SDL_Renderer* renderer) = 0;
 };
 
 #endif /* CHARACTERS_CHARACTER_H_ */
