@@ -300,7 +300,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 	unsigned int currentTime = SDL_GetTicks();
 
-	if( (currentTime - lastTime) > 60 && currentIntroSprite <= LAST_INTRO_SPRITE){
+	if(currentIntroSprite <= LAST_INTRO_SPRITE){
         if(!isLookingLeft && 325 <= currentIntroSprite && currentIntroSprite<= 332)
             this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderManR_", currentIntroSprite, ".png",
                                           renderer, &m_Texture);

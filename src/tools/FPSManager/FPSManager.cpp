@@ -12,6 +12,8 @@ FPSManager::FPSManager(int screenFPS) {
 	delta = 0;
 	elapsedTime = 0;
 	delayTime = 0;
+	t1 = 0;
+	t2 = 0;
 }
 
 void FPSManager::start() {

@@ -316,7 +316,7 @@ void Wolverine::makeIntro(SDL_Renderer* renderer){
 
 	unsigned int currentTime = SDL_GetTicks();
 
-	if( (currentTime - lastTime) > 60 && currentIntroSprite <= LAST_INTRO_SPRITE){
+	if( currentIntroSprite <= LAST_INTRO_SPRITE){
 		this->loader->loadActionSprite("images/wolverine/wolverine_intro/", "MVC2_Wolverine_", currentIntroSprite, ".png",
 							renderer, &m_Texture);
 		++currentIntroSprite;
