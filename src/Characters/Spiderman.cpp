@@ -27,8 +27,8 @@ const int LAST_JUMPING_RIGHT_SPRITE = 210;
 const int FIRST_JUMPING_LEFT_SPRITE = 198;
 const int LAST_JUMPING_LEFT_SPRITE = 210;
 
-const int FIRST_INTRO_SPRITE = 189;
-const int LAST_INTRO_SPRITE = 196;
+const int FIRST_INTRO_SPRITE = 315;
+const int LAST_INTRO_SPRITE = 330;
 
 Spiderman::Spiderman(string name, int PosX)
 : Character(
@@ -296,7 +296,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 	isMakingIntro = true;
 	isStanding = false;
 
-	this->loader.loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+	this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
 						renderer, &m_Texture);
 
 	++currentIntroSprite;
