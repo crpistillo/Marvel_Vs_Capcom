@@ -23,7 +23,6 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
         changeCharacter();
         setCharacterToChanging();
         isChanging = true;
-        std::cout << "hola";
     }
     if(!currentCharacter->isMakingIntro)
         isChanging = false;
