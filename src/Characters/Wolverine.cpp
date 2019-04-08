@@ -31,7 +31,7 @@ const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
 
 const int FIRST_INTRO_SPRITE = 0;
-const int LAST_INTRO_SPRITE = 171;
+const int LAST_INTRO_SPRITE = 17;
 
 Wolverine::Wolverine(string name, int PosX)
         : Character(
