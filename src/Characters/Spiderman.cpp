@@ -34,7 +34,7 @@ Spiderman::~Spiderman(){
 }
 
 void Spiderman::load(SDL_Renderer* renderer) {
-	m_Texture.loadFromFile("images/spiderman/spiderman_standing_right/MVC2_SpiderMan_159.png", renderer);
+	m_Texture.loadFromFile("images/spiderman/spiderman_standing_right/MVC2_SpiderMan_0.png", renderer);
 }
 
 void Spiderman::resetSpriteVariables() {

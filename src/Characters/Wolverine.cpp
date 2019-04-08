@@ -30,7 +30,7 @@ Wolverine::Wolverine(string name, int PosX)
 }
 
 void Wolverine::load(SDL_Renderer *renderer) {
-    m_Texture.loadFromFile("images/wolverine/wolverine_standing_right/MVC2_Wolverine_21.png", renderer);
+    m_Texture.loadFromFile("images/wolverine/wolverine_standing_right/MVC2_Wolverine_0.png", renderer);
 }
 
 void Wolverine::resetSpriteVariables() {
