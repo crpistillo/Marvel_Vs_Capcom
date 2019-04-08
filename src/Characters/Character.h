@@ -78,6 +78,8 @@ protected:
     Controls* characterControls;
 	string name;
 
+	unsigned int lastTime;
+
 private:
 	virtual void resetSpriteVariables() = 0;
 	virtual void renderStandSprite(SDL_Renderer *renderer) = 0;

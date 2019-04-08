@@ -45,6 +45,8 @@ Character::Character(
     this->loader = new ImageLoader();
     this->characterControls = NULL;
 
+    this->lastTime = SDL_GetTicks();
+
 }
 
 // Public:
