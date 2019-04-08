@@ -12,23 +12,23 @@ const int LEVEL_HEIGHT = 600;
 
 const int INITIAL_POS_Y = 20;
 
-const int FIRST_STANDING_SPRITE = 159;
-const int LAST_STANDING_SPRITE = 167;
+const int FIRST_STANDING_SPRITE = 0;
+const int LAST_STANDING_SPRITE = 8;
 
-const int FIRST_WALKING_SPRITE = 170;
-const int LAST_WALKING_SPRITE = 180;
+const int FIRST_WALKING_SPRITE = 0;
+const int LAST_WALKING_SPRITE = 10;
 
-const int FIRST_JUMPING_SPRITE = 189;
-const int LAST_JUMPING_SPRITE = 196;
+const int FIRST_JUMPING_SPRITE = 0;
+const int LAST_JUMPING_SPRITE = 7;
 
-const int FIRST_JUMPING_RIGHT_SPRITE = 198;
-const int LAST_JUMPING_RIGHT_SPRITE = 210;
+const int FIRST_JUMPING_RIGHT_SPRITE = 0;
+const int LAST_JUMPING_RIGHT_SPRITE = 12;
 
-const int FIRST_JUMPING_LEFT_SPRITE = 198;
-const int LAST_JUMPING_LEFT_SPRITE = 210;
+const int FIRST_JUMPING_LEFT_SPRITE = 0;
+const int LAST_JUMPING_LEFT_SPRITE = 12;
 
-const int FIRST_INTRO_SPRITE = 315;
-const int LAST_INTRO_SPRITE = 331;
+const int FIRST_INTRO_SPRITE = 0;
+const int LAST_INTRO_SPRITE = 16;
 
 Spiderman::Spiderman(string name, int PosX)
 : Character(
@@ -301,7 +301,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 	unsigned int currentTime = SDL_GetTicks();
 
 	if(currentIntroSprite <= LAST_INTRO_SPRITE){
-        if(!isLookingLeft && 325 <= currentIntroSprite && currentIntroSprite<= 332)
+        if(!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite<= 16)
             this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderManR_", currentIntroSprite, ".png",
                                           renderer, &m_Texture);
         else
