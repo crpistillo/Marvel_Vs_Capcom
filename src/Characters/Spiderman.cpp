@@ -28,7 +28,9 @@ const int FIRST_JUMPING_LEFT_SPRITE = 198;
 const int LAST_JUMPING_LEFT_SPRITE = 210;
 
 const int FIRST_INTRO_SPRITE = 315;
-const int LAST_INTRO_SPRITE = 336;
+const int LAST_INTRO_SPRITE = 330;
+
+unsigned int lastTime = SDL_GetTicks();
 
 Spiderman::Spiderman(string name, int PosX)
 : Character(
@@ -296,10 +298,25 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 	isMakingIntro = true;
 	isStanding = false;
 
-	this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
-						renderer, &m_Texture);
 
-	++currentIntroSprite;
+
+	unsigned int currentTime = SDL_GetTicks();
+
+	if( (currentTime - lastTime) > 60 && currentIntroSprite != LAST_INTRO_SPRITE){
+		this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+							renderer, &m_Texture);
+
+		++currentIntroSprite;
+		lastTime = currentTime;
+	}
+	else if((currentTime - lastTime) > 500){
+		this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+									renderer, &m_Texture);
+
+		++currentIntroSprite;
+	}
+
+
 
 	if(currentIntroSprite > LAST_INTRO_SPRITE){
 		currentIntroSprite = FIRST_INTRO_SPRITE;
