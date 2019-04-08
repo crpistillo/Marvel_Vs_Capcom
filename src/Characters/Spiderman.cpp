@@ -30,8 +30,6 @@ const int LAST_JUMPING_LEFT_SPRITE = 210;
 const int FIRST_INTRO_SPRITE = 315;
 const int LAST_INTRO_SPRITE = 332;
 
-unsigned int lastTime = SDL_GetTicks();
-
 Spiderman::Spiderman(string name, int PosX)
 : Character(
 	PosX,

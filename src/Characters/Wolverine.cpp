@@ -31,7 +31,7 @@ const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
 
 const int FIRST_INTRO_SPRITE = 0;
-const int LAST_INTRO_SPRITE = 17;
+const int LAST_INTRO_SPRITE = 25;
 
 Wolverine::Wolverine(string name, int PosX)
         : Character(
@@ -309,20 +309,32 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
 }
 
 void Wolverine::makeIntro(SDL_Renderer* renderer){
-    isMakingIntro = true;
-    isStanding = false;
+	isMakingIntro = true;
+	isStanding = false;
 
-    this->loader->loadActionSprite("images/wolverine/wolverine_intro/", "MVC2_Wolverine_", currentIntroSprite, ".png",
-                                  renderer, &m_Texture);
 
-    ++currentIntroSprite;
 
-    if(currentIntroSprite > LAST_INTRO_SPRITE){
-        currentIntroSprite = FIRST_INTRO_SPRITE;
+	unsigned int currentTime = SDL_GetTicks();
 
-        isMakingIntro = false;
-        isStanding = true;
-    }
+	if( (currentTime - lastTime) > 60 && currentIntroSprite != LAST_INTRO_SPRITE){
+		this->loader->loadActionSprite("images/wolverine/wolverine_intro/", "MVC2_Wolverine_", currentIntroSprite, ".png",
+							renderer, &m_Texture);
+		++currentIntroSprite;
+		lastTime = currentTime;
+	}
+	else if((currentTime - lastTime) > 500){
+		this->loader->loadActionSprite("images/wolverine/wolverine_intro/", "MVC2_Wolverine_", currentIntroSprite, ".png",
+									renderer, &m_Texture);
+		++currentIntroSprite;
+	}
+
+
+
+	if(currentIntroSprite > LAST_INTRO_SPRITE){
+		currentIntroSprite = FIRST_INTRO_SPRITE;
+		isMakingIntro = false;
+		isStanding = true;
+		}
 }
 
 void Wolverine::repositionHeightAfterJump(char direction) {
