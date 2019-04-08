@@ -10,27 +10,14 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
+//Por defecto, todos los sprites comienzan en 0.
 const int INITIAL_POS_Y = 20;
-
-const int FIRST_STANDING_SPRITE = 0;
 const int LAST_STANDING_SPRITE = 16;
-
-const int FIRST_WALKING_SPRITE = 0;
 const int LAST_WALKING_SPRITE = 15;
-
-const int FIRST_JUMPING_SPRITE = 0;
 const int LAST_JUMPING_SPRITE = 7;
-
-const int FIRST_JUMPING_RIGHT_SPRITE = 0;
 const int LAST_JUMPING_RIGHT_SPRITE = 13;
-
-const int FIRST_JUMPING_LEFT_SPRITE = 0;
 const int LAST_JUMPING_LEFT_SPRITE = 13;
-
-const int FIRST_WALKBACK_SPRITE = 0;
 const int LAST_WALKBACK_SPRITE = 15;
-
-const int FIRST_INTRO_SPRITE = 0;
 const int LAST_INTRO_SPRITE = 25;
 
 Wolverine::Wolverine(string name, int PosX)
@@ -48,11 +35,11 @@ void Wolverine::load(SDL_Renderer *renderer) {
 
 void Wolverine::resetSpriteVariables() {
     mPosY = INITIAL_POS_Y;
-    currentJumpingSprite = FIRST_JUMPING_SPRITE;
-    currentWalkingRightSprite = FIRST_WALKING_SPRITE;
-    currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
-    currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
-    currentWalkbackLeftSprite = FIRST_WALKBACK_SPRITE;
+    currentJumpingSprite = 0;
+    currentWalkingRightSprite = 0;
+    currentWalkingLeftSprite = 0;
+    currentWalkbackRightSprite = 0;
+    currentWalkbackLeftSprite = 0;
 }
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
@@ -77,7 +64,7 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
 void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position) {
     string imagePath;
     if (currentStandingSprite > LAST_STANDING_SPRITE)
-        currentStandingSprite = FIRST_STANDING_SPRITE;
+        currentStandingSprite = 0;
 
     if (position == 'r')
         imagePath =
@@ -111,7 +98,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
         animacionLeft(renderer);
     } else {
         if (currentWalkbackRightSprite > LAST_WALKBACK_SPRITE) {
-            currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
+            currentWalkbackRightSprite = 0;
         }
 
         string imagePath = "images/wolverine/wolverine_walkbackwards_right/MVC2_Wolverine_" +
@@ -153,7 +140,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
         animacionRight(renderer);
     } else {
         if (currentWalkbackRightSprite > LAST_WALKBACK_SPRITE) {
-            currentWalkbackRightSprite = FIRST_WALKBACK_SPRITE;
+            currentWalkbackRightSprite = 0;
         }
 
         string imagePath = "images/wolverine/wolverine_walkbackwards_left/MVC2_Wolverine_" +
@@ -184,7 +171,7 @@ void Wolverine::animacionRight(SDL_Renderer *renderer) {
     string imagePath;
 
     if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
-        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+        currentWalkingRightSprite = 0;
     }
 
     imagePath =
@@ -197,7 +184,7 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer) {
     string imagePath;
 
     if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+        currentWalkingLeftSprite = 0;
     }
 
     imagePath =
@@ -230,7 +217,7 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     ++currentJumpingSprite;
 
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
-        currentJumpingSprite = FIRST_JUMPING_SPRITE;
+        currentJumpingSprite = 0;
         mPosY = INITIAL_POS_Y;
 
         isStanding = true;
@@ -260,7 +247,7 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
 
     if (currentJumpingRightSprite >
         LAST_JUMPING_RIGHT_SPRITE) {    //Hasta que no termine de saltar, no cambio los booleanos.
-        currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
+        currentJumpingRightSprite = 0;
         mPosY = INITIAL_POS_Y;
 
         isStanding = true;
@@ -291,7 +278,7 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
 
     if (currentJumpingLeftSprite >
         LAST_JUMPING_LEFT_SPRITE) {    //Hasta que no termine de saltar, no cambio los booleanos.
-        currentJumpingLeftSprite = FIRST_JUMPING_LEFT_SPRITE;
+        currentJumpingLeftSprite = 0;
         mPosY = INITIAL_POS_Y;
 
         isStanding = true;
@@ -315,7 +302,7 @@ void Wolverine::makeIntro(SDL_Renderer* renderer){
 	}
 
 	if(currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
-		currentIntroSprite = FIRST_INTRO_SPRITE;
+		currentIntroSprite = 0;
 		isMakingIntro = false;
 		isStanding = true;
 		}
@@ -324,13 +311,13 @@ void Wolverine::makeIntro(SDL_Renderer* renderer){
 void Wolverine::repositionHeightAfterJump(char direction) {
 
     if (direction == 'r') {
-        if (currentJumpingRightSprite < ((FIRST_JUMPING_RIGHT_SPRITE + LAST_JUMPING_RIGHT_SPRITE) / 2)) {
+        if (currentJumpingRightSprite < (( LAST_JUMPING_RIGHT_SPRITE) / 2)) {
             mPosY -= CHARACTER_VEL;
         } else {
             mPosY += CHARACTER_VEL;
         }
     } else {
-        if (currentJumpingLeftSprite < ((FIRST_JUMPING_LEFT_SPRITE + LAST_JUMPING_LEFT_SPRITE) / 2)) {
+        if (currentJumpingLeftSprite < (( LAST_JUMPING_LEFT_SPRITE) / 2)) {
             mPosY -= CHARACTER_VEL;
         } else {
             mPosY += CHARACTER_VEL;

@@ -12,22 +12,12 @@ const int LEVEL_HEIGHT = 600;
 
 const int INITIAL_POS_Y = 20;
 
-const int FIRST_STANDING_SPRITE = 0;
+//Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 8;
-
-const int FIRST_WALKING_SPRITE = 0;
 const int LAST_WALKING_SPRITE = 10;
-
-const int FIRST_JUMPING_SPRITE = 0;
 const int LAST_JUMPING_SPRITE = 7;
-
-const int FIRST_JUMPING_RIGHT_SPRITE = 0;
 const int LAST_JUMPING_RIGHT_SPRITE = 12;
-
-const int FIRST_JUMPING_LEFT_SPRITE = 0;
 const int LAST_JUMPING_LEFT_SPRITE = 12;
-
-const int FIRST_INTRO_SPRITE = 0;
 const int LAST_INTRO_SPRITE = 16;
 
 Spiderman::Spiderman(string name, int PosX)
@@ -49,9 +39,9 @@ void Spiderman::load(SDL_Renderer* renderer) {
 
 void Spiderman::resetSpriteVariables() {
 	mPosY = INITIAL_POS_Y;
-	currentJumpingSprite = FIRST_JUMPING_SPRITE;
-	currentWalkingRightSprite = FIRST_WALKING_SPRITE;
-	currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+	currentJumpingSprite = 0;
+	currentWalkingRightSprite = 0;
+	currentWalkingLeftSprite = 0;
 }
 
 void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
@@ -67,7 +57,7 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 	string imagePath;
 	if (currentStandingSprite > LAST_STANDING_SPRITE)
-		currentStandingSprite = FIRST_STANDING_SPRITE;
+		currentStandingSprite = 0;
 
 	if (position == 'r')
 		imagePath = "images/spiderman/spiderman_standing_right/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
@@ -170,7 +160,7 @@ void Spiderman::animacionRight(SDL_Renderer *renderer){
 	string imagePath;
 
 	if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
-        currentWalkingRightSprite = FIRST_WALKING_SPRITE;
+        currentWalkingRightSprite = 0;
     }
 
 	imagePath = "images/spiderman/spiderman_walking_right/MVC2_SpiderMan_" + to_string(currentWalkingRightSprite) + ".png";
@@ -182,7 +172,7 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
 	string imagePath;
 
     if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = FIRST_WALKING_SPRITE;
+        currentWalkingLeftSprite = 0;
     }
 
     imagePath = "images/spiderman/spiderman_walking_left/MVC2_SpiderMan_" + to_string(currentWalkingLeftSprite) + ".png";
@@ -219,7 +209,7 @@ void Spiderman::jump(SDL_Renderer *renderer) {
     ++currentJumpingSprite;
 
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
-        currentJumpingSprite = FIRST_JUMPING_SPRITE;
+        currentJumpingSprite = 0;
         mPosY = INITIAL_POS_Y;
         isStanding = true;
         isJumpingVertical = false;
@@ -247,7 +237,7 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	++currentJumpingRightSprite;
 
 	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
-		currentJumpingRightSprite = FIRST_JUMPING_RIGHT_SPRITE;
+		currentJumpingRightSprite = 0;
 	    mPosY = INITIAL_POS_Y;
 
 	    isStanding = true;
@@ -277,7 +267,7 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 	++currentJumpingLeftSprite;
 
 	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
-		currentJumpingLeftSprite = FIRST_JUMPING_LEFT_SPRITE;
+		currentJumpingLeftSprite = 0;
 	    mPosY = INITIAL_POS_Y;
 
 	    isStanding = true;
@@ -308,7 +298,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 
 	if(currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
-		currentIntroSprite = FIRST_INTRO_SPRITE;
+		currentIntroSprite = 0;
 
 		isMakingIntro = false;
 		isStanding = true;
@@ -319,7 +309,7 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 void Spiderman::repositionHeightAfterJump(char direction){
 
 	if(direction == 'r'){
-		if (currentJumpingRightSprite < ((FIRST_JUMPING_RIGHT_SPRITE + LAST_JUMPING_RIGHT_SPRITE) / 2)) {
+		if (currentJumpingRightSprite < ((LAST_JUMPING_RIGHT_SPRITE) / 2)) {
 			mPosY -= CHARACTER_VEL;
 		}
 		else{
@@ -327,7 +317,7 @@ void Spiderman::repositionHeightAfterJump(char direction){
 		}
 	}
 	else{
-		if (currentJumpingLeftSprite < ((FIRST_JUMPING_LEFT_SPRITE + LAST_JUMPING_LEFT_SPRITE) / 2)) {
+		if (currentJumpingLeftSprite < ((LAST_JUMPING_LEFT_SPRITE) / 2)) {
 			mPosY -= CHARACTER_VEL;
 		}
 		else{
