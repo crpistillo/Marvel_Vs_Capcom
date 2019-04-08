@@ -15,7 +15,7 @@ public:
     void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
-    void changeCharacter();
+
 
     void loads(SDL_Renderer *pRenderer);
 
@@ -26,7 +26,10 @@ private:
     Character* firstCharacter;
     Character* secondCharacter;
     int changeKey;
+    bool isChanging;
 
+    void changeCharacter();
+    void setCharacterToChanging();
 };
 
 

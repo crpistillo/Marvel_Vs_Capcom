@@ -30,20 +30,24 @@ const int LAST_JUMPING_LEFT_SPRITE = 98;
 const int FIRST_WALKBACK_SPRITE = 55;
 const int LAST_WALKBACK_SPRITE = 70;
 
+const int FIRST_INTRO_SPRITE = 0;
+const int LAST_INTRO_SPRITE = 0;
+
 Wolverine::Wolverine(string name, int PosX)
         : Character(
-        PosX,
-        INITIAL_POS_Y,
-        FIRST_WALKING_SPRITE,
-        FIRST_WALKING_SPRITE,
-        FIRST_STANDING_SPRITE,
-        FIRST_JUMPING_SPRITE,
-        FIRST_JUMPING_RIGHT_SPRITE,
-        FIRST_JUMPING_LEFT_SPRITE,
-        FIRST_WALKBACK_SPRITE,
-        FIRST_WALKBACK_SPRITE,
-        true,
-        name
+        	PosX,
+        	INITIAL_POS_Y,
+        	FIRST_WALKING_SPRITE,
+       		FIRST_WALKING_SPRITE,
+      		FIRST_STANDING_SPRITE,
+        	FIRST_JUMPING_SPRITE,
+        	FIRST_JUMPING_RIGHT_SPRITE,
+        	FIRST_JUMPING_LEFT_SPRITE,
+        	FIRST_WALKING_SPRITE,
+        	FIRST_WALKING_SPRITE,
+        	FIRST_INTRO_SPRITE,
+        	false,
+        	name
 ) {
 }
 
@@ -302,6 +306,10 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
         isStanding = true;
         isJumpingLeft = false;
     }
+}
+
+void Wolverine::makeIntro(SDL_Renderer* renderer){
+	isMakingIntro = false;
 }
 
 void Wolverine::repositionHeightAfterJump(char direction) {

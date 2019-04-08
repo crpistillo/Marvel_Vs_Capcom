@@ -27,6 +27,9 @@ const int LAST_JUMPING_RIGHT_SPRITE = 210;
 const int FIRST_JUMPING_LEFT_SPRITE = 198;
 const int LAST_JUMPING_LEFT_SPRITE = 210;
 
+const int FIRST_INTRO_SPRITE = 189;
+const int LAST_INTRO_SPRITE = 196;
+
 Spiderman::Spiderman(string name, int PosX)
 : Character(
 	PosX,
@@ -37,8 +40,9 @@ Spiderman::Spiderman(string name, int PosX)
 	FIRST_JUMPING_SPRITE,
 	FIRST_JUMPING_RIGHT_SPRITE,
 	FIRST_JUMPING_LEFT_SPRITE,
-	0,//Spiderman no necesita animacion para ir marcha atras
-	0,
+	FIRST_WALKING_SPRITE,
+	FIRST_WALKING_SPRITE,
+	FIRST_INTRO_SPRITE,
 	false,
 	name
 )
@@ -262,8 +266,6 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 	isStanding = false;
 	isJumpingLeft = true;
 
-	string imagePath;
-
 	if(isLookingLeft){
 
 		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_left/", "MVC2_SpiderMan_", currentJumpingLeftSprite, ".png",
@@ -287,6 +289,25 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 	    isStanding = true;
 	    isJumpingLeft = false;
 	}
+}
+
+void Spiderman::makeIntro(SDL_Renderer* renderer){
+
+	isMakingIntro = true;
+	isStanding = false;
+
+	this->loader.loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+						renderer, &m_Texture);
+
+	++currentIntroSprite;
+
+	if(currentIntroSprite > LAST_INTRO_SPRITE){
+		currentIntroSprite = FIRST_INTRO_SPRITE;
+
+		isMakingIntro = false;
+		isStanding = true;
+	}
+
 }
 
 void Spiderman::repositionHeightAfterJump(char direction){

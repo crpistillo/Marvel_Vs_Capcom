@@ -19,6 +19,7 @@ Character::Character(
         int currentJumpingLeftSprite,
         int currentWalkbackLeftSprite,
         int currentWalkbackRightSprite,
+		int currentIntroSprite,
         bool isLookingLeft,
         string name
 ) {
@@ -34,18 +35,26 @@ Character::Character(
     this->currentJumpingSprite = currentJumpingSprite;
     this->currentJumpingRightSprite = currentJumpingRightSprite;
     this->currentJumpingLeftSprite = currentJumpingLeftSprite;
+    this->currentIntroSprite = currentIntroSprite;
     this->isLookingLeft = isLookingLeft;
     this->isStanding = true;
     this->isJumpingVertical = false;
     this->isJumpingRight = false;
     this->isJumpingLeft = false;
+    this->isMakingIntro = false;
     this->loader = new ImageLoader();
+    this->characterControls = NULL;
 
 }
 
 // Public:
 void Character::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     InputManager *inputManager = InputManager::getInstance();
+
+    if (isMakingIntro){
+    	makeIntro(renderer);
+    	return;
+    }
 
     if (isJumpingVertical) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
         jump(renderer);
@@ -125,6 +134,10 @@ void Character::positionUpdate(int* x, int* y) {
 
 void Character::setControls(Controls* controls) {
     characterControls = controls;
+}
+
+void Character::startIntro(){
+	isMakingIntro = true;
 }
 
 
