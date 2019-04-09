@@ -29,6 +29,8 @@ public:
 	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
 	int getPosX();
 	int getPosY();
+	int getWidth();
+	int getSobrante();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void positionUpdate(int* x, int* y);
     void setControls(Controls* controls);
@@ -40,6 +42,8 @@ protected:
 	Character(
 		int mPosX,
 		int mPosY,
+		int width,
+		int sobrante,
 		bool isLookingLeft,
 		string name
 	);
@@ -49,6 +53,8 @@ protected:
 	int mPosX, mPosY;
 	//The velocity of the character
 	int mVelX, mVelY;
+
+	int width, sobrante;
 
 	Texture m_Texture;
 	ImageLoader* loader;

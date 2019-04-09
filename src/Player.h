@@ -21,7 +21,15 @@ public:
 
     int getPosX();
 
+<<<<<<< HEAD
     Character* getCurrentCharacter();
+=======
+    int getWidth();
+
+    int getSobrante();
+
+    int getCentro();
+>>>>>>> branch 'Grafica' of https://github.com/sebak94/marvel-vs-capcom
 
 private:
     Character* currentCharacter;

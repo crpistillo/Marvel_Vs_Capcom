@@ -11,11 +11,15 @@
 Character::Character(
         int mPosX,
         int mPosY,
+		int width,
+		int sobrante,
         bool isLookingLeft,
         string name
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
+    this->width = width;
+    this->sobrante = sobrante;
     this->mVelX = 0;
     this->mVelY = 0;
     this->currentWalkingLeftSprite = 0;
@@ -114,6 +118,14 @@ int Character::getPosX() {
 
 int Character::getPosY() {
     return mPosY;
+}
+
+int Character::getWidth() {
+    return width;
+}
+
+int Character::getSobrante() {
+    return sobrante;
 }
 
 Character::~Character() {
