@@ -130,13 +130,21 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
-	distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
-	distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
+	//distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
+	//distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
+	if (player1->getCentro() > player2->getCentro()) {
+		distancia = player1->getPosX()+player1->getSobrante()+player1->getWidth() - (player2->getPosX()+player2->getSobrante());
+		distancia2 = player2->getPosX()+player2->getSobrante() - (player1->getPosX()+player1->getSobrante()+player1->getWidth());
+	} else {
+		distancia = player1->getPosX()+player1->getSobrante() - (player2->getPosX()+player2->getSobrante()+player2->getWidth());
+		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
+	}
     player1->update(m_Renderer, distancia, player2->getPosX());
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
     //Centrar la camara sobre ambos personajes
-    camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
+    //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
+    camera.x = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
     //camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 	camera.y = 0;
 

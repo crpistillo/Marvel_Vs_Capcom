@@ -24,6 +24,8 @@ Wolverine::Wolverine(string name, int PosX)
         : Character(
         	PosX,
         	INITIAL_POS_Y,
+			Wolverine::CHARACTER_WIDTH,
+			Wolverine::SOBRANTE,
         	false,
         	name
 ) {
@@ -83,7 +85,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     //Mover
     mPosX -= CHARACTER_VEL;
 
-    if ((mPosX - CHARACTER_VEL <= -Wolverine::SOBRANTE) || (distance < (-450))) {
+    if ((mPosX - CHARACTER_VEL <= -Wolverine::SOBRANTE) || (distance < (-800))) {
         isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -130,7 +132,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     mPosX += CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Wolverine::SOBRANTE - Wolverine::CHARACTER_WIDTH)) ||
-        (distance > 725)) {
+        (distance > 800)) {
         isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;

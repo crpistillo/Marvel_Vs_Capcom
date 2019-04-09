@@ -64,4 +64,19 @@ int Player::getPosX() {
     currentCharacter->getPosX();
 }
 
+int Player::getWidth() {
+    currentCharacter->getWidth();
+}
+
+int Player::getSobrante() {
+    currentCharacter->getSobrante();
+}
+
+int Player::getCentro() {
+    int centro;
+    centro = currentCharacter->getPosX()+currentCharacter->getSobrante()+(currentCharacter->getWidth())/2;
+    return centro;
+}
+
+
 

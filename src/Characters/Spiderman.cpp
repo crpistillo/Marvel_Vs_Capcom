@@ -24,6 +24,8 @@ Spiderman::Spiderman(string name, int PosX)
 : Character(
 	PosX,
 	INITIAL_POS_Y,
+	Spiderman::CHARACTER_WIDTH,
+	Spiderman::SOBRANTE,
 	false,
 	name
 )
@@ -87,7 +89,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     /*distance es la distancia entre personajes la cual pensada como si fuesen puntos
      * iria de -600 a 600, pero como los personajes tienen ancho (y diferente ancho),
      * se ven numeros (como ese -375) que fueron sacados a ojo*/
-    if ((mPosX - CHARACTER_VEL <= -Spiderman::SOBRANTE) || (distance < (-375))) {
+    if ((mPosX - CHARACTER_VEL <= -Spiderman::SOBRANTE) || (distance < (-800))) {
     	isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;

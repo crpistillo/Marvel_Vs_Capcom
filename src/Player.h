@@ -21,6 +21,12 @@ public:
 
     int getPosX();
 
+    int getWidth();
+
+    int getSobrante();
+
+    int getCentro();
+
 private:
     Character* currentCharacter;
     Character* firstCharacter;
