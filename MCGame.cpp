@@ -114,14 +114,14 @@ void MCGame::run() {
 }
 
 void MCGame::render() {
-	logger->log("Inicio Renderizado MCGame.", DEBUG);
+//	logger->log("Inicio Renderizado MCGame.", DEBUG);
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
     g_BackgroundTexture.render(0, 0, m_Renderer, &camera);
     player2->render(m_Renderer, camera.x, camera.y, player1->getPosX());
     player1->render(m_Renderer, camera.x, camera.y, player2->getPosX());
     SDL_RenderPresent(m_Renderer); // draw to the screen
-    logger->log("Fin Renderizado MCGame.", DEBUG);
+//   logger->log("Fin Renderizado MCGame.", DEBUG);
 }
 
 void MCGame::clean() {
@@ -158,5 +158,5 @@ void MCGame::update() {
 	if ((camera.x) > 3200 - (camera.w)) camera.x = 3200 - camera.w;
 	if ((camera.y) > 600 - (camera.h)) camera.y = 600 - camera.h;
 
-	logger->log("Actualizacion posicionamiento MCGame.", DEBUG);
+	//logger->log("Actualizacion posicionamiento MCGame.", DEBUG);
 }
