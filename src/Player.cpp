@@ -61,20 +61,16 @@ void Player::loads(SDL_Renderer *pRenderer) {
 }
 
 int Player::getPosX() {
-    currentCharacter->getPosX();
+    return currentCharacter->getPosX();
 }
 
-Character* Player::getCurrentCharacter()
-{
-	return this->currentCharacter;
-}
 
 int Player::getWidth() {
-    currentCharacter->getWidth();
+    return currentCharacter->getWidth();
 }
 
 int Player::getSobrante() {
-    currentCharacter->getSobrante();
+    return currentCharacter->getSobrante();
 }
 
 int Player::getCentro() {
