@@ -64,12 +64,11 @@ int Player::getPosX() {
     currentCharacter->getPosX();
 }
 
-<<<<<<< HEAD
 Character* Player::getCurrentCharacter()
 {
 	return this->currentCharacter;
 }
-=======
+
 int Player::getWidth() {
     currentCharacter->getWidth();
 }
@@ -84,6 +83,10 @@ int Player::getCentro() {
     return centro;
 }
 
->>>>>>> branch 'Grafica' of https://github.com/sebak94/marvel-vs-capcom
+Character* Player::getCurrentCharacter()
+{
+	return this->currentCharacter;
+}
+
 
 

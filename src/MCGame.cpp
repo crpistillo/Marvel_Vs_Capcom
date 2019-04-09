@@ -165,14 +165,9 @@ void MCGame::update() {
     }
 
     //Centrar la camara sobre ambos personajes
-<<<<<<< HEAD
-    camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
-    //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-=======
     //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
     camera.x = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
-    //camera.y = ( spiderman->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
->>>>>>> branch 'Grafica' of https://github.com/sebak94/marvel-vs-capcom
+    //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 	camera.y = 0;
 
 	//Keep the camera in bounds
