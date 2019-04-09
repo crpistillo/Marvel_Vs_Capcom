@@ -21,6 +21,8 @@ public:
 
     int getPosX();
 
+    Character* getCurrentCharacter();
+
 private:
     Character* currentCharacter;
     Character* firstCharacter;
@@ -30,6 +32,7 @@ private:
 
     void changeCharacter();
     void setCharacterToChanging();
+
 };
 
 

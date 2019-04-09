@@ -16,6 +16,7 @@
 #include "tools/logger/Logger.h"
 #include "InputManager.h"
 #include "Player.h"
+#include "Layer.h"
 
 using namespace std;
 
@@ -28,7 +29,11 @@ private:
     SDL_Joystick* gGameController = NULL;
     Logger* logger;
     // Scene textures
-    Texture g_BackgroundTexture;
+    Texture frontGroundTexture;
+    Texture middleGroundTexture;
+    Texture backGroundTexture;
+    Layer* middleGround;
+    Layer* backGround;
     Player* player1;
     Player* player2;
 

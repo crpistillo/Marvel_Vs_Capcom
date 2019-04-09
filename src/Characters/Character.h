@@ -34,6 +34,7 @@ public:
     void setControls(Controls* controls);
     void startIntro();
     bool isMakingIntro;
+    Controls* getControls();
 
 protected:
 	Character(

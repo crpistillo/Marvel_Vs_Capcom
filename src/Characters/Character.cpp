@@ -101,7 +101,7 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
 
     if (isStanding)
         renderStandSprite(mRenderer);
-    m_Texture.render(mPosX - camX, mPosY - camY, mRenderer);
+    m_Texture.render(mPosX - camX, mPosY - camY, 1153, 865, mRenderer);
 }
 
 void Character::free() {
@@ -131,6 +131,11 @@ void Character::setControls(Controls* controls) {
 
 void Character::startIntro(){
 	isMakingIntro = true;
+}
+
+Controls* Character::getControls()
+{
+	return this->characterControls;
 }
 
 

@@ -64,4 +64,9 @@ int Player::getPosX() {
     currentCharacter->getPosX();
 }
 
+Character* Player::getCurrentCharacter()
+{
+	return this->currentCharacter;
+}
+
 
