@@ -26,6 +26,8 @@ const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 int distancia;
 int distancia2;
+int centerBefore,centerLater=0;
+
 
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -152,6 +154,7 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
+
 	//distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
 	//distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
 	if (player1->getCentro() > player2->getCentro()) {
@@ -163,24 +166,32 @@ void MCGame::update() {
 	}
     player1->update(m_Renderer, distancia, player2->getPosX());
     player2->update(m_Renderer, distancia2, player1->getPosX());
-    middleGround->update(player1);
-    backGround->update(player1);
 
-    if(camera.x>1 && camera.x<LEVEL_WIDTH-SCREEN_WIDTH)
+    centerBefore = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
+    //Centrar la camara sobre ambos personajes
+    //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
+    camera.x = centerBefore;
+    //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
+	camera.y = 0;
+
+	middleGround->update(centerBefore, centerLater);
+	backGround->update(centerBefore, centerLater);
+
+    if(camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH)
     {
     	middleGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
     	backGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
     }
-
-    //Centrar la camara sobre ambos personajes
-    //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
-    camera.x = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
-    //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-	camera.y = 0;
 
 	//Keep the camera in bounds
 	if ((camera.x) < 0) camera.x = 0;
 	if ((camera.y) < 0) camera.y = 0;
 	if ((camera.x) > 3200 - (camera.w)) camera.x = 3200 - camera.w;
 	if ((camera.y) > 600 - (camera.h)) camera.y = 600 - camera.h;
+
+	centerLater = camera.x;
+	cout<<"centerBefore: "<<centerBefore<<endl;
+	cout<<"centerLater: "<<centerLater<<endl;
+
+
 }

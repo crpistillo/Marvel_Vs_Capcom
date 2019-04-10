@@ -20,20 +20,24 @@ Layer::Layer(int layerWidth, int layerHeight, float layerVel, int posX)
 	this-> mPosY = 0;
     this->mVelX = 0;
     this->mVelY = 0;
+
 }
 
-void Layer::update(Player* player1) {
-    InputManager *inputManager = InputManager::getInstance();
+void Layer::update(int centerBefore, int centerLater)
+{
 
-    Controls* characterControls = player1->getCurrentCharacter()->getControls();
+		if(centerLater > centerBefore)
+		{
+			mVelX += this->layerVel;
+		}
+		else if (centerLater < centerBefore)
+		{
+			mVelX -= this->layerVel;
+		}
 
-    //Acciones de dos teclas primero
-    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))  mVelX += this->layerVel;
-    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey)) mVelX -= this->layerVel;
 
-        //Acciones de una sola tecla
-    else if (inputManager->isKeyDown(characterControls->rightKey)) mVelX += this->layerVel;
-    else if (inputManager->isKeyDown(characterControls->leftKey))  mVelX -= this->layerVel;
+	//si se mueve a la derecha
+
 
 }
 

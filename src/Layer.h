@@ -29,7 +29,7 @@ class Layer
 
 		void render( int camX, int camY, SDL_Renderer *mRenderer, Texture* gTexture);
 
-		void update(Player* player1);
+		void update(int centerBefore, int centerLater);
 
 		//Position accessors
 		float getPosX();
@@ -45,6 +45,9 @@ class Layer
 
 		//The velocity of the dot
 		float mVelX, mVelY;
+
+		int changeKey;
+
 };
 
 
