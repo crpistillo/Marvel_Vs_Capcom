@@ -86,8 +86,12 @@ MCGame::MCGame(Logger* logger){
     Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO);
     Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO);
 
+    logger->log("Creacion de controles.", DEBUG);
+
     Controls* controlPlayer2 = new WASDControls();
     Controls* controlPlayer1 = new ArrowControls();
+
+    logger->log("Creacion de Jugadores.", DEBUG);
 
     player1 = new Player(character1, character2, controlPlayer1);
     player2 = new Player(character3, character4, controlPlayer2);
@@ -100,6 +104,8 @@ void MCGame::run() {
 	m_Running = true;
 	FPSManager fpsManager(SCREEN_FPS);
 
+	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
+
 	while(m_Running) {
 		fpsManager.start();
 
@@ -109,6 +115,7 @@ void MCGame::run() {
 
 		fpsManager.stop();
 	}
+	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
 
 void MCGame::render() {
@@ -135,6 +142,7 @@ void MCGame::clean() {
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
     SDL_Quit();
+    logger->log("Fin clean MCGame", DEBUG);
 }
 
 void MCGame::handleEvents() {
