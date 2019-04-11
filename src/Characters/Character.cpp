@@ -46,6 +46,7 @@ Character::Character(
 
 // Public:
 void Character::update(SDL_Renderer *renderer, int distance, int posContrincante) {
+
     InputManager *inputManager = InputManager::getInstance();
 
     if (isMakingIntro){
@@ -129,6 +130,8 @@ int Character::getSobrante() {
 }
 
 Character::~Character() {
+    delete loader;
+    m_Texture.free();
     this->free();
 }
 

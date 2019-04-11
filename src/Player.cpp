@@ -5,6 +5,7 @@
 #include "Player.h"
 
 Player::Player(Character *first, Character *second, Controls* controls) {
+    this->controls = controls;
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
@@ -82,6 +83,13 @@ int Player::getCentro() {
 Character* Player::getCurrentCharacter()
 {
 	return this->currentCharacter;
+}
+
+Player::~Player() {
+    delete controls;
+    delete firstCharacter;
+    delete secondCharacter;
+
 }
 
 

@@ -19,6 +19,7 @@ using namespace std;
 
 class Character {
 public:
+    ~Character();
 	//Maximum axis velocity of the character
 	static const int CHARACTER_VEL = 10;
     void free();
@@ -47,9 +48,8 @@ protected:
 		bool isLookingLeft,
 		string name
 	);
-	~Character();
 
-	//The X and Y offsets of the character
+    //The X and Y offsets of the character
 	int mPosX, mPosY;
 	//The velocity of the character
 	int mVelX, mVelY;

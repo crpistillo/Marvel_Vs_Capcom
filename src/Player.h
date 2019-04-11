@@ -12,6 +12,7 @@
 class Player {
 public:
     Player(Character* first, Character* second, Controls* controls);
+    ~Player();
     void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
@@ -33,6 +34,7 @@ private:
     Character* currentCharacter;
     Character* firstCharacter;
     Character* secondCharacter;
+    Controls* controls;
     int changeKey;
     bool isChanging;
 
