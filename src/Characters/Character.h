@@ -33,7 +33,7 @@ public:
 	int getWidth();
 	int getSobrante();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
-    void positionUpdate(int* x, int* y);
+    void positionUpdate(int* x);
     void setControls(Controls* controls);
     void startIntro();
     bool isMakingIntro;

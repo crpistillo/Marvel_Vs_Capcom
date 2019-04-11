@@ -41,13 +41,12 @@ void Player::free() {
 
 void Player::changeCharacter() {
     int updateX = currentCharacter->getPosX();
-    int updateY = currentCharacter->getPosY();
 
     if(currentCharacter == firstCharacter)
         currentCharacter = secondCharacter;
     else
         currentCharacter = firstCharacter;
-    currentCharacter->positionUpdate(&updateX, &updateY);
+    currentCharacter->positionUpdate(&updateX);
     //animacion
 
 }

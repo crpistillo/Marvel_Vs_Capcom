@@ -135,9 +135,8 @@ Character::~Character() {
     this->free();
 }
 
-void Character::positionUpdate(int* x, int* y) {
+void Character::positionUpdate(int* x) {
     mPosX = *x;
-    mPosY = *y;
 }
 
 void Character::setControls(Controls* controls) {
