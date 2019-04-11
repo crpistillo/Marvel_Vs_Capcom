@@ -28,12 +28,18 @@ void Layer::update(int centerBefore, int centerLater)
 
 		if(centerLater > centerBefore)
 		{
-			mVelX += this->layerVel;
+			mVelX -= this->layerVel;
+			this->move();
+			mVelX=0;
+
 		}
 		else if (centerLater < centerBefore)
 		{
-			mVelX -= this->layerVel;
+			mVelX += this->layerVel;
+			this->move();
+			mVelX=0;
 		}
+
 
 
 	//si se mueve a la derecha
@@ -67,13 +73,13 @@ void Layer::handleEvent( SDL_Event& e)
     }
 }
 
-void Layer::move(int levelWidth, int level_height)
+void Layer::move()
 {
     //Move the dot left or right
     mPosX += mVelX;
 
     //If the dot went too far to the left or right
-    if( ( mPosX < 0 ) || ( mPosX + this->layerWidth > levelWidth ) )
+    if( ( mPosX < 0 ) || ( mPosX + this->layerWidth > LEVEL_WIDTH ) )
     {
         //Move back
         mPosX -= mVelX;
@@ -83,7 +89,7 @@ void Layer::move(int levelWidth, int level_height)
     mPosY += mVelY;
 
     //If the dot went too far up or down
-    if( ( mPosY < 0 ) || ( mPosY + this->layerHeight > level_height ) )
+    if( ( mPosY < 0 ) || ( mPosY + this->layerHeight > LEVEL_HEIGHT ) )
     {
         //Move back
         mPosY -= mVelY;
@@ -104,6 +110,11 @@ float Layer::getPosX()
 float Layer::getPosY()
 {
 	return mPosY;
+}
+
+float Layer::getVel()
+{
+	return mVelX;
 }
 
 

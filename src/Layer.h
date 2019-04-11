@@ -12,6 +12,9 @@
 #include "Player.h"
 #include<SDL2/SDL.h>
 
+const int LEVEL_WIDTH = 3200;
+const int LEVEL_HEIGHT = 600;
+
 class Layer
 {
     public:
@@ -23,7 +26,7 @@ class Layer
 		void handleEvent( SDL_Event& e);
 
 		//Moves the dot
-		void move(int levelWidth, int level_height);
+		void move();
 
 		//Shows the dot on the screen relative to the camera
 
@@ -34,6 +37,7 @@ class Layer
 		//Position accessors
 		float getPosX();
 		float getPosY();
+		float getVel();
 
     private:
 		int layerWidth;

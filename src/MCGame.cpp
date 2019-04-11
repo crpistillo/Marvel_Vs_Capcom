@@ -22,11 +22,9 @@ const int SCREEN_FPS = 30;
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int LEVEL_WIDTH = 3200;
-const int LEVEL_HEIGHT = 600;
 int distancia;
 int distancia2;
-int centerBefore,centerLater=0;
+int centerBefore,centerLater=-1000;
 
 
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -98,8 +96,8 @@ MCGame::MCGame(Logger* logger){
     player1 = new Player(character1, character2, controlPlayer1);
     player2 = new Player(character3, character4, controlPlayer2);
 
-    middleGround = new Layer(2400, 600, 3.33, 400);
-    backGround = new Layer(1600,600,6.715,800);
+    middleGround = new Layer(2400, 600, 3.33, 400);//3.33
+    backGround = new Layer(1600,600,6.715,800);//6.715
 }
 
 void MCGame::run() {
@@ -168,20 +166,12 @@ void MCGame::update() {
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
     centerBefore = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
+
     //Centrar la camara sobre ambos personajes
     //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
     camera.x = centerBefore;
     //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
 	camera.y = 0;
-
-	middleGround->update(centerBefore, centerLater);
-	backGround->update(centerBefore, centerLater);
-
-    if(camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH)
-    {
-    	middleGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
-    	backGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
-    }
 
 	//Keep the camera in bounds
 	if ((camera.x) < 0) camera.x = 0;
@@ -189,9 +179,20 @@ void MCGame::update() {
 	if ((camera.x) > 3200 - (camera.w)) camera.x = 3200 - camera.w;
 	if ((camera.y) > 600 - (camera.h)) camera.y = 600 - camera.h;
 
+
+	if(centerLater!=-1000 && (camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH))
+	{
+		middleGround->update(centerBefore, centerLater);
+		backGround->update(centerBefore, centerLater);
+	}
+
 	centerLater = camera.x;
-	cout<<"centerBefore: "<<centerBefore<<endl;
-	cout<<"centerLater: "<<centerLater<<endl;
+
+	/*if(camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH)
+	{
+	    middleGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
+	    backGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
+	}*/
 
 
 }
