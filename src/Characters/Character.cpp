@@ -97,7 +97,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante, bool suplente) {
     if (Character::mPosX > posContrincante) {
         isLookingLeft = true;
     } else {
@@ -106,6 +106,14 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
 
     if (isStanding)
         renderStandSprite(mRenderer);
+
+    if (suplente) {
+    	Uint8 r = 000;
+    	Uint8 g = 255;
+    	Uint8 b = 255;
+    	m_Texture.setColor( r, g, b );
+    }
+
     m_Texture.render(mPosX - camX, mPosY - camY, 1153, 865, mRenderer);
 }
 

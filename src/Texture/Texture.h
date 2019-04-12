@@ -33,6 +33,9 @@ public:
 
     int getHeight();
 
+    //Set color modulation
+    void setColor( Uint8 red, Uint8 green, Uint8 blue );
+
 private:
     //The actual hardware texture
     SDL_Texture *mTexture;

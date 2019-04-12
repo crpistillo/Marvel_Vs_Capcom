@@ -27,7 +27,7 @@ public:
 	//Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
 	//Shows the character on the screen
-	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
+	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante, bool suplente);
 	int getPosX();
 	int getPosY();
 	int getWidth();

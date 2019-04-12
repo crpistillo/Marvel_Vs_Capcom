@@ -37,6 +37,7 @@ private:
     Controls* controls;
     int changeKey;
     bool isChanging;
+    bool secundario;
 
     void changeCharacter();
     void setCharacterToChanging();
