@@ -25,7 +25,7 @@ Layer::Layer(int layerWidth, int layerHeight, float layerVel, int posX)
 
 void Layer::update(int centerBefore, int centerLater)
 {
-
+		//Si la camara se esta moviendo para la derecha
 		if(centerLater > centerBefore)
 		{
 			mVelX -= this->layerVel;
@@ -33,88 +33,54 @@ void Layer::update(int centerBefore, int centerLater)
 			mVelX=0;
 
 		}
+
+		//Si la camara se esta moviendo hacia la izquierda
 		else if (centerLater < centerBefore)
 		{
 			mVelX += this->layerVel;
 			this->move();
 			mVelX=0;
 		}
-
-
-
-	//si se mueve a la derecha
-
-
 }
 
-void Layer::handleEvent( SDL_Event& e)
-{
-    //If a key was pressed
-	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
-        {
-            case SDLK_LEFT: mVelX -= this->layerVel; break;
-            case SDLK_RIGHT: mVelX += this->layerVel; break;
-        }
-    }
-    //If a key was released
-    else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
-        {
-            case SDLK_UP: mVelY += this->layerVel; break;
-            case SDLK_DOWN: mVelY -= this->layerVel; break;
-            case SDLK_LEFT: mVelX += this->layerVel; break;
-            case SDLK_RIGHT: mVelX -= this->layerVel; break;
-        }
-    }
-}
 
 void Layer::move()
 {
-    //Move the dot left or right
+    //Mueve el layer a la derecha o a la izquierda
     mPosX += mVelX;
 
-    //If the dot went too far to the left or right
+    //Si el layer se fue muy a la derecha o a la izquierda
     if( ( mPosX < 0 ) || ( mPosX + this->layerWidth > LEVEL_WIDTH ) )
     {
-        //Move back
+        //Lo mueve para atras
         mPosX -= mVelX;
-    }
-
-    //Move the dot up or down
-    mPosY += mVelY;
-
-    //If the dot went too far up or down
-    if( ( mPosY < 0 ) || ( mPosY + this->layerHeight > LEVEL_HEIGHT ) )
-    {
-        //Move back
-        mPosY -= mVelY;
     }
 }
 
 void Layer::render( int camX, int camY, SDL_Renderer* mRenderer, Texture* gTexture)
 {
-    //Show the dot relative to the camera
+    //Muestra el layer relativo a la camara
 	gTexture->render( mPosX - camX, mPosY - camY, layerWidth+100, layerHeight, mRenderer);
 }
 
-float Layer::getPosX()
+double Layer::getPosX()
 {
 	return mPosX;
 }
 
-float Layer::getPosY()
+double Layer::getPosY()
 {
 	return mPosY;
 }
 
-float Layer::getVel()
+double Layer::getVel()
 {
-	return mVelX;
+	return this->layerVel;
+}
+
+void Layer::changeVel(float vel)
+{
+	this->layerVel = vel;
 }
 
 

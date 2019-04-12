@@ -37,6 +37,7 @@ public:
     void startIntro();
     bool isMakingIntro;
     Controls* getControls();
+   	bool isMoving();
 
 protected:
 	Character(

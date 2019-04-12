@@ -17,6 +17,7 @@
 #include "InputManager.h"
 #include "Player.h"
 #include "Layer.h"
+#include "Parallax.h"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ private:
     Layer* backGround;
     Player* player1;
     Player* player2;
+    Parallax* parallaxController;
 
 
 public:

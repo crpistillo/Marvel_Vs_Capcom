@@ -19,38 +19,34 @@ class Layer
 {
     public:
 
-		//Initializes the variables
+		//Inicializa las variales
 		Layer(int layerWidth, int layerHeight, float layerVel, int posX);
 
-		//Takes key presses and adjusts the dot's velocity
-		void handleEvent( SDL_Event& e);
-
-		//Moves the dot
+		//Mueve el layer
 		void move();
 
-		//Shows the dot on the screen relative to the camera
-
+		//Muestra el layer en la pantalla, relativo a la camara
 		void render( int camX, int camY, SDL_Renderer *mRenderer, Texture* gTexture);
 
+		//Controla el movimiento del layer segun si la camara se movio a la derecha o izquierda
 		void update(int centerBefore, int centerLater);
 
 		//Position accessors
-		float getPosX();
-		float getPosY();
-		float getVel();
+		double getPosX();
+		double getPosY();
+		double getVel();
+		void changeVel(float vel);
 
     private:
 		int layerWidth;
 		int layerHeight;
-		float layerVel;
+		double layerVel;
 
 		//The X and Y offsets of the dot
-		float mPosX, mPosY;
+		double mPosX, mPosY;
 
 		//The velocity of the dot
-		float mVelX, mVelY;
-
-		int changeKey;
+		double mVelX, mVelY;
 
 };
 

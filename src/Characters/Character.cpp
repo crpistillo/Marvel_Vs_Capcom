@@ -150,5 +150,10 @@ Controls* Character::getControls()
 	return this->characterControls;
 }
 
+bool Character::isMoving()
+{
+	return !(this->isStanding);
+}
+
 
 

@@ -6,6 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 
+
 using namespace std;
 
 /*200 es el corrimiento a la izquierda desde el centro*/
@@ -97,7 +98,8 @@ MCGame::MCGame(Logger* logger){
     player2 = new Player(character3, character4, controlPlayer2);
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
-    backGround = new Layer(1600,600,6.715,800);//6.715
+    backGround = new Layer(1600,600,6.66667,800);//6.715
+    parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
 }
 
 void MCGame::run() {
@@ -165,34 +167,6 @@ void MCGame::update() {
     player1->update(m_Renderer, distancia, player2->getPosX());
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
-    centerBefore = (player1->getCentro() + player2->getCentro()) / 2 - SCREEN_WIDTH / 2;
-
-    //Centrar la camara sobre ambos personajes
-    //camera.x = (((( player1->getPosX() + Spiderman::CHARACTER_WIDTH / 2 ) + ( player2->getPosX() + Wolverine::CHARACTER_WIDTH / 2 )) / 2 ) - SCREEN_WIDTH / 2) + ((Spiderman::SOBRANTE+Wolverine::SOBRANTE)/2);
-    camera.x = centerBefore;
-    //camera.y = ( player1->getPosY() + Spiderman::CHARACTER_HEIGHT / 2 ) - SCREEN_HEIGHT / 2;
-	camera.y = 0;
-
-	//Keep the camera in bounds
-	if ((camera.x) < 0) camera.x = 0;
-	if ((camera.y) < 0) camera.y = 0;
-	if ((camera.x) > 3200 - (camera.w)) camera.x = 3200 - camera.w;
-	if ((camera.y) > 600 - (camera.h)) camera.y = 600 - camera.h;
-
-
-	if(centerLater!=-1000 && (camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH))
-	{
-		middleGround->update(centerBefore, centerLater);
-		backGround->update(centerBefore, centerLater);
-	}
-
-	centerLater = camera.x;
-
-	/*if(camera.x > 1 && camera.x < LEVEL_WIDTH-SCREEN_WIDTH)
-	{
-	    middleGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
-	    backGround->move(LEVEL_WIDTH, LEVEL_HEIGHT);
-	}*/
-
+    parallaxController->doParallax(&player1,&player2);
 
 }
