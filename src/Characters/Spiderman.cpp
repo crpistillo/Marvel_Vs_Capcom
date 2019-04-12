@@ -20,9 +20,9 @@ const int LAST_JUMPING_RIGHT_SPRITE = 12;
 const int LAST_JUMPING_LEFT_SPRITE = 12;
 const int LAST_INTRO_SPRITE = 16;
 
-const unsigned int SECONDARY_RED = 0;
-const unsigned int SECONDARY_GREEN = 255;
-const unsigned int SECONDARY_BLUE = 255;
+const unsigned int SECONDARY_RED = 255;
+const unsigned int SECONDARY_GREEN = 200;
+const unsigned int SECONDARY_BLUE = 000;
 
 Spiderman::Spiderman(string name, int PosX, bool secondaryColor)
 : Character(

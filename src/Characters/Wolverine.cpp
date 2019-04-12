@@ -21,8 +21,8 @@ const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
 
 const unsigned int SECONDARY_RED = 255;
-const unsigned int SECONDARY_GREEN = 150;
-const unsigned int SECONDARY_BLUE = 150;
+const unsigned int SECONDARY_GREEN = 255;
+const unsigned int SECONDARY_BLUE = 0;
 
 Wolverine::Wolverine(string name, int PosX, bool secondaryColor)
         : Character(
