@@ -19,6 +19,7 @@ using namespace std;
 
 class Character {
 public:
+    ~Character();
 	//Maximum axis velocity of the character
 	static const int CHARACTER_VEL = 10;
     void free();
@@ -26,13 +27,13 @@ public:
 	//Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
 	//Shows the character on the screen
-	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
+	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante, bool suplente);
 	int getPosX();
 	int getPosY();
 	int getWidth();
 	int getSobrante();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
-    void positionUpdate(int* x, int* y);
+    void positionUpdate(int* x);
     void setControls(Controls* controls);
     void startIntro();
     bool isMakingIntro;
@@ -48,9 +49,8 @@ protected:
 		bool isLookingLeft,
 		string name
 	);
-	~Character();
 
-	//The X and Y offsets of the character
+    //The X and Y offsets of the character
 	int mPosX, mPosY;
 	//The velocity of the character
 	int mVelX, mVelY;

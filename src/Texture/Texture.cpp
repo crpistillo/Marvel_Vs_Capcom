@@ -93,3 +93,10 @@ int Texture::getWidth() {
 int Texture::getHeight() {
     return mHeight;
 }
+
+void Texture::setColor( Uint8 red, Uint8 green, Uint8 blue )
+{
+	//Modulate texture
+	SDL_SetTextureColorMod( mTexture, red, green, blue );
+}
+

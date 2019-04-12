@@ -5,10 +5,12 @@
 #include "Player.h"
 
 Player::Player(Character *first, Character *second, Controls* controls) {
+    this->controls = controls;
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
     isChanging = false;
+    secundario = false;
 
     changeKey = controls->changeKey;
     firstCharacter->setControls(controls);
@@ -30,7 +32,7 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
 }
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    currentCharacter->render(mRenderer, camX, camY, posContrincante);
+    currentCharacter->render(mRenderer, camX, camY, posContrincante, secundario);
 }
 
 void Player::free() {
@@ -40,13 +42,16 @@ void Player::free() {
 
 void Player::changeCharacter() {
     int updateX = currentCharacter->getPosX();
-    int updateY = currentCharacter->getPosY();
 
-    if(currentCharacter == firstCharacter)
-        currentCharacter = secondCharacter;
-    else
+    if(currentCharacter == firstCharacter) {
+    	currentCharacter = secondCharacter;
+    	secundario = true;
+    }
+    else {
         currentCharacter = firstCharacter;
-    currentCharacter->positionUpdate(&updateX, &updateY);
+        secundario = false;
+    }
+    currentCharacter->positionUpdate(&updateX);
     //animacion
 
 }
@@ -82,6 +87,13 @@ int Player::getCentro() {
 Character* Player::getCurrentCharacter()
 {
 	return this->currentCharacter;
+}
+
+Player::~Player() {
+    delete controls;
+    delete firstCharacter;
+    delete secondCharacter;
+
 }
 
 
