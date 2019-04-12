@@ -20,7 +20,11 @@ const int LAST_JUMPING_RIGHT_SPRITE = 12;
 const int LAST_JUMPING_LEFT_SPRITE = 12;
 const int LAST_INTRO_SPRITE = 16;
 
-Spiderman::Spiderman(string name, int PosX)
+const unsigned int SECONDARY_RED = 0;
+const unsigned int SECONDARY_GREEN = 255;
+const unsigned int SECONDARY_BLUE = 255;
+
+Spiderman::Spiderman(string name, int PosX, bool secondaryColor)
 : Character(
 	PosX,
 	INITIAL_POS_Y,
@@ -28,15 +32,19 @@ Spiderman::Spiderman(string name, int PosX)
 	Spiderman::SOBRANTE,
 	false,
 	name
-)
-{
+){
+	if(secondaryColor)
+		loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
+	else
+		loader = new ImageLoader(255,255,255);
 }
 
 Spiderman::~Spiderman(){
 }
 
 void Spiderman::load(SDL_Renderer* renderer) {
-	m_Texture.loadFromFile("images/spiderman/spiderman_standing_right/MVC2_SpiderMan_0.png", renderer);
+	this->loader->loadActionSprite("images/spiderman/spiderman_standing_right/", "MVC2_SpiderMan_", 0, ".png",
+	                                          renderer, &m_Texture);
 }
 
 void Spiderman::resetSpriteVariables() {
@@ -61,20 +69,24 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 	if (currentStandingSprite > LAST_STANDING_SPRITE)
 		currentStandingSprite = 0;
 
-	if (position == 'r')
-		imagePath = "images/spiderman/spiderman_standing_right/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
-	else
-		imagePath = "images/spiderman/spiderman_standing_left/MVC2_SpiderMan_" + to_string(currentStandingSprite) + ".png";
-	m_Texture.loadFromFile(imagePath, renderer);
-
+	if (position == 'r'){
+		this->loader->loadActionSprite("images/spiderman/spiderman_standing_right/", "MVC2_SpiderMan_", currentStandingSprite, ".png",
+			                                          renderer, &m_Texture);
+	}
+	else{
+		this->loader->loadActionSprite("images/spiderman/spiderman_standing_left/", "MVC2_SpiderMan_", currentStandingSprite, ".png",
+					                                          renderer, &m_Texture);
+	}
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
 	if (isLookingLeft){
-		m_Texture.loadFromFile("images/spiderman/spiderman_duck/MVC2_SpiderMan_219_left.png", renderer);
+		this->loader->loadActionSprite("images/spiderman/spiderman_duck/", "MVC2_SpiderMan_", 219, "_left.png",
+							                                          renderer, &m_Texture);
 	}else{
-		m_Texture.loadFromFile("images/spiderman/spiderman_duck/MVC2_SpiderMan_219.png", renderer);
+		this->loader->loadActionSprite("images/spiderman/spiderman_duck/", "MVC2_SpiderMan_", 219, ".png",
+									                                          renderer, &m_Texture);
 	}
 }
 
@@ -165,8 +177,8 @@ void Spiderman::animacionRight(SDL_Renderer *renderer){
         currentWalkingRightSprite = 0;
     }
 
-	imagePath = "images/spiderman/spiderman_walking_right/MVC2_SpiderMan_" + to_string(currentWalkingRightSprite) + ".png";
-	m_Texture.loadFromFile(imagePath, renderer);
+	this->loader->loadActionSprite("images/spiderman/spiderman_walking_right/", "MVC2_SpiderMan_", currentWalkingRightSprite, ".png",
+										                                          renderer, &m_Texture);
 	++currentWalkingRightSprite;
 }
 
@@ -177,8 +189,8 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
         currentWalkingLeftSprite = 0;
     }
 
-    imagePath = "images/spiderman/spiderman_walking_left/MVC2_SpiderMan_" + to_string(currentWalkingLeftSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
+    this->loader->loadActionSprite("images/spiderman/spiderman_walking_left/", "MVC2_SpiderMan_", currentWalkingLeftSprite, ".png",
+    										                                          renderer, &m_Texture);
     ++currentWalkingLeftSprite;
 }
 
@@ -189,13 +201,13 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
 	if(isLookingLeft){
 
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_inverted/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping_inverted/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
 						renderer, &m_Texture);
 
 	}
 	else{
 
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping/", "MVC2_SpiderMan_", currentJumpingSprite, ".png",
 								renderer, &m_Texture);
 
 
@@ -225,12 +237,12 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_right_inverted/", "MVC2_SpiderMan_", currentJumpingRightSprite, "a.png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping_right_inverted/", "MVC2_SpiderMan_", currentJumpingRightSprite, "a.png",
 				renderer, &m_Texture);
 	}
 
 	else{
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_right/", "MVC2_SpiderMan_", currentJumpingRightSprite, ".png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping_right/", "MVC2_SpiderMan_", currentJumpingRightSprite, ".png",
 				renderer, &m_Texture);
 	}
 
@@ -254,13 +266,13 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 
 	if(isLookingLeft){
 
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_left/", "MVC2_SpiderMan_", currentJumpingLeftSprite, ".png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping_left/", "MVC2_SpiderMan_", currentJumpingLeftSprite, ".png",
 						renderer, &m_Texture);
 	}
 
 	else{
 
-		this->loader.loadActionSprite("images/spiderman/spiderman_jumping_left_inverted/", "MVC2_SpiderMan_", currentJumpingLeftSprite, "a.png",
+		this->loader->loadActionSprite("images/spiderman/spiderman_jumping_left_inverted/", "MVC2_SpiderMan_", currentJumpingLeftSprite, "a.png",
 						renderer, &m_Texture);
 	}
 
@@ -288,10 +300,10 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 	if(currentIntroSprite <= LAST_INTRO_SPRITE){
         if(!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite<= 16)
-            this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderManR_", currentIntroSprite, ".png",
+            this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderManR_", currentIntroSprite, ".png",
                                           renderer, &m_Texture);
         else
-            this->loader.loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+            this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
                                           renderer, &m_Texture);
 
 		++currentIntroSprite;

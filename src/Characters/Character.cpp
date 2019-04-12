@@ -37,7 +37,8 @@ Character::Character(
     this->isJumpingRight = false;
     this->isJumpingLeft = false;
     this->isMakingIntro = false;
-    this->loader = new ImageLoader();
+
+    this->loader = NULL;
     this->characterControls = NULL;
 
     this->lastTime = SDL_GetTicks();
@@ -97,7 +98,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante, bool suplente) {
+void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     if (Character::mPosX > posContrincante) {
         isLookingLeft = true;
     } else {
@@ -106,13 +107,6 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
 
     if (isStanding)
         renderStandSprite(mRenderer);
-
-    if (suplente) {
-    	Uint8 r = 000;
-    	Uint8 g = 255;
-    	Uint8 b = 255;
-    	m_Texture.setColor( r, g, b );
-    }
 
     m_Texture.render(mPosX - camX, mPosY - camY, 1153, 865, mRenderer);
 }

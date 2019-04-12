@@ -81,11 +81,11 @@ MCGame::MCGame(Logger* logger){
 	m_Renderer = NULL;
 	m_Running = false;
 
-	Character* character1 = new Spiderman("Spiderman", INITIAL_POS_X_PLAYER_ONE);
-    Character* character2 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_ONE);
+	Character* character1 = new Spiderman("Spiderman", INITIAL_POS_X_PLAYER_ONE, false);
+    Character* character2 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_ONE, false);
 
-    Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO);
-    Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO);
+    Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO, true);
+    Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO, true);
 
     logger->log("Creacion de controles.", DEBUG);
 

@@ -20,7 +20,11 @@ const int LAST_JUMPING_LEFT_SPRITE = 13;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
 
-Wolverine::Wolverine(string name, int PosX)
+const unsigned int SECONDARY_RED = 255;
+const unsigned int SECONDARY_GREEN = 150;
+const unsigned int SECONDARY_BLUE = 150;
+
+Wolverine::Wolverine(string name, int PosX, bool secondaryColor)
         : Character(
         	PosX,
         	INITIAL_POS_Y,
@@ -29,10 +33,14 @@ Wolverine::Wolverine(string name, int PosX)
         	false,
         	name
 ) {
+	if(secondaryColor)
+		this->loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
+	else
+		this->loader = new ImageLoader(255,255,255);
 }
 
 void Wolverine::load(SDL_Renderer *renderer) {
-    m_Texture.loadFromFile("images/wolverine/wolverine_standing_right/MVC2_Wolverine_0.png", renderer);
+	this->loader->loadActionSprite("images/wolverine/wolverine_standing_right/", "MVC2_Wolverine_", 0, ".png", renderer, &m_Texture);
 }
 
 void Wolverine::resetSpriteVariables() {
@@ -47,9 +55,9 @@ void Wolverine::resetSpriteVariables() {
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
     isStanding = false;
     if (isLookingLeft) {
-        m_Texture.loadFromFile("images/wolverine/wolverine_duck/MVC2_Wolverine_38_left.png", renderer);
+    	this->loader->loadActionSprite("images/wolverine/wolverine_duck/", "MVC2_Wolverine_", 38, "_left.png", renderer, &m_Texture);
     } else {
-        m_Texture.loadFromFile("images/wolverine/wolverine_duck/MVC2_Wolverine_38.png", renderer);
+    	this->loader->loadActionSprite("images/wolverine/wolverine_duck/", "MVC2_Wolverine_", 38, ".png", renderer, &m_Texture);
     }
 }
 
@@ -68,14 +76,11 @@ void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position) {
     if (currentStandingSprite > LAST_STANDING_SPRITE)
         currentStandingSprite = 0;
 
-    if (position == 'r')
-        imagePath =
-                "images/wolverine/wolverine_standing_right/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
+    if (position == 'r'){
+    	this->loader->loadActionSprite("images/wolverine/wolverine_standing_right/", "MVC2_Wolverine_", currentStandingSprite, ".png", renderer, &m_Texture);
+    }
     else
-        imagePath =
-                "images/wolverine/wolverine_standing_left/MVC2_Wolverine_" + to_string(currentStandingSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
-
+    	this->loader->loadActionSprite("images/wolverine/wolverine_standing_left/", "MVC2_Wolverine_", currentStandingSprite, ".png", renderer, &m_Texture);
 }
 
 void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
@@ -103,9 +108,8 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
             currentWalkbackRightSprite = 0;
         }
 
-        string imagePath = "images/wolverine/wolverine_walkbackwards_right/MVC2_Wolverine_" +
-                           to_string(currentWalkbackRightSprite) + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+        this->loader->loadActionSprite("images/wolverine/wolverine_walkbackwards_right/", "MVC2_Wolverine_",
+        		currentWalkbackRightSprite, ".png", renderer, &m_Texture);
         ++currentWalkbackRightSprite;
         isLookingLeft = false;
     }
@@ -145,9 +149,8 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
             currentWalkbackRightSprite = 0;
         }
 
-        string imagePath = "images/wolverine/wolverine_walkbackwards_left/MVC2_Wolverine_" +
-                           to_string(currentWalkbackRightSprite) + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+        this->loader->loadActionSprite("images/wolverine/wolverine_walkbackwards_left/", "MVC2_Wolverine_",
+                		currentWalkbackRightSprite, ".png", renderer, &m_Texture);
         ++currentWalkbackRightSprite;
         isLookingLeft = true;
     }
@@ -176,9 +179,8 @@ void Wolverine::animacionRight(SDL_Renderer *renderer) {
         currentWalkingRightSprite = 0;
     }
 
-    imagePath =
-            "images/wolverine/wolverine_walking_right/MVC2_Wolverine_" + to_string(currentWalkingRightSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
+    this->loader->loadActionSprite("images/wolverine/wolverine_walking_right/", "MVC2_Wolverine_",
+    		currentWalkingRightSprite, ".png", renderer, &m_Texture);
     ++currentWalkingRightSprite;
 }
 
@@ -189,9 +191,9 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer) {
         currentWalkingLeftSprite = 0;
     }
 
-    imagePath =
-            "images/wolverine/wolverine_walking_left/MVC2_Wolverine_" + to_string(currentWalkingLeftSprite) + ".png";
-    m_Texture.loadFromFile(imagePath, renderer);
+    this->loader->loadActionSprite("images/wolverine/wolverine_walking_left/", "MVC2_Wolverine_",
+        		currentWalkingLeftSprite, ".png", renderer, &m_Texture);
+
     ++currentWalkingLeftSprite;
 }
 
@@ -201,12 +203,13 @@ void Wolverine::jump(SDL_Renderer *renderer) {
     string imagePath;
 
     if (isLookingLeft) {
-        imagePath = "images/wolverine/wolverine_jumping_inverted/MVC2_Wolverine_" + to_string(currentJumpingSprite) +
-                    ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping_inverted/", "MVC2_Wolverine_",
+                		currentJumpingSprite, ".png", renderer, &m_Texture);
     } else {
-        imagePath = "images/wolverine/wolverine_jumping/MVC2_Wolverine_" + to_string(currentJumpingSprite) + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping/", "MVC2_Wolverine_",
+                        		currentJumpingSprite, ".png", renderer, &m_Texture);
     }
 
     if (currentJumpingSprite < 83) {
@@ -234,13 +237,12 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
     string imagePath;
 
     if (isLookingLeft) {
-        imagePath = "images/wolverine/wolverine_jumping_right_inverted/MVC2_Wolverine_" +
-                    to_string(currentJumpingRightSprite) + "a" + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping_right_inverted/", "MVC2_Wolverine_",
+                                		currentJumpingRightSprite, "a.png", renderer, &m_Texture);
     } else {
-        imagePath = "images/wolverine/wolverine_jumping_right/MVC2_Wolverine_" + to_string(currentJumpingRightSprite) +
-                    ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping_right/", "MVC2_Wolverine_",
+                                        		currentJumpingRightSprite, ".png", renderer, &m_Texture);
     }
 
     this->repositionHeightAfterJump('r');
@@ -264,13 +266,11 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
     string imagePath;
 
     if (isLookingLeft) {
-        imagePath = "images/wolverine/wolverine_jumping_left/MVC2_Wolverine_" + to_string(currentJumpingLeftSprite) +
-                    ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping_left/", "MVC2_Wolverine_",
+                                                		currentJumpingLeftSprite, ".png", renderer, &m_Texture);
     } else {
-        imagePath = "images/wolverine/wolverine_jumping_left_inverted/MVC2_Wolverine_" +
-                    to_string(currentJumpingLeftSprite) + "a" + ".png";
-        m_Texture.loadFromFile(imagePath, renderer);
+        this->loader->loadActionSprite("images/wolverine/wolverine_jumping_left_inverted/", "MVC2_Wolverine_",
+                                                		currentJumpingLeftSprite, "a.png", renderer, &m_Texture);
     }
 
 

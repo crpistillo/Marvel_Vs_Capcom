@@ -13,7 +13,7 @@
 class Spiderman final: public Character {
 public:
     //Initializes the variables
-    Spiderman(string name, int PosX);
+    Spiderman(string name, int PosX, bool secondaryColor);
     ~Spiderman();
     void load(SDL_Renderer* renderer);
 
@@ -28,8 +28,6 @@ public:
 	static const int SOBRANTE = 437;
 
 private:
-
-	ImageLoader loader;
 
     void resetSpriteVariables();
     void renderStandSprite(SDL_Renderer *renderer);

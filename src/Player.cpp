@@ -10,7 +10,6 @@ Player::Player(Character *first, Character *second, Controls* controls) {
     firstCharacter = first;
     secondCharacter = second;
     isChanging = false;
-    secundario = false;
 
     changeKey = controls->changeKey;
     firstCharacter->setControls(controls);
@@ -32,7 +31,7 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
 }
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    currentCharacter->render(mRenderer, camX, camY, posContrincante, secundario);
+    currentCharacter->render(mRenderer, camX, camY, posContrincante);
 }
 
 void Player::free() {
@@ -45,11 +44,9 @@ void Player::changeCharacter() {
 
     if(currentCharacter == firstCharacter) {
     	currentCharacter = secondCharacter;
-    	secundario = true;
     }
     else {
         currentCharacter = firstCharacter;
-        secundario = false;
     }
     currentCharacter->positionUpdate(&updateX);
     //animacion
