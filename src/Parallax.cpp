@@ -32,8 +32,8 @@ void Parallax::adjustLayerVelocity(Player** player1, Player** player2)
 	}
     else
     {
-        (*middleGround)->changeVel(3.33/2);
-        (*backGround)->changeVel(6.715/2);
+        (*middleGround)->changeVel(1.665);
+        (*backGround)->changeVel(3.3575);
 	}
 }
 
@@ -54,16 +54,16 @@ void Parallax::keepCameraAndCenterInBounds()
 	{
 		this->camera->x = 0;
 		(*(this->centerBefore)) = this->screenWidth/2;
-		(*(this->middleGround))->changeVel(3.33/2);
-		(*(this->backGround))->changeVel(6.715/2);
+		//(*(this->middleGround))->changeVel(3.33/2);
+		//(*(this->backGround))->changeVel(6.715/2);
 	}
 
 	if ((this->camera->x) > this->levelWidth - (this->camera->w))
 	{
 		this->camera->x = 3200 - this->camera->w;
 		(*(this->centerBefore)) = this->levelWidth - this->screenWidth/2;
-		(*(this->middleGround))->changeVel(3.33/2);//1.665
-		(*(this->backGround))->changeVel(6.715/2);//3.3575
+		//(*(this->middleGround))->changeVel(3.33/2);//1.665
+		//(*(this->backGround))->changeVel(6.715/2);//3.3575
 	}
 }
 
