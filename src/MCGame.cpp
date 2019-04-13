@@ -141,6 +141,7 @@ void MCGame::clean() {
     backGroundTexture.free();
     delete backGround;
     delete middleGround;
+    delete parallaxController;
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
     SDL_Quit();

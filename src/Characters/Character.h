@@ -19,7 +19,7 @@ using namespace std;
 
 class Character {
 public:
-    ~Character();
+    virtual~Character();
 	//Maximum axis velocity of the character
 	static const int CHARACTER_VEL = 10;
     void free();
