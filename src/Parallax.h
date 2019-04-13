@@ -10,6 +10,9 @@
 
 #include "Layer.h"
 
+const int MIDDLE_GROUND_VEL = 3.33;
+const int BACK_GROUND_VEL = 6.66667;
+
 class Parallax
 {
 private:

@@ -28,12 +28,12 @@ void Parallax::adjustLayerVelocity(Player** player1, Player** player2)
 	if(this->playersAreMoving(*player1, *player2))
 	{
 		(*middleGround)->changeVel(3.33);
-	   	(*backGround)->changeVel(6.66667);
+	   	(*backGround)->changeVel(6.715);
 	}
     else
     {
-        (*middleGround)->changeVel(6.66667/2);
-        (*backGround)->changeVel(6.66667/2);
+        (*middleGround)->changeVel(3.33/2);
+        (*backGround)->changeVel(6.715/2);
 	}
 }
 
@@ -55,7 +55,7 @@ void Parallax::keepCameraAndCenterInBounds()
 		this->camera->x = 0;
 		(*(this->centerBefore)) = this->screenWidth/2;
 		(*(this->middleGround))->changeVel(3.33/2);
-		(*(this->backGround))->changeVel(6.66667/2);
+		(*(this->backGround))->changeVel(6.715/2);
 	}
 
 	if ((this->camera->x) > this->levelWidth - (this->camera->w))
@@ -63,13 +63,13 @@ void Parallax::keepCameraAndCenterInBounds()
 		this->camera->x = 3200 - this->camera->w;
 		(*(this->centerBefore)) = this->levelWidth - this->screenWidth/2;
 		(*(this->middleGround))->changeVel(3.33/2);//1.665
-		(*(this->backGround))->changeVel(6.66667/2);//3.3575
+		(*(this->backGround))->changeVel(6.715/2);//3.3575
 	}
 }
 
 void Parallax::updateLayers()
 {
-	if(*(this->centerLater)!=-1000 && (this->camera->x > 1 && this->camera->x < this->levelWidth-this->screenWidth))
+	if(*(this->centerLater)!=-1000)// && (this->camera->x > 1 && this->camera->x < this->levelWidth-this->screenWidth))
 	{
 		(*(this->middleGround))->update(*(this->centerBefore), *(this->centerLater));
 		(*(this->backGround))->update(*(this->centerBefore), *(this->centerLater));

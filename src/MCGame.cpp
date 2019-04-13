@@ -98,7 +98,7 @@ MCGame::MCGame(Logger* logger){
     player2 = new Player(character3, character4, controlPlayer2);
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
-    backGround = new Layer(1600,600,6.66667,800);//6.715
+    backGround = new Layer(1600,600,6.715,800);//6.715
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
 }
 
