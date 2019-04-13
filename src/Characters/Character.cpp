@@ -81,8 +81,10 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
         //Acciones de una sola tecla
     else if (inputManager->isKeyDown(characterControls->upKey)) jump(renderer);
     else if (inputManager->isKeyDown(characterControls->downKey)) renderDuckSprite(renderer);
-    else if (inputManager->isKeyDown(characterControls->rightKey)) moveRight(renderer, distance, posContrincante);
-    else if (inputManager->isKeyDown(characterControls->leftKey)) moveLeft(renderer, distance, posContrincante);
+    else if (inputManager->isKeyDown(characterControls->rightKey) && !inputManager->isKeyUp(characterControls->leftKey))
+        moveRight(renderer, distance, posContrincante);
+    else if (inputManager->isKeyDown(characterControls->leftKey) && !inputManager->isKeyUp(characterControls->rightKey))
+        moveLeft(renderer, distance, posContrincante);
 
 
     if (
