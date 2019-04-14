@@ -24,12 +24,12 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 200;
 const unsigned int SECONDARY_BLUE = 000;
 
-Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height)
+Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
 : Character(
 	PosX,
 	INITIAL_POS_Y,
-	Spiderman::CHARACTER_WIDTH,
-	Spiderman::SOBRANTE,
+	ancho,
+	sobrante,
 	false,
 	width,
 	height
@@ -102,7 +102,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     /*distance es la distancia entre personajes la cual pensada como si fuesen puntos
      * iria de -600 a 600, pero como los personajes tienen ancho (y diferente ancho),
      * se ven numeros (como ese -375) que fueron sacados a ojo*/
-    if ((mPosX - CHARACTER_VEL <= -Spiderman::SOBRANTE) || (distance < (-800))) {
+    if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-800))) {
     	isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -139,7 +139,7 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     //Mover
     mPosX += CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::SOBRANTE - Spiderman::CHARACTER_WIDTH)) || (distance > 800)) {
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) || (distance > 800)) {
     	isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;

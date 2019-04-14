@@ -11,8 +11,7 @@ using namespace std;
 
 /*200 es el corrimiento a la izquierda desde el centro*/
 //((LEVEL_WIDTH/2)-Spiderman::SOBRANTE)-(Spiderman::CHARACTER_WIDTH/2)-200;
-const int INITIAL_POS_X_PLAYER_ONE = 864;
-const int INITIAL_POS_X_PLAYER_TWO = 1222;
+
 
 
 const string ERROR = "ERROR";
@@ -113,11 +112,19 @@ MCGame::MCGame(Logger* logger, json config){
 	int widthWolverine = config["characters"][1]["width"];
 	int heightWolverine = config["characters"][1]["height"];
 
-	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman);
-    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine);
+	int spidermanSobrante = widthSpiderman*242/640;
+	int spidermanAncho= widthSpiderman*110/640;
+	int wolverineSobrante = widthWolverine*278/640;
+	int wolverineAncho= widthWolverine*87/640;
 
-    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine);
-    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman);
+	int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH/2)-spidermanSobrante)-(spidermanAncho/2)-200;
+	int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
+
+	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
+    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+
+    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
 
     logger->log("Creacion de controles.", DEBUG);
 

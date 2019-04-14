@@ -13,12 +13,12 @@
 class Wolverine final: public Character {
 public:
     //Initializes the variables
-	Wolverine(int PosX, bool secondaryColor, int width, int height);
+	Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho);
     void load(SDL_Renderer* renderer);
-	static const int CHARACTER_WIDTH = 157;
-	static const int CHARACTER_HEIGHT = 20;
+	//static const int CHARACTER_WIDTH = 157;
+	//static const int CHARACTER_HEIGHT = 20;
 
-	static const int SOBRANTE = 502;
+	//static const int SOBRANTE = 502;
 
 private:
     void resetSpriteVariables();

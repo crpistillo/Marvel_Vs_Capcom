@@ -24,12 +24,12 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 255;
 const unsigned int SECONDARY_BLUE = 0;
 
-Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height)
+Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
         : Character(
         	PosX,
         	INITIAL_POS_Y,
-			Wolverine::CHARACTER_WIDTH,
-			Wolverine::SOBRANTE,
+			ancho,
+			sobrante,
         	false,
 			width,
 			height
@@ -91,7 +91,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     //Mover
     mPosX -= CHARACTER_VEL;
 
-    if ((mPosX - CHARACTER_VEL <= -Wolverine::SOBRANTE) || (distance < (-800))) {
+    if ((mPosX - CHARACTER_VEL <= -Wolverine::getSobrante()) || (distance < (-800))) {
         isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -136,7 +136,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     //Mover
     mPosX += CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Wolverine::SOBRANTE - Wolverine::CHARACTER_WIDTH)) ||
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Wolverine::getSobrante() - Wolverine::getWidth())) ||
         (distance > 800)) {
         isLookingLeft = true;
         //Move back
