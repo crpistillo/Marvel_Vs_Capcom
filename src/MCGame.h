@@ -38,10 +38,11 @@ private:
     Player* player1;
     Player* player2;
     Parallax* parallaxController;
+    json config;
 
 
 public:
-    MCGame(Logger* logger);
+    MCGame(Logger* logger, json config);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int

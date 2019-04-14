@@ -34,7 +34,7 @@ int main() {
 	json config = parseConfigFile(logger);
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-    mcGame = new MCGame(logger);
+    mcGame = new MCGame(logger, config);
     mcGame->init("Marvel vs Capcom", 100, 100, 800, 600, 0);
     mcGame->run();
 

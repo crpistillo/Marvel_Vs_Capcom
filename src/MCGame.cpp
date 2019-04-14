@@ -64,6 +64,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 
                 player1->loads(m_Renderer);
                 player2->loads(m_Renderer);
+
                 backGroundTexture.loadFromFile("images/fondo.png", m_Renderer);
                 middleGroundTexture.loadFromFile("images/montanas.png", m_Renderer);
                 frontGroundTexture.loadFromFile("images/camino.png", m_Renderer);
@@ -75,11 +76,13 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     return true;
 }
 
-MCGame::MCGame(Logger* logger){
+MCGame::MCGame(Logger* logger, json config){
 	this->logger = logger;
 	m_Window = NULL;
 	m_Renderer = NULL;
 	m_Running = false;
+	this->config = config;
+
 
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false);
     Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false);
@@ -99,6 +102,7 @@ MCGame::MCGame(Logger* logger){
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
     backGround = new Layer(1600,600,6.66667,800);//6.715
+
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
 }
 
