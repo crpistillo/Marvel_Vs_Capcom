@@ -94,32 +94,10 @@ void MCGame::loadGroundTextureByZIndex(){
 	backGroundTexture.loadFromFile("images/" + backgroundFilepath, m_Renderer);
 	middleGroundTexture.loadFromFile("images/" + middlegroundFilepath, m_Renderer);
 	frontGroundTexture.loadFromFile("images/" + frontgroundFilepath, m_Renderer);
+
+	backGround->setZIndex(backgroundsList[0]["zindex"]);
+	middleGround->setZIndex(backgroundsList[1]["zindex"]);
 }
-
-void orderBackgroundsByZIndex(json* backgroundList){
-
-	int pos_sel = 0;
-	json aux;
-
-	for(int i = 2; i >= 0; i--){
-
-		for(int x = 0; x <= i; x++){
-			if(backgroundList[x]["zindex"] > backgroundList[pos_sel]["zindex"]){
-				pos_sel = x;
-			}
-		}
-
-		aux = backgroundList[i];
-		backgroundList[i] = backgroundList[pos_sel];
-		backgroundList[pos_sel] = aux;
-		pos_sel = 0;
-	}
-}
-
-
-
-
-
 
 
 
@@ -224,4 +202,24 @@ void MCGame::update() {
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
     parallaxController->doParallax(&player1,&player2);
+}
+
+void orderBackgroundsByZIndex(json* backgroundList){
+
+	int pos_sel = 0;
+	json aux;
+
+	for(int i = 2; i >= 0; i--){
+
+		for(int x = 0; x <= i; x++){
+			if(backgroundList[x]["zindex"] > backgroundList[pos_sel]["zindex"]){
+				pos_sel = x;
+			}
+		}
+
+		aux = backgroundList[i];
+		backgroundList[i] = backgroundList[pos_sel];
+		backgroundList[pos_sel] = aux;
+		pos_sel = 0;
+	}
 }

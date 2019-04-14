@@ -37,6 +37,7 @@ class Layer
 		double getVel();
 		void changeVel(float vel);
 		void adjustPosX(float posX);
+		void setZIndex(int z);
 
     private:
 		int layerWidth;
@@ -48,6 +49,8 @@ class Layer
 
 		//The velocity of the dot
 		double mVelX, mVelY;
+
+		int ZIndex;
 
 };
 

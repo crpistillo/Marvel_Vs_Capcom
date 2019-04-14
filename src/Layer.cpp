@@ -20,6 +20,7 @@ Layer::Layer(int layerWidth, int layerHeight, float layerVel, int posX)
 	this-> mPosY = 0;
     this->mVelX = 0;
     this->mVelY = 0;
+    this->ZIndex = 0;
 
 }
 
@@ -86,6 +87,10 @@ void Layer::adjustPosX(float posX)
 void Layer::changeVel(float vel)
 {
 	this->layerVel = vel;
+}
+
+void Layer::setZIndex(int z){
+	this->ZIndex = z;
 }
 
 
