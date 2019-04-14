@@ -13,7 +13,7 @@
 class Spiderman final: public Character {
 public:
     //Initializes the variables
-    Spiderman(int PosX, bool secondaryColor);
+    Spiderman(int PosX, bool secondaryColor, int width, int height);
     ~Spiderman();
     void load(SDL_Renderer* renderer);
 

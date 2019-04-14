@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "Layer.h"
 #include "Parallax.h"
+#include "tools/json/ConfigFileParser/ConfigFileParser.h"
 
 using namespace std;
 

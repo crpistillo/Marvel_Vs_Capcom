@@ -13,7 +13,7 @@
 class Wolverine final: public Character {
 public:
     //Initializes the variables
-	Wolverine(int PosX, bool secondaryColor);
+	Wolverine(int PosX, bool secondaryColor, int width, int height);
     void load(SDL_Renderer* renderer);
 	static const int CHARACTER_WIDTH = 157;
 	static const int CHARACTER_HEIGHT = 20;

@@ -83,12 +83,16 @@ MCGame::MCGame(Logger* logger, json config){
 	m_Running = false;
 	this->config = config;
 
+	int widthSpiderman = config["characters"][0]["width"];
+	int heightSpiderman = config["characters"][0]["height"];
+	int widthWolverine = config["characters"][1]["width"];
+	int heightWolverine = config["characters"][1]["height"];
 
-	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false);
-    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false);
+	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman);
+    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine);
 
-    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true);
-    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true);
+    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine);
+    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman);
 
     logger->log("Creacion de controles.", DEBUG);
 

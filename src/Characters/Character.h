@@ -14,7 +14,6 @@
 #include "../InputManager.h"
 #include "../tools/ImageLoader/ImageLoader.h"
 #include "../Controls/Controls.h"
-#include "../tools/json/ConfigFileParser/ConfigFileParser.h"
 
 using namespace std;
 
@@ -47,7 +46,9 @@ protected:
 		int mPosY,
 		int width,
 		int sobrante,
-		bool isLookingLeft
+		bool isLookingLeft,
+		int widthSprite,
+		int heightSprite
 	);
 
     //The X and Y offsets of the character
@@ -56,6 +57,8 @@ protected:
 	int mVelX, mVelY;
 
 	int width, sobrante;
+
+	int widthSprite, heightSprite;
 
 	Texture m_Texture;
 	ImageLoader* loader;
@@ -75,7 +78,6 @@ protected:
 	bool isJumpingRight;
 	bool isJumpingLeft;
     Controls* characterControls;
-	json j;
 
 	unsigned int lastTime;
 
