@@ -60,6 +60,8 @@ protected:
 
 	int widthSprite, heightSprite;
 
+	int INITIAL_POS_Y;
+
 	Texture m_Texture;
 	ImageLoader* loader;
 

@@ -24,6 +24,7 @@ Character::Character(
     this->sobrante = sobrante;
     this->widthSprite = widthSprite;
     this->heightSprite = heightSprite;
+    this->INITIAL_POS_Y= mPosY;
     this->mVelX = 0;
     this->mVelY = 0;
     this->currentWalkingLeftSprite = 0;

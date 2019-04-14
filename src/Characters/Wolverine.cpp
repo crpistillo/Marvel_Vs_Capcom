@@ -11,7 +11,6 @@ const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
 //Por defecto, todos los sprites comienzan en 0.
-const int INITIAL_POS_Y = 20;
 const int LAST_STANDING_SPRITE = 16;
 const int LAST_WALKING_SPRITE = 15;
 const int LAST_JUMPING_SPRITE = 7;
@@ -27,7 +26,7 @@ const unsigned int SECONDARY_BLUE = 0;
 Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
         : Character(
         	PosX,
-        	INITIAL_POS_Y,
+			556-(height*297/480),
 			ancho,
 			sobrante,
         	false,
@@ -45,7 +44,7 @@ void Wolverine::load(SDL_Renderer *renderer) {
 }
 
 void Wolverine::resetSpriteVariables() {
-    mPosY = INITIAL_POS_Y;
+    mPosY = this->INITIAL_POS_Y;
     currentJumpingSprite = 0;
     currentWalkingRightSprite = 0;
     currentWalkingLeftSprite = 0;
@@ -224,7 +223,7 @@ void Wolverine::jump(SDL_Renderer *renderer) {
 
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
         currentJumpingSprite = 0;
-        mPosY = INITIAL_POS_Y;
+        mPosY = this->INITIAL_POS_Y;
 
         isStanding = true;
         isJumpingVertical = false;
@@ -253,7 +252,7 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
     if (currentJumpingRightSprite >
         LAST_JUMPING_RIGHT_SPRITE) {    //Hasta que no termine de saltar, no cambio los booleanos.
         currentJumpingRightSprite = 0;
-        mPosY = INITIAL_POS_Y;
+        mPosY = this->INITIAL_POS_Y;
 
         isStanding = true;
         isJumpingRight = false;
@@ -282,7 +281,7 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
     if (currentJumpingLeftSprite >
         LAST_JUMPING_LEFT_SPRITE) {    //Hasta que no termine de saltar, no cambio los booleanos.
         currentJumpingLeftSprite = 0;
-        mPosY = INITIAL_POS_Y;
+        mPosY = this->INITIAL_POS_Y;
 
         isStanding = true;
         isJumpingLeft = false;

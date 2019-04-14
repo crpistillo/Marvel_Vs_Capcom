@@ -10,8 +10,6 @@ using namespace std;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int INITIAL_POS_Y = 20;
-
 //Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 8;
 const int LAST_WALKING_SPRITE = 10;
@@ -27,7 +25,7 @@ const unsigned int SECONDARY_BLUE = 000;
 Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
 : Character(
 	PosX,
-	INITIAL_POS_Y,
+	556-(height*297/480),
 	ancho,
 	sobrante,
 	false,
@@ -49,7 +47,7 @@ void Spiderman::load(SDL_Renderer* renderer) {
 }
 
 void Spiderman::resetSpriteVariables() {
-	mPosY = INITIAL_POS_Y;
+	mPosY = this->INITIAL_POS_Y;
 	currentJumpingSprite = 0;
 	currentWalkingRightSprite = 0;
 	currentWalkingLeftSprite = 0;
@@ -99,9 +97,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     //Mover
     mPosX -= CHARACTER_VEL;
 
-    /*distance es la distancia entre personajes la cual pensada como si fuesen puntos
-     * iria de -600 a 600, pero como los personajes tienen ancho (y diferente ancho),
-     * se ven numeros (como ese -375) que fueron sacados a ojo*/
+    /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-800))) {
     	isLookingLeft = false;
         //Move back
@@ -225,7 +221,7 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
     if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
         currentJumpingSprite = 0;
-        mPosY = INITIAL_POS_Y;
+        mPosY = this->INITIAL_POS_Y;
         isStanding = true;
         isJumpingVertical = false;
     }
@@ -253,7 +249,7 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 
 	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
 		currentJumpingRightSprite = 0;
-	    mPosY = INITIAL_POS_Y;
+	    mPosY = this->INITIAL_POS_Y;
 
 	    isStanding = true;
 	    isJumpingRight = false;
@@ -283,7 +279,7 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 
 	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
 		currentJumpingLeftSprite = 0;
-	    mPosY = INITIAL_POS_Y;
+	    mPosY = this->INITIAL_POS_Y;
 
 	    isStanding = true;
 	    isJumpingLeft = false;
