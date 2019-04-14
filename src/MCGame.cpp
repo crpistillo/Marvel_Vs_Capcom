@@ -30,6 +30,9 @@ int centerBefore,centerLater=-1000;
 
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
+void orderBackgroundsByZIndex(json* backgroundList);
+
+
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 
@@ -65,9 +68,24 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 player1->loads(m_Renderer);
                 player2->loads(m_Renderer);
 
-                backGroundTexture.loadFromFile("images/fondo.png", m_Renderer);
-                middleGroundTexture.loadFromFile("images/montanas.png", m_Renderer);
-                frontGroundTexture.loadFromFile("images/camino.png", m_Renderer);
+
+                //std::cout << this->config["battlefield"][0]["background"]["filepath"];
+
+                json firstBackgroundConfig =  this->config["battlefield"][0]["background"];
+                json secondBackgroundConfig =  this->config["battlefield"][1]["background"];
+                json thirdBackgroundConfig =  this->config["battlefield"][2]["background"];
+
+                json backgroundsList[3] = {firstBackgroundConfig, secondBackgroundConfig, thirdBackgroundConfig};
+
+                orderBackgroundsByZIndex(backgroundsList);
+
+                string backgroundFilepath = backgroundsList[0]["filepath"];
+                string middlegroundFilepath = backgroundsList[1]["filepath"];
+                string frontgroundFilepath = backgroundsList[2]["filepath"];
+
+                backGroundTexture.loadFromFile("images/" + backgroundFilepath, m_Renderer);
+                middleGroundTexture.loadFromFile("images/" + middlegroundFilepath, m_Renderer);
+                frontGroundTexture.loadFromFile("images/" + frontgroundFilepath, m_Renderer);
             }
         }
     }
@@ -75,6 +93,33 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     // everything inited successfully,
     return true;
 }
+
+void orderBackgroundsByZIndex(json* backgroundList){
+
+	int pos_sel = 0;
+	json aux;
+
+	for(int i = 2; i >= 0; i--){
+
+		for(int x = 0; x <= i; x++){
+			if(backgroundList[x]["zindex"] > backgroundList[pos_sel]["zindex"]){
+				pos_sel = x;
+			}
+		}
+
+		aux = backgroundList[i];
+		backgroundList[i] = backgroundList[pos_sel];
+		backgroundList[pos_sel] = aux;
+		pos_sel = 0;
+	}
+}
+
+
+
+
+
+
+
 
 MCGame::MCGame(Logger* logger, json config){
 	this->logger = logger;
