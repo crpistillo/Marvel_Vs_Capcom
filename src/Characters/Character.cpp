@@ -174,7 +174,7 @@ Controls* Character::getControls()
 
 bool Character::isMoving()
 {
-	return !(this->isStanding);
+	return !(this->isStanding || this->isJumpingVertical);
 }
 
 
