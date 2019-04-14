@@ -81,11 +81,11 @@ MCGame::MCGame(Logger* logger){
 	m_Renderer = NULL;
 	m_Running = false;
 
-	Character* character1 = new Spiderman("Spiderman", INITIAL_POS_X_PLAYER_ONE, false);
-    Character* character2 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_ONE, false);
+	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false);
+    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false);
 
-    Character* character3 = new Wolverine("Wolverine",INITIAL_POS_X_PLAYER_TWO, true);
-    Character* character4 = new Spiderman("Spiderman",INITIAL_POS_X_PLAYER_TWO, true);
+    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true);
+    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true);
 
     logger->log("Creacion de controles.", DEBUG);
 
@@ -169,8 +169,4 @@ void MCGame::update() {
     player2->update(m_Renderer, distancia2, player1->getPosX());
 
     parallaxController->doParallax(&player1,&player2);
-
-    cout<<"Background: "<<backGround->getPosX()<<endl;
-    cout<<"MiddleGround: "<<middleGround->getPosX()<<endl;
-
 }

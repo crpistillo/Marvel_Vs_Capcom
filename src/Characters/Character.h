@@ -47,8 +47,7 @@ protected:
 		int mPosY,
 		int width,
 		int sobrante,
-		bool isLookingLeft,
-		string name
+		bool isLookingLeft
 	);
 
     //The X and Y offsets of the character
@@ -76,7 +75,6 @@ protected:
 	bool isJumpingRight;
 	bool isJumpingLeft;
     Controls* characterControls;
-	string name;
 	json j;
 
 	unsigned int lastTime;

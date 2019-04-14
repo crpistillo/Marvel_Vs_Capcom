@@ -24,14 +24,13 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 200;
 const unsigned int SECONDARY_BLUE = 000;
 
-Spiderman::Spiderman(string name, int PosX, bool secondaryColor)
+Spiderman::Spiderman(int PosX, bool secondaryColor)
 : Character(
 	PosX,
 	INITIAL_POS_Y,
 	Spiderman::CHARACTER_WIDTH,
 	Spiderman::SOBRANTE,
-	false,
-	name
+	false
 ){
 	if(secondaryColor)
 		loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);

@@ -14,8 +14,7 @@ Character::Character(
         int mPosY,
 		int width,
 		int sobrante,
-        bool isLookingLeft,
-        string name
+        bool isLookingLeft
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -43,8 +42,6 @@ Character::Character(
     this->characterControls = NULL;
 
     this->lastTime = SDL_GetTicks();
-
-    this->name = name;
 
 	std::ifstream i("config/config_default.json");
 	i >> j;
@@ -119,15 +116,16 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
     int ancho;
     int alto;
 
+    /*
 	if (Character::name == "Spiderman") {
 		ancho = j["characters"][0]["width"];
 		alto = j["characters"][0]["height"];
 	} else {
 		ancho = j["characters"][1]["width"];
 		alto = j["characters"][1]["height"];
-	}
+	}*/
 
-    m_Texture.render(mPosX - camX, mPosY - camY, ancho, alto, mRenderer);
+    m_Texture.render(mPosX - camX, mPosY - camY, 1153, 865, mRenderer); //esto es los valores que se cambian la resolucion
 }
 
 void Character::free() {

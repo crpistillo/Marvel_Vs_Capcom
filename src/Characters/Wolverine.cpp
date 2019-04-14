@@ -24,14 +24,13 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 255;
 const unsigned int SECONDARY_BLUE = 0;
 
-Wolverine::Wolverine(string name, int PosX, bool secondaryColor)
+Wolverine::Wolverine(int PosX, bool secondaryColor)
         : Character(
         	PosX,
         	INITIAL_POS_Y,
 			Wolverine::CHARACTER_WIDTH,
 			Wolverine::SOBRANTE,
-        	false,
-        	name
+        	false
 ) {
 	if(secondaryColor)
 		this->loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
