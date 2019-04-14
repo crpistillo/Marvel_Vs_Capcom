@@ -54,22 +54,22 @@ void Parallax::keepCameraAndCenterInBounds()
 	{
 		this->camera->x = 0;
 		(*(this->centerBefore)) = this->screenWidth/2;
-		//(*(this->middleGround))->changeVel(3.33/2);
-		//(*(this->backGround))->changeVel(6.715/2);
+		(*(this->middleGround))->adjustPosX(0.400009);
+		(*(this->backGround))->adjustPosX(0.914982);
 	}
 
 	if ((this->camera->x) > this->levelWidth - (this->camera->w))
 	{
 		this->camera->x = 3200 - this->camera->w;
 		(*(this->centerBefore)) = this->levelWidth - this->screenWidth/2;
-		//(*(this->middleGround))->changeVel(3.33/2);//1.665
-		//(*(this->backGround))->changeVel(6.715/2);//3.3575
+		(*(this->middleGround))->adjustPosX(799.6);
+		(*(this->backGround))->adjustPosX(1599.09);
 	}
 }
 
 void Parallax::updateLayers()
 {
-	if(*(this->centerLater)!=-1000)// && (this->camera->x > 1 && this->camera->x < this->levelWidth-this->screenWidth))
+	if(*(this->centerLater)!=-1000)// && (this->camera->x > 2 && this->camera->x < this->levelWidth-this->screenWidth))
 	{
 		(*(this->middleGround))->update(*(this->centerBefore), *(this->centerLater));
 		(*(this->backGround))->update(*(this->centerBefore), *(this->centerLater));

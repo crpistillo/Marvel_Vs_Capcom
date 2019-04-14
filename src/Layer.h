@@ -36,6 +36,7 @@ class Layer
 		double getPosY();
 		double getVel();
 		void changeVel(float vel);
+		void adjustPosX(float posX);
 
     private:
 		int layerWidth;

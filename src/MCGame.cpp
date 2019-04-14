@@ -170,6 +170,7 @@ void MCGame::update() {
 
     parallaxController->doParallax(&player1,&player2);
 
-    cout<<"Background: "<<backGround->getVel()<<endl;
+    cout<<"Background: "<<backGround->getPosX()<<endl;
+    cout<<"MiddleGround: "<<middleGround->getPosX()<<endl;
 
 }

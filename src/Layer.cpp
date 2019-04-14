@@ -78,6 +78,11 @@ double Layer::getVel()
 	return this->layerVel;
 }
 
+void Layer::adjustPosX(float posX)
+{
+	this->mPosX = posX;
+}
+
 void Layer::changeVel(float vel)
 {
 	this->layerVel = vel;
