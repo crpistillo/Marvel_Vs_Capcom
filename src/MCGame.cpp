@@ -77,7 +77,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 
                 json backgroundsList[3] = {firstBackgroundConfig, secondBackgroundConfig, thirdBackgroundConfig};
 
-                orderBackgroundsByZIndex(backgroundsList);
+                orderBackgroundsByZIndex(backgroundsList);  //Ordena la lista de backgrounds del config.json de menor a mayor segun z index.
 
                 string backgroundFilepath = backgroundsList[0]["filepath"];
                 string middlegroundFilepath = backgroundsList[1]["filepath"];
