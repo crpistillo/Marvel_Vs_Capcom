@@ -14,6 +14,7 @@
 #include "../InputManager.h"
 #include "../tools/ImageLoader/ImageLoader.h"
 #include "../Controls/Controls.h"
+#include "../tools/json/ConfigFileParser/ConfigFileParser.h"
 
 using namespace std;
 
@@ -76,6 +77,7 @@ protected:
 	bool isJumpingLeft;
     Controls* characterControls;
 	string name;
+	json j;
 
 	unsigned int lastTime;
 
