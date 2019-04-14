@@ -69,29 +69,31 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 player2->loads(m_Renderer);
 
 
-                //std::cout << this->config["battlefield"][0]["background"]["filepath"];
-
-                json firstBackgroundConfig =  this->config["battlefield"][0]["background"];
-                json secondBackgroundConfig =  this->config["battlefield"][1]["background"];
-                json thirdBackgroundConfig =  this->config["battlefield"][2]["background"];
-
-                json backgroundsList[3] = {firstBackgroundConfig, secondBackgroundConfig, thirdBackgroundConfig};
-
-                orderBackgroundsByZIndex(backgroundsList);  //Ordena la lista de backgrounds del config.json de menor a mayor segun z index.
-
-                string backgroundFilepath = backgroundsList[0]["filepath"];
-                string middlegroundFilepath = backgroundsList[1]["filepath"];
-                string frontgroundFilepath = backgroundsList[2]["filepath"];
-
-                backGroundTexture.loadFromFile("images/" + backgroundFilepath, m_Renderer);
-                middleGroundTexture.loadFromFile("images/" + middlegroundFilepath, m_Renderer);
-                frontGroundTexture.loadFromFile("images/" + frontgroundFilepath, m_Renderer);
+                loadGroundTextureByZIndex();
             }
         }
     }
 
     // everything inited successfully,
     return true;
+}
+
+void MCGame::loadGroundTextureByZIndex(){
+	json firstBackgroundConfig =  this->config["battlefield"][0]["background"];
+	json secondBackgroundConfig =  this->config["battlefield"][1]["background"];
+	json thirdBackgroundConfig =  this->config["battlefield"][2]["background"];
+
+	json backgroundsList[3] = {firstBackgroundConfig, secondBackgroundConfig, thirdBackgroundConfig};
+
+	orderBackgroundsByZIndex(backgroundsList);  //Ordena la lista de backgrounds del config.json de menor a mayor segun z index.
+
+	string backgroundFilepath = backgroundsList[0]["filepath"];
+	string middlegroundFilepath = backgroundsList[1]["filepath"];
+	string frontgroundFilepath = backgroundsList[2]["filepath"];
+
+	backGroundTexture.loadFromFile("images/" + backgroundFilepath, m_Renderer);
+	middleGroundTexture.loadFromFile("images/" + middlegroundFilepath, m_Renderer);
+	frontGroundTexture.loadFromFile("images/" + frontgroundFilepath, m_Renderer);
 }
 
 void orderBackgroundsByZIndex(json* backgroundList){

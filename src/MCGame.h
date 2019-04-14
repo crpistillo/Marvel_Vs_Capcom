@@ -41,6 +41,8 @@ private:
     Parallax* parallaxController;
     json config;
 
+    void loadGroundTextureByZIndex();
+
 
 public:
     MCGame(Logger* logger, json config);
