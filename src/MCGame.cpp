@@ -201,10 +201,10 @@ void MCGame::render() {
 			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
 		else if(renderizables[i] == player2){
-			player2->render(m_Renderer, camera.x, camera.y, player1->getPosX());
+			player2->render(m_Renderer, camera.x, camera.y, player1->getCentro());
 		}
 		else if(renderizables[i] == player1){
-			player1->render(m_Renderer, camera.x, camera.y, player2->getPosX());
+			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro());
 		}
 	}
 

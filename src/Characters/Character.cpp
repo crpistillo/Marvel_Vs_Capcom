@@ -107,7 +107,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
 }
 
 void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    if (Character::mPosX > posContrincante) {
+    if (this->getCentro() > posContrincante) {
         isLookingLeft = true;
     } else {
         isLookingLeft = false;
