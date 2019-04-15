@@ -50,9 +50,9 @@ void Parallax::setCenterBefore()
 
 void Parallax::keepCameraAndCenterInBounds()
 {
-	if ((this->camera->x) < 0)
+	if ((this->camera->x) < 2)
 	{
-		this->camera->x = 0;
+		this->camera->x = 2;
 		(*(this->centerBefore)) = this->screenWidth/2;
 		(*(this->middleGround))->adjustPosX(0.400009);
 		(*(this->backGround))->adjustPosX(0.914982);
