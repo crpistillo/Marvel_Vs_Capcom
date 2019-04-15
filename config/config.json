@@ -4,13 +4,13 @@
 		{
 			"background": {
 				"filepath": "camino.png",
-				"zindex": 3
+				"zindex": 10
 			}
 		},
 		{
 			"background": {
 				"filepath": "montanas.png",
-				"zindex": 2
+				"zindex": 9
 			}
 		},
 		{

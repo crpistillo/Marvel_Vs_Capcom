@@ -128,7 +128,14 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
 		alto = j["characters"][1]["height"];
 	}*/
 
-    m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer); //esto es los valores que se cambian la resolucion
+    if(isLookingLeft){
+    	SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL;
+    	m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer,nullptr,NULL,nullptr,flipType); //esto es los valores que se cambian la resolucion
+    }
+    else{
+    	SDL_RendererFlip flipType = SDL_FLIP_NONE;
+    	m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer,NULL,NULL,NULL,flipType);
+    }
 }
 
 void Character::free() {

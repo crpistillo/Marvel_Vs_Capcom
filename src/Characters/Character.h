@@ -91,7 +91,7 @@ protected:
 private:
 	virtual void resetSpriteVariables() = 0;
 	virtual void renderStandSprite(SDL_Renderer *renderer) = 0;
-	virtual void loadStandSprite(SDL_Renderer *renderer, char position) = 0;
+	virtual void loadStandSprite(SDL_Renderer *renderer) = 0;
 	virtual void renderDuckSprite(SDL_Renderer *renderer) = 0;
 	virtual void moveRight(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
 	virtual void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
