@@ -27,6 +27,7 @@ Character::Character(
     this->INITIAL_POS_Y= mPosY;
     this->mVelX = 0;
     this->mVelY = 0;
+    this->ZIndex = 0;
     this->currentWalkingLeftSprite = 0;
     this->currentWalkingRightSprite = 0;
     this->currentStandingSprite = 0;
@@ -183,6 +184,15 @@ bool Character::isMoving()
 {
 	return !(this->isStanding || this->isJumpingVertical);
 }
+
+int Character::getZIndex(){
+	return this->ZIndex;
+}
+
+void Character::setZIndex(int z){
+	this->ZIndex = z;
+}
+
 
 
 

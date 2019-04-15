@@ -8,8 +8,9 @@
 
 #include "Characters/Character.h"
 #include "Controls/Controls.h"
+#include "Renderizable.h"
 
-class Player {
+class Player: public Renderizable {
 public:
     Player(Character* first, Character* second, Controls* controls);
     ~Player();
@@ -29,6 +30,7 @@ public:
     int getSobrante();
 
     int getCentro();
+    int getZIndex();
 
 private:
     Character* currentCharacter;

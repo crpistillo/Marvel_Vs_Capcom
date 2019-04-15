@@ -91,5 +91,9 @@ Player::~Player() {
 
 }
 
+int Player::getZIndex(){
+	return this->currentCharacter->getZIndex();
+
+}
 
 

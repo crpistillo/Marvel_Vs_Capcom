@@ -5,6 +5,7 @@
 #include "MCGame.h"
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
+#include <queue>
 
 
 using namespace std;
@@ -96,6 +97,7 @@ void MCGame::loadGroundTextureByZIndex(){
 
 	backGround->setZIndex(backgroundsList[0]["zindex"]);
 	middleGround->setZIndex(backgroundsList[1]["zindex"]);
+	frontGround->setZIndex(backgroundsList[2]["zindex"]);
 }
 
 
@@ -107,10 +109,23 @@ MCGame::MCGame(Logger* logger, json config){
 	m_Running = false;
 	this->config = config;
 
-	int widthSpiderman = config["characters"][0]["width"];
-	int heightSpiderman = config["characters"][0]["height"];
-	int widthWolverine = config["characters"][1]["width"];
-	int heightWolverine = config["characters"][1]["height"];
+	json spidermanConfig;
+	json wolverineConfig;
+
+	if(config["characters"][0]["name"] == "spiderman"){
+		spidermanConfig = config["characters"][0];
+		wolverineConfig = config["characters"][1];
+	}
+	else{
+		spidermanConfig = config["characters"][1];
+		wolverineConfig = config["characters"][0];
+	}
+
+	int widthSpiderman = spidermanConfig["width"];
+	int heightSpiderman = spidermanConfig["height"];
+	int widthWolverine = wolverineConfig["width"];
+	int heightWolverine = wolverineConfig["height"];
+
 
 	int spidermanSobrante = widthSpiderman*242/640;
 	int spidermanAncho= widthSpiderman*110/640;
@@ -121,10 +136,15 @@ MCGame::MCGame(Logger* logger, json config){
 	int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
 
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
+	character1->setZIndex(spidermanConfig["zindex"]);
     Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+    character2->setZIndex(wolverineConfig["zindex"]);
+
 
     Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+    character3->setZIndex(wolverineConfig["zindex"]);
     Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
+    character4->setZIndex(spidermanConfig["zindex"]);
 
     logger->log("Creacion de controles.", DEBUG);
 
@@ -138,6 +158,7 @@ MCGame::MCGame(Logger* logger, json config){
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
     backGround = new Layer(1600,600,6.66667,800);//6.715
+    frontGround = new Layer(3200,600,0,0);
 
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
 }
@@ -160,17 +181,58 @@ void MCGame::run() {
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
 
+void orderRenderizableListByZIndex(Renderizable** list);
+
 void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
-	backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture);
-    middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture);
-    frontGroundTexture.render(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, m_Renderer, &camera);
 
-    player2->render(m_Renderer, camera.x, camera.y, player1->getPosX());
-    player1->render(m_Renderer, camera.x, camera.y, player2->getPosX());
+	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*player1) , &(*player2)};
+	orderRenderizableListByZIndex(renderizables);
+
+	for(int i = 0; i < 5; i++){
+		if(renderizables[i] == backGround){
+			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == middleGround){
+			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == frontGround){
+			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+		}
+		else if(renderizables[i] == player2){
+			player2->render(m_Renderer, camera.x, camera.y, player1->getPosX());
+		}
+		else if(renderizables[i] == player1){
+			player1->render(m_Renderer, camera.x, camera.y, player2->getPosX());
+		}
+	}
+
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
+
+void orderRenderizableListByZIndex(Renderizable** list){
+
+	int pos_sel = 0;
+	Renderizable* aux;
+
+	for(int i = 4; i >= 0; i--){
+
+		for(int x=0; x<= i; x++){
+
+			if(list[x]->getZIndex() > list[pos_sel]->getZIndex())
+				pos_sel = x;
+
+			aux = list[i];
+			list[i] = list[pos_sel];
+			list[pos_sel] = aux;
+			pos_sel = 0;
+
+		}
+	}
+}
+
+
 
 void MCGame::clean() {
     //m_Texture.free();

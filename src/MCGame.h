@@ -36,6 +36,7 @@ private:
     Texture backGroundTexture;
     Layer* middleGround;
     Layer* backGround;
+    Layer* frontGround;
     Player* player1;
     Player* player2;
     Parallax* parallaxController;

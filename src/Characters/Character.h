@@ -40,6 +40,8 @@ public:
     bool isMakingIntro;
     Controls* getControls();
    	bool isMoving();
+   	void setZIndex(int z);
+   	int getZIndex();
 
 protected:
 	Character(
@@ -62,6 +64,8 @@ protected:
 	int widthSprite, heightSprite;
 
 	int INITIAL_POS_Y;
+
+	int ZIndex;
 
 	Texture m_Texture;
 	ImageLoader* loader;

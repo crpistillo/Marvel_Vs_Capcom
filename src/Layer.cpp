@@ -58,10 +58,10 @@ void Layer::move()
     }
 }
 
-void Layer::render( int camX, int camY, SDL_Renderer* mRenderer, Texture* gTexture)
+void Layer::render( int camX, int camY, SDL_Renderer* mRenderer, Texture* gTexture, SDL_Rect* clip)
 {
     //Muestra el layer relativo a la camara
-	gTexture->render( mPosX - camX, mPosY - camY, layerWidth+100, layerHeight, mRenderer);
+	gTexture->render( mPosX - camX, mPosY - camY, layerWidth+100, layerHeight, mRenderer, clip);
 }
 
 double Layer::getPosX()
@@ -91,6 +91,10 @@ void Layer::changeVel(float vel)
 
 void Layer::setZIndex(int z){
 	this->ZIndex = z;
+}
+
+int Layer::getZIndex(){
+	return this->ZIndex;
 }
 
 
