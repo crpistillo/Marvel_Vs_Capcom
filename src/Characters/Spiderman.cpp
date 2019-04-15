@@ -263,17 +263,16 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 	unsigned int currentTime = SDL_GetTicks();
 
 	if(currentIntroSprite <= LAST_INTRO_SPRITE){
-		this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+        if(!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite<= 16)
+            this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderManR_", currentIntroSprite, ".png",
                                           renderer, &m_Texture);
-		if(currentIntroSprite == LAST_INTRO_SPRITE && isLookingLeft)
-			this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", 394, ".png",
-			                                          renderer, &m_Texture);
+        else
+            this->loader->loadActionSprite("images/spiderman/spiderman_intro/", "MVC2_SpiderMan_", currentIntroSprite, ".png",
+                                          renderer, &m_Texture);
 
 		++currentIntroSprite;
 		lastTime = currentTime;
 	}
-
-
 
 
 	if(currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
