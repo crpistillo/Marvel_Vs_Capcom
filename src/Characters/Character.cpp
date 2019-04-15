@@ -164,7 +164,9 @@ Character::~Character() {
 }
 
 void Character::positionUpdate(int* x) {
-    mPosX = *x;
+	/*x tiene el centro del personaje (ubicacion exacta del personaje)
+	 * La posicion en x se calcula con eso*/
+    mPosX = *x - this->getSobrante() - (this->getWidth()/2);
 }
 
 void Character::setControls(Controls* controls) {

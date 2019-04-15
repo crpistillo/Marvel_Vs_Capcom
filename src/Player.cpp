@@ -40,7 +40,9 @@ void Player::free() {
 }
 
 void Player::changeCharacter() {
-    int updateX = currentCharacter->getPosX();
+    /*En lugar de madarle al otro personaje la posicion en x del sprite,
+     * se le envia el centro (justo la posicion del personaje donde debe estar)*/
+	int updateX = currentCharacter->getCentro();
 
     if(currentCharacter == firstCharacter) {
     	currentCharacter = secondCharacter;
