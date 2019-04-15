@@ -150,6 +150,12 @@ int Character::getSobrante() {
     return sobrante;
 }
 
+int Character::getCentro() {
+    int centro;
+    centro = this->getPosX()+this->getSobrante()+(this->getWidth())/2;
+    return centro;
+}
+
 Character::~Character() {
     delete loader;
     m_Texture.free();

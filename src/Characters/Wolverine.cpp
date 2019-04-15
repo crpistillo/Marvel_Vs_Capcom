@@ -96,7 +96,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
         mPosX += CHARACTER_VEL;
     }
 
-    if (Wolverine::mPosX > posContrincante) {
+    if (this->getCentro() > posContrincante) {
         /*Esta función animación la cree para Spiderman ya que la animación donde
         * camina para atras es la misma que la de para adelante, pero haciendo eso
         * con la forma de caminar de Wolverine no queda muy bien, por lo que esta
@@ -142,7 +142,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
         mPosX -= CHARACTER_VEL;
     }
 
-    if (Wolverine::mPosX<posContrincante) {
+    if (this->getCentro() < posContrincante) {
         animacionRight(renderer);
     } else {
         if (currentWalkbackRightSprite > LAST_WALKBACK_SPRITE) {

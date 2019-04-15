@@ -105,7 +105,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     }
 
 
-    if (Spiderman::mPosX > posContrincante){
+    if (this->getCentro() > posContrincante){
     	animacionLeft(renderer);
     }
     else {
@@ -141,7 +141,7 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
         mPosX -= CHARACTER_VEL;
     }
 
-    if (Spiderman::mPosX < posContrincante){
+    if (this->getCentro() < posContrincante){
     	animacionRight(renderer);
     }
     else {

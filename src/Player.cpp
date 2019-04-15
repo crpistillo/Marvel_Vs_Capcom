@@ -76,9 +76,7 @@ int Player::getSobrante() {
 }
 
 int Player::getCentro() {
-    int centro;
-    centro = currentCharacter->getPosX()+currentCharacter->getSobrante()+(currentCharacter->getWidth())/2;
-    return centro;
+    return currentCharacter->getCentro();
 }
 
 Character* Player::getCurrentCharacter()

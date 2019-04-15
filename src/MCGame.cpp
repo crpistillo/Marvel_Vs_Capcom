@@ -205,8 +205,8 @@ void MCGame::update() {
 		distancia = player1->getPosX()+player1->getSobrante() - (player2->getPosX()+player2->getSobrante()+player2->getWidth());
 		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
 	}
-    player1->update(m_Renderer, distancia, player2->getPosX());
-    player2->update(m_Renderer, distancia2, player1->getPosX());
+    player1->update(m_Renderer, distancia, player2->getCentro());
+    player2->update(m_Renderer, distancia2, player1->getCentro());
 
     parallaxController->doParallax(&player1,&player2);
 }

@@ -32,6 +32,7 @@ public:
 	int getPosY();
 	int getWidth();
 	int getSobrante();
+	int getCentro();
 	void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void positionUpdate(int* x);
     void setControls(Controls* controls);
