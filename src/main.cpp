@@ -28,12 +28,19 @@ json parseConfigFile(Logger* logger, char* logPath) {
 MCGame* mcGame = 0;
 
 int main(int argc, char** argv) {
-    if(argc != 2)
-        printf("error");//error
 	Logger* logger = new Logger("marvel-vs-capcom.log");
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
-	json config = parseConfigFile(logger, argv[1]);
+	json config;
+    if(argc != 2){
+    	logger->log("Archivo de configuracion no especificado, cargando el archivo de configuracion por defecto.", INFO);
+    	config = parseConfigFile(logger, "config/config_default.json");
+    }
+    else{
+    	string configPath = (string) argv[1];
+    	logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
+    	config = parseConfigFile(logger, argv[1]);
+    }
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
     mcGame = new MCGame(logger, config);
