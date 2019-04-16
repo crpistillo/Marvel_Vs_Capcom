@@ -22,6 +22,9 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 200;
 const unsigned int SECONDARY_BLUE = 000;
 
+const string MVC_FILEPATH = "/MVC2_SpiderMan_";
+const string FILE_EXTENSION = ".png";
+
 Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
 : Character(
 	PosX,
@@ -42,7 +45,7 @@ Spiderman::~Spiderman(){
 }
 
 void Spiderman::load(SDL_Renderer* renderer) {
-	this->loader->loadActionSprite(characterFilepath + "standing_right", "/MVC2_SpiderMan_", 0, ".png",
+	this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, 0, FILE_EXTENSION,
 	                                          renderer, &m_Texture);
 }
 
@@ -69,11 +72,11 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 		currentStandingSprite = 0;
 
 	if (position == 'r'){
-		this->loader->loadActionSprite(characterFilepath + "standing_right", "/MVC2_SpiderMan_", currentStandingSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
 			                                          renderer, &m_Texture);
 	}
 	else{
-		this->loader->loadActionSprite(characterFilepath + "standing_left", "/MVC2_SpiderMan_", currentStandingSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
 					                                          renderer, &m_Texture);
 	}
 }
@@ -81,10 +84,10 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 	isStanding = false;
 	if (isLookingLeft){
-		this->loader->loadActionSprite(characterFilepath + "duck", "/MVC2_SpiderMan_", 219, "_left.png",
+		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
 							                                          renderer, &m_Texture);
 	}else{
-		this->loader->loadActionSprite(characterFilepath + "duck", "/MVC2_SpiderMan_", 219, ".png",
+		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
 									                                          renderer, &m_Texture);
 	}
 }
@@ -174,7 +177,7 @@ void Spiderman::animacionRight(SDL_Renderer *renderer){
         currentWalkingRightSprite = 0;
     }
 
-	this->loader->loadActionSprite(characterFilepath + "walking_right", "/MVC2_SpiderMan_", currentWalkingRightSprite, ".png",
+	this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH, currentWalkingRightSprite, FILE_EXTENSION,
 										                                          renderer, &m_Texture);
 	++currentWalkingRightSprite;
 }
@@ -186,7 +189,7 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
         currentWalkingLeftSprite = 0;
     }
 
-    this->loader->loadActionSprite(characterFilepath + "walking_left", "/MVC2_SpiderMan_", currentWalkingLeftSprite, ".png",
+    this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH, currentWalkingLeftSprite, FILE_EXTENSION,
     										                                          renderer, &m_Texture);
     ++currentWalkingLeftSprite;
 }
@@ -198,13 +201,13 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
 	if(isLookingLeft){
 
-		this->loader->loadActionSprite(characterFilepath + "jumping_inverted", "/MVC2_SpiderMan_", currentJumpingSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
 
 	}
 	else{
 
-		this->loader->loadActionSprite(characterFilepath + "jumping", "/MVC2_SpiderMan_", currentJumpingSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
 								renderer, &m_Texture);
 
 
@@ -234,12 +237,12 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	string imagePath;
 
 	if(isLookingLeft){
-		this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", "/MVC2_SpiderMan_", currentJumpingRightSprite, "a.png",
+		this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
 				renderer, &m_Texture);
 	}
 
 	else{
-		this->loader->loadActionSprite(characterFilepath + "jumping_right", "/MVC2_SpiderMan_", currentJumpingRightSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
 				renderer, &m_Texture);
 	}
 
@@ -263,13 +266,13 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 
 	if(isLookingLeft){
 
-		this->loader->loadActionSprite(characterFilepath + "jumping_left", "/MVC2_SpiderMan_", currentJumpingLeftSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
 	}
 
 	else{
 
-		this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", "/MVC2_SpiderMan_", currentJumpingLeftSprite, "a.png",
+		this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
 	}
 
@@ -297,10 +300,10 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 	if(currentIntroSprite <= LAST_INTRO_SPRITE){
         if(!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite<= 16)
-            this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentIntroSprite, ".png",
+            this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentIntroSprite, FILE_EXTENSION,
                                           renderer, &m_Texture);
         else
-            this->loader->loadActionSprite(characterFilepath + "intro/", "/MVC2_SpiderMan_", currentIntroSprite, ".png",
+            this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite, FILE_EXTENSION,
                                           renderer, &m_Texture);
 
 		++currentIntroSprite;
