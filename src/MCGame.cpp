@@ -127,7 +127,11 @@ MCGame::MCGame(Logger* logger, json config){
 	int heightWolverine = wolverineConfig["height"];
 
 	string spidermanPath = spidermanConfig["filepath"];
+	if(spidermanPath != "images/spiderman/spiderman_")
+		logger->log("Filepath para personaje Spiderman incorrecto. Error al cargar imagenes.", ERROR);
 	string wolverinePath = wolverineConfig["filepath"];
+	if(wolverinePath != "images/wolverine/wolverine_")
+		logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
 
 	int spidermanSobrante = widthSpiderman*242/640;

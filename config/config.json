@@ -23,7 +23,7 @@
 	"characters": [
 		{
 			"name": "spiderman",
-			"filepath": "images/spiderman/spiderman_",
+			"filepath": "images/spiderman/spiderman",
 			"width": 1153,
 			"height": 865,
 			"zindex": 99
