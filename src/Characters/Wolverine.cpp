@@ -23,6 +23,9 @@ const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 255;
 const unsigned int SECONDARY_BLUE = 0;
 
+const string MVC_FILEPATH = "/MVC2_Wolverine_";
+const string FILE_EXTENSION = ".png";
+
 Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
         : Character(
         	PosX,
@@ -40,7 +43,7 @@ Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int s
 }
 
 void Wolverine::load(SDL_Renderer *renderer) {
-	this->loader->loadActionSprite(characterFilepath + "standing_right", "/MVC2_Wolverine_", 0, ".png", renderer, &m_Texture);
+	this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, 0, FILE_EXTENSION, renderer, &m_Texture);
 }
 
 void Wolverine::resetSpriteVariables() {
@@ -55,9 +58,9 @@ void Wolverine::resetSpriteVariables() {
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
     isStanding = false;
     if (isLookingLeft) {
-    	this->loader->loadActionSprite(characterFilepath + "duck", "/MVC2_Wolverine_", 38, "_left.png", renderer, &m_Texture);
+    	this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 39, FILE_EXTENSION, renderer, &m_Texture);
     } else {
-    	this->loader->loadActionSprite(characterFilepath + "duck", "/MVC2_Wolverine_", 38, ".png", renderer, &m_Texture);
+    	this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 38, FILE_EXTENSION, renderer, &m_Texture);
     }
 }
 
@@ -77,10 +80,10 @@ void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position) {
         currentStandingSprite = 0;
 
     if (position == 'r'){
-    	this->loader->loadActionSprite(characterFilepath + "standing_right", "/MVC2_Wolverine_", currentStandingSprite, ".png", renderer, &m_Texture);
+    	this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
     else
-    	this->loader->loadActionSprite(characterFilepath + "standing_left", "/MVC2_Wolverine_", currentStandingSprite, ".png", renderer, &m_Texture);
+    	this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION, renderer, &m_Texture);
 }
 
 void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
@@ -108,8 +111,8 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
             currentWalkbackRightSprite = 0;
         }
 
-        this->loader->loadActionSprite(characterFilepath + "walkbackwards_right", "/MVC2_Wolverine_",
-        		currentWalkbackRightSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "walkbackwards_right", MVC_FILEPATH,
+        		currentWalkbackRightSprite, FILE_EXTENSION, renderer, &m_Texture);
         ++currentWalkbackRightSprite;
         isLookingLeft = false;
     }
@@ -149,8 +152,8 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
             currentWalkbackRightSprite = 0;
         }
 
-        this->loader->loadActionSprite(characterFilepath + "walkbackwards_left", "/MVC2_Wolverine_",
-                		currentWalkbackRightSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "walkbackwards_left", MVC_FILEPATH,
+                		currentWalkbackRightSprite, FILE_EXTENSION, renderer, &m_Texture);
         ++currentWalkbackRightSprite;
         isLookingLeft = true;
     }
@@ -179,8 +182,8 @@ void Wolverine::animacionRight(SDL_Renderer *renderer) {
         currentWalkingRightSprite = 0;
     }
 
-    this->loader->loadActionSprite(characterFilepath + "walking_right", "/MVC2_Wolverine_",
-    		currentWalkingRightSprite, ".png", renderer, &m_Texture);
+    this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH,
+    		currentWalkingRightSprite, FILE_EXTENSION, renderer, &m_Texture);
     ++currentWalkingRightSprite;
 }
 
@@ -191,8 +194,8 @@ void Wolverine::animacionLeft(SDL_Renderer *renderer) {
         currentWalkingLeftSprite = 0;
     }
 
-    this->loader->loadActionSprite(characterFilepath + "walking_left", "/MVC2_Wolverine_",
-        		currentWalkingLeftSprite, ".png", renderer, &m_Texture);
+    this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
+        		currentWalkingLeftSprite, FILE_EXTENSION, renderer, &m_Texture);
 
     ++currentWalkingLeftSprite;
 }
@@ -204,12 +207,12 @@ void Wolverine::jump(SDL_Renderer *renderer) {
 
     if (isLookingLeft) {
 
-        this->loader->loadActionSprite(characterFilepath + "jumping_inverted", "/MVC2_Wolverine_",
-                		currentJumpingSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,
+                		currentJumpingSprite, FILE_EXTENSION, renderer, &m_Texture);
     } else {
 
-        this->loader->loadActionSprite(characterFilepath + "jumping", "/MVC2_Wolverine_",
-                        		currentJumpingSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH,
+                        		currentJumpingSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
 
     if (currentJumpingSprite < 83) {
@@ -238,11 +241,11 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
 
     if (isLookingLeft) {
 
-        this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", "/MVC2_Wolverine_",
-                                		currentJumpingRightSprite, "a.png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH,
+                                		currentJumpingRightSprite, FILE_EXTENSION, renderer, &m_Texture);
     } else {
-        this->loader->loadActionSprite(characterFilepath + "jumping_right", "/MVC2_Wolverine_",
-                                        		currentJumpingRightSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH,
+                                        		currentJumpingRightSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
 
     this->repositionHeightAfterJump('r');
@@ -266,11 +269,11 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
     string imagePath;
 
     if (isLookingLeft) {
-        this->loader->loadActionSprite(characterFilepath + "jumping_left", "/MVC2_Wolverine_",
-                                                		currentJumpingLeftSprite, ".png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH,
+                                                		currentJumpingLeftSprite, FILE_EXTENSION, renderer, &m_Texture);
     } else {
-        this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", "/MVC2_Wolverine_",
-                                                		currentJumpingLeftSprite, "a.png", renderer, &m_Texture);
+        this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH,
+                                                		currentJumpingLeftSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
 
 
@@ -297,7 +300,7 @@ void Wolverine::makeIntro(SDL_Renderer* renderer){
 	unsigned int currentTime = SDL_GetTicks();
 
 	if( currentIntroSprite <= LAST_INTRO_SPRITE){
-		this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_Wolverine_", currentIntroSprite, ".png",
+		this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite, FILE_EXTENSION,
 							renderer, &m_Texture);
 		++currentIntroSprite;
 		lastTime = currentTime;
