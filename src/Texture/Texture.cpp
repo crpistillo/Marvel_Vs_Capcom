@@ -28,6 +28,20 @@ bool Texture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
     SDL_Surface *loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL) {
         printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+
+        SDL_Surface *loadedSurface = IMG_Load("images/not_found.png");
+        //Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface(mRenderer, loadedSurface);
+        if (newTexture == NULL) {
+        	printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+        } else {
+        	//Get image dimensions
+            mWidth = loadedSurface->w;
+            mHeight = loadedSurface->h;
+        }
+
+        //Get rid of old loaded surface
+        SDL_FreeSurface(loadedSurface);
     } else {
         //Color key image
         SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0xFF, 0, 0xFF));
