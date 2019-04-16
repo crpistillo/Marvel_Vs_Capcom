@@ -138,6 +138,8 @@ MCGame::MCGame(Logger* logger, json config){
 	int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH/2)-spidermanSobrante)-(spidermanAncho/2)-200;
 	int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
 
+	logger->log("Creacion de personajes.", DEBUG);
+
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
 	character1->setZIndex(spidermanConfig["zindex"]);
 	character1->setFilepath(spidermanPath);
@@ -163,9 +165,13 @@ MCGame::MCGame(Logger* logger, json config){
     player1 = new Player(character1, character2, controlPlayer1);
     player2 = new Player(character3, character4, controlPlayer2);
 
+    logger->log("Definicion de Fondo.", DEBUG);	
+
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
     backGround = new Layer(1600,600,6.66667,800);//6.715
     frontGround = new Layer(3200,600,0,0);
+
+    logger->log("Creacion de Parallax.", DEBUG);
 
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
 }
@@ -191,6 +197,7 @@ void MCGame::run() {
 void orderRenderizableListByZIndex(Renderizable** list);
 
 void MCGame::render() {
+	logger->log("Inicio render.", DEBUG);	
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
@@ -214,7 +221,7 @@ void MCGame::render() {
 			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro());
 		}
 	}
-
+	logger->log("Fin render.", DEBUG);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
@@ -243,14 +250,18 @@ void orderRenderizableListByZIndex(Renderizable** list){
 
 void MCGame::clean() {
     //m_Texture.free();
+    logger->log("Inicio limpieza MCGame.", INFO);
     delete player1;
     delete player2;
+    logger->log("Borrado de jugadores finalizado.", DEBUG);   
     frontGroundTexture.free();
     middleGroundTexture.free();
     backGroundTexture.free();
+    logger->log("Liberacion de variables de fondo finalizado.", DEBUG);
     delete backGround;
     delete middleGround;
     delete parallaxController;
+    logger->log("Borrado de fondos finalizado.", DEBUG);
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
     SDL_Quit();
@@ -265,6 +276,7 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
 
+	logger->log("Reubicacion inicio.", DEBUG);
 	//distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
 	//distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
 	if (player1->getCentro() > player2->getCentro()) {
@@ -274,9 +286,11 @@ void MCGame::update() {
 		distancia = player1->getPosX()+player1->getSobrante() - (player2->getPosX()+player2->getSobrante()+player2->getWidth());
 		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
 	}
+    logger->log("Actualizacion posicion MCGame.", DEBUG);
     player1->update(m_Renderer, distancia, player2->getCentro());
     player2->update(m_Renderer, distancia2, player1->getCentro());
 
+    logger->log("Actualizacion parallax - MCGame.", DEBUG);
     parallaxController->doParallax(&player1,&player2);
 }
 
