@@ -17,8 +17,8 @@ const string DEBUG = "DEBUG";
 
 using namespace std;
 
-json parseConfigFile(Logger* logger) {
-	ConfigFileParser* parser = new ConfigFileParser("config/config.json", logger);
+json parseConfigFile(Logger* logger, char* logPath) {
+	ConfigFileParser* parser = new ConfigFileParser(logPath, logger);
 	parser->parse();
 	json config = parser->getConfig();
 	delete parser;
@@ -27,11 +27,13 @@ json parseConfigFile(Logger* logger) {
 
 MCGame* mcGame = 0;
 
-int main() {
+int main(int argc, char** argv) {
+    if(argc != 2)
+        printf("error");//error
 	Logger* logger = new Logger("marvel-vs-capcom.log");
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
-	json config = parseConfigFile(logger);
+	json config = parseConfigFile(logger, argv[1]);
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
     mcGame = new MCGame(logger, config);
