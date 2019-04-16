@@ -126,6 +126,9 @@ MCGame::MCGame(Logger* logger, json config){
 	int widthWolverine = wolverineConfig["width"];
 	int heightWolverine = wolverineConfig["height"];
 
+	string spidermanPath = spidermanConfig["filepath"];
+	string wolverinePath = wolverineConfig["filepath"];
+
 
 	int spidermanSobrante = widthSpiderman*242/640;
 	int spidermanAncho= widthSpiderman*110/640;
@@ -137,14 +140,18 @@ MCGame::MCGame(Logger* logger, json config){
 
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
 	character1->setZIndex(spidermanConfig["zindex"]);
+	character1->setFilepath(spidermanPath);
     Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
     character2->setZIndex(wolverineConfig["zindex"]);
+    character2->setFilepath(wolverinePath);
 
 
     Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
     character3->setZIndex(wolverineConfig["zindex"]);
+    character3->setFilepath(wolverinePath);
     Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
     character4->setZIndex(spidermanConfig["zindex"]);
+    character4->setFilepath(spidermanPath);
 
     logger->log("Creacion de controles.", DEBUG);
 

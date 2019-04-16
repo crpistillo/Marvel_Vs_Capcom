@@ -28,6 +28,7 @@ Character::Character(
     this->mVelX = 0;
     this->mVelY = 0;
     this->ZIndex = 0;
+    this->characterFilepath = "";
     this->currentWalkingLeftSprite = 0;
     this->currentWalkingRightSprite = 0;
     this->currentStandingSprite = 0;
@@ -194,6 +195,11 @@ int Character::getZIndex(){
 void Character::setZIndex(int z){
 	this->ZIndex = z;
 }
+
+void Character::setFilepath(string fp){
+	this->characterFilepath = fp;
+}
+
 
 
 

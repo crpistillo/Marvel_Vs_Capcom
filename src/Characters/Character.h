@@ -42,6 +42,7 @@ public:
    	bool isMoving();
    	void setZIndex(int z);
    	int getZIndex();
+   	void setFilepath(string fp);
 
 protected:
 	Character(
@@ -66,6 +67,8 @@ protected:
 	int INITIAL_POS_Y;
 
 	int ZIndex;
+
+	string characterFilepath;
 
 	Texture m_Texture;
 	ImageLoader* loader;
