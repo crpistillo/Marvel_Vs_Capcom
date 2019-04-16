@@ -30,7 +30,7 @@
 		},
 		{
 			"name": "wolverine",
-			"filepath": "wolverine.png",
+			"filepath": "images/wolverine/wolverine_",
 			"width": 1153,
 			"height": 865,
 			"zindex": 99
