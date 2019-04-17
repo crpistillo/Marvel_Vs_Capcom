@@ -177,7 +177,7 @@ MCGame::MCGame(Logger* logger, json config){
 
     logger->log("Creacion de Parallax.", DEBUG);
 
-    parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater);
+    parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater,logger);
 }
 
 void MCGame::run() {
@@ -295,7 +295,7 @@ void MCGame::update() {
     player2->update(m_Renderer, distancia2, player1->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
-    parallaxController->doParallax(&player1,&player2);
+    parallaxController->doParallax(&player1,&player2,logger);
 }
 
 void orderBackgroundsByZIndex(json* backgroundList){

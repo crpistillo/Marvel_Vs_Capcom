@@ -7,49 +7,68 @@
 
 #include "Parallax.h"
 
-Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater)
+
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
+
+
+Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater,Logger* logger)
 {
+	logger->log("Definicion middleGround Parallax.", DEBUG);
 	this->middleGround = middleGround;
+	logger->log("Definicion backGround Parallax.", DEBUG);
 	this->backGround = backGround;
+	logger->log("Definicion camera Parallax.", DEBUG);
 	this->camera = camera;
+	logger->log("Definicion centerBefore Parallax.", DEBUG);
 	this->centerBefore = centerBefore;
+	logger->log("Definicion centerLater Parallax.", DEBUG);
 	this->centerLater = centerLater;
+	logger->log("Definicion screenWidth Parallax.", DEBUG);
 	this->screenWidth = 800;
+	logger->log("Definicion levelWidth Parallax.", DEBUG);
 	this->levelWidth= 3200;
 }
 
-bool Parallax::playersAreMoving(Player* player1, Player* player2)
+bool Parallax::playersAreMoving(Player* player1, Player* player2,Logger* logger)
 {
+	logger->log("Marca personajes en movimiento.", DEBUG);
 	return player1->getCurrentCharacter()->isMoving() && player2->getCurrentCharacter()->isMoving();
 }
 
-void Parallax::adjustLayerVelocity(Player** player1, Player** player2)
+void Parallax::adjustLayerVelocity(Player** player1, Player** player2,Logger* logger)
 {
-	if(this->playersAreMoving(*player1, *player2))
+	if(this->playersAreMoving(*player1, *player2,logger))
 	{
+		logger->log("Def. velocidad de movimiento parallax con jg. en mov.", DEBUG);
 		(*middleGround)->changeVel(3.33);
 	   	(*backGround)->changeVel(6.715);
 	}
     else
     {
+    	logger->log("Def. velocidad de movimiento parallax con jg. estaticos.", DEBUG);
         (*middleGround)->changeVel(1.665);
         (*backGround)->changeVel(3.3575);
 	}
 }
 
-void Parallax::centerCamera(Player** player1, Player** player2)
+void Parallax::centerCamera(Player** player1, Player** player2,Logger* logger)
 {
+	logger->log("Parallax - Centra camara.", DEBUG);
 	camera->x = ((*player1)->getCentro() + (*player2)->getCentro()) / 2 - screenWidth / 2;
 	camera->y = 0;
 }
 
-void Parallax::setCenterBefore()
+void Parallax::setCenterBefore(Logger* logger)
 {
+	logger->log("Parallax - Define centro.", DEBUG);
 	*(this->centerBefore) = this->screenWidth/2 + camera->x;
 }
 
-void Parallax::keepCameraAndCenterInBounds()
+void Parallax::keepCameraAndCenterInBounds(Logger* logger)
 {
+	logger->log("Parallax - ajusta posicion segun camara.", DEBUG);
 	if ((this->camera->x) < 2)
 	{
 		this->camera->x = 2;
@@ -67,7 +86,7 @@ void Parallax::keepCameraAndCenterInBounds()
 	}
 }
 
-void Parallax::updateLayers()
+void Parallax::updateLayers(Logger* logger)
 {
 	if(*(this->centerLater)!=-1000)// && (this->camera->x > 2 && this->camera->x < this->levelWidth-this->screenWidth))
 	{
@@ -76,24 +95,30 @@ void Parallax::updateLayers()
 	}
 }
 
-void Parallax::setCenterLater()
+void Parallax::setCenterLater(Logger* logger)
 {
 	*(this->centerLater) = this->screenWidth/2 + camera->x;
 }
 
-void Parallax::doParallax(Player** player1, Player** player2)
+void Parallax::doParallax(Player** player1, Player** player2,Logger* logger)
 {
-	this->adjustLayerVelocity(player1,player2);
+	logger->log("Parallax - llama Ajusta velocidad del layer.", DEBUG);
+	this->adjustLayerVelocity(player1,player2,logger);
 
-	this->centerCamera(player1, player2);
+	logger->log("Parallax - llama Centra camara.", DEBUG);
+	this->centerCamera(player1, player2,logger);
 
-	this->setCenterBefore();
+	logger->log("Parallax - llama Ubica el centro anterior.", DEBUG);
+	this->setCenterBefore(logger);
 
-	this->keepCameraAndCenterInBounds();
+	logger->log("Parallax - llama Mantiene la camara y el centro.", DEBUG);
+	this->keepCameraAndCenterInBounds(logger);
 
-	this->updateLayers();
+	logger->log("Parallax - llama Actualiza layers.", DEBUG);
+	this->updateLayers(logger);
 
-	this->setCenterLater();
+	logger->log("Parallax - llama Setea el centro del layer.", DEBUG);
+	this->setCenterLater(logger);
 }
 
 
