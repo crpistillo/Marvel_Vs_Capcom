@@ -37,6 +37,7 @@ bool Parallax::playersAreMoving(Player* player1, Player* player2,Logger* logger)
 	return player1->getCurrentCharacter()->isMoving() && player2->getCurrentCharacter()->isMoving();
 }
 
+
 void Parallax::adjustLayerVelocity(Player** player1, Player** player2,Logger* logger)
 {
 	if(this->playersAreMoving(*player1, *player2,logger))
