@@ -4,7 +4,12 @@
 
 #include "Player.h"
 
-Player::Player(Character *first, Character *second, Controls* controls) {
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
+
+Player::Player(Character *first, Character *second, Controls* controls,Logger* logger) {
+	logger->log("Inicializacion de personajes para jugador.", DEBUG);
     this->controls = controls;
     currentCharacter = first;
     firstCharacter = first;
@@ -12,14 +17,17 @@ Player::Player(Character *first, Character *second, Controls* controls) {
     isChanging = false;
 
     changeKey = controls->changeKey;
+    logger->log("Inicializacion de controles para jugador.", DEBUG);
     firstCharacter->setControls(controls);
     secondCharacter->setControls(controls);
 }
 
 
 
-void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
+void Player::update(SDL_Renderer *renderer, int distance, int posContrincante,Logger* logger) {
+
     InputManager* inputManager = InputManager::getInstance();
+    logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
     if(inputManager->isKeyDown(changeKey) && !isChanging){
         changeCharacter();
         setCharacterToChanging();
@@ -27,11 +35,12 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     }
     if(!currentCharacter->isMakingIntro)
         isChanging = false;
-    currentCharacter->update(renderer, distance, posContrincante);
+    currentCharacter->update(renderer, distance, posContrincante,logger);
 }
 
-void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    currentCharacter->render(mRenderer, camX, camY, posContrincante);
+void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante,Logger* logger) {
+	logger->log("Renderizado de personaje - Render.", DEBUG);
+	currentCharacter->render(mRenderer, camX, camY, posContrincante,logger);
 }
 
 void Player::free() {

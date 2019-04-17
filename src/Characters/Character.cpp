@@ -6,6 +6,11 @@
  */
 
 #include "Character.h"
+#include "../tools/logger/Logger.h"
+
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
 
 
 // Protected
@@ -53,7 +58,7 @@ Character::Character(
 }
 
 // Public:
-void Character::update(SDL_Renderer *renderer, int distance, int posContrincante) {
+void Character::update(SDL_Renderer *renderer, int distance, int posContrincante,Logger* logger) {
 
     InputManager *inputManager = InputManager::getInstance();
 
@@ -107,7 +112,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante,Logger* logger) {
     if (this->getCentro() > posContrincante) {
         isLookingLeft = true;
     } else {

@@ -9,13 +9,14 @@
 #include "Characters/Character.h"
 #include "Controls/Controls.h"
 #include "Renderizable.h"
+#include "tools/logger/Logger.h"
 
 class Player: public Renderizable {
 public:
-    Player(Character* first, Character* second, Controls* controls);
+    Player(Character* first, Character* second, Controls* controls,Logger* logger);
     ~Player();
-    void update(SDL_Renderer* renderer, int distance, int posContrincante);
-    void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
+    void update(SDL_Renderer* renderer, int distance, int posContrincante,Logger* logger);
+    void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante,Logger* logger);
     void free();
 
 
