@@ -3,19 +3,19 @@
 	"battlefield": [
 		{
 			"background": {
-				"filepath": "camino.png",
+				"filepath": "images/camino.png",
 				"zindex": 3
 			}
 		},
 		{
 			"background": {
-				"filepath": "montanas.png",
+				"filepath": "images/montanas.png",
 				"zindex": 2
 			}
 		},
 		{
 			"background": {
-				"filepath": "fondo.png",
+				"filepath": "images/fondo.png",
 				"zindex": 1
 			}
 		}

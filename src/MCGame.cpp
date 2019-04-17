@@ -85,9 +85,9 @@ void MCGame::loadGroundTextureByZIndex(){
 	string middlegroundFilepath = backgroundsList[1]["filepath"];
 	string frontgroundFilepath = backgroundsList[2]["filepath"];
 
-	backGroundTexture.loadFromFile("images/" + backgroundFilepath, m_Renderer);
-	middleGroundTexture.loadFromFile("images/" + middlegroundFilepath, m_Renderer);
-	frontGroundTexture.loadFromFile("images/" + frontgroundFilepath, m_Renderer);
+	backGroundTexture.loadFromFile(backgroundFilepath, m_Renderer);
+	middleGroundTexture.loadFromFile(middlegroundFilepath, m_Renderer);
+	frontGroundTexture.loadFromFile(frontgroundFilepath, m_Renderer);
 
 	backGround->setZIndex(backgroundsList[0]["zindex"]);
 	middleGround->setZIndex(backgroundsList[1]["zindex"]);
