@@ -57,7 +57,7 @@ void Wolverine::resetSpriteVariables() {
 }
 
 void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
-    isStanding = false;
+    agachado = true;
     if (isLookingLeft) {
     	this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 39, FILE_EXTENSION, renderer, &m_Texture);
     } else {
@@ -67,6 +67,7 @@ void Wolverine::renderDuckSprite(SDL_Renderer *renderer) {
 
 void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
     isStanding = true;
+    agachado = false;
     this->resetSpriteVariables();
     if (isLookingLeft) {
         this->loadStandSprite(renderer, 'l');

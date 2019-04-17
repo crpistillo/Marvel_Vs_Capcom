@@ -88,6 +88,7 @@ protected:
 	int currentIntroSprite;
 	bool isLookingLeft;
 	bool isStanding;
+	bool agachado;
 	bool isJumpingVertical;
 	bool isJumpingRight;
 	bool isJumpingLeft;

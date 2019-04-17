@@ -47,6 +47,7 @@ Character::Character(
     this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
     this->isStanding = true;
+    this->agachado = false;
     this->isJumpingVertical = false;
     this->isJumpingRight = false;
     this->isJumpingLeft = false;
@@ -121,7 +122,7 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
         isLookingLeft = false;
     }
 
-    if (isStanding)
+    if (isStanding && !agachado)
         renderStandSprite(mRenderer);
 
     //int ancho;
@@ -192,7 +193,7 @@ Controls* Character::getControls()
 
 bool Character::isMoving()
 {
-	return !(this->isStanding || this->isJumpingVertical);
+	return !(this->isStanding || this->isJumpingVertical || this->agachado);
 }
 
 int Character::getZIndex(){

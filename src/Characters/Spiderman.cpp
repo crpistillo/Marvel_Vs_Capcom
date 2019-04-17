@@ -59,6 +59,7 @@ void Spiderman::resetSpriteVariables() {
 
 void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 	isStanding = true;
+	agachado = false;
 	this->resetSpriteVariables();
     if (isLookingLeft) {
     	this->loadStandSprite(renderer, 'l');
@@ -83,7 +84,7 @@ void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
-	isStanding = false;
+	agachado = true;
 	if (isLookingLeft){
 		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
 							                                          renderer, &m_Texture);
