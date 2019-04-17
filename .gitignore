@@ -46,5 +46,6 @@
 .settings/
 
 /Debug/makefile
+.settings/language.settings.xml
 /Debug/marvel-vs-capcom/
 /Debug/sources.mk

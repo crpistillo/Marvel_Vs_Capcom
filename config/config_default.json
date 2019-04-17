@@ -3,41 +3,41 @@
 	"battlefield": [
 		{
 			"background": {
-				"filepath": "camino.png",
+				"filepath": "images/camino.png",
 				"zindex": 3
 			}
 		},
 		{
 			"background": {
-				"filepath": "montanas.png",
+				"filepath": "images/montanas.png",
 				"zindex": 2
 			}
 		},
 		{
 			"background": {
-				"filepath": "fondo.png",
+				"filepath": "images/fondo.png",
 				"zindex": 1
 			}
 		}
 	],
 	"characters": [
 		{
-			"name": "ryu",
-			"filepath": "ryu.png",
-			"height": 45,
-			"width": 20,
+			"name": "spiderman",
+			"filepath": "images/spiderman/spiderman_",
+			"width": 1153,
+			"height": 865,
 			"zindex": 99
 		},
 		{
-			"name": "spiderman",
-			"filepath": "spiderman.png",
-			"height": 45,
-			"width": 20,
+			"name": "wolverine",
+			"filepath": "images/wolverine/wolverine_",
+			"width": 1153,
+			"height": 865,
 			"zindex": 99
 		}
 	],
 	"window": {
-		"height": 800,
-		"width": 600
+		"width": 800,
+		"height": 600
 	}
 }

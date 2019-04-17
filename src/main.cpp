@@ -9,12 +9,16 @@
 #include <iostream>
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "tools/logger/Logger.h"
-#include "headers/MCGame.h"
+#include "MCGame.h"
+
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
 
 using namespace std;
 
-json parseConfigFile(Logger* logger) {
-	ConfigFileParser* parser = new ConfigFileParser("config/config.json", logger);
+json parseConfigFile(Logger* logger, char* logPath) {
+	ConfigFileParser* parser = new ConfigFileParser(logPath, logger);
 	parser->parse();
 	json config = parser->getConfig();
 	delete parser;
@@ -23,25 +27,33 @@ json parseConfigFile(Logger* logger) {
 
 MCGame* mcGame = 0;
 
-int main() {
-	/*Logger* logger = new Logger("marvel-vs-capcom.log");
+int main(int argc, char** argv) {
+	Logger* logger = new Logger("marvel-vs-capcom.log");
 	logger->startSession();
-	json config = parseConfigFile(logger);
-	cout << config.dump(4) << endl;
-
-	logger->finishSession();
-	delete logger;
-*/
-    mcGame = new MCGame();
-    mcGame->init("Marvel vs Capcom", 100, 100, 640, 480, 0);
-    while(mcGame->running()) {
-        mcGame->handleEvents();
-        mcGame->update();
-        mcGame->render();
+	logger->log("Logger iniciado.", DEBUG);
+	json config;
+    if(argc != 2){
+    	logger->log("Archivo de configuracion no especificado, cargando el archivo de configuracion por defecto.", INFO);
+    	config = parseConfigFile(logger, "config/config_default.json");
     }
+    else{
+    	string configPath = (string) argv[1];
+    	logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
+    	config = parseConfigFile(logger, argv[1]);
+    }
+	int ancho = config["window"]["width"];
+	int alto = config["window"]["height"];
+	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
+
+    mcGame = new MCGame(logger, config, ancho, alto);
+    mcGame->camera = { 0, 0, ancho, alto };
+    mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
+    mcGame->run();
+
     mcGame->clean();
+    logger->log("Fin de ciclo de ejecucion.", INFO);
+    logger->finishSession();
+    delete logger;
+    delete mcGame;
     return 0;
-
-
-	return 0;
 }
