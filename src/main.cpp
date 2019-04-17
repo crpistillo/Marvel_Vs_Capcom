@@ -41,10 +41,13 @@ int main(int argc, char** argv) {
     	logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
     	config = parseConfigFile(logger, argv[1]);
     }
+	int ancho = config["window"]["width"];
+	int alto = config["window"]["height"];
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-    mcGame = new MCGame(logger, config);
-    mcGame->init("Marvel vs Capcom", 100, 100, 800, 600, 0);
+    mcGame = new MCGame(logger, config, ancho, alto);
+    mcGame->camera = { 0, 0, ancho, alto };
+    mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->run();
 
     mcGame->clean();

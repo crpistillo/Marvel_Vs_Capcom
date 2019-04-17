@@ -53,7 +53,8 @@ protected:
 		int sobrante,
 		bool isLookingLeft,
 		int widthSprite,
-		int heightSprite
+		int heightSprite,
+		int anchoPantalla
 	);
 
     //The X and Y offsets of the character
@@ -68,6 +69,8 @@ protected:
 	int INITIAL_POS_Y;
 
 	int ZIndex;
+
+	int anchoPantalla;
 
 	string characterFilepath;
 

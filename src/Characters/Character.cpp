@@ -21,7 +21,8 @@ Character::Character(
 		int sobrante,
         bool isLookingLeft,
 		int widthSprite,
-		int heightSprite
+		int heightSprite,
+		int anchoPantalla
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -33,6 +34,7 @@ Character::Character(
     this->mVelX = 0;
     this->mVelY = 0;
     this->ZIndex = 0;
+    this->anchoPantalla = anchoPantalla;
     this->characterFilepath = "";
     this->currentWalkingLeftSprite = 0;
     this->currentWalkingRightSprite = 0;

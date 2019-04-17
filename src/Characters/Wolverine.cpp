@@ -26,7 +26,7 @@ const unsigned int SECONDARY_BLUE = 0;
 const string MVC_FILEPATH = "/MVC2_Wolverine_";
 const string FILE_EXTENSION = ".png";
 
-Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
+Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla)
         : Character(
         	PosX,
 			556-(height*297/480),
@@ -34,7 +34,8 @@ Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int s
 			sobrante,
         	false,
 			width,
-			height
+			height,
+			anchoPantalla
 ) {
 	if(secondaryColor)
 		this->loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
@@ -93,7 +94,7 @@ void Wolverine::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     //Mover
     mPosX -= CHARACTER_VEL;
 
-    if ((mPosX - CHARACTER_VEL <= -Wolverine::getSobrante()) || (distance < (-800))) {
+    if ((mPosX - CHARACTER_VEL <= -Wolverine::getSobrante()) || (distance < (-anchoPantalla))) {
         isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -139,7 +140,7 @@ void Wolverine::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     mPosX += CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Wolverine::getSobrante() - Wolverine::getWidth())) ||
-        (distance > 800)) {
+        (distance > anchoPantalla)) {
         isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;

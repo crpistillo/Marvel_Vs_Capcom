@@ -10,8 +10,6 @@
 
 using namespace std;
 
-/*200 es el corrimiento a la izquierda desde el centro*/
-//((LEVEL_WIDTH/2)-Spiderman::SOBRANTE)-(Spiderman::CHARACTER_WIDTH/2)-200;
 
 
 
@@ -21,14 +19,10 @@ const string DEBUG = "DEBUG";
 
 const int SCREEN_FPS = 30;
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
 int distancia;
 int distancia2;
 int centerBefore,centerLater=-1000;
 
-
-SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 void orderBackgroundsByZIndex(json* backgroundList);
 
@@ -102,8 +96,10 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(Logger* logger, json config){
+MCGame::MCGame(Logger* logger, json config, int ancho, int alto){
 	this->logger = logger;
+	this->SCREEN_WIDTH = ancho;
+	this->SCREEN_HEIGHT = alto;
 	m_Window = NULL;
 	m_Renderer = NULL;
 	m_Running = false;
@@ -144,18 +140,18 @@ MCGame::MCGame(Logger* logger, json config){
 
 	logger->log("Creacion de personajes.", DEBUG);
 
-	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
+	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
 	character1->setZIndex(spidermanConfig["zindex"]);
 	character1->setFilepath(spidermanPath);
-    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
     character2->setZIndex(wolverineConfig["zindex"]);
     character2->setFilepath(wolverinePath);
 
 
-    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho);
+    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
     character3->setZIndex(wolverineConfig["zindex"]);
     character3->setFilepath(wolverinePath);
-    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho);
+    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
     character4->setZIndex(spidermanConfig["zindex"]);
     character4->setFilepath(spidermanPath);
 
@@ -177,7 +173,7 @@ MCGame::MCGame(Logger* logger, json config){
 
     logger->log("Creacion de Parallax.", DEBUG);
 
-    parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater,logger);
+    parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger, SCREEN_WIDTH);
 }
 
 void MCGame::run() {

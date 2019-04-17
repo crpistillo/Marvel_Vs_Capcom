@@ -26,7 +26,7 @@ private:
 	int levelWidth;
 
 public:
-	Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater,Logger* logger);
+	Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater, Logger* logger, int screenWidth);
 
 	bool playersAreMoving(Player* player1, Player* player2,Logger* logger);
 

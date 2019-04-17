@@ -25,7 +25,7 @@ const unsigned int SECONDARY_BLUE = 000;
 const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
-Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho)
+Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla)
 : Character(
 	PosX,
 	556-(height*297/480),
@@ -33,7 +33,8 @@ Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int s
 	sobrante,
 	false,
 	width,
-	height
+	height,
+	anchoPantalla
 ){
 	if(secondaryColor)
 		loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
@@ -101,7 +102,7 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     mPosX -= CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
-    if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-800))) {
+    if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-anchoPantalla))) {
     	isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -138,7 +139,7 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     //Mover
     mPosX += CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) || (distance > 800)) {
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) || (distance > anchoPantalla)) {
     	isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;

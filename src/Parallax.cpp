@@ -13,7 +13,7 @@ const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
 
-Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater,Logger* logger)
+Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater, Logger* logger, int screenWidth)
 {
 	logger->log("Definicion middleGround Parallax.", DEBUG);
 	this->middleGround = middleGround;
@@ -26,7 +26,7 @@ Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, i
 	logger->log("Definicion centerLater Parallax.", DEBUG);
 	this->centerLater = centerLater;
 	logger->log("Definicion screenWidth Parallax.", DEBUG);
-	this->screenWidth = 800;
+	this->screenWidth = screenWidth;
 	logger->log("Definicion levelWidth Parallax.", DEBUG);
 	this->levelWidth= 3200;
 }

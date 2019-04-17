@@ -45,8 +45,13 @@ private:
     void loadGroundTextureByZIndex();
 
 
+protected:
+    int SCREEN_WIDTH;
+    int SCREEN_HEIGHT;
+
+
 public:
-    MCGame(Logger* logger, json config);
+    MCGame(Logger* logger, json config, int ancho, int alto);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
@@ -56,6 +61,7 @@ public:
     void update();
     void handleEvents();
     void clean();
+    SDL_Rect camera;
 };
 
 
