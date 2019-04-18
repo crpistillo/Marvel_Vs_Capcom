@@ -28,7 +28,7 @@ json parseConfigFile(Logger* logger, char* logPath) {
 MCGame* mcGame = 0;
 
 int main(int argc, char** argv) {
-	Logger* logger = new Logger("marvel-vs-capcom.log");
+	Logger* logger = new Logger("marvel-vs-capcom-");
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
 	json config;

@@ -11,12 +11,14 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 const string INITIAL_LOG_LEVEL = INFO;
+const string FASE = "1";
+const string VERSION = "1.0";
 
 ofstream ofs;
 const string separator = "==========================================================================================================\n";
 
 Logger::Logger(string filePath) {
-	this->filePath = filePath;
+	this->filePath = filePath + getDate() + ".log";
 	this->logLevel = INITIAL_LOG_LEVEL;
 }
 
@@ -32,10 +34,15 @@ void Logger::startSession() {
 	ofs.open(this->filePath.c_str(), ofstream::app);
 	ofs << separator;
 	ofs << "Game started at " + getDate() + "\n";
+	ofs << "FASE: " + FASE + "\n";
+	ofs << "VERSION: " + VERSION + "\n";
+	ofs << separator;
 }
 
 void Logger::finishSession() {
+	ofs << separator;
 	ofs << "Game finished at " + getDate()+ "\n";
+	ofs << separator;
 	ofs.close();
 }
 
