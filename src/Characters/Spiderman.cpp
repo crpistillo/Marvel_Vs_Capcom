@@ -14,8 +14,8 @@ const int LEVEL_HEIGHT = 600;
 const int LAST_STANDING_SPRITE = 8;
 const int LAST_WALKING_SPRITE = 10;
 const int LAST_JUMPING_SPRITE = 19;
-const int LAST_JUMPING_RIGHT_SPRITE = 16;
-const int LAST_JUMPING_LEFT_SPRITE = 16;
+const int LAST_JUMPING_RIGHT_SPRITE = 19;
+const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
 
 const unsigned int SECONDARY_RED = 255;
@@ -216,10 +216,10 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 	}
 
     if (currentJumpingSprite < 10) {
-        mPosY -= 3*CHARACTER_VEL;
+        mPosY -= 2.5*CHARACTER_VEL;
     }
     if (currentJumpingSprite > 10) {
-        mPosY += 3*CHARACTER_VEL;
+        mPosY += 2.5*CHARACTER_VEL;
     }
 
     ++currentJumpingSprite;
@@ -250,11 +250,11 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 
 	this->repositionHeightAfterJump('r');
 
-    if (currentJumpingRightSprite < 9) {
-        mPosY -= 2*CHARACTER_VEL;
+    if (currentJumpingRightSprite < 10) {
+        mPosY -= 1.7*CHARACTER_VEL;
     }
-    if (currentJumpingRightSprite > 9) {
-        mPosY += 2*CHARACTER_VEL;
+    if (currentJumpingRightSprite > 10) {
+        mPosY += 1.7*CHARACTER_VEL;
     }
 
 	++currentJumpingRightSprite;
@@ -287,11 +287,11 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 
 	this->repositionHeightAfterJump('l');
 
-    if (currentJumpingLeftSprite < 9) {
-        mPosY -= 2*CHARACTER_VEL;
+    if (currentJumpingLeftSprite < 10) {
+        mPosY -= 1.7*CHARACTER_VEL;
     }
-    if (currentJumpingLeftSprite > 9) {
-        mPosY += 2*CHARACTER_VEL;
+    if (currentJumpingLeftSprite > 10) {
+        mPosY += 1.7*CHARACTER_VEL;
     }
 
 	++currentJumpingLeftSprite;
