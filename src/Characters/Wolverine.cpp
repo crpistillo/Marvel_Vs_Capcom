@@ -13,9 +13,9 @@ const int LEVEL_HEIGHT = 600;
 //Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 16;
 const int LAST_WALKING_SPRITE = 15;
-const int LAST_JUMPING_SPRITE = 7;
-const int LAST_JUMPING_RIGHT_SPRITE = 13;
-const int LAST_JUMPING_LEFT_SPRITE = 13;
+const int LAST_JUMPING_SPRITE = 19;
+const int LAST_JUMPING_RIGHT_SPRITE = 16;
+const int LAST_JUMPING_LEFT_SPRITE = 16;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
 
@@ -217,11 +217,11 @@ void Wolverine::jump(SDL_Renderer *renderer) {
                         		currentJumpingSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
 
-    if (currentJumpingSprite < 83) {
-        mPosY -= CHARACTER_VEL;
+    if (currentJumpingSprite < 10) {
+        mPosY -= 3*CHARACTER_VEL;
     }
-    if (currentJumpingSprite >= 83) {
-        mPosY += CHARACTER_VEL;
+    if (currentJumpingSprite >= 10) {
+        mPosY += 3*CHARACTER_VEL;
     }
 
     ++currentJumpingSprite;
@@ -252,6 +252,13 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
 
     this->repositionHeightAfterJump('r');
 
+    if (currentJumpingRightSprite < 9) {
+        mPosY -= 2*CHARACTER_VEL;
+    }
+    if (currentJumpingRightSprite > 9) {
+        mPosY += 2*CHARACTER_VEL;
+    }
+
     ++currentJumpingRightSprite;
 
     if (currentJumpingRightSprite >
@@ -280,6 +287,13 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
 
 
     this->repositionHeightAfterJump('l');
+
+    if (currentJumpingLeftSprite < 9) {
+        mPosY -= 2*CHARACTER_VEL;
+    }
+    if (currentJumpingLeftSprite > 9) {
+        mPosY += 2*CHARACTER_VEL;
+    }
 
     ++currentJumpingLeftSprite;
 

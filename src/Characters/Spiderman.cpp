@@ -13,9 +13,9 @@ const int LEVEL_HEIGHT = 600;
 //Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 8;
 const int LAST_WALKING_SPRITE = 10;
-const int LAST_JUMPING_SPRITE = 7;
-const int LAST_JUMPING_RIGHT_SPRITE = 12;
-const int LAST_JUMPING_LEFT_SPRITE = 12;
+const int LAST_JUMPING_SPRITE = 11;
+const int LAST_JUMPING_RIGHT_SPRITE = 16;
+const int LAST_JUMPING_LEFT_SPRITE = 16;
 const int LAST_INTRO_SPRITE = 16;
 
 const unsigned int SECONDARY_RED = 255;
@@ -215,11 +215,11 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
 	}
 
-    if (currentJumpingSprite < 193) {
-        mPosY -= CHARACTER_VEL;
+    if (currentJumpingSprite < 6) {
+        mPosY -= 4*CHARACTER_VEL;
     }
-    if (currentJumpingSprite > 193) {
-        mPosY += CHARACTER_VEL;
+    if (currentJumpingSprite > 6) {
+        mPosY += 4*CHARACTER_VEL;
     }
 
     ++currentJumpingSprite;
@@ -250,6 +250,13 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 
 	this->repositionHeightAfterJump('r');
 
+    if (currentJumpingRightSprite < 9) {
+        mPosY -= 2*CHARACTER_VEL;
+    }
+    if (currentJumpingRightSprite > 9) {
+        mPosY += 2*CHARACTER_VEL;
+    }
+
 	++currentJumpingRightSprite;
 
 	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
@@ -279,6 +286,13 @@ void Spiderman::jumpLeft(SDL_Renderer* renderer){
 	}
 
 	this->repositionHeightAfterJump('l');
+
+    if (currentJumpingLeftSprite < 9) {
+        mPosY -= 2*CHARACTER_VEL;
+    }
+    if (currentJumpingLeftSprite > 9) {
+        mPosY += 2*CHARACTER_VEL;
+    }
 
 	++currentJumpingLeftSprite;
 
