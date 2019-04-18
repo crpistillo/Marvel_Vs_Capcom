@@ -13,7 +13,7 @@ const int LEVEL_HEIGHT = 600;
 //Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 8;
 const int LAST_WALKING_SPRITE = 10;
-const int LAST_JUMPING_SPRITE = 11;
+const int LAST_JUMPING_SPRITE = 15;
 const int LAST_JUMPING_RIGHT_SPRITE = 16;
 const int LAST_JUMPING_LEFT_SPRITE = 16;
 const int LAST_INTRO_SPRITE = 16;
@@ -215,11 +215,11 @@ void Spiderman::jump(SDL_Renderer *renderer) {
 
 	}
 
-    if (currentJumpingSprite < 6) {
-        mPosY -= 4*CHARACTER_VEL;
+    if (currentJumpingSprite < 8) {
+        mPosY -= 3*CHARACTER_VEL;
     }
-    if (currentJumpingSprite > 6) {
-        mPosY += 4*CHARACTER_VEL;
+    if (currentJumpingSprite > 8) {
+        mPosY += 3*CHARACTER_VEL;
     }
 
     ++currentJumpingSprite;
