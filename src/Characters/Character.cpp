@@ -193,7 +193,7 @@ Controls* Character::getControls()
 
 bool Character::isMoving()
 {
-	return !(this->isStanding || this->isJumpingVertical || this->agachado);
+	return !(this->isStanding || this->isJumpingVertical || this->agachado || this->isMakingIntro);
 }
 
 int Character::getZIndex(){

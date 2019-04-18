@@ -47,6 +47,7 @@ public:
 	void doParallax(Player** player1, Player** player2,Logger* logger);
 
 
+    bool playersAreMakingIntro(Player *player1, Player *player2, Logger *logger);
 };
 
 
