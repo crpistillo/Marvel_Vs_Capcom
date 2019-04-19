@@ -6,7 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
-
+#include <stdio.h>
 
 using namespace std;
 
@@ -143,6 +143,8 @@ MCGame::MCGame(Logger* logger, json config, int ancho, int alto){
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
 	character1->setZIndex(spidermanConfig["zindex"]);
 	character1->setFilepath(spidermanPath);
+
+
     Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
     character2->setZIndex(wolverineConfig["zindex"]);
     character2->setFilepath(wolverinePath);
@@ -151,9 +153,12 @@ MCGame::MCGame(Logger* logger, json config, int ancho, int alto){
     Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
     character3->setZIndex(wolverineConfig["zindex"]);
     character3->setFilepath(wolverinePath);
+
+
     Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
     character4->setZIndex(spidermanConfig["zindex"]);
     character4->setFilepath(spidermanPath);
+
 
     logger->log("Creacion de controles.", DEBUG);
 
@@ -236,13 +241,11 @@ void orderRenderizableListByZIndex(Renderizable** list){
 
 			if(list[x]->getZIndex() > list[pos_sel]->getZIndex())
 				pos_sel = x;
-
-			aux = list[i];
-			list[i] = list[pos_sel];
-			list[pos_sel] = aux;
-			pos_sel = 0;
-
 		}
+		aux = list[i];
+		list[i] = list[pos_sel];
+		list[pos_sel] = aux;
+		pos_sel = 0;
 	}
 }
 
