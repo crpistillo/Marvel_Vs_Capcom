@@ -28,7 +28,7 @@ const string FILE_EXTENSION = ".png";
 Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla)
 : Character(
 	PosX,
-	567-(height*297/480),
+	556-(height*297/480),
 	ancho,
 	sobrante,
 	false,
