@@ -39,6 +39,9 @@ public:
     void setControls(Controls* controls);
     void startIntro();
     bool isMakingIntro;
+	bool isJumpingVertical;
+	bool isJumpingRight;
+	bool isJumpingLeft;
     Controls* getControls();
    	bool isMoving();
    	void setZIndex(int z);
@@ -89,9 +92,6 @@ protected:
 	bool isLookingLeft;
 	bool isStanding;
 	bool agachado;
-	bool isJumpingVertical;
-	bool isJumpingRight;
-	bool isJumpingLeft;
     Controls* characterControls;
 
 	unsigned int lastTime;

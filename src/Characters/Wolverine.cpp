@@ -252,13 +252,6 @@ void Wolverine::jumpRight(SDL_Renderer *renderer) {
 
     this->repositionHeightAfterJump('r');
 
-    if (currentJumpingRightSprite < 10) {
-        mPosY -= 1.7*CHARACTER_VEL;
-    }
-    if (currentJumpingRightSprite > 10) {
-        mPosY += 1.7*CHARACTER_VEL;
-    }
-
     ++currentJumpingRightSprite;
 
     if (currentJumpingRightSprite >
@@ -287,13 +280,6 @@ void Wolverine::jumpLeft(SDL_Renderer *renderer) {
 
 
     this->repositionHeightAfterJump('l');
-
-    if (currentJumpingLeftSprite < 10) {
-        mPosY -= 1.7*CHARACTER_VEL;
-    }
-    if (currentJumpingLeftSprite > 10) {
-        mPosY += 1.7*CHARACTER_VEL;
-    }
 
     ++currentJumpingLeftSprite;
 
@@ -332,16 +318,16 @@ void Wolverine::makeIntro(SDL_Renderer* renderer){
 void Wolverine::repositionHeightAfterJump(char direction) {
 
     if (direction == 'r') {
-        if (currentJumpingRightSprite < (( LAST_JUMPING_RIGHT_SPRITE) / 2)) {
-            mPosY -= CHARACTER_VEL;
+        if (currentJumpingRightSprite < 10) {
+            mPosY -= 2.5*CHARACTER_VEL;
         } else {
-            mPosY += CHARACTER_VEL;
+            mPosY += 2.5*CHARACTER_VEL;
         }
     } else {
-        if (currentJumpingLeftSprite < (( LAST_JUMPING_LEFT_SPRITE) / 2)) {
-            mPosY -= CHARACTER_VEL;
+        if (currentJumpingLeftSprite < 10) {
+            mPosY -= 2.5*CHARACTER_VEL;
         } else {
-            mPosY += CHARACTER_VEL;
+            mPosY += 2.5*CHARACTER_VEL;
         }
 
     }
