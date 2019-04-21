@@ -13,7 +13,7 @@ const int LEVEL_HEIGHT = 600;
 //Por defecto, todos los sprites comienzan en 0.
 const int LAST_STANDING_SPRITE = 8;
 const int LAST_WALKING_SPRITE = 10;
-const int LAST_JUMPING_SPRITE = 19;
+const int LAST_JUMPING_SPRITE = 21;
 const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
