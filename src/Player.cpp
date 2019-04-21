@@ -44,8 +44,8 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
 }
 
 void Player::free() {
-    firstCharacter->free();
-    secondCharacter->free();
+    delete firstCharacter;
+    delete secondCharacter;
 }
 
 void Player::changeCharacter() {

@@ -23,7 +23,6 @@ public:
     virtual~Character();
 	//Maximum axis velocity of the character
 	static const int CHARACTER_VEL = 10;
-    void free();
 	virtual void load(SDL_Renderer* renderer) = 0;
 	//Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);

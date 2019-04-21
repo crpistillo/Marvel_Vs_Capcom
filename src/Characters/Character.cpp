@@ -140,9 +140,6 @@ void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContr
     m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer); //esto es los valores que se cambian la resolucion
 }
 
-void Character::free() {
-    m_Texture.free();
-}
 
 int Character::getPosX() {
     return mPosX;
@@ -169,7 +166,6 @@ int Character::getCentro() {
 Character::~Character() {
     delete loader;
     m_Texture.free();
-    this->free();
 }
 
 void Character::positionUpdate(int* x) {
