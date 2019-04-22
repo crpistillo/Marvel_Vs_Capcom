@@ -105,17 +105,30 @@ MCGame::MCGame(Logger* logger, json config, int ancho, int alto){
 	m_Running = false;
 	this->config = config;
 
-	json spidermanConfig;
-	json wolverineConfig;
+	json spidermanConfig = config["characters"][0];
+	json wolverineConfig = config["characters"][1];
 
-	if(config["characters"][0]["name"] == "spiderman"){
-		spidermanConfig = config["characters"][0];
-		wolverineConfig = config["characters"][1];
+	string msj;
+
+	if (spidermanConfig["name"] != "spiderman"){
+		string name = spidermanConfig["name"];
+		string filepath = spidermanConfig["filepath"];
+		msj = "No se reconoce al personaje '" + name + "'."
+				+ " Se intentara cargar las imagenes correspondiente al filepath: " + filepath
+				+ " como las imagenes del personaje 'spiderman'.";
+		logger->log(msj, ERROR);
 	}
-	else{
-		spidermanConfig = config["characters"][1];
-		wolverineConfig = config["characters"][0];
+
+	if (wolverineConfig["name"] != "wolverine"){
+		string name = wolverineConfig["name"];
+		string filepath = wolverineConfig["filepath"];
+		msj = "No se reconoce al personaje '" + name + "'."
+						+ " Se cargaran las imagenes correspondiente al filepath: " + filepath
+						+ " como las imagenes del personaje 'wolverine'.";
+				logger->log(msj, ERROR);
 	}
+
+
 
 	int widthSpiderman = spidermanConfig["width"];
 	int heightSpiderman = spidermanConfig["height"];
