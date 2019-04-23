@@ -28,8 +28,13 @@ int main(int argc, char** argv) {
 			printf ("Error en apertura de conexion\n");
 		}else{
 			listen(Descriptor,4);
-	int	new_sock = accept(Descriptor,(struct sockaddr *)&Direccion,0);
-			//read(new_sock,Datos,4);
+	socklen_t  sin_size=sizeof(Direccion);
+	int new_sock = accept(Descriptor,(struct sockaddr *)&Direccion,&sin_size);
+	if(new_sock == -1){
+		printf ("Error en aceptacion de conexion\n");
+
+	}
+	//read(new_sock,Datos,4);
 
 
 	//Ciclo para enviar y recibir mensajes
