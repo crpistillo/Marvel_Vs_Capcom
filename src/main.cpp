@@ -17,7 +17,7 @@ const string DEBUG = "DEBUG";
 
 using namespace std;
 
-json parseConfigFile(Logger* logger, char* logPath) {
+json parseConfigFile(Logger* logger, string logPath) {
 	ConfigFileParser* parser = new ConfigFileParser(logPath, logger);
 	parser->parse();
 	json config = parser->getConfig();
