@@ -104,8 +104,27 @@ void ConfigFileParser::validateBattlefield(json defaultConfig) {
 						this->replaceByDefault("battlefield", defaultConfig, "");
 						break;
 					} else {
+
+						//Filepath verification
 						if((*it)["background"].find("filepath") == (*it)["background"].end()) {
 							this->logError("battlefield", "Hay un filepath no especificado.");
+							this->replaceByDefault("battlefield", defaultConfig, "");
+							break;
+						}
+						if(! (*it)["background"].find("filepath")->is_string()) {
+							this->logError("battlefield", "Uno de los campos 'filepath' no es válido. Debe ser un string.");
+							this->replaceByDefault("battlefield", defaultConfig, "");
+							break;
+						}
+
+						//Z Index verification
+						if((*it)["background"].find("zindex") == (*it)["background"].end()) {
+							this->logError("battlefield", "Hay un z index no especificado.");
+							this->replaceByDefault("battlefield", defaultConfig, "");
+							break;
+						}
+						if(! (*it)["background"].find("zindex")->is_number_unsigned()) {
+							this->logError("battlefield", "Uno de los campos 'z index' no es válido. Debe ser un número positivo.");
 							this->replaceByDefault("battlefield", defaultConfig, "");
 							break;
 						}
