@@ -67,7 +67,12 @@ void ConfigFileParser::validateLogLevel(json defaultConfig) {
 	if(this->config.find("log") == this->config.end()) {
 		this->logError("log", "Nivel de log no especificado.");
 		this->replaceByDefault("log", defaultConfig, "");
-	} else {
+	}
+	if(!this->config.find("log")->is_string()) {
+		this->logError("log", "Campo 'log' invalido. Debe ser un string.");
+		this->replaceByDefault("log", defaultConfig, "");
+	}
+	else {
 		string logErrorLevel = this->config["log"];
 		if(logErrorLevel != ERROR && logErrorLevel != INFO && logErrorLevel != DEBUG) {
 			this->logError("log", "No existe el nivel de log especificado.");
