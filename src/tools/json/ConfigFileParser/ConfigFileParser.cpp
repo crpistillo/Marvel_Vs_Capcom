@@ -96,7 +96,12 @@ void ConfigFileParser::validateBattlefield(json defaultConfig) {
 			if(battlefield.empty()) {
 				this->logError("battlefield", "Battlefield está vacío.");
 				this->replaceByDefault("battlefield", defaultConfig, "");
-			} else {
+			}
+			if((int) battlefield.size() != 3) {
+				this->logError("battlefield", "Battlefield no contiene la cantidad de backgrounds necesarios. Deben ser 3.");
+				this->replaceByDefault("battlefield", defaultConfig, "");
+			}
+			else {
 				this->logger->log("Verificando si todos los elementos tienen el atributo 'background' y dentro de este un 'filepath'", INFO);
 				for(json::iterator it = battlefield.begin(); it != battlefield.end(); ++it) {
 					if(it->find("background") == it->end()) {
