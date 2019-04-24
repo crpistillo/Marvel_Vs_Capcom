@@ -117,19 +117,19 @@ void ConfigFileParser::validateBattlefield(json defaultConfig) {
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
 
 						}
-						if(! (*it)["background"].find("filepath")->is_string()) {
+						else if(! (*it)["background"].find("filepath")->is_string()) {
 							this->logError("battlefield bloque " + to_string(count), "Uno de los campos 'filepath' no es válido. Debe ser un string.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
 
 						}
 
 						//Z Index verification
-						if((*it)["background"].find("zindex") == (*it)["background"].end()) {
+						else if((*it)["background"].find("zindex") == (*it)["background"].end()) {
 							this->logError("battlefield bloque " + to_string(count), "Hay un z index no especificado.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
 
 						}
-						if(! (*it)["background"].find("zindex")->is_number_unsigned()) {
+						else if(! (*it)["background"].find("zindex")->is_number_unsigned()) {
 							this->logError("battlefield bloque " + to_string(count), "Uno de los campos 'z index' no es válido. Debe ser un número positivo.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
 
