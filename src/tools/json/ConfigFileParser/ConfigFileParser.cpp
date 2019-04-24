@@ -106,33 +106,33 @@ void ConfigFileParser::validateBattlefield(json defaultConfig) {
 				int count = 0;
 				for(json::iterator it = battlefield.begin(); it != battlefield.end(); ++it) {
 					if(it->find("background") == it->end()) {
-						this->logError("battlefield", "Hay un background no especificado.");
+						this->logError("battlefield bloque " + to_string(count), "Hay un background no especificado.");
 						this->replaceByDefault("battlefield", defaultConfig,"",count);
-						break;
+
 					} else {
 
 						//Filepath verification
 						if((*it)["background"].find("filepath") == (*it)["background"].end()) {
-							this->logError("battlefield", "Hay un filepath no especificado.");
+							this->logError("battlefield bloque " + to_string(count), "Hay un filepath no especificado.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
-							break;
+
 						}
 						if(! (*it)["background"].find("filepath")->is_string()) {
-							this->logError("battlefield", "Uno de los campos 'filepath' no es válido. Debe ser un string.");
+							this->logError("battlefield bloque " + to_string(count), "Uno de los campos 'filepath' no es válido. Debe ser un string.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
-							break;
+
 						}
 
 						//Z Index verification
 						if((*it)["background"].find("zindex") == (*it)["background"].end()) {
-							this->logError("battlefield", "Hay un z index no especificado.");
+							this->logError("battlefield bloque " + to_string(count), "Hay un z index no especificado.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
-							break;
+
 						}
 						if(! (*it)["background"].find("zindex")->is_number_unsigned()) {
-							this->logError("battlefield", "Uno de los campos 'z index' no es válido. Debe ser un número positivo.");
+							this->logError("battlefield bloque " + to_string(count), "Uno de los campos 'z index' no es válido. Debe ser un número positivo.");
                             this->replaceByDefault("battlefield", defaultConfig,"",count);
-							break;
+
 						}
 					}
 					count++;
@@ -166,60 +166,60 @@ void ConfigFileParser::validateCharacters(json defaultConfig) {
 					if(it->find("name") == it->end()) {
 						this->logError("characters bloque " + to_string(count), "Hay un name no especificado.");
 						this->replaceByDefault("characters", defaultConfig,"", count);
-						break;
+
 					}
-					if(!it->find("name")->is_string()){
+					else if(!it->find("name")->is_string()){
 						this->logError("characters bloque " + to_string(count), "Uno de los campos 'name' no es válido. Debe ser un string.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
 
 					//Filepath verification
-					if(it->find("filepath") == it->end()) {
+					else if(it->find("filepath") == it->end()) {
 						this->logError("characters bloque " + to_string(count), "Hay un filepath no especificado.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
-					if(!it->find("filepath")->is_string()) {
+					else if(!it->find("filepath")->is_string()) {
 						this->logError("characters bloque " + to_string(count), "Uno de los campos 'filepath' no es válido. Debe ser un string.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
 
 					//Height verification
-					if(it->find("height") == it->end()) {
+					else if(it->find("height") == it->end()) {
 						this->logError("characters bloque " + to_string(count), "Hay un height no especificado.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
-					if(!it->find("height")->is_number_unsigned()) {
+					else if(!it->find("height")->is_number_unsigned()) {
 						this->logError("characters bloque " + to_string(count), "Uno de los campos 'height' no es válido. Debe ser un número positivo.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
 
 					//Width verification
-					if(it->find("width") == it->end()) {
+					else if(it->find("width") == it->end()) {
 						this->logError("characters bloque " + to_string(count), "Hay un width no especificado.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
-					if(!it->find("width")->is_number_unsigned()) {
+					else if(!it->find("width")->is_number_unsigned()) {
 						this->logError("characters bloque " + to_string(count), "Uno de los campos 'width' no es válido. Debe ser un número positivo.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
 
 					//Zindex verification
-					if(it->find("zindex") == it->end()) {
+					else if(it->find("zindex") == it->end()) {
 						this->logError("characters bloque " + to_string(count), "Hay un zindex no especificado.");
 						this->replaceByDefault("characters", defaultConfig,"" ,count);
-						break;
+
 					}
-					if(!it->find("zindex")->is_number_unsigned()) {
+					else if(!it->find("zindex")->is_number_unsigned()) {
 						this->logError("characters bloque " + to_string(count), "Uno de los campos 'zindex' no es válido. Debe ser un número positivo.");
 						this->replaceByDefault("characters", defaultConfig,"",count);
-						break;
+
 					}
 
 					count++;
