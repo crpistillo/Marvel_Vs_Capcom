@@ -129,26 +129,68 @@ void ConfigFileParser::validateCharacters(json defaultConfig) {
 			} else {
 				this->logger->log("Verificando si todos los elementos tienen los atributos necesarios.", INFO);
 				for(json::iterator it = characters.begin(); it != characters.end(); ++it) {
+
+					//Name verification
 					if(it->find("name") == it->end()) {
 						this->logError("characters", "Hay un name no especificado.");
 						this->replaceByDefault("characters", defaultConfig, "");
 						break;
 					}
+					if(!it->find("name")->is_string()){
+						this->logError("characters", "Uno de los campos 'name' no es válido. Debe ser un string.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+
+					//Filepath verification
 					if(it->find("filepath") == it->end()) {
 						this->logError("characters", "Hay un filepath no especificado.");
 						this->replaceByDefault("characters", defaultConfig, "");
 						break;
 					}
+					if(!it->find("filepath")->is_string()) {
+						this->logError("characters", "Uno de los campos 'filepath' no es válido. Debe ser un string.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+
+					//Height verification
 					if(it->find("height") == it->end()) {
 						this->logError("characters", "Hay un height no especificado.");
 						this->replaceByDefault("characters", defaultConfig, "");
 						break;
 					}
+					if(!it->find("height")->is_number_unsigned()) {
+						this->logError("characters", "Uno de los campos 'height' no es válido. Debe ser un número positivo.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+
+					//Width verification
 					if(it->find("width") == it->end()) {
 						this->logError("characters", "Hay un width no especificado.");
 						this->replaceByDefault("characters", defaultConfig, "");
 						break;
 					}
+					if(!it->find("width")->is_number_unsigned()) {
+						this->logError("characters", "Uno de los campos 'width' no es válido. Debe ser un número positivo.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+
+					//Zindex verification
+					if(it->find("zindex") == it->end()) {
+						this->logError("characters", "Hay un zindex no especificado.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+					if(!it->find("zindex")->is_number_unsigned()) {
+						this->logError("characters", "Uno de los campos 'zindex' no es válido. Debe ser un número positivo.");
+						this->replaceByDefault("characters", defaultConfig, "");
+						break;
+					}
+
+
 				}
 			}
 		}
