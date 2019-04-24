@@ -21,17 +21,17 @@ using namespace std;
 
 class Logger {
 private:
+	static Logger* instance;
 	string filePath;
 	string logLevel;
-	string getDate();
+	Logger(string filePath);
 	bool hasToLog(string requiredLogLevel);
 public:
-	Logger(string filePath);
 	void setLogLevel(string logLevel);
 	void startSession();
 	void log(string message, string requiredLogLevel);
 	void finishSession();
+	static Logger* getInstance();
 };
-
 
 #endif /* TOOLS_LOGGER_LOGGER_H_ */

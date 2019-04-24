@@ -12,8 +12,8 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-ConfigFileParser::ConfigFileParser(string path, Logger* logger) {
-	this->logger = logger;
+ConfigFileParser::ConfigFileParser(string path) {
+	this->logger = Logger::getInstance();
 	if(!this->fileExists(path)) {
 		this->logger->log("Usando archivo de configuración por default ubicado en '" + DEFAULT_CONFIG_FILE_PATH, INFO);
 		this->filePath = DEFAULT_CONFIG_FILE_PATH;

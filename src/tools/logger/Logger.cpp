@@ -17,17 +17,25 @@ const string VERSION = "1.0";
 ofstream ofs;
 const string separator = "==========================================================================================================\n";
 
-Logger::Logger(string filePath) {
-	this->filePath = filePath + getDate() + ".log";
-	this->logLevel = INITIAL_LOG_LEVEL;
-}
-
-string Logger::getDate() {
+string getDate() {
     time_t timeT = time(nullptr);
     string timeString = asctime(localtime(&timeT));
     unsigned int length = timeString.size();
     timeString.resize(--length);
     return timeString;
+}
+
+Logger::Logger(string filePath) {
+	this->filePath = filePath;
+	this->logLevel = INITIAL_LOG_LEVEL;
+}
+
+Logger* Logger::getInstance() {
+    if(!instance) {
+        instance = new Logger("marvel-vs-capcom-" + getDate() + ".log");
+    }
+
+    return instance;
 }
 
 void Logger::startSession() {
@@ -41,7 +49,7 @@ void Logger::startSession() {
 
 void Logger::finishSession() {
 	ofs << separator;
-	ofs << "Game finished at " + getDate()+ "\n";
+	ofs << "Game finished at " + getDate() + "\n";
 	ofs << separator;
 	ofs.close();
 }
@@ -59,6 +67,6 @@ bool Logger::hasToLog(string requiredLogLevel) {
 
 void Logger::log(string message, string requiredLogLevel) {
 	if(this->hasToLog(requiredLogLevel)) {
-		ofs << "[" + this->getDate() + "]-[" + requiredLogLevel + "] : " + message + "\n";
+		ofs << "[" + getDate() + "]-[" + requiredLogLevel + "] : " + message + "\n";
 	}
 }

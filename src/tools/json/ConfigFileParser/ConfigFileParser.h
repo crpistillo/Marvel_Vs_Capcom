@@ -31,7 +31,7 @@ private:
 	void replaceByDefault(string key, json defaultConfig, string subKey);
 
 public:
-	ConfigFileParser(string path, Logger* logger);
+	ConfigFileParser(string path);
 	void parse();
 	json getConfig();
 };

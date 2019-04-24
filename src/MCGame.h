@@ -51,7 +51,7 @@ protected:
 
 
 public:
-    MCGame(Logger* logger, json config, int ancho, int alto);
+    MCGame(json config, int ancho, int alto);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int

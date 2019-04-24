@@ -6,12 +6,8 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
-#include <stdio.h>
 
 using namespace std;
-
-
-
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -96,8 +92,8 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(Logger* logger, json config, int ancho, int alto){
-	this->logger = logger;
+MCGame::MCGame(json config, int ancho, int alto){
+	this->logger = Logger::getInstance();
 	this->SCREEN_WIDTH = ancho;
 	this->SCREEN_HEIGHT = alto;
 	m_Window = NULL;
