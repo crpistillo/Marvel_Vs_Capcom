@@ -33,13 +33,13 @@ int main(int argc, char** argv) {
 	logger->log("Logger iniciado.", DEBUG);
 	json config;
     if(argc != 2){
-    	logger->log("Archivo de configuracion no especificado, cargando el archivo de configuracion por defecto.", INFO);
+    	logger->log("Archivo de configuracion no especificado.", INFO);
     	config = parseConfigFile(logger, "config/config_default.json");
     }
     else{
     	string configPath = (string) argv[1];
     	logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
-    	config = parseConfigFile(logger, argv[1]);
+    	config = parseConfigFile(logger, configPath);
     }
 	int ancho = config["window"]["width"];
 	int alto = config["window"]["height"];
