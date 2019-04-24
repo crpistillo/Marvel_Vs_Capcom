@@ -9,7 +9,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <string>
-
+#include "../tools/logger/Logger.h"
 
 class Texture {
 public:
@@ -39,6 +39,7 @@ public:
 private:
     //The actual hardware texture
     SDL_Texture *mTexture;
+    Logger *logger;
 
     //Image dimensions
     int mWidth;

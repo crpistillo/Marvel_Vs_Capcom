@@ -4,12 +4,16 @@
 
 #include "Texture.h"
 
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
 
 Texture::Texture() {
     //Initialize
     mTexture = NULL;
     mWidth = 0;
     mHeight = 0;
+    logger = Logger::getInstance();
 }
 
 Texture::~Texture() {
@@ -27,13 +31,13 @@ bool Texture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
     //Load image at specified path
     SDL_Surface *loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL) {
-        printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+        this->logger->log("Unable to load image " + string(path.c_str()) + "! SDL_image Error: " + IMG_GetError() + "\n", ERROR);
 
         SDL_Surface *loadedSurface = IMG_Load("images/not_found.png");
         //Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(mRenderer, loadedSurface);
         if (newTexture == NULL) {
-        	printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+        	this->logger->log("Unable to create texture from " + string(path.c_str()) + "! SDL Error: " + SDL_GetError() + "\n", ERROR);
         } else {
         	//Get image dimensions
             mWidth = loadedSurface->w;
@@ -49,7 +53,7 @@ bool Texture::loadFromFile(std::string path, SDL_Renderer *mRenderer) {
         //Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(mRenderer, loadedSurface);
         if (newTexture == NULL) {
-            printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+        	this->logger->log("Unable to create texture from " + string(path.c_str()) + "! SDL Error: " + SDL_GetError() + "\n", ERROR);
         } else {
             //Get image dimensions
             mWidth = loadedSurface->w;
