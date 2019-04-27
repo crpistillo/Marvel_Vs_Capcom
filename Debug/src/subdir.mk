@@ -9,6 +9,8 @@ CPP_SRCS += \
 ../src/MCGame.cpp \
 ../src/Parallax.cpp \
 ../src/Player.cpp \
+../src/Server.cpp \
+../src/cliente.cpp \
 ../src/main.cpp 
 
 OBJS += \
@@ -17,6 +19,8 @@ OBJS += \
 ./src/MCGame.o \
 ./src/Parallax.o \
 ./src/Player.o \
+./src/Server.o \
+./src/cliente.o \
 ./src/main.o 
 
 CPP_DEPS += \
@@ -25,6 +29,8 @@ CPP_DEPS += \
 ./src/MCGame.d \
 ./src/Parallax.d \
 ./src/Player.d \
+./src/Server.d \
+./src/cliente.d \
 ./src/main.d 
 
 

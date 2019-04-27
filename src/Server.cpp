@@ -8,13 +8,10 @@
 #include <string.h>
 
 
-int main(int argc, char** argv) {
+int iniciar_servidor(char* port) {
     int Descriptor;
-    char Datos[]="Pepe";
-    int continua;
     char buf[1024];
     char enviar[1024];
-    char enviar2[1024];
 	struct sockaddr_in Direccion;
 	Direccion.sin_family = AF_INET;
 	Direccion.sin_port = htons(8080); //	htons((int)port);
@@ -34,32 +31,27 @@ int main(int argc, char** argv) {
 		printf ("Error en aceptacion de conexion\n");
 
 	}
-	//read(new_sock,Datos,4);
-
-
 	//Ciclo para enviar y recibir mensajes
 	 while(1){
 	 //El servidor espera el primer mensaje
-	 recv(new_sock,buf,1024,0);
-	 //if(strcmp(&buf,"salir")==0){
-//	 break;
-	// }
+     recv(new_sock,buf,sizeof(buf),0);
+	 if(strcmp(buf,"salir")==0){
+	 break;
+	 }
 	 printf("Cliente: %s\n",buf);
 
 	 //El cliente recibe el mensaje del servidor
 	 printf("Escribir mensaje: ");
-	 scanf("%*c%[^\n]",enviar2);
-	 send(new_sock,enviar2,1024,0);
-	 if(strcmp(enviar2,"salir")==0){
+	 scanf("%s[^\n]",&enviar);
+
+	 send(new_sock,enviar,sizeof(enviar),0);
+
+	 if(strcmp(enviar,"salir")==0){
 	 break;
 	 }
 	}
-
-			//printf("MSG: %s\n",Datos);
-
 		}
 	}
 	close(Descriptor);
-
     return 0;
 }

@@ -1,1 +1,1 @@
-int Server(/*char* port*/);
+int iniciar_servidor(char* port);
