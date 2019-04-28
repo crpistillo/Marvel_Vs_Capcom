@@ -24,8 +24,8 @@ C_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src/Characters \
-src/Controls \
 src \
+src/Controls \
 src/Texture \
 src/tools/FPSManager \
 src/tools/ImageLoader \

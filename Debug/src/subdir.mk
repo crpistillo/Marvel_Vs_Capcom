@@ -4,33 +4,33 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/Client.cpp \
 ../src/InputManager.cpp \
 ../src/Layer.cpp \
 ../src/MCGame.cpp \
 ../src/Parallax.cpp \
 ../src/Player.cpp \
 ../src/Server.cpp \
-../src/cliente.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/Client.o \
 ./src/InputManager.o \
 ./src/Layer.o \
 ./src/MCGame.o \
 ./src/Parallax.o \
 ./src/Player.o \
 ./src/Server.o \
-./src/cliente.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/Client.d \
 ./src/InputManager.d \
 ./src/Layer.d \
 ./src/MCGame.d \
 ./src/Parallax.d \
 ./src/Player.d \
 ./src/Server.d \
-./src/cliente.d \
 ./src/main.d 
 
 

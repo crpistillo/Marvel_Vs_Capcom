@@ -15,7 +15,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
-#include "cliente.h"
+#include "Client.h"
 
 
 #define DATA "Hola"
@@ -37,7 +37,7 @@ json parseConfigFile(string logPath) {
 MCGame* mcGame = 0;
 Logger *Logger::instance = 0;
 
-int iniciar_cliente(int cantArg,char* dirJson,char * host,char * port,char * cantInst) {
+int initClient(int cantArg,char* dirJson,char * host,char * port,char * cantInst) {
 	Logger* logger = Logger::getInstance();
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
@@ -55,7 +55,8 @@ int iniciar_cliente(int cantArg,char* dirJson,char * host,char * port,char * can
 	int ancho = config["window"]["width"];
 	int alto = config["window"]["height"];
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
-////////////////
+
+	////////////////
     char buf[1024];
     char enviar[1024];
     int Descriptor;
@@ -66,37 +67,36 @@ int iniciar_cliente(int cantArg,char* dirJson,char * host,char * port,char * can
 
 
 	Descriptor = socket (AF_INET, SOCK_STREAM, 0);
-	if (Descriptor == -1) {
+	if(Descriptor == -1) {
 		printf ("Error en apertura de socket servidor\n");
-    }else{
-    int estado_conexion = connect(Descriptor,(struct sockaddr *)&Direccion, sizeof (Direccion));
-	if (estado_conexion == -1) {
-		printf("Hubo un error en la conexion remota\n");
-	}else{
-	while(1){
-	 //El servidor espera el primer mensaje
-	 printf("Escribir mensaje: ");
-	 scanf("%s[^\n]",&enviar);
-	 //send(Descriptor,enviar,strlen(enviar),0);
-	 send(Descriptor,enviar,sizeof(enviar),0);
-	 if(strcmp(enviar,"salir")==0){
-	 break;
-	 }
+    } else {
+    	int estado_conexion = connect(Descriptor,(struct sockaddr *)&Direccion, sizeof (Direccion));
+    	if(estado_conexion == -1) {
+    		printf("Hubo un error en la conexion remota\n");
+    	} else {
+			while(1) {
+				//El servidor espera el primer mensaje
+				printf("Escribir mensaje: ");
+				scanf("%s[^\n]", &enviar);
+				//send(Descriptor,enviar,strlen(enviar),0);
+				send(Descriptor, enviar, sizeof(enviar), 0);
+				if(strcmp(enviar, "salir") == 0) {
+					break;
+				}
 
-	 //El cliente recibe el mensaje del servidor
-	 recv(Descriptor,buf,sizeof(buf),0);
-	 if(strcmp(buf,"salir")==0){
-	 break;
-	 }
-	 printf("Servidor: %s\n",buf);
-	}
+				//El cliente recibe el mensaje del servidor
+				recv(Descriptor, buf, sizeof(buf), 0);
+				if(strcmp(buf, "salir") == 0) {
+					break;
+				}
+				printf("Servidor: %s\n",buf);
+			}
 
-	close(Descriptor);
-
-}
-}
-
+			close(Descriptor);
+    	}
+    }
 	//////////////////////
+
     mcGame = new MCGame(config, ancho, alto);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
