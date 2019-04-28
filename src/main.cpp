@@ -2,13 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "Client.h"
+#include "Client/Client.h"
 #include "Server.h"
+#include "tools/logger/Logger.h"
+
+Logger *Logger::instance = 0;
 
 int main(int argc, char* argv[]) {
 	if (strncmp(argv[2], "client", 6) == 0) {
 		//validateClientParams(argv);
-		initClient(argc, argv[1], argv[2], argv[3], argv[4]);
+		initClient(argc, argv[1], string(argv[2]), atoi(argv[3]), argv[4]);
 	} else {
 		if (strncmp(argv[2], "server", 6) == 0) {
 			//validateServerParams(*argv);

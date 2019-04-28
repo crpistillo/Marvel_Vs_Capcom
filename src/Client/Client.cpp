@@ -7,15 +7,14 @@
 //============================================================================
 
 #include <iostream>
-#include "tools/json/ConfigFileParser/ConfigFileParser.h"
-#include "tools/logger/Logger.h"
-#include "MCGame.h"
-#include "Server.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
+#include "../MCGame.h"
+#include "../Server.h"
 #include "Client.h"
+#include "NetworkManager.h"
 
 
 #define DATA "Hola"
@@ -26,6 +25,8 @@ const string DEBUG = "DEBUG";
 
 using namespace std;
 
+NetworkManager *NetworkManager::instance = 0;
+
 json parseConfigFile(string logPath) {
 	ConfigFileParser* parser = new ConfigFileParser(logPath);
 	parser->parse();
@@ -35,50 +36,55 @@ json parseConfigFile(string logPath) {
 }
 
 MCGame* mcGame = 0;
-Logger *Logger::instance = 0;
 
-int connectToServer() {
+bool connectToServer(string host, int port) {
 	char buf[1024];
 	char enviar[1024];
-	int Descriptor;
-	struct sockaddr_in Direccion;
-	Direccion.sin_family = AF_INET;
-	Direccion.sin_port = htons(8080); //	htons((int)port);
-	Direccion.sin_addr.s_addr = INADDR_ANY;
 
-
-	Descriptor = socket (AF_INET, SOCK_STREAM, 0);
-	if(Descriptor == -1) {
-		printf ("Error en apertura de socket servidor\n");
-		return 1;
-	} else {
-		int estado_conexion = connect(Descriptor,(struct sockaddr *)&Direccion, sizeof (Direccion));
-		if(estado_conexion == -1) {
-			printf("Hubo un error en la conexion remota\n");
-			return 1;
-		} else {
-			while(1) {
-				//El servidor espera el primer mensaje
-				printf("Escribir mensaje: ");
-				scanf("%s[^\n]", &enviar);
-				//send(Descriptor,enviar,strlen(enviar),0);
-				send(Descriptor, enviar, sizeof(enviar), 0);
-				if(strcmp(enviar, "salir") == 0) {
-					break;
-				}
-
-				//El cliente recibe el mensaje del servidor
-				recv(Descriptor, buf, sizeof(buf), 0);
-				if(strcmp(buf, "salir") == 0) {
-					break;
-				}
-				printf("Servidor: %s\n",buf);
-			}
-
-			close(Descriptor);
-		}
+	NetworkManager* networkManager = NetworkManager::getInstance();
+	if(!networkManager->connectToServer(host, port)) {
+		return false;
 	}
-	return 0;
+	networkManager->sendMessage("Mensaje de prueba al sv.");
+
+//	int Descriptor;
+//	struct sockaddr_in Direccion;
+//	Direccion.sin_family = AF_INET;
+//	Direccion.sin_port = htons(8080); //	htons((int)port);
+//	Direccion.sin_addr.s_addr = INADDR_ANY;
+//
+//	Descriptor = socket (AF_INET, SOCK_STREAM, 0);
+//	if(Descriptor == -1) {
+//		printf ("Error en apertura de socket servidor\n");
+//		return 1;
+//	} else {
+//		int estado_conexion = connect(Descriptor,(struct sockaddr *)&Direccion, sizeof (Direccion));
+//		if(estado_conexion == -1) {
+//			printf("Hubo un error en la conexion remota\n");
+//			return 1;
+//		} else {
+//			while(1) {
+//				//El servidor espera el primer mensaje
+//				printf("Escribir mensaje: ");
+//				scanf("%s[^\n]", &enviar);
+//				//send(Descriptor,enviar,strlen(enviar),0);
+//				send(Descriptor, enviar, sizeof(enviar), 0);
+//				if(strcmp(enviar, "salir") == 0) {
+//					break;
+//				}
+//
+//				//El cliente recibe el mensaje del servidor
+//				recv(Descriptor, buf, sizeof(buf), 0);
+//				if(strcmp(buf, "salir") == 0) {
+//					break;
+//				}
+//				printf("Servidor: %s\n",buf);
+//			}
+//
+//			close(Descriptor);
+//		}
+//	}
+	return true;
 }
 
 void cleanLogger(Logger* logger) {
@@ -86,7 +92,7 @@ void cleanLogger(Logger* logger) {
 	delete logger;
 }
 
-int initClient(int cantArg,char* dirJson,char * host,char * port,char * cantInst) {
+int initClient(int cantArg, char* dirJson, string host, int port, char* cantInst) {
 	Logger* logger = Logger::getInstance();
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
@@ -105,7 +111,7 @@ int initClient(int cantArg,char* dirJson,char * host,char * port,char * cantInst
 	int alto = config["window"]["height"];
 	logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-	if(connectToServer() == 1) {
+	if(!connectToServer(host, port)) {
 		logger->log("No se pudo hacer la conexión con el servidor.", ERROR);
 		cleanLogger(logger);
 		return 0;

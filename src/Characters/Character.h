@@ -27,13 +27,13 @@ public:
 	//Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
 	//Shows the character on the screen
-	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante,Logger* logger);
+	void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
 	int getPosX();
 	int getPosY();
 	int getWidth();
 	int getSobrante();
 	int getCentro();
-	void update(SDL_Renderer* renderer, int distance, int posContrincante,Logger* logger);
+	void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void positionUpdate(int* x);
     void setControls(Controls* controls);
     void startIntro();

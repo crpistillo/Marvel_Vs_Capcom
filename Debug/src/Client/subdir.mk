@@ -4,35 +4,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/InputManager.cpp \
-../src/Layer.cpp \
-../src/MCGame.cpp \
-../src/Parallax.cpp \
-../src/Player.cpp \
-../src/Server.cpp \
-../src/main.cpp 
+../src/Client/Client.cpp \
+../src/Client/ClientSocket.cpp \
+../src/Client/NetworkManager.cpp 
 
 OBJS += \
-./src/InputManager.o \
-./src/Layer.o \
-./src/MCGame.o \
-./src/Parallax.o \
-./src/Player.o \
-./src/Server.o \
-./src/main.o 
+./src/Client/Client.o \
+./src/Client/ClientSocket.o \
+./src/Client/NetworkManager.o 
 
 CPP_DEPS += \
-./src/InputManager.d \
-./src/Layer.d \
-./src/MCGame.d \
-./src/Parallax.d \
-./src/Player.d \
-./src/Server.d \
-./src/main.d 
+./src/Client/Client.d \
+./src/Client/ClientSocket.d \
+./src/Client/NetworkManager.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/%.o: ../src/%.cpp
+src/Client/%.o: ../src/Client/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"

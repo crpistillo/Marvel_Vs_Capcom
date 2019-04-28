@@ -61,7 +61,7 @@ Character::Character(
 }
 
 // Public:
-void Character::update(SDL_Renderer *renderer, int distance, int posContrincante,Logger* logger) {
+void Character::update(SDL_Renderer *renderer, int distance, int posContrincante) {
 
     InputManager *inputManager = InputManager::getInstance();
 
@@ -115,7 +115,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante,Logger* logger) {
+void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     if (this->getCentro() > posContrincante) {
         isLookingLeft = true;
     } else {

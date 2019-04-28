@@ -176,8 +176,8 @@ MCGame::MCGame(json config, int ancho, int alto){
 
     logger->log("Creacion de Jugadores.", DEBUG);
 
-    player1 = new Player(character1, character2, controlPlayer1,logger);
-    player2 = new Player(character3, character4, controlPlayer2,logger);
+    player1 = new Player(character1, character2, controlPlayer1);
+    player2 = new Player(character3, character4, controlPlayer2);
 
     logger->log("Definicion de Fondo.", DEBUG);	
 
@@ -229,10 +229,10 @@ void MCGame::render() {
 			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
 		else if(renderizables[i] == player2){
-			player2->render(m_Renderer, camera.x, camera.y, player1->getCentro(),logger);
+			player2->render(m_Renderer, camera.x, camera.y, player1->getCentro());
 		}
 		else if(renderizables[i] == player1){
-			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro(),logger);
+			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro());
 		}
 	}
 	logger->log("Fin render.", DEBUG);
@@ -299,8 +299,8 @@ void MCGame::update() {
 		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
 	}
     logger->log("Actualizacion posicion MCGame.", DEBUG);
-    player1->update(m_Renderer, distancia, player2->getCentro(),logger);
-    player2->update(m_Renderer, distancia2, player1->getCentro(),logger);
+    player1->update(m_Renderer, distancia, player2->getCentro());
+    player2->update(m_Renderer, distancia2, player1->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
     parallaxController->doParallax(&player1,&player2,logger);
