@@ -8,21 +8,21 @@
 
 Logger *Logger::instance = 0;
 
-int main(int argc, char* argv[]) {
-	if (strncmp(argv[2], "client", 6) == 0) {
-		//validateClientParams(argv);
-		initClient(argc, argv[1], string(argv[2]), atoi(argv[3]), argv[4]);
-	} else {
-		if (strncmp(argv[2], "server", 6) == 0) {
-			//validateServerParams(*argv);
-			//initServer((int)argv[2]);
-			//int puerto = 8080;
-			initServer(argv[4]);
-		} else {
-			printf ("Parametro ingresado Incorrecto\n");
-			return 1;
-		}
-	}
+int main(int argc, char *argv[]) {
+    if (strncmp(argv[2], "client", 6) == 0) {
+        //validateClientParams(argv);
+        initClient(argc, argv[1], string(argv[3]), atoi(argv[4]));
+    } else {
+        if (strncmp(argv[2], "server", 6) == 0) {
+            //validateServerParams(*argv);
+            //initServer((int)argv[2]);
+            //int puerto = 8080;
+            initServer(argv[4]);
+        } else {
+            printf("Parametro ingresado Incorrecto\n");
+            return 1;
+        }
+    }
 
     return 0;
 }

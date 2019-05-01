@@ -92,7 +92,7 @@ void cleanLogger(Logger* logger) {
 	delete logger;
 }
 
-int initClient(int cantArg, char* dirJson, string host, int port, char* cantInst) {
+int initClient(int cantArg, char *dirJson, string host, int port) {
 	Logger* logger = Logger::getInstance();
 	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);

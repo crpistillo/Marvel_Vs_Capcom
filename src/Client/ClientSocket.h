@@ -18,21 +18,22 @@
 
 class ClientSocket {
 public:
-	ClientSocket(string host, int port);
+	ClientSocket(string *host, int port);
 	~ClientSocket();
 	bool isInitialized();
 	bool isConnected();
 	bool sendMessage(string message);
 	bool receiveMessage(char* receivedMessage, int receivedMessageLength);
 	void disconnectSocket();
+    struct sockaddr_in* address;
+
 
 private:
-	int _socket;
-	string host;
+	int _socket = 0;
+	string host  = "";
 	int port;
-	struct sockaddr_in* address;
-	bool initialized;
-	bool connected;
+	bool initialized = false;
+	bool connected = false;
 
 	bool initializeAddress();
 	bool initializeSocket();

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int initClient(int cantArg, char* dirJson, string host, int port, char* cantInst);
+int initClient(int cantArg, char *dirJson, string host, int port);
 
 #endif
  

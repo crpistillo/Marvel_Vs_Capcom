@@ -11,11 +11,11 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-ClientSocket::ClientSocket(string host, int port) {
-	this->host = host;
+ClientSocket::ClientSocket(string *host, int port) {
+	this->host = *host;
 	this->port = port;
+	this->address = (sockaddr_in*) malloc(sizeof(sockaddr_in*)); //free
 
-	address = NULL;
 	_socket = -1;
 	initialized = false;
 

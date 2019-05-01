@@ -30,10 +30,11 @@ void NetworkManager::sendMessage(string message) {
 bool NetworkManager::connectToServer(string host, int port) {
 	Logger* logger = Logger::getInstance();
 
-	client = new ClientSocket(host, port);
+	client = new ClientSocket(&host, port);
 
 	if (!client->isConnected()) {
 		logger->log("Error al intentar conectar con el servidor.", ERROR);
+		free(client->address);
 		delete client;
 		client = NULL;
 		return false;
