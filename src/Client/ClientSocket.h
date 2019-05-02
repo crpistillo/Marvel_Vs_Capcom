@@ -25,7 +25,7 @@ public:
 	bool sendMessage(string message);
 	bool receiveMessage(char* receivedMessage, int receivedMessageLength);
 	void disconnectSocket();
-    struct sockaddr_in* address;
+    struct sockaddr_in address;
 
 
 private:

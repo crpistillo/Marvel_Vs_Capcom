@@ -34,7 +34,7 @@ bool NetworkManager::connectToServer(string host, int port) {
 
 	if (!client->isConnected()) {
 		logger->log("Error al intentar conectar con el servidor.", ERROR);
-		free(client->address);
+//		free(client->address);
 		delete client;
 		client = NULL;
 		return false;

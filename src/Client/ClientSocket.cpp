@@ -14,7 +14,7 @@ const string DEBUG = "DEBUG";
 ClientSocket::ClientSocket(string *host, int port) {
 	this->host = *host;
 	this->port = port;
-	this->address = (sockaddr_in*) malloc(sizeof(sockaddr_in*)); //free
+	//this.address = (sockaddr_in) malloc(sizeof(sockaddr_in)); //free
 
 	_socket = -1;
 	initialized = false;
@@ -40,16 +40,16 @@ bool ClientSocket::isConnected() {
 }
 
 bool ClientSocket::initializeAddress() {
-	address->sin_family = AF_INET;
-	address->sin_port = htons((int)this->port);
-	address->sin_addr.s_addr = INADDR_ANY;
+	address.sin_family = AF_INET;
+	address.sin_port = htons((int)this->port);
+	address.sin_addr.s_addr = INADDR_ANY;
 	return true;
 }
 
 bool ClientSocket::initializeSocket() {
 	Logger* logger = Logger::getInstance();
 
-	_socket = socket(address->sin_family, SOCK_STREAM, 0);
+	_socket = socket(address.sin_family, SOCK_STREAM, 0);
 	if(_socket == -1) {
 		logger->log("Error en inicializar socket del cliente", ERROR);
 		return false;
