@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
         run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-            run_server(atoi(argv[3]));
+           return run_server(atoi(argv[3]));
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -61,7 +61,10 @@ int main(int argc, char *argv[]) {
 
 int run_server(int port) {
     pthread_t msg;
-    tcpServer.setup(port);
+    if(!tcpServer.setup(port)){
+        cout << "Error al crear el server" << endl;
+        return -1;
+    }
     if (pthread_create(&msg, NULL, loop, NULL) == 0) {
         tcpServer.receive();
     }
