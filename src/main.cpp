@@ -32,11 +32,11 @@ MCGame* mcGame;
 
 int run_server(int port);
 int run_client(int cantArg, char *dirJson, string host, int port);
+void *loop(void *m);
+
 
 int main(int argc, char *argv[]) {
     if (strncmp(argv[2], "client", 6) == 0) {
-        //validateClientParams(argv);
-        // initClient(argc, argv[1], string(argv[3]), atoi(argv[4]));
         run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
@@ -50,34 +50,19 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-
-
-void *loop(void *m) {
-    pthread_detach(pthread_self());
-    while (1) {
-        char ch[1024];
-        string str = tcpServer.getMessage();
-        if (!str.empty()) {
-            cout << "Message:" << str << endl;
-            if(str == "salir")
-                break;
-            /*   cout << "Enviar Mensaje:" << endl;
-
-               scanf("%s \n", ch);
-               string s = string(ch);
-               tcpServer.Send(" [client message: " + str + "] " + s);
-               */
-            tcpServer.clean();
-        }
-    }
-    tcpServer.detach();
-}
+/* Parametros de inicio client:               |           *Parametros de inicio server:
+ * 1) Archivo json                            |           *1) Archivo json
+ * 2) Tipo de ejecucion (cliente o servidor)  |           *2) Tipo de ejecucion (cliente o servidor)
+ * 3) Ip                                      |           *3) Puerto
+ * 4) Puerto                                  |
+ *
+ */
 
 
 int run_server(int port) {
     pthread_t msg;
     tcpServer.setup(port);
-    if (pthread_create(&msg, NULL, loop, (void *) 0) == 0) {
+    if (pthread_create(&msg, NULL, loop, NULL) == 0) {
         tcpServer.receive();
     }
     return 0;
@@ -112,33 +97,23 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     mcGame->run();
 
 
-    /*while(1)
-    {
-        printf("Enviar Mensaje:");
-        scanf("%s", buf);
-
-        tcpClient.Send(string(buf));
-        if(string(buf) == "salir")
-            break;
-
-        string rec = tcpClient.receive();
-        if( rec != "" )
-        {
-            cout << "Server Response:" << rec << endl;
-            if(rec == "salir")
-                break;
-        }
-        sleep(1);
-    }*/
-
-
     return 0;
 }
 
-/* Parametros de inicio:
- * 1) Archivo json
- * 2) Tipo de ejecucion (cliente o servidor)
- * 3) Ip
- * 4) Puerto
- *
- */
+
+
+void *loop(void *m) {
+    pthread_detach(pthread_self());
+    while (1) {
+        char ch[1024];
+        string str = tcpServer.getMessage();
+        if (!str.empty()) {
+            cout << "Message:" << str << endl;
+            if(str == "salir")
+                break;
+            tcpServer.clean();
+        }
+    }
+    tcpServer.detach();
+}
+

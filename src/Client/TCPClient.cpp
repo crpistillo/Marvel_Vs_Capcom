@@ -18,7 +18,7 @@ bool TCPClient::setup(string address , int port)
         sock = socket(AF_INET , SOCK_STREAM , 0);
         if (sock == -1)
         {
-            cout << "Could not create socket" << endl;
+            cout << "Error al inicializar el socket" << endl;
         }
     }
     if(inet_addr(address.c_str()) == -1)

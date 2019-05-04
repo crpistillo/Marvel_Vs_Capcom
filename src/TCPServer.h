@@ -31,7 +31,7 @@ public:
     char msg[ MAXPACKETSIZE ];
     static string Message;
 
-    void setup(int port);
+    bool setup(int port);
     string receive();
     string getMessage();
     void Send(string msg);

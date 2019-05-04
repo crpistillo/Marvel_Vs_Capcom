@@ -27,15 +27,23 @@ void* TCPServer::Task(void *arg)
     return 0;
 }
 
-void TCPServer::setup(int port)
+bool TCPServer::setup(int port)
 {
     sockfd=socket(AF_INET,SOCK_STREAM,0);
+    if(sockfd == -1){
+        cout << "Fallo al crear file descriptor:" << endl;
+        return false;
+    }
     memset(&serverAddress,0,sizeof(serverAddress));
     serverAddress.sin_family=AF_INET;
     serverAddress.sin_addr.s_addr=htonl(INADDR_ANY);
     serverAddress.sin_port=htons(port);
-    bind(sockfd,(struct sockaddr *)&serverAddress, sizeof(serverAddress));
-    listen(sockfd,5);
+    if(bind(sockfd,(struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1){
+       cout << "Error en apertura de conexion\n" << endl;
+        return false;
+    }
+    listen(sockfd,4);
+    return true;
 }
 
 string TCPServer::receive()
