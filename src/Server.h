@@ -1,1 +1,0 @@
-int initServer(char* port);
