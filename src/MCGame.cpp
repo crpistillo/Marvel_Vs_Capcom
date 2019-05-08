@@ -92,10 +92,11 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(json config, int ancho, int alto){
+MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 	this->logger = Logger::getInstance();
 	this->SCREEN_WIDTH = ancho;
 	this->SCREEN_HEIGHT = alto;
+	this->tcpClient = client;
 	m_Window = NULL;
 	m_Renderer = NULL;
 	m_Running = false;

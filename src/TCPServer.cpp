@@ -6,77 +6,67 @@
 
 string TCPServer::Message;
 
-void* TCPServer::Task(void *arg)
-{
+void *TCPServer::Task(void *arg) {
     int n;
-    int newsockfd = (long)arg;
+    int newsockfd = (long) arg;
     char msg[MAXPACKETSIZE];
     pthread_detach(pthread_self());
-    while(1)
-    {
-        n=recv(newsockfd,msg,MAXPACKETSIZE,0);
-        if(n==0)
-        {
+    while (1) {
+        n = recv(newsockfd, msg, MAXPACKETSIZE, 0);
+        if (n == 0) {
             close(newsockfd);
             break;
         }
-        msg[n]=0;
+        msg[n] = 0;
         //send(newsockfd,msg,n,0);
         Message = string(msg);
     }
     return 0;
 }
 
-bool TCPServer::setup(int port)
-{
-    sockfd=socket(AF_INET,SOCK_STREAM,0);
-    if(sockfd == -1){
+bool TCPServer::setup(int port) {
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
         cout << "Fallo al crear file descriptor:" << endl;
         return false;
     }
-    memset(&serverAddress,0,sizeof(serverAddress));
-    serverAddress.sin_family=AF_INET;
-    serverAddress.sin_addr.s_addr=htonl(INADDR_ANY);
-    serverAddress.sin_port=htons(port);
-    if(bind(sockfd,(struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1){
-       cout << "Error en apertura de conexion\n" << endl;
+    memset(&serverAddress, 0, sizeof(serverAddress));
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+    serverAddress.sin_port = htons(port);
+    if (bind(sockfd, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
+        cout << "Error en apertura de conexion\n" << endl;
         return false;
     }
-    listen(sockfd,4);
+    listen(sockfd, 4);
     return true;
 }
 
-string TCPServer::receive()
-{
+string TCPServer::receive() {
     string str;
-    while(1)
-    {
-        socklen_t sosize  = sizeof(clientAddress);
-        newsockfd = accept(sockfd,(struct sockaddr*)&clientAddress,&sosize);
+    while (1) {
+        socklen_t sosize = sizeof(clientAddress);
+        newsockfd = accept(sockfd, (struct sockaddr *) &clientAddress, &sosize);
         str = inet_ntoa(clientAddress.sin_addr);
-        pthread_create(&serverThread,NULL,&Task,(void *)newsockfd);
+        pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
     return str;
 }
 
-string TCPServer::getMessage()
-{
+string TCPServer::getMessage() {
     return Message;
 }
 
-void TCPServer::Send(string msg)
-{
-    send(newsockfd,msg.c_str(),msg.length(),0);
+void TCPServer::Send(string msg) {
+    send(newsockfd, msg.c_str(), msg.length(), 0);
 }
 
-void TCPServer::clean()
-{
+void TCPServer::clean() {
     Message = "";
     memset(msg, 0, MAXPACKETSIZE);
 }
 
-void TCPServer::detach()
-{
+void TCPServer::detach() {
     close(sockfd);
     close(newsockfd);
 }

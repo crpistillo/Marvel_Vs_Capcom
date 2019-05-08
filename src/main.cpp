@@ -91,10 +91,19 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     int alto = config["window"]["height"];
     logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-    tcpClient.setup(host, port);             //MCGame tendria que tener el tcpClient
+    if(!tcpClient.setup(host, port)) {                  //MCGame tendria que tener el tcpClient
+        cout << "Failed to setup Client" << endl;
+        return -1;
+    }
     tcpClient.Send("Connection succesfull");
+    /*while (1){
+        string str = tcpClient.receive(17);
+        cout << str <<  endl;
+        if(str == "Connection ready")
+            break;
+    }*/
 
-    mcGame = new MCGame(config, ancho, alto);
+    mcGame = new MCGame(config, ancho, alto, &tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->run();
@@ -108,10 +117,10 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 void *loop(void *m) {
     pthread_detach(pthread_self());
     while (1) {
-        char ch[1024];
         string str = tcpServer.getMessage();
         if (!str.empty()) {
             cout << "Message:" << str << endl;
+            tcpServer.Send("Connection ready");
             if(str == "salir")
                 break;
             tcpServer.clean();

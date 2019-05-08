@@ -19,6 +19,7 @@
 #include "Layer.h"
 #include "Parallax.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
+#include "Client/TCPClient.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ private:
     Player* player2;
     Parallax* parallaxController;
     json config;
+    TCPClient* tcpClient;
 
     void loadGroundTextureByZIndex();
 
@@ -51,7 +53,7 @@ protected:
 
 
 public:
-    MCGame(json config, int ancho, int alto);
+    MCGame(json config, int ancho, int alto, TCPClient *client);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
