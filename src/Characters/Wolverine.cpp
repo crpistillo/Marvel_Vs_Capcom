@@ -70,18 +70,18 @@ void Wolverine::renderStandSprite(SDL_Renderer *renderer) {
     agachado = false;
     this->resetSpriteVariables();
     if (isLookingLeft) {
-        this->loadStandSprite(renderer, 'l');
+        this->loadStandSprite(renderer);
     } else {
-        this->loadStandSprite(renderer, 'r');
+        this->loadStandSprite(renderer);
     }
 }
 
-void Wolverine::loadStandSprite(SDL_Renderer *renderer, char position) {
+void Wolverine::loadStandSprite(SDL_Renderer *renderer) {
     string imagePath;
     if (currentStandingSprite > LAST_STANDING_SPRITE)
         currentStandingSprite = 0;
 
-    if (position == 'r'){
+    if (!isLookingLeft){
     	this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION, renderer, &m_Texture);
     }
     else

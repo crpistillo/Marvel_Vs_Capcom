@@ -62,36 +62,34 @@ void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
 	agachado = false;
 	this->resetSpriteVariables();
     if (isLookingLeft) {
-    	this->loadStandSprite(renderer, 'l');
+        this->loadStandSprite(renderer);
     } else {
-    	this->loadStandSprite(renderer, 'r');
+        this->loadStandSprite(renderer);
     }
 }
 
-void Spiderman::loadStandSprite(SDL_Renderer *renderer, char position){
-	string imagePath;
+
+
+void Spiderman::loadStandSprite(SDL_Renderer *renderer) {
 	if (currentStandingSprite > LAST_STANDING_SPRITE)
 		currentStandingSprite = 0;
 
-	if (position == 'r'){
+	if (!isLookingLeft)
 		this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
 			                                          renderer, &m_Texture);
-	}
-	else{
+	else
 		this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
 					                                          renderer, &m_Texture);
-	}
 }
 
 void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
 	agachado = true;
-	if (isLookingLeft){
+	if (isLookingLeft)
 		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
 							                                          renderer, &m_Texture);
-	}else{
+	else
 		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
 									                                          renderer, &m_Texture);
-	}
 }
 
 void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
@@ -117,21 +115,10 @@ void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincan
     	animacionRight(renderer);
     	isLookingLeft = false;
     }
-
-    //If the dot is inside the screen move
-    /*if(mPosX - DOT_VEL > 0) {
-        mPosX -= DOT_VEL;
-    }*/
-
-
-
-    //If the dot went too far to the left or right
-    /*if (mPosX < -900) {
-        //Move back
-        mPosX += CHARACTER_VEL;
-    }*/
 }
 
+
+//void move (... int side) without renderer
 void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
 
 	isStanding = false;
@@ -146,6 +133,10 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
         mPosX -= CHARACTER_VEL;
     }
 
+    //if(stand == JR || stand == JL)
+
+
+    //update sprite number
     if (this->getCentro() < posContrincante){
     	animacionRight(renderer);
     }
@@ -153,40 +144,24 @@ void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrinca
     	animacionLeft(renderer);
     	isLookingLeft = true;
     }
-
-
-    //If the dot is inside the screen move
-    /*if( mPosX + DOT_VEL < LEVEL_WIDTH ) {
-        mPosX += DOT_VEL;
-    }*/
-
-
-    //Para que los personajes no se vayan del camino.png
-    //437 es la distancia desde el comienzo de la imagen hasta el personaje
-    //y 198 el ancho del personaje
-    //if ((mPosX < -437) || (mPosX + 437 + 198 > LEVEL_WIDTH)) {
-    /*if (mPosX + 437 + 198 > LEVEL_WIDTH) {
-        //Move back
-        mPosX -= CHARACTER_VEL;
-    }*/
-
 }
 
+
+
+//void animacion
 void Spiderman::animacionRight(SDL_Renderer *renderer){
-	string imagePath;
+    ++currentWalkingRightSprite;
 
 	if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
         currentWalkingRightSprite = 0;
     }
 
+
 	this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH, currentWalkingRightSprite, FILE_EXTENSION,
 										                                          renderer, &m_Texture);
-	++currentWalkingRightSprite;
 }
 
 void Spiderman::animacionLeft(SDL_Renderer *renderer){
-	string imagePath;
-
     if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
         currentWalkingLeftSprite = 0;
     }
@@ -199,21 +174,16 @@ void Spiderman::animacionLeft(SDL_Renderer *renderer){
 void Spiderman::jump(SDL_Renderer *renderer) {
 	isStanding = false;
 	isJumpingVertical = true;
-	string imagePath;
 
-	if(isLookingLeft){
 
+
+
+	if(isLookingLeft)
 		this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
-
-	}
-	else{
-
+	else
 		this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
 								renderer, &m_Texture);
-
-
-	}
 
     if (currentJumpingSprite < 10) {
         mPosY -= 2.5*CHARACTER_VEL;
@@ -236,19 +206,15 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	isStanding = false;
 	isJumpingRight = true;
 
-	string imagePath;
-
-	if(isLookingLeft){
+	//without this
+	if(isLookingLeft)
 		this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
 				renderer, &m_Texture);
-	}
-
-	else{
+	else
 		this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
 				renderer, &m_Texture);
-	}
 
-	this->repositionHeightAfterJump('r');
+    this->repositionHeightAfterJump();
 
 	++currentJumpingRightSprite;
 
@@ -261,24 +227,22 @@ void Spiderman::jumpRight(SDL_Renderer *renderer){
 	}
 }
 
+
 void Spiderman::jumpLeft(SDL_Renderer* renderer){
 
 	isStanding = false;
 	isJumpingLeft = true;
 
-	if(isLookingLeft){
-
+	//without this
+	if(isLookingLeft)
 		this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
-	}
-
-	else{
-
+	else
 		this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
 						renderer, &m_Texture);
-	}
 
-	this->repositionHeightAfterJump('l');
+
+	this->repositionHeightAfterJump();
 
 	++currentJumpingLeftSprite;
 
@@ -322,9 +286,9 @@ void Spiderman::makeIntro(SDL_Renderer* renderer){
 
 }
 
-void Spiderman::repositionHeightAfterJump(char direction){
+void Spiderman::repositionHeightAfterJump() {
 
-	if(direction == 'r'){
+	if(isJumpingRight){
 		if (currentJumpingRightSprite < 10) {
 			mPosY -= 2.5*CHARACTER_VEL;
 		}

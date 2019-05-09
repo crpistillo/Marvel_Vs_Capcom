@@ -31,7 +31,7 @@ private:
 
     void resetSpriteVariables();
     void renderStandSprite(SDL_Renderer *renderer);
-    void loadStandSprite(SDL_Renderer *renderer, char position);
+    void loadStandSprite(SDL_Renderer *renderer);
     void renderDuckSprite(SDL_Renderer *renderer);
     void moveRight(SDL_Renderer *renderer, int distance, int posContrincante);
     void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante);
@@ -41,7 +41,7 @@ private:
     void updateStand();
     void animacionRight(SDL_Renderer *renderer);
     void animacionLeft(SDL_Renderer *renderer);
-    void repositionHeightAfterJump(char direction);
+    void repositionHeightAfterJump();
     void makeIntro(SDL_Renderer* renderer);
 };
 
