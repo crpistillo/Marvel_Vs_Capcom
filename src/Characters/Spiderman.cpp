@@ -47,6 +47,8 @@ Spiderman::~Spiderman() {
 }
 
 void Spiderman::load(SDL_Renderer *renderer) {
+
+
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
@@ -134,7 +136,7 @@ void Spiderman::resetSpriteVariables() {
 void Spiderman::stand() {
     currentAction = STANDING;
     this->resetSpriteVariables();
-    if (currentStandingSprite > LAST_STANDING_SPRITE)
+    if (currentStandingSprite >= LAST_STANDING_SPRITE)
         currentStandingSprite = 0;
 }
 
@@ -204,6 +206,7 @@ void Spiderman::jump(int *currentSprite, int lastSprite) {
         *currentSprite = 0;
         mPosY = this->INITIAL_POS_Y;
         this->currentAction = STANDING;
+        currentStandingSprite = 0;
     }
 }
 
@@ -241,6 +244,7 @@ void Spiderman::makeIntro() {
     if (currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500) {
         currentIntroSprite = 0;
         currentAction = STANDING;
+        currentStandingSprite = 0;
     }
 
 }
