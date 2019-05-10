@@ -240,12 +240,13 @@ void Wolverine::makeIntro(){
 
 	unsigned int currentTime = SDL_GetTicks();
 
-	if( currentIntroSprite <= LAST_INTRO_SPRITE){
+
+	if( currentIntroSprite < LAST_INTRO_SPRITE){
 		++currentIntroSprite;
 		lastTime = currentTime;
 	}
 
-	if(currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
+	if(currentIntroSprite >= LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
 		currentIntroSprite = 0;
 		currentAction = STANDING;
         currentStandingSprite = 0;
