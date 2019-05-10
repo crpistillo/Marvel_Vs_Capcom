@@ -26,285 +26,223 @@ const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
 Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla)
-: Character(
-	PosX,
-	556-(height*297/480),
-	ancho,
-	sobrante,
-	false,
-	width,
-	height,
-	anchoPantalla
-){
-	if(secondaryColor)
-		loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
-	else
-		loader = new ImageLoader(255,255,255);
+        : Character(
+        PosX,
+        556 - (height * 297 / 480),
+        ancho,
+        sobrante,
+        false,
+        width,
+        height,
+        anchoPantalla
+) {
+    if (secondaryColor)
+        loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
+    else
+        loader = new ImageLoader(255, 255, 255);
+    currentAction = STANDING;
 }
 
-Spiderman::~Spiderman(){
+Spiderman::~Spiderman() {
 }
 
-void Spiderman::load(SDL_Renderer* renderer) {
-	this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, 0, FILE_EXTENSION,
-	                                          renderer, &m_Texture);
+void Spiderman::load(SDL_Renderer *renderer) {
+    switch (this->currentAction) {
+        case STANDING:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH,
+                                               currentStandingSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case DUCK:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case JUMPINGVERTICAL:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,
+                                               currentJumpingSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case JUMPINGRIGHT:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH,
+                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH,
+                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case JUMPINGLEFT:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH,
+                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH,
+                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+
+        case MAKINGINTRO:
+            if (!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite <= 16)
+                this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentIntroSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case MOVING:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
+                                               currentWalkingSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH,
+                                               currentWalkingSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+    }
+
 }
 
 void Spiderman::resetSpriteVariables() {
-	mPosY = this->INITIAL_POS_Y;
-	currentJumpingSprite = 0;
-	currentWalkingRightSprite = 0;
-	currentWalkingLeftSprite = 0;
-}
-
-void Spiderman::renderStandSprite(SDL_Renderer *renderer) {
-	isStanding = true;
-	agachado = false;
-	this->resetSpriteVariables();
-    if (isLookingLeft) {
-        this->loadStandSprite(renderer);
-    } else {
-        this->loadStandSprite(renderer);
-    }
+    mPosY = this->INITIAL_POS_Y;
+    currentJumpingSprite = 0;
+    currentWalkingSprite = 0;
 }
 
 
 
-void Spiderman::loadStandSprite(SDL_Renderer *renderer) {
-	if (currentStandingSprite > LAST_STANDING_SPRITE)
-		currentStandingSprite = 0;
 
-	if (!isLookingLeft)
-		this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
-			                                          renderer, &m_Texture);
-	else
-		this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite, FILE_EXTENSION,
-					                                          renderer, &m_Texture);
+void Spiderman::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite > LAST_STANDING_SPRITE)
+        currentStandingSprite = 0;
 }
 
-void Spiderman::renderDuckSprite(SDL_Renderer *renderer) {
-	agachado = true;
-	if (isLookingLeft)
-		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
-							                                          renderer, &m_Texture);
-	else
-		this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
-									                                          renderer, &m_Texture);
+
+
+void Spiderman::renderDuckSprite() {
+    currentAction = DUCK;
 }
 
-void Spiderman::moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) {
+void Spiderman::moveLeft(int distance, int posContrincante) {
 
-	isStanding = false;
-    isLookingLeft = true;
-
-    //Mover
     mPosX -= CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-anchoPantalla))) {
-    	isLookingLeft = false;
+        isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
     }
 
-
-    if (this->getCentro() > posContrincante){
-    	animacionLeft(renderer);
-    }
-    else {
-    	animacionRight(renderer);
-    	isLookingLeft = false;
+    if (this->getCentro() > posContrincante) {
+        walkingSpriteUpdate();
+    } else {
+        walkingSpriteUpdate();
+        isLookingLeft = false;
     }
 }
 
 
-//void move (... int side) without renderer
-void Spiderman::moveRight(SDL_Renderer *renderer, int distance, int posContrincante) {
+void Spiderman::moveRight(int distance, int posContrincante) {
 
-	isStanding = false;
+    currentAction = MOVING;
     isLookingLeft = false;
 
-    //Mover
     mPosX += CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) || (distance > anchoPantalla)) {
-    	isLookingLeft = true;
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) ||
+        (distance > anchoPantalla)) {
+        isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;
     }
 
-    //if(stand == JR || stand == JL)
-
-
-    //update sprite number
-    if (this->getCentro() < posContrincante){
-    	animacionRight(renderer);
-    }
-    else {
-    	animacionLeft(renderer);
-    	isLookingLeft = true;
+    if (this->getCentro() < posContrincante) {
+        walkingSpriteUpdate();
+    } else {
+        walkingSpriteUpdate();
+        isLookingLeft = true;
     }
 }
-
 
 
 //void animacion
-void Spiderman::animacionRight(SDL_Renderer *renderer){
-    ++currentWalkingRightSprite;
+void Spiderman::walkingSpriteUpdate() {
+    ++currentWalkingSprite;
 
-	if (currentWalkingRightSprite > LAST_WALKING_SPRITE) {
-        currentWalkingRightSprite = 0;
-    }
-
-
-	this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH, currentWalkingRightSprite, FILE_EXTENSION,
-										                                          renderer, &m_Texture);
+    if (currentWalkingSprite > LAST_WALKING_SPRITE)
+        currentWalkingSprite = 0;
 }
 
-void Spiderman::animacionLeft(SDL_Renderer *renderer){
-    if (currentWalkingLeftSprite > LAST_WALKING_SPRITE) {
-        currentWalkingLeftSprite = 0;
-    }
 
-    this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH, currentWalkingLeftSprite, FILE_EXTENSION,
-    										                                          renderer, &m_Texture);
-    ++currentWalkingLeftSprite;
-}
+void Spiderman::jump(int *currentSprite, int lastSprite) {
 
-void Spiderman::jump(SDL_Renderer *renderer) {
-	isStanding = false;
-	isJumpingVertical = true;
-
-
-
-
-	if(isLookingLeft)
-		this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
-						renderer, &m_Texture);
-	else
-		this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite, FILE_EXTENSION,
-								renderer, &m_Texture);
-
-    if (currentJumpingSprite < 10) {
-        mPosY -= 2.5*CHARACTER_VEL;
-    }
-    if (currentJumpingSprite > 10) {
-        mPosY += 2.5*CHARACTER_VEL;
-    }
-
-    ++currentJumpingSprite;
-
-    if (currentJumpingSprite > LAST_JUMPING_SPRITE) {
-        currentJumpingSprite = 0;
+    *currentSprite < 10 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
+    (*currentSprite)++;
+    if (*currentSprite > lastSprite) {
+        *currentSprite = 0;
         mPosY = this->INITIAL_POS_Y;
-        isStanding = true;
-        isJumpingVertical = false;
+        this->currentAction = STANDING;
     }
 }
 
-void Spiderman::jumpRight(SDL_Renderer *renderer){
-	isStanding = false;
-	isJumpingRight = true;
+void Spiderman::jumpVertical() {
+    this->currentAction = JUMPINGVERTICAL;
+    jump(&currentJumpingSprite, LAST_JUMPING_SPRITE);
+}
 
-	//without this
-	if(isLookingLeft)
-		this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
-				renderer, &m_Texture);
-	else
-		this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH, currentJumpingRightSprite, FILE_EXTENSION,
-				renderer, &m_Texture);
+void Spiderman::jumpRight() {
+    this->currentAction = JUMPINGRIGHT;
+    jump(&currentJumpingRightSprite, LAST_JUMPING_RIGHT_SPRITE);
 
-    this->repositionHeightAfterJump();
-
-	++currentJumpingRightSprite;
-
-	if (currentJumpingRightSprite > LAST_JUMPING_RIGHT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
-		currentJumpingRightSprite = 0;
-	    mPosY = this->INITIAL_POS_Y;
-
-	    isStanding = true;
-	    isJumpingRight = false;
-	}
 }
 
 
-void Spiderman::jumpLeft(SDL_Renderer* renderer){
-
-	isStanding = false;
-	isJumpingLeft = true;
-
-	//without this
-	if(isLookingLeft)
-		this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
-						renderer, &m_Texture);
-	else
-		this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH, currentJumpingLeftSprite, FILE_EXTENSION,
-						renderer, &m_Texture);
-
-
-	this->repositionHeightAfterJump();
-
-	++currentJumpingLeftSprite;
-
-	if (currentJumpingLeftSprite > LAST_JUMPING_LEFT_SPRITE) {	//Hasta que no termine de saltar, no cambio los booleanos.
-		currentJumpingLeftSprite = 0;
-	    mPosY = this->INITIAL_POS_Y;
-
-	    isStanding = true;
-	    isJumpingLeft = false;
-	}
+void Spiderman::jumpLeft() {
+    this->currentAction = JUMPINGLEFT;
+    jump(&currentJumpingRightSprite, LAST_JUMPING_LEFT_SPRITE);
 }
 
-void Spiderman::makeIntro(SDL_Renderer* renderer){
 
-	isMakingIntro = true;
-	isStanding = false;
-
+void Spiderman::makeIntro() {
+    currentAction = MAKINGINTRO;
 
 
-	unsigned int currentTime = SDL_GetTicks();
-
-	if(currentIntroSprite <= LAST_INTRO_SPRITE){
-        if(!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite<= 16)
-            this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentIntroSprite, FILE_EXTENSION,
-                                          renderer, &m_Texture);
-        else
-            this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite, FILE_EXTENSION,
-                                          renderer, &m_Texture);
-
-		++currentIntroSprite;
-		lastTime = currentTime;
-	}
+    unsigned int currentTime = SDL_GetTicks();
 
 
-	if(currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
-		currentIntroSprite = 0;
+    if (currentIntroSprite <= LAST_INTRO_SPRITE) {
+        ++currentIntroSprite;
+        lastTime = currentTime;
+    }
 
-		isMakingIntro = false;
-		isStanding = true;
-	}
 
-}
+    if (currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500) {
+        currentIntroSprite = 0;
+        currentAction = STANDING;
+    }
 
-void Spiderman::repositionHeightAfterJump() {
-
-	if(isJumpingRight){
-		if (currentJumpingRightSprite < 10) {
-			mPosY -= 2.5*CHARACTER_VEL;
-		}
-		else{
-			mPosY += 2.5*CHARACTER_VEL;
-		}
-	}
-	else{
-		if (currentJumpingLeftSprite < 10) {
-			mPosY -= 2.5*CHARACTER_VEL;
-		}
-		else{
-			mPosY += 2.5*CHARACTER_VEL;
-		}
-
-	}
 }
 
 
@@ -313,3 +251,5 @@ void Spiderman::updateStand() {
     if (currentStandingSprite <= LAST_STANDING_SPRITE)
         currentStandingSprite++;
 }
+
+

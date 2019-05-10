@@ -29,12 +29,12 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
 	Logger* logger = Logger::getInstance();
     InputManager* inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
-    if(inputManager->isKeyDown(changeKey) && !isChanging && !(currentCharacter->isJumpingVertical || currentCharacter->isJumpingRight || currentCharacter->isJumpingLeft)){
+    if(inputManager->isKeyDown(changeKey) && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
         changeCharacter();
         setCharacterToChanging();
         isChanging = true;
     }
-    if(!currentCharacter->isMakingIntro)
+    if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
     currentCharacter->update(renderer, distance, posContrincante);
 }

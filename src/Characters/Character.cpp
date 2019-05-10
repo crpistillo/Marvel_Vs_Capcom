@@ -30,28 +30,21 @@ Character::Character(
     this->sobrante = sobrante;
     this->widthSprite = widthSprite;
     this->heightSprite = heightSprite;
-    this->INITIAL_POS_Y= mPosY;
+    this->INITIAL_POS_Y = mPosY;
     this->mVelX = 0;
     this->mVelY = 0;
     this->ZIndex = 0;
     this->anchoPantalla = anchoPantalla;
     this->characterFilepath = "";
-    this->currentWalkingLeftSprite = 0;
-    this->currentWalkingRightSprite = 0;
+    this->currentWalkingSprite = 0;
     this->currentStandingSprite = 0;
-    this->currentWalkbackLeftSprite = 0;
-    this->currentWalkbackRightSprite = 0;
+    this->currentWalkbackSprite = 0;
     this->currentJumpingSprite = 0;
     this->currentJumpingRightSprite = 0;
     this->currentJumpingLeftSprite = 0;
     this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
-    this->isStanding = true;
-    this->agachado = false;
-    this->isJumpingVertical = false;
-    this->isJumpingRight = false;
-    this->isJumpingLeft = false;
-    this->isMakingIntro = false;
+    currentAction = STANDING;
 
     this->loader = NULL;
     this->characterControls = NULL;
@@ -65,43 +58,50 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
 
     InputManager *inputManager = InputManager::getInstance();
 
-    if (isMakingIntro){
-    	makeIntro(renderer);
-    	return;
+    bool actionStarted = false;
+
+    if(this->currentAction == MI || this->currentAction == JV || this->currentAction == JR || this ->currentAction == JL)
+        actionStarted = true;
+
+    if (currentAction == MAKINGINTRO){
+    	makeIntro();
     }
 
-    if (isJumpingVertical) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
-        jump(renderer);
-        return;
+    if (currentAction == JUMPINGVERTICAL) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
+        jumpVertical();
     }
 
-    if (isJumpingRight) {        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
+    if (currentAction == JUMPINGRIGHT) {        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
 
-        moveRight(renderer, distance, posContrincante);
-        jumpRight(renderer);
-        return;
+        moveRight(distance, posContrincante);
+        jumpRight();
     }
 
-    if (isJumpingLeft) {
+    if (currentAction == JUMPINGLEFT) {
+        moveLeft( distance, posContrincante);
+        jumpLeft();
+    }
 
-        moveLeft(renderer, distance, posContrincante);
-        jumpLeft(renderer);
+    if(actionStarted){
+        load(renderer);
         return;
     }
 
     //Acciones de dos teclas primero
-    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey)) jumpRight(renderer);
-    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey)) jumpLeft(renderer);
+    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))
+        jumpRight();
+    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey))
+        jumpLeft();
 
         //Acciones de una sola tecla
     else if (inputManager->isKeyDown(characterControls->upKey))
-        jump(renderer);
+        jumpVertical();
     else if (inputManager->isKeyDown(characterControls->downKey))
-        renderDuckSprite(renderer);
+        renderDuckSprite();
     else if (inputManager->isKeyDown(characterControls->rightKey) && !inputManager->isKeyUp(characterControls->leftKey))
-        moveRight(renderer, distance, posContrincante);
+        moveRight(distance, posContrincante);
     else if (inputManager->isKeyDown(characterControls->leftKey) && !inputManager->isKeyUp(characterControls->rightKey))
-        moveLeft(renderer, distance, posContrincante);
+        moveLeft(distance, posContrincante);
 
 
     if (
@@ -112,33 +112,14 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
             || (inputManager->isKeyUp(characterControls->rightKey) &&
                 inputManager->isKeyUp(characterControls->leftKey))
             )
-        this->renderStandSprite(renderer);
+        this->stand();
+    load(renderer);
 
     updateStand();
 }
 
 void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    if (this->getCentro() > posContrincante) {
-        isLookingLeft = true;
-    } else {
-        isLookingLeft = false;
-    }
-
-    if (isStanding && !agachado)
-        renderStandSprite(mRenderer);
-
-    //int ancho;
-    //int alto;
-
-    /*
-	if (Character::name == "Spiderman") {
-		ancho = j["characters"][0]["width"];
-		alto = j["characters"][0]["height"];
-	} else {
-		ancho = j["characters"][1]["width"];
-		alto = j["characters"][1]["height"];
-	}*/
-
+    isLookingLeft = this->getCentro() > posContrincante;
     m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer); //esto es los valores que se cambian la resolucion
 }
 
@@ -181,7 +162,7 @@ void Character::setControls(Controls* controls) {
 }
 
 void Character::startIntro(){
-	isMakingIntro = true;
+    currentAction = MAKINGINTRO;
 }
 
 Controls* Character::getControls()
@@ -191,7 +172,7 @@ Controls* Character::getControls()
 
 bool Character::isMoving()
 {
-	return !(this->isStanding || this->isJumpingVertical || this->agachado || this->isMakingIntro);
+	return (this->currentAction == STANDING);
 }
 
 int Character::getZIndex(){

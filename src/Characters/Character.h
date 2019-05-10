@@ -17,9 +17,10 @@
 #include "../tools/logger/Logger.h"
 #include "orientation_constants.h"
 
-typedef enum orientation {
-    STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, AGACHADO = A
-} orientation_t;
+typedef enum actions {
+    STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
+    MOVING = M, WALKBACK = WB
+} actions_t;
 
 using namespace std;
 
@@ -36,40 +37,22 @@ public:
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
     //Shows the character on the screen
     void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante);
-
     int getPosX();
-
     int getPosY();
-
     int getWidth();
-
     int getSobrante();
-
     int getCentro();
-
     void update(SDL_Renderer *renderer, int distance, int posContrincante);
-
     void positionUpdate(int *x);
-
     void setControls(Controls *controls);
-
     void startIntro();
-
-    bool isMakingIntro;
-    bool isJumpingVertical;
-    bool isJumpingRight;
-    bool isJumpingLeft;
-
     Controls *getControls();
-
     bool isMoving();
-
     void setZIndex(int z);
-
     int getZIndex();
-
     void setFilepath(string fp);
 
+    actions_t currentAction;
 protected:
     Character(
             int mPosX,
@@ -102,18 +85,15 @@ protected:
     Texture m_Texture;
     ImageLoader *loader;
 
-    int currentWalkingLeftSprite;
     int currentStandingSprite;
-    int currentWalkingRightSprite;
+    int currentWalkingSprite;
     int currentJumpingSprite;
     int currentJumpingRightSprite;
     int currentJumpingLeftSprite;
-    int currentWalkbackLeftSprite;
-    int currentWalkbackRightSprite;
+    int currentWalkbackSprite;
     int currentIntroSprite;
     bool isLookingLeft;
-    bool isStanding;
-    bool agachado;
+
     Controls *characterControls;
 
     unsigned int lastTime;
@@ -121,25 +101,23 @@ protected:
 private:
     virtual void resetSpriteVariables() = 0;
 
-    virtual void renderStandSprite(SDL_Renderer *renderer) = 0;
+    virtual void stand() = 0;
 
-    virtual void loadStandSprite(SDL_Renderer *renderer) = 0;
+    virtual void renderDuckSprite() = 0;
 
-    virtual void renderDuckSprite(SDL_Renderer *renderer) = 0;
+    virtual void moveRight( int distance, int posContrincante) = 0;
 
-    virtual void moveRight(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
+    virtual void moveLeft( int distance, int posContrincante) = 0;
 
-    virtual void moveLeft(SDL_Renderer *renderer, int distance, int posContrincante) = 0;
+    virtual void jumpVertical() = 0;
 
-    virtual void jump(SDL_Renderer *renderer) = 0;
+    virtual void jumpRight() = 0;
 
-    virtual void jumpRight(SDL_Renderer *renderer) = 0;
-
-    virtual void jumpLeft(SDL_Renderer *renderer) = 0;
+    virtual void jumpLeft() = 0;
 
     virtual void updateStand() = 0;
 
-    virtual void makeIntro(SDL_Renderer *renderer) = 0;
+    virtual void makeIntro() = 0;
 };
 
 #endif /* CHARACTERS_CHARACTER_H_ */

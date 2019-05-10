@@ -11,6 +11,11 @@
 #define JL 2
 #define JV 3
 #define MI 4
-#define A 5
+#define D 5
+#define M 6
+#define WB 7
+
+#define R 0
+#define L 1
 
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H
