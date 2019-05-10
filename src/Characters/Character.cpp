@@ -172,7 +172,7 @@ Controls* Character::getControls()
 
 bool Character::isMoving()
 {
-	return (this->currentAction == STANDING);
+	return (!(this->currentAction == STANDING) || !(this->currentAction == DUCK));
 }
 
 int Character::getZIndex(){
