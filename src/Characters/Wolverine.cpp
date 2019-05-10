@@ -194,11 +194,10 @@ void Wolverine::moveRight(int distance, int posContrincante) {
 }
 
 void Wolverine::walkingSpriteUpdate() {
+    ++currentWalkingSprite;
 
     if (currentWalkingSprite > LAST_WALKING_SPRITE)
         currentWalkingSprite = 0;
-
-    ++currentWalkingSprite;
 }
 
 

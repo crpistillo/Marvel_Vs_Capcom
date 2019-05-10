@@ -193,7 +193,7 @@ void Spiderman::moveRight(int distance, int posContrincante) {
 void Spiderman::walkingSpriteUpdate() {
     ++currentWalkingSprite;
 
-    if (currentWalkingSprite > LAST_WALKING_SPRITE)
+    if (currentWalkingSprite >= LAST_WALKING_SPRITE)
         currentWalkingSprite = 0;
 }
 
