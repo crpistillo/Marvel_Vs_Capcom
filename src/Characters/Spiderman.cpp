@@ -48,8 +48,6 @@ Spiderman::~Spiderman() {
 
 void Spiderman::load(SDL_Renderer *renderer) {
 
-    cout << currentAction << endl;
-
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
