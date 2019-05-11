@@ -162,6 +162,7 @@ void Wolverine::moveLeft(int distance, int posContrincante) {
     } else {
         if (currentWalkbackSprite > LAST_WALKBACK_SPRITE)
             currentWalkbackSprite = 0;
+        currentAction = WALKBACK;
 
         ++currentWalkbackSprite;
         isLookingLeft = false;
@@ -184,8 +185,9 @@ void Wolverine::moveRight(int distance, int posContrincante) {
     if (this->getCentro() < posContrincante) {
         walkingSpriteUpdate();
     } else {
-        if (currentWalkbackSprite > LAST_WALKBACK_SPRITE)
+        if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
             currentWalkbackSprite = 0;
+        currentAction = WALKBACK;
 
         ++currentWalkbackSprite;
         isLookingLeft = true;

@@ -48,6 +48,7 @@ Spiderman::~Spiderman() {
 
 void Spiderman::load(SDL_Renderer *renderer) {
 
+    cout << currentAction << endl;
 
     switch (this->currentAction) {
         case STANDING:
@@ -148,10 +149,11 @@ void Spiderman::renderDuckSprite() {
 
 void Spiderman::moveLeft(int distance, int posContrincante) {
 
+    currentAction = MOVING;
     mPosX -= CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
-    if ((mPosX - CHARACTER_VEL <= -Spiderman::getSobrante()) || (distance < (-anchoPantalla))) {
+    if ((mPosX - CHARACTER_VEL < -Spiderman::getSobrante()) || (distance < (-anchoPantalla))) {
         isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
@@ -193,7 +195,7 @@ void Spiderman::moveRight(int distance, int posContrincante) {
 void Spiderman::walkingSpriteUpdate() {
     ++currentWalkingSprite;
 
-    if (currentWalkingSprite >= LAST_WALKING_SPRITE)
+    if (currentWalkingSprite > LAST_WALKING_SPRITE)
         currentWalkingSprite = 0;
 }
 
