@@ -216,7 +216,7 @@ void Spiderman::jumpRight() {
 
 void Spiderman::jumpLeft() {
     this->currentAction = JUMPINGLEFT;
-    jump(&currentJumpingRightSprite, LAST_JUMPING_LEFT_SPRITE);
+    jump(&currentJumpingLeftSprite, LAST_JUMPING_LEFT_SPRITE);
 }
 
 
@@ -227,13 +227,13 @@ void Spiderman::makeIntro() {
     unsigned int currentTime = SDL_GetTicks();
 
 
-    if (currentIntroSprite <= LAST_INTRO_SPRITE) {
+    if (currentIntroSprite < LAST_INTRO_SPRITE) {
         ++currentIntroSprite;
         lastTime = currentTime;
     }
 
 
-    if (currentIntroSprite > LAST_INTRO_SPRITE && (currentTime - lastTime) > 500) {
+    if (currentIntroSprite >= LAST_INTRO_SPRITE && (currentTime - lastTime) > 500) {
         currentIntroSprite = 0;
         currentAction = STANDING;
         currentStandingSprite = 0;
