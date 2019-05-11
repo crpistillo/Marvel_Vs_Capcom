@@ -31,7 +31,7 @@ public:
     //Maximum axis velocity of the character
     static const int CHARACTER_VEL = 10;
 
-    virtual void load(SDL_Renderer *renderer) = 0;
+    virtual void load(SDL_Renderer *renderer, int posContrincante) = 0;
 
     //Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
@@ -64,7 +64,7 @@ protected:
             int heightSprite,
             int anchoPantalla
     );
-
+    bool isLookingLeft;
     //The X and Y offsets of the character
     int mPosX, mPosY;
     //The velocity of the character
@@ -92,13 +92,13 @@ protected:
     int currentJumpingLeftSprite;
     int currentWalkbackSprite;
     int currentIntroSprite;
-    bool isLookingLeft;
 
     Controls *characterControls;
 
     unsigned int lastTime;
 
 private:
+
     virtual void resetSpriteVariables() = 0;
 
     virtual void stand() = 0;

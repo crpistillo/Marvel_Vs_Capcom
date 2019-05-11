@@ -43,7 +43,7 @@ Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int s
 		this->loader = new ImageLoader(255,255,255);
 }
 
-void Wolverine::load(SDL_Renderer *renderer) {
+void Wolverine::load(SDL_Renderer *renderer, int posContrincante) {
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
@@ -160,7 +160,7 @@ void Wolverine::moveLeft(int distance, int posContrincante) {
     if (this->getCentro() > posContrincante) {
         walkingSpriteUpdate();
     } else {
-        if (currentWalkbackSprite > LAST_WALKBACK_SPRITE)
+        if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
             currentWalkbackSprite = 0;
         currentAction = WALKBACK;
 

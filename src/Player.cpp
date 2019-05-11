@@ -70,9 +70,9 @@ void Player::setCharacterToChanging(){
 	currentCharacter->startIntro();
 }
 
-void Player::loads(SDL_Renderer *pRenderer) {
-    firstCharacter->load(pRenderer);
-    secondCharacter->load(pRenderer);
+void Player::loads(SDL_Renderer *pRenderer, int posContrincante) {
+    firstCharacter->load(pRenderer, posContrincante);
+    secondCharacter->load(pRenderer, posContrincante);
 }
 
 int Player::getPosX() {

@@ -83,7 +83,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     }
 
     if(actionStarted){
-        load(renderer);
+        load(renderer, posContrincante);
         return;
     }
 
@@ -113,7 +113,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
                 inputManager->isKeyUp(characterControls->leftKey))
             )
         this->stand();
-    load(renderer);
+    load(renderer, posContrincante);
 
     updateStand();
 }

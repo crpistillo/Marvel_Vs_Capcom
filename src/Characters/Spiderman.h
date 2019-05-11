@@ -15,7 +15,7 @@ public:
     //Initializes the variables
     Spiderman(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla);
     ~Spiderman();
-    void load(SDL_Renderer* renderer);
+    void load(SDL_Renderer *renderer, int posContrincante);
 
 	/*Es la dimension del personaje sin contar el fondo magenta. Se mide "a mano" con un
 	 * editor de texto, asegurándose de, primero, haber llevado la imágen (en stand by)

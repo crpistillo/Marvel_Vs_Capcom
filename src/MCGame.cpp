@@ -55,8 +55,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                player1->loads(m_Renderer);
-                player2->loads(m_Renderer);
+                player1->loads(m_Renderer, 0);
+                player2->loads(m_Renderer, 1);
 
 
                 loadGroundTextureByZIndex();

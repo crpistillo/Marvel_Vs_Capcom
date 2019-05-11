@@ -46,8 +46,9 @@ Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int s
 Spiderman::~Spiderman() {
 }
 
-void Spiderman::load(SDL_Renderer *renderer) {
+void Spiderman::load(SDL_Renderer *renderer, int posContrincante) {
 
+    isLookingLeft = this->getCentro() > posContrincante;
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
@@ -152,7 +153,6 @@ void Spiderman::moveLeft(int distance, int posContrincante) {
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -Spiderman::getSobrante()) || (distance < (-anchoPantalla))) {
-        isLookingLeft = false;
         //Move back
         mPosX += CHARACTER_VEL;
     }
@@ -161,7 +161,6 @@ void Spiderman::moveLeft(int distance, int posContrincante) {
         walkingSpriteUpdate();
     } else {
         walkingSpriteUpdate();
-        isLookingLeft = false;
     }
 }
 
@@ -169,23 +168,16 @@ void Spiderman::moveLeft(int distance, int posContrincante) {
 void Spiderman::moveRight(int distance, int posContrincante) {
 
     currentAction = MOVING;
-    isLookingLeft = false;
 
     mPosX += CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - Spiderman::getSobrante() - Spiderman::getWidth())) ||
         (distance > anchoPantalla)) {
-        isLookingLeft = true;
         //Move back
         mPosX -= CHARACTER_VEL;
     }
 
-    if (this->getCentro() < posContrincante) {
-        walkingSpriteUpdate();
-    } else {
-        walkingSpriteUpdate();
-        isLookingLeft = true;
-    }
+    walkingSpriteUpdate();
 }
 
 

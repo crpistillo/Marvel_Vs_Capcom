@@ -20,7 +20,7 @@ public:
     void free();
 
 
-    void loads(SDL_Renderer *pRenderer);
+    void loads(SDL_Renderer *pRenderer, int posContrincante);
 
     int getPosX();
 
