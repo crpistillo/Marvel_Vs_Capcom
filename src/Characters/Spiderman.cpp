@@ -157,11 +157,7 @@ void Spiderman::moveLeft(int distance, int posContrincante) {
         mPosX += CHARACTER_VEL;
     }
 
-    if (this->getCentro() > posContrincante) {
         walkingSpriteUpdate();
-    } else {
-        walkingSpriteUpdate();
-    }
 }
 
 
