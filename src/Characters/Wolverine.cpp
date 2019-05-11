@@ -56,12 +56,11 @@ void Wolverine::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
         case DUCK:
-            if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
-                                               renderer, &m_Texture);
-            else
-                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
-                                               renderer, &m_Texture);
+            if (isLookingLeft) {
+                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 39, FILE_EXTENSION, renderer, &m_Texture);
+            } else {
+                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 38, FILE_EXTENSION, renderer, &m_Texture);
+            }
             break;
         case JUMPINGVERTICAL:
             if (isLookingLeft)
@@ -229,7 +228,7 @@ void Wolverine::jumpRight() {
 
 void Wolverine::jumpLeft() {
     this->currentAction = JUMPINGLEFT;
-    jump(&currentJumpingRightSprite, LAST_JUMPING_LEFT_SPRITE);
+    jump(&currentJumpingLeftSprite, LAST_JUMPING_LEFT_SPRITE);
 }
 
 
