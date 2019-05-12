@@ -5,6 +5,19 @@
 #include "TCPServer.h"
 
 string TCPServer::Message;
+const int maxConnections = 4;
+const string ERROR = "ERROR";
+const string INFO = "INFO";
+const string DEBUG = "DEBUG";
+
+TCPServer::TCPServer()
+{
+	this->numberOfConnections = 0;
+	this->port = 0;
+	this->sockfd = 0;
+	this->newsockfd = 0;
+	this->serverSocket = new Socket();
+}
 
 void *TCPServer::Task(void *arg) {
     int n;
@@ -24,29 +37,32 @@ void *TCPServer::Task(void *arg) {
     return 0;
 }
 
-bool TCPServer::setup(int port) {
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd == -1) {
-        cout << "Fallo al crear file descriptor:" << endl;
-        return false;
-    }
-    memset(&serverAddress, 0, sizeof(serverAddress));
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-    serverAddress.sin_port = htons(port);
-    if (bind(sockfd, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) == -1) {
-        cout << "Error en apertura de conexion\n" << endl;
-        return false;
-    }
-    listen(sockfd, 4);
-    return true;
+bool TCPServer::setup(int port, Logger* logger) {
+
+	logger->log("Comienza a iniciarse el servidor", INFO);
+	logger->log("Se crea el socket de escucha del servidor", INFO);
+
+	this->setSockfd(this->serverSocket->create(logger));
+
+	string msgInfo = "El numero de puerto es: " + to_string(this->port);
+	logger->log(msgInfo, INFO);
+
+	this->serverSocket->bindToAddress(port,logger);
+
+	this->serverSocket->listenConnection(maxConnections,logger);
+
+	return true;
+
+
+	//this->sockfd->listenConnection(maxConnections,logger);
+    //return setup;
 }
 
 string TCPServer::receive() {
     string str;
     while (1) {
         socklen_t sosize = sizeof(clientAddress);
-        newsockfd = accept(sockfd, (struct sockaddr *) &clientAddress, &sosize);
+        newsockfd = accept(this->serverSocket->get_fd(), (struct sockaddr *) &clientAddress, &sosize);
         str = inet_ntoa(clientAddress.sin_addr);
         pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
@@ -67,6 +83,11 @@ void TCPServer::clean() {
 }
 
 void TCPServer::detach() {
-    close(sockfd);
+    close(this->serverSocket->get_fd() );
     close(newsockfd);
+}
+
+void TCPServer::setSockfd(int sockfd)
+{
+	this->sockfd = sockfd;
 }

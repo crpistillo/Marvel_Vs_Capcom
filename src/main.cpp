@@ -25,22 +25,24 @@ json parseConfigFile(string logPath) {
 
 Logger *Logger::instance = 0;
 
-TCPServer tcpServer;
-TCPClient tcpClient;
+TCPServer* tcpServer;
+TCPClient* tcpClient;
 MCGame* mcGame;
 
 
-int run_server(int port);
+int run_server(int port, Logger* logger);
 int run_client(int cantArg, char *dirJson, string host, int port);
 void *loop(void *m);
 
 
 int main(int argc, char *argv[]) {
+	Logger* logger = Logger::getInstance();
+
     if (strncmp(argv[2], "client", 6) == 0) {
         run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(atoi(argv[3]));
+           return run_server(atoi(argv[3]),logger);
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -59,19 +61,25 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int port) {
+int run_server(int port, Logger* logger) {
+
+	tcpServer = new TCPServer();
+
     pthread_t msg;
-    if(!tcpServer.setup(port)){
+
+    if(!tcpServer->setup(port, logger)){
         cout << "Error al crear el server" << endl;
         return -1;
     }
     if (pthread_create(&msg, NULL, loop, NULL) == 0) {
-        tcpServer.receive();
+        tcpServer->receive();
     }
     return 0;
 }
 
 int run_client(int cantArg, char *dirJson, string host, int port) {
+
+	tcpClient = new TCPClient();
 
     Logger* logger = Logger::getInstance();
     logger->startSession();
@@ -91,11 +99,11 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     int alto = config["window"]["height"];
     logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-    if(!tcpClient.setup(host, port)) {                  //MCGame tendria que tener el tcpClient
+    if(!tcpClient->setup(host, port)) {                  //MCGame tendria que tener el tcpClient
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-    tcpClient.Send("Connection succesfull");
+    tcpClient->Send("Connection succesfull");
     /*while (1){
         string str = tcpClient.receive(17);
         cout << str <<  endl;
@@ -103,7 +111,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
             break;
     }*/
 
-    mcGame = new MCGame(config, ancho, alto, &tcpClient);
+    mcGame = new MCGame(config, ancho, alto, tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->run();
@@ -117,15 +125,15 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 void *loop(void *m) {
     pthread_detach(pthread_self());
     while (1) {
-        string str = tcpServer.getMessage();
+        string str = tcpServer->getMessage();
         if (!str.empty()) {
             cout << "Message:" << str << endl;
-            tcpServer.Send("Connection ready");
+            tcpServer->Send("Connection ready");
             if(str == "salir")
                 break;
-            tcpServer.clean();
+            tcpServer->clean();
         }
     }
-    tcpServer.detach();
+    tcpServer->detach();
 }
 

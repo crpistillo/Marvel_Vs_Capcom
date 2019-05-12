@@ -16,6 +16,8 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include "Socket.h"
+#include "tools/logger/Logger.h"
 
 using namespace std;
 
@@ -23,23 +25,32 @@ using namespace std;
 
 class TCPServer
 {
+private:
+    static void * Task(void * argv);
+    int numberOfConnections;
+    int port;
+
+
 public:
+    Socket* serverSocket;
     int sockfd, newsockfd, n, pid;
-    struct sockaddr_in serverAddress;
+    //struct sockaddr_in serverAddress; //sockadrr_in es para protocolo IPv4
     struct sockaddr_in clientAddress;
     pthread_t serverThread;
     char msg[ MAXPACKETSIZE ];
     static string Message;
 
-    bool setup(int port);
+    TCPServer();
+    bool setup(int port, Logger* logger);
     string receive();
     string getMessage();
     void Send(string msg);
     void detach();
     void clean();
+    void initServer();
+    void setSockfd(int sockfd);
 
-private:
-    static void * Task(void * argv);
+
 };
 
 #endif
