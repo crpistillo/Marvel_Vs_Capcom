@@ -52,10 +52,6 @@ bool TCPServer::setup(int port, Logger* logger) {
 	this->serverSocket->listenConnection(maxConnections,logger);
 
 	return true;
-
-
-	//this->sockfd->listenConnection(maxConnections,logger);
-    //return setup;
 }
 
 string TCPServer::receive() {

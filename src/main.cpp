@@ -30,8 +30,8 @@ TCPClient* tcpClient;
 MCGame* mcGame;
 
 
-int run_server(int port, Logger* logger);
-int run_client(int cantArg, char *dirJson, string host, int port);
+int run_server(int cantArg, char *dirJson, int port, Logger* logger);
+int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger);
 void *loop(void *m);
 
 
@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
 	Logger* logger = Logger::getInstance();
 
     if (strncmp(argv[2], "client", 6) == 0) {
-        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
+        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]), logger);
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(atoi(argv[3]),logger);
+           return run_server(argc, argv[1], atoi(argv[3]),logger);
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -61,9 +61,24 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int port, Logger* logger) {
+int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
 
 	tcpServer = new TCPServer();
+
+	logger->startSession();
+	logger->log("Logger iniciado.", DEBUG);
+	json config;
+
+    if(cantArg != 2){
+    	logger->log("Archivo de configuracion no especificado, cargando el archivo de configuracion por defecto.", INFO);
+	    config = parseConfigFile("config/config_default.json");
+    }
+    else{
+        string configPath = (string) dirJson;
+        logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
+	    config = parseConfigFile(dirJson);
+    }
+
 
     pthread_t msg;
 
@@ -77,11 +92,10 @@ int run_server(int port, Logger* logger) {
     return 0;
 }
 
-int run_client(int cantArg, char *dirJson, string host, int port) {
+int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger) {
 
 	tcpClient = new TCPClient();
 
-    Logger* logger = Logger::getInstance();
     logger->startSession();
     logger->log("Logger iniciado.", DEBUG);
     json config;
