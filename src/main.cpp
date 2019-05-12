@@ -7,6 +7,7 @@
 #include "TCPServer.h"
 #include "tools/logger/Logger.h"
 #include "MCGame.h"
+#include "ServerThread.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -79,14 +80,13 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
 	    config = parseConfigFile(dirJson);
     }
 
-
-    pthread_t msg;
+    ServerThread* serverThread = new ServerThread(tcpServer);
 
     if(!tcpServer->setup(port, logger)){
         cout << "Error al crear el server" << endl;
         return -1;
     }
-    if (pthread_create(&msg, NULL, loop, NULL) == 0) {
+    if (serverThread->create()) {
         tcpServer->receive();
     }
     return 0;
@@ -134,20 +134,4 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
     return 0;
 }
 
-
-
-void *loop(void *m) {
-    pthread_detach(pthread_self());
-    while (1) {
-        string str = tcpServer->getMessage();
-        if (!str.empty()) {
-            cout << "Message:" << str << endl;
-            tcpServer->Send("Connection ready");
-            if(str == "salir")
-                break;
-            tcpServer->clean();
-        }
-    }
-    tcpServer->detach();
-}
 

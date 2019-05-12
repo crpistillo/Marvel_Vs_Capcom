@@ -11,21 +11,23 @@
 #include "ClientsThread.h"
 #include "Queue/Queue.h"
 #include "TCPServer.h"
+#include "TCPServer.h"
 
 class ServerThread
 {
 private:
 	Queue<ClientsThread> clientsThreads; //cola de los threads de los clientes
-	TCPServer* server;
 	Socket* socket;
 	pthread_t serverThread;
+	TCPServer* server;
 
 public:
 
 	ServerThread(TCPServer* server);
 	bool create();
-	static void *loop(void *arg);
-	void join();
+	static void* loopStatic(void* arg);
+	void* loop();
+	//void join();
 
 
 };
