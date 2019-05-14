@@ -86,9 +86,11 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
         cout << "Error al crear el server" << endl;
         return -1;
     }
-    if (serverThread->create()) {
+
+    /*if (serverThread->create()) {
         tcpServer->receive();
-    }
+    }*/
+    tcpServer->receive();
     return 0;
 }
 
@@ -117,7 +119,7 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-    //tcpClient->Send("Connection succesfull");
+    tcpClient->Send("Connection succesfull");
     /*while (1){
         string str = tcpClient.receive(17);
         cout << str <<  endl;
@@ -128,10 +130,15 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
     string msj;
     while(1){
     	msj = tcpClient->read();
+    	if(msj == "NO MORE CONNECTIONS ALLOWED \n"){
+    		cout << msj;
+    		return 0;
+    	}
+
     	if(msj == "READY\n")
     		break;
     	else{
-    		cout << "NOT READY\n";
+    		cout << msj;
     	}
     }
 

@@ -59,13 +59,21 @@ string TCPServer::receive() {
     while (1) {
         socklen_t sosize = sizeof(clientAddress);
         newsockfd = accept(this->serverSocket->get_fd(), (struct sockaddr *) &clientAddress, &sosize);
+        if(numberOfConnections == MAXPLAYERS){
+        	char* msj = (char*) "NO MORE CONNECTIONS ALLOWED \n";
+        	send(newsockfd, msj, strlen(msj), 0);
+        	close(newsockfd);
+        	continue;
+
+        }
         clientsSockets[numberOfConnections] = newsockfd;
         numberOfConnections++;
 
         if(numberOfConnections != MAXPLAYERS){
-        	char *msjNotReady = (char*) "NOT READY\n";
+        	string msjNotReady = "Not ready yet. Players:" + to_string(numberOfConnections) + "/2\n";
+        	const char* msjNR = msjNotReady.c_str();
         	for(int i = 0; i < numberOfConnections; i++){
-        		send(clientsSockets[i], msjNotReady, strlen(msjNotReady),0 );
+        		send(clientsSockets[i], msjNR, strlen(msjNR),0 );
         	}
         }
         else{
