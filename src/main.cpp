@@ -117,13 +117,23 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-    tcpClient->Send("Connection succesfull");
+    //tcpClient->Send("Connection succesfull");
     /*while (1){
         string str = tcpClient.receive(17);
         cout << str <<  endl;
         if(str == "Connection ready")
             break;
     }*/
+
+    string msj;
+    while(1){
+    	msj = tcpClient->read();
+    	if(msj == "READY\n")
+    		break;
+    	else{
+    		cout << "NOT READY\n";
+    	}
+    }
 
     mcGame = new MCGame(config, ancho, alto, tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };

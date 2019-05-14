@@ -25,8 +25,9 @@ C_DEPS :=
 SUBDIRS := \
 src/Characters \
 src/Client \
-src/Controls \
 src \
+src/Controls \
+src/Queue \
 src/Texture \
 src/tools/FPSManager \
 src/tools/ImageLoader \

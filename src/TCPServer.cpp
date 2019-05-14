@@ -59,8 +59,24 @@ string TCPServer::receive() {
     while (1) {
         socklen_t sosize = sizeof(clientAddress);
         newsockfd = accept(this->serverSocket->get_fd(), (struct sockaddr *) &clientAddress, &sosize);
+        clientsSockets[numberOfConnections] = newsockfd;
+        numberOfConnections++;
+
+        if(numberOfConnections != MAXPLAYERS){
+        	char *msjNotReady = (char*) "NOT READY\n";
+        	for(int i = 0; i < numberOfConnections; i++){
+        		send(clientsSockets[i], msjNotReady, strlen(msjNotReady),0 );
+        	}
+        }
+        else{
+        	char *msjReady = (char*) "READY\n";
+        	for(int i = 0; i < numberOfConnections; i++){
+        		send(clientsSockets[i], msjReady, strlen(msjReady),0 );
+        	}
+        }
         str = inet_ntoa(clientAddress.sin_addr);
-        pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
+        cout << str;
+        //pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
     return str;
 }

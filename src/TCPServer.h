@@ -22,6 +22,7 @@
 using namespace std;
 
 #define MAXPACKETSIZE 4096
+#define MAXPLAYERS 2
 
 class TCPServer
 {
@@ -29,6 +30,7 @@ private:
     static void * Task(void * argv);
     int numberOfConnections;
     int port;
+    int clientsSockets[MAXPLAYERS];
 
 
 public:
