@@ -30,7 +30,11 @@ public:
 
 	int get_fd();
 
-	void listenConnection(int maxConnections, Logger* logger);
+	bool listenConnection(int maxConnections, Logger* logger);
+
+	bool initialize(Logger* logger, int port, int maxConnections);
+
+	void acceptConnection(Socket* otherSocket, struct sockaddr_in *clientAddress, Logger* logger);
 
 };
 

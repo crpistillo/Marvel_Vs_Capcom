@@ -34,12 +34,13 @@ bool Socket::create(Logger* logger)
 
 bool Socket::bindToAddress(int port, Logger* logger) //cuidado con pasar sin referencia!!
 {
-	struct sockaddr_in serverAddress;
 	this->port = port;
+	struct sockaddr_in serverAddress;
     memset(&serverAddress, 0, sizeof(struct sockaddr_in)); //Clear structure
     serverAddress.sin_family = AF_INET; //IP Domain Adress
     serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(this->port);
+
     if (bind(this->fd, (struct sockaddr *) &serverAddress, sizeof(struct sockaddr_in)) == -1)
     {
     	std::string msgError = "Error en apertura de conexion.";
@@ -55,12 +56,34 @@ int Socket::get_fd()
 	return this->fd;
 }
 
-void Socket::listenConnection(int maxConnections, Logger* logger)
+bool Socket::listenConnection(int maxConnections, Logger* logger)
 {
 	if(listen(this->fd,maxConnections)==-1)
 	{
 		std::string msgError = "Error al escuchar las conecciones entrantes.";
 		cout << msgError << endl;
 		logger->log(msgError,ERROR);
+		return false;
+	}
+	return true;
+}
+
+bool Socket::initialize(Logger* logger, int port, int maxConnections)
+{
+	return (this->create(logger) && this->bindToAddress(port,logger) &&
+			this->listenConnection(maxConnections,logger));
+
+}
+
+void Socket::acceptConnection(Socket* otherSocket, struct sockaddr_in *clientAddress, Logger* logger)
+{
+	socklen_t sosize = sizeof(*clientAddress);
+	this->fd = accept(otherSocket->get_fd(), (struct sockaddr *) &(*clientAddress), &sosize);
+	if(this->fd == -1)
+	{
+		std::string msgError = "Error al escuchar las conecciones entrantes.";
+				cout << msgError << endl;
+				logger->log(msgError,ERROR);
 	}
 }
+

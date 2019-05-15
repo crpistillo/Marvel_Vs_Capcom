@@ -17,6 +17,18 @@ bool ServerThread::create()
 {
 	return(pthread_create(&(this->serverThread), NULL, loopStatic, this)==0);
 }
+//arreglar(caro,yo)
+/*
+void* ServerThread::function()
+{
+	  // This cast will work for Linux, but in general casting pthread_id to an
+	  // integral type isn't portable.
+	  unsigned long id = (unsigned long)pthread_self();
+	  printf("Thread %lu created to handle connection with socket %d\n", id, sockfd);
+	  serve_connection(sockfd);
+	  printf("Thread %lu done\n", id);
+	  return 0;
+}*/
 
 void* ServerThread::loop()
 {

@@ -3,6 +3,9 @@
 //
 
 #include "TCPServer.h"
+#include "ServerThread.h"
+#include "netdb.h"
+#include <string>
 
 string TCPServer::Message;
 const int maxConnections = 4;
@@ -14,9 +17,8 @@ TCPServer::TCPServer()
 {
 	this->numberOfConnections = 0;
 	this->port = 0;
-	this->sockfd = 0;
-	this->newsockfd = 0;
 	this->serverSocket = new Socket();
+	this->newSockFd = new Socket();
 }
 
 void *TCPServer::Task(void *arg) {
@@ -42,35 +44,45 @@ bool TCPServer::setup(int port, Logger* logger) {
 	logger->log("Comienza a iniciarse el servidor", INFO);
 	logger->log("Se crea el socket de escucha del servidor", INFO);
 
-	this->setSockfd(this->serverSocket->create(logger));
-
-	string msgInfo = "El numero de puerto es: " + to_string(this->port);
+	this->port = port;
+	string msgInfo = "Serving on port " + to_string(this->port);
+	cout<<msgInfo<<endl;
 	logger->log(msgInfo, INFO);
 
-	this->serverSocket->bindToAddress(port,logger);
+	bool ret = this->serverSocket->initialize(logger, port, maxConnections);
 
-	this->serverSocket->listenConnection(maxConnections,logger);
+	//this->setSockfd(this->serverSocket->get_fd());
 
-	return true;
+	return ret;
 }
 
-string TCPServer::receive() {
+string TCPServer::receive(Logger* logger) {
     string str;
     while (1) {
-        socklen_t sosize = sizeof(clientAddress);
-        connection_information_t to_send;
-        newsockfd = accept(this->serverSocket->get_fd(), (struct sockaddr *) &clientAddress, &sosize);
+
+    	struct sockaddr_in clientAddress;
+
+        newSockFd->acceptConnection(this->serverSocket, &clientAddress, logger);
+
+        connection_information_t to_send; //que es esto?
+
+        socklen_t clientAddress_len = sizeof(clientAddress);
+
+        this->reportClientConnected(&clientAddress, clientAddress_len, logger);
+
+
+        //numero de conexiones(modularizar o algo)
         if(numberOfConnections == MAXPLAYERS){
 
         	to_send.nconnections = numberOfConnections;
         	to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
 
-        	send(newsockfd, &to_send, sizeof(connection_information_t) , 0);
-        	close(newsockfd);
+        	send(newSockFd->get_fd(), &to_send, sizeof(connection_information_t) , 0);
+        	close(newSockFd->get_fd());
         	continue;
 
         }
-        clientsSockets[numberOfConnections] = newsockfd;
+        clientsSockets[numberOfConnections] = newSockFd ->get_fd();
         numberOfConnections++;
 
         if(numberOfConnections != MAXPLAYERS){
@@ -95,6 +107,11 @@ string TCPServer::receive() {
         }
         str = inet_ntoa(clientAddress.sin_addr);
         cout << str;
+
+        //ServerThread* serverThread = new ServerThread(tcpServer);
+
+        //comenzarThread (Caro,yo)
+
         //pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
     return str;
@@ -105,7 +122,7 @@ string TCPServer::getMessage() {
 }
 
 void TCPServer::Send(string msg) {
-    send(newsockfd, msg.c_str(), msg.length(), 0);
+    send(newSockFd->get_fd(), msg.c_str(), msg.length(), 0);
 }
 
 void TCPServer::clean() {
@@ -115,10 +132,25 @@ void TCPServer::clean() {
 
 void TCPServer::detach() {
     close(this->serverSocket->get_fd() );
-    close(newsockfd);
+    close(newSockFd->get_fd());
 }
 
-void TCPServer::setSockfd(int sockfd)
+void TCPServer::reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger)
 {
-	this->sockfd = sockfd;
+
+	char hostbuf[NI_MAXHOST];
+	char portbuf[NI_MAXSERV];
+    if (getnameinfo((struct sockaddr*)clientAddress, clientAddress_len,
+    		hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, 0) == 0)
+    {
+    	string msg = "Client " + string(hostbuf) + ", " + string(portbuf) + " connected";
+    	cout<<msg<<endl;
+    	logger->log(msg, INFO);
+	}
+    else
+    {
+    	cout<<"Client unknown connected "<<endl;
+    }
+    return;
 }
+

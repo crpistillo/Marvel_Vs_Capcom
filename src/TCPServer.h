@@ -36,22 +36,23 @@ private:
 
 public:
     Socket* serverSocket;
-    int sockfd, newsockfd, n, pid;
-    //struct sockaddr_in serverAddress; //sockadrr_in es para protocolo IPv4
-    struct sockaddr_in clientAddress;
-    pthread_t serverThread;
+    Socket* newSockFd;
+    int n, pid;
+    //struct sockaddr_in serverAddress;
+    //struct sockaddr_in clientAddress;//sockadrr_in es para protocolo IPv4
+    //pthread_t serverThread;
     char msg[ MAXPACKETSIZE ];
     static string Message;
 
     TCPServer();
     bool setup(int port, Logger* logger);
-    string receive();
+    string receive(Logger* logger);
     string getMessage();
     void Send(string msg);
     void detach();
     void clean();
     void initServer();
-    void setSockfd(int sockfd);
+    void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
 
 
 };

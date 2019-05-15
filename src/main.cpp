@@ -9,6 +9,9 @@
 #include "MCGame.h"
 #include "ServerThread.h"
 #include "data_structs.h"
+#include <sys/socket.h>
+
+#include "Utils.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -34,11 +37,12 @@ MCGame* mcGame;
 
 int run_server(int cantArg, char *dirJson, int port, Logger* logger);
 int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger);
-void *loop(void *m);
 
 
 int main(int argc, char *argv[]) {
 	Logger* logger = Logger::getInstance();
+	logger->startSession();
+
 
     if (strncmp(argv[2], "client", 6) == 0) {
         run_client(argc, argv[1], string(argv[3]),atoi(argv[4]), logger);
@@ -67,7 +71,6 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
 
 	tcpServer = new TCPServer();
 
-	logger->startSession();
 	logger->log("Logger iniciado.", DEBUG);
 	json config;
 
@@ -91,7 +94,8 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
     /*if (serverThread->create()) {
         tcpServer->receive();
     }*/
-    tcpServer->receive();
+
+    tcpServer->receive(logger);
     return 0;
 }
 
@@ -99,7 +103,7 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
 
 	tcpClient = new TCPClient();
 
-    logger->startSession();
+	//LOGGER//////////
     logger->log("Logger iniciado.", DEBUG);
     json config;
 
@@ -115,6 +119,8 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
     int ancho = config["window"]["width"];
     int alto = config["window"]["height"];
     logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
+
+    /////////////////
 
     if(!tcpClient->setup(host, port)) {                  //MCGame tendria que tener el tcpClient
         cout << "Failed to setup Client" << endl;
