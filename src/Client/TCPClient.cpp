@@ -54,18 +54,18 @@ bool TCPClient::Send(string data) {
     return true;
 }
 
-string TCPClient::receive(int size) {
-    char buffer[size];
-    memset(&buffer[0], 0, sizeof(buffer));
+void* TCPClient::receive(int size) {
+    void *buffer =  malloc(size);
+    memset(buffer, 0, size);
 
-    string reply;
+    //string reply;
     if (recv(sock, buffer, size, 0) < 0) {
         cout << "receive failed!" << endl;
         return nullptr;
     }
-    buffer[size - 1] = '\0';
-    reply = buffer;
-    return reply;
+    //buffer[size - 1] = '\0';
+    //reply = buffer;
+    return buffer;
 }
 
 string TCPClient::read() {

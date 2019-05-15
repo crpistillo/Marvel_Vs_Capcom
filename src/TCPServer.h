@@ -18,6 +18,7 @@
 #include <pthread.h>
 #include "Socket.h"
 #include "tools/logger/Logger.h"
+#include "data_structs.h"
 
 using namespace std;
 

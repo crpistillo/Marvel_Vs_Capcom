@@ -8,6 +8,7 @@
 #include "tools/logger/Logger.h"
 #include "MCGame.h"
 #include "ServerThread.h"
+#include "data_structs.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -127,18 +128,19 @@ int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger
             break;
     }*/
 
-    string msj;
+    void* msj;
     while(1){
-    	msj = tcpClient->read();
-    	if(msj == "NO MORE CONNECTIONS ALLOWED \n"){
-    		cout << msj;
+    	msj = tcpClient->receive(sizeof(connection_information_t));
+    	connection_information_t* buf = (connection_information_t*) msj;
+    	if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
+    		cout << "Connection not allowed. No more players. \n";
     		return 0;
     	}
 
-    	if(msj == "READY\n")
+    	if(buf->status == READY)
     		break;
     	else{
-    		cout << msj;
+    		cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
     	}
     }
 

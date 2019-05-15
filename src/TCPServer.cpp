@@ -58,10 +58,14 @@ string TCPServer::receive() {
     string str;
     while (1) {
         socklen_t sosize = sizeof(clientAddress);
+        connection_information_t to_send;
         newsockfd = accept(this->serverSocket->get_fd(), (struct sockaddr *) &clientAddress, &sosize);
         if(numberOfConnections == MAXPLAYERS){
-        	char* msj = (char*) "NO MORE CONNECTIONS ALLOWED \n";
-        	send(newsockfd, msj, strlen(msj), 0);
+
+        	to_send.nconnections = numberOfConnections;
+        	to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
+
+        	send(newsockfd, &to_send, sizeof(connection_information_t) , 0);
         	close(newsockfd);
         	continue;
 
@@ -70,16 +74,23 @@ string TCPServer::receive() {
         numberOfConnections++;
 
         if(numberOfConnections != MAXPLAYERS){
-        	string msjNotReady = "Not ready yet. Players:" + to_string(numberOfConnections) + "/2\n";
-        	const char* msjNR = msjNotReady.c_str();
+
+        	//string msjNotReady = "Not ready yet. Players:" + to_string(numberOfConnections) + "/2\n";
+        	to_send.status = NOT_READY;
+        	to_send.nconnections = numberOfConnections;
+
+
+        	//const char* msjNR = msjNotReady.c_str();
         	for(int i = 0; i < numberOfConnections; i++){
-        		send(clientsSockets[i], msjNR, strlen(msjNR),0 );
+        		send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
         	}
         }
         else{
-        	char *msjReady = (char*) "READY\n";
+        	//char *msjReady = (char*) "READY\n";
+        	to_send.status = READY;
+        	to_send.nconnections = numberOfConnections;
         	for(int i = 0; i < numberOfConnections; i++){
-        		send(clientsSockets[i], msjReady, strlen(msjReady),0 );
+        		send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
         	}
         }
         str = inet_ntoa(clientAddress.sin_addr);

@@ -31,7 +31,7 @@ public:
     TCPClient();
     bool setup(string address, int port);
     bool Send(string data);
-    string receive(int size = 4096);
+    void* receive(int size = 4096);
     string read();
     void exit();
 };
