@@ -109,10 +109,13 @@ int run_server(int cantArg, char *dirJson, int port) {
 
     cout << "Numero de jugadores alcanzado! \n";
 
-    //while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
-    //	continue;
+    tcpServer->createReceivingThreadPerClient();
 
     logger->finishSession();
+
+    while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    	continue;
+
     exit(0);
 }
 

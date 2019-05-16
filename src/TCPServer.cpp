@@ -14,6 +14,8 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
+pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+
 TCPServer::TCPServer()
 {
 	this->numberOfConnections = 0;
@@ -21,6 +23,12 @@ TCPServer::TCPServer()
 	this->serverSocket = new Socket();
 	this->newSockFd = new Socket();
 }
+
+typedef struct{
+	TCPServer* server;
+	int clientSocket;
+} client_receive_t;
+
 
 void *TCPServer::Task(void *arg) {
     int n;
@@ -166,7 +174,74 @@ int TCPServer::getNumberOfConections(){
 	return numberOfConnections;
 }
 
+void TCPServer::clientReceive(int socket){
 
+
+
+	int socket_to_read = clientsSockets[socket];
+	pthread_t asd = pthread_self();
+	cout << "Hola! Soy el hilo: " + to_string(asd) + ". Soy el encargado de leer del socket: "
+	+ to_string(socket_to_read) +"\n";
+
+	while(1)
+		continue;
+}
+
+int* TCPServer::getClientsSockets(){
+	return this->clientsSockets;
+}
+
+
+
+
+/*Funcion que lee del socket la informacion que los clientes le envian.
+ * Esta deberia leer, codificar y encolar eventos en la cola del servidor*/
+static void* ClientReceive(void* args){
+
+	pthread_t hilo = pthread_self();
+
+	//Recibo los argumentos y los casteo en el orden que corresponde.
+	pthread_mutex_lock(&mtx);
+	client_receive_t* arg = (client_receive_t*) args;
+	TCPServer* server = arg->server;
+	int socket = arg->clientSocket;
+	pthread_mutex_unlock(&mtx);
+
+	int socket_to_read = (server->getClientsSockets())[socket];
+	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
+	+ to_string(socket_to_read) +"\n";
+
+	while(1)
+		continue;
+
+	return NULL;
+}
+
+int TCPServer::createReceivingThreadPerClient(){
+
+	//Preparo los MAXPLAYERS argumentos a pasarle a la funcion del thread.
+	client_receive_t *args[MAXPLAYERS];
+
+	for(int i = 0; i < MAXPLAYERS; i++){
+		client_receive_t* arg = (client_receive_t*) malloc(sizeof(client_receive_t));
+
+		arg->clientSocket = i;
+		arg->server = this;
+
+		args[i] = arg;
+	}
+
+	//Creo MAXPLAYERS threads, uno por cada cliente conectado
+	for(int i = 0; i < MAXPLAYERS; i++){
+
+		pthread_mutex_lock(&mtx);
+		if( pthread_create(&(this->clientsThreads[i]), NULL , ClientReceive , args[i] ) )
+			return -1;
+		pthread_mutex_unlock(&mtx);
+	}
+
+	return 0;
+}
 
 
 

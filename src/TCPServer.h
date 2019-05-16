@@ -35,7 +35,9 @@ private:
     int clientsSockets[MAXPLAYERS];
     Logger* logger;
 
-    pthread_t acceptThread;
+    pthread_t acceptThread;  //Identificador del thread que acepta conexiones
+
+    pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
 
 public:
@@ -51,6 +53,7 @@ public:
     TCPServer();
     bool setup(int port, Logger* logger);
     void receive();
+    void clientReceive(int socket);
     string getMessage();
     void Send(string msg);
     void detach();
@@ -59,6 +62,8 @@ public:
     void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
     int createAceptingThread();
     int getNumberOfConections();
+    int createReceivingThreadPerClient();
+    int* getClientsSockets();
 
 
 };
