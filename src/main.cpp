@@ -33,20 +33,17 @@ TCPClient* tcpClient;
 MCGame* mcGame;
 
 
-int run_server(int cantArg, char *dirJson, int port, Logger* logger);
-int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger);
+int run_server(int cantArg, char *dirJson, int port);
+int run_client(int cantArg, char *dirJson, string host, int port);
 
 
 int main(int argc, char *argv[]) {
-	Logger* logger = Logger::getInstance();
-	logger->startSession();
-
 
     if (strncmp(argv[2], "client", 6) == 0) {
-        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]), logger);
+        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(argc, argv[1], atoi(argv[3]),logger);
+           return run_server(argc, argv[1], atoi(argv[3]));
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -65,18 +62,28 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
+int run_server(int cantArg, char *dirJson, int port) {
 
+	Logger* logger = Logger::getInstance();
+	logger->startSession("SERVER");
 	tcpServer = new TCPServer();
 
-	logger->log("Logger iniciado.", DEBUG);
+	logger->log("Logger iniciado.", INFO);
 	json config;
 
-    if(cantArg != 2){
-    	logger->log("Archivo de configuracion no especificado, cargando el archivo de configuracion por defecto.", INFO);
+	if(cantArg != 4){
+		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 4.", ERROR);
+		logger->finishSession();
+		return -1;
+	}
+
+	FILE *configFile;
+    if( !(configFile = fopen( dirJson,  "r")) ){ //VVerifico que el archivo que me pasan exista.
+    	logger->log("Archivo de configuracion no existente, cargando el archivo de configuracion por defecto.", INFO);
 	    config = parseConfigFile("config/config_default.json");
     }
     else{
+    	fclose(configFile);
         string configPath = (string) dirJson;
         logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
 	    config = parseConfigFile(dirJson);
@@ -102,13 +109,17 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
 
     cout << "Numero de jugadores alcanzado! \n";
 
-    while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
-    	continue;
+    //while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    //	continue;
 
+    logger->finishSession();
     exit(0);
 }
 
-int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger) {
+int run_client(int cantArg, char *dirJson, string host, int port) {
+
+	Logger* logger = Logger::getInstance();
+	logger->startSession("CLIENT");
 
 	tcpClient = new TCPClient();
 

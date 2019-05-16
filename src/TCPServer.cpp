@@ -66,6 +66,7 @@ void TCPServer::receive() {
     	struct sockaddr_in clientAddress;
 
         newSockFd->acceptConnection(this->serverSocket, &clientAddress, logger);
+        logger->log("Nueva conexion aceptada", INFO);
 
         connection_information_t to_send;
 
