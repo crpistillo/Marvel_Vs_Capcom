@@ -11,8 +11,6 @@
 #include "data_structs.h"
 #include <sys/socket.h>
 
-#include "Utils.h"
-
 const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
@@ -84,7 +82,7 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
 	    config = parseConfigFile(dirJson);
     }
 
-    ServerThread* serverThread = new ServerThread(tcpServer);
+    ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
 
     if(!tcpServer->setup(port, logger)){
         cout << "Error al crear el server" << endl;
@@ -94,8 +92,14 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
     /*if (serverThread->create()) {
         tcpServer->receive();
     }*/
+    //tcpServer->receive(logger);
 
-    tcpServer->receive(logger);
+    if( tcpServer->createAceptingThread() )   //Crea el thread que escucha conexiones nuevas.
+    	return -1;
+
+    while(1)								//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    	continue;
+
     return 0;
 }
 

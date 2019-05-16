@@ -19,11 +19,12 @@
 #include "Socket.h"
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
+#include <pthread.h>
 
 using namespace std;
 
 #define MAXPACKETSIZE 4096
-#define MAXPLAYERS 2
+#define MAXPLAYERS 4
 
 class TCPServer
 {
@@ -32,6 +33,9 @@ private:
     int numberOfConnections;
     int port;
     int clientsSockets[MAXPLAYERS];
+    Logger* logger;
+
+    pthread_t acceptThread;
 
 
 public:
@@ -46,13 +50,14 @@ public:
 
     TCPServer();
     bool setup(int port, Logger* logger);
-    string receive(Logger* logger);
+    void receive();
     string getMessage();
     void Send(string msg);
     void detach();
     void clean();
     void initServer();
     void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
+    int createAceptingThread();
 
 
 };

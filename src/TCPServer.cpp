@@ -6,6 +6,7 @@
 #include "ServerThread.h"
 #include "netdb.h"
 #include <string>
+#include <pthread.h>
 
 string TCPServer::Message;
 const int maxConnections = 4;
@@ -41,6 +42,8 @@ void *TCPServer::Task(void *arg) {
 
 bool TCPServer::setup(int port, Logger* logger) {
 
+	this->logger = logger;
+
 	logger->log("Comienza a iniciarse el servidor", INFO);
 	logger->log("Se crea el socket de escucha del servidor", INFO);
 
@@ -56,7 +59,7 @@ bool TCPServer::setup(int port, Logger* logger) {
 	return ret;
 }
 
-string TCPServer::receive(Logger* logger) {
+void TCPServer::receive() {
     string str;
     while (1) {
 
@@ -106,7 +109,7 @@ string TCPServer::receive(Logger* logger) {
         	}
         }
         str = inet_ntoa(clientAddress.sin_addr);
-        cout << str;
+        cout << str + "\n";
 
         //ServerThread* serverThread = new ServerThread(tcpServer);
 
@@ -114,7 +117,6 @@ string TCPServer::receive(Logger* logger) {
 
         //pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
-    return str;
 }
 
 string TCPServer::getMessage() {
@@ -153,4 +155,18 @@ void TCPServer::reportClientConnected(const struct sockaddr_in* clientAddress, s
     }
     return;
 }
+
+static void* wrapperReceive(void* args){
+	TCPServer *server = (TCPServer*) args;
+	server->receive();
+	return 0;
+}
+
+int TCPServer::createAceptingThread() {
+	return ( pthread_create( &(this->acceptThread), NULL, wrapperReceive, this) );
+}
+
+
+
+
 
