@@ -110,6 +110,7 @@ int run_server(int cantArg, char *dirJson, int port) {
     cout << "Numero de jugadores alcanzado! \n";
 
     tcpServer->createReceivingThreadPerClient();
+    tcpServer->createSendingThreadPerClient();
 
     logger->finishSession();
 

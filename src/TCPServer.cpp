@@ -27,7 +27,7 @@ TCPServer::TCPServer()
 typedef struct{
 	TCPServer* server;
 	int clientSocket;
-} client_receive_t;
+} info_for_thread_t;
 
 
 void *TCPServer::Task(void *arg) {
@@ -195,14 +195,16 @@ int* TCPServer::getClientsSockets(){
 
 
 /*Funcion que lee del socket la informacion que los clientes le envian.
- * Esta deberia leer, codificar y encolar eventos en la cola del servidor*/
+ * Esta deberia leer, codificar y encolar eventos en la cola del servidor
+ *
+ * Son los denominados "thread lectura cliente x"*/
 static void* ClientReceive(void* args){
 
 	pthread_t hilo = pthread_self();
 
 	//Recibo los argumentos y los casteo en el orden que corresponde.
 	pthread_mutex_lock(&mtx);
-	client_receive_t* arg = (client_receive_t*) args;
+	info_for_thread_t* arg = (info_for_thread_t*) args;
 	TCPServer* server = arg->server;
 	int socket = arg->clientSocket;
 	pthread_mutex_unlock(&mtx);
@@ -220,10 +222,10 @@ static void* ClientReceive(void* args){
 int TCPServer::createReceivingThreadPerClient(){
 
 	//Preparo los MAXPLAYERS argumentos a pasarle a la funcion del thread.
-	client_receive_t *args[MAXPLAYERS];
+	info_for_thread_t *args[MAXPLAYERS];
 
 	for(int i = 0; i < MAXPLAYERS; i++){
-		client_receive_t* arg = (client_receive_t*) malloc(sizeof(client_receive_t));
+		info_for_thread_t* arg = (info_for_thread_t*) malloc(sizeof(info_for_thread_t));
 
 		arg->clientSocket = i;
 		arg->server = this;
@@ -241,6 +243,55 @@ int TCPServer::createReceivingThreadPerClient(){
 	}
 
 	return 0;
+}
+
+/*Esta funcion se encarga de desencolar datos de las colas de los clientes
+ * y mandarle dicha informacion a cada cliente por el socket
+ *
+ * Son los denominados "thread escritura cliente x"
+ * */
+static void* ClientSend(void* args){
+
+	pthread_t hilo = pthread_self();
+
+	//Recibo los argumentos y los casteo en el orden que corresponde.
+	pthread_mutex_lock(&mtx);
+	info_for_thread_t* arg = (info_for_thread_t*) args;
+	TCPServer* server = arg->server;
+	int socket = arg->clientSocket;
+	pthread_mutex_unlock(&mtx);
+
+	int socket_to_send = (server->getClientsSockets())[socket];
+	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de mandar datos al socket: "
+	+ to_string(socket_to_send) +"\n";
+
+	while(1)
+		continue;
+
+	return NULL;
+}
+
+int TCPServer::createSendingThreadPerClient(){
+	info_for_thread_t* args[MAXPLAYERS];
+
+	for(int i = 0; i < MAXPLAYERS; i++){
+		info_for_thread_t* arg = (info_for_thread_t*) malloc(sizeof(info_for_thread_t));
+
+		arg->clientSocket = i;
+		arg->server = this;
+
+		args[i] = arg;
+	}
+
+	//Creo MAXPLAYERS threads, uno por cada cliente conectado
+	for(int i = 0; i < MAXPLAYERS; i++){
+
+		pthread_mutex_lock(&mtx);
+		if( pthread_create(&(this->clientsThreads[i]), NULL , ClientSend , args[i] ) )
+			return -1;
+		pthread_mutex_unlock(&mtx);
+	}
+
 }
 
 

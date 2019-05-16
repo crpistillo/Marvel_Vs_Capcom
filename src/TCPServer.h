@@ -63,6 +63,7 @@ public:
     int createAceptingThread();
     int getNumberOfConections();
     int createReceivingThreadPerClient();
+    int createSendingThreadPerClient();
     int* getClientsSockets();
 
 
