@@ -36,6 +36,11 @@ public:
 
 	void acceptConnection(Socket* otherSocket, struct sockaddr_in *clientAddress, Logger* logger);
 
+    bool connectTo(string address, int listenPort);
+
+    bool sendData(void* to_send, size_t size_data);
+
+    bool reciveData(void* data, int size);
 };
 
 

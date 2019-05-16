@@ -149,13 +149,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-    tcpClient->Send("Connection succesfull");
-    /*while (1){
-        string str = tcpClient.receive(17);
-        cout << str <<  endl;
-        if(str == "Connection ready")
-            break;
-    }*/
+//    tcpClient->Send("Connection succesfull");
 
     void* msj;
     while(1){
