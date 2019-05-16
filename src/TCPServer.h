@@ -24,7 +24,7 @@
 using namespace std;
 
 #define MAXPACKETSIZE 4096
-#define MAXPLAYERS 4
+#define MAXPLAYERS 2
 
 class TCPServer
 {
@@ -58,6 +58,7 @@ public:
     void initServer();
     void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
     int createAceptingThread();
+    int getNumberOfConections();
 
 
 };

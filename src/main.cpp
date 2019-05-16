@@ -97,10 +97,15 @@ int run_server(int cantArg, char *dirJson, int port, Logger* logger) {
     if( tcpServer->createAceptingThread() )   //Crea el thread que escucha conexiones nuevas.
     	return -1;
 
-    while(1)								//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    while( tcpServer->getNumberOfConections() != MAXPLAYERS)	//Espera hasta que se conecten MAXPLAYERS
     	continue;
 
-    return 0;
+    cout << "Numero de jugadores alcanzado! \n";
+
+    while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    	continue;
+
+    exit(0);
 }
 
 int run_client(int cantArg, char *dirJson, string host, int port, Logger* logger) {

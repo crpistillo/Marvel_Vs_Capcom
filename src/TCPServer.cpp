@@ -67,14 +67,14 @@ void TCPServer::receive() {
 
         newSockFd->acceptConnection(this->serverSocket, &clientAddress, logger);
 
-        connection_information_t to_send; //que es esto?
+        connection_information_t to_send;
 
         socklen_t clientAddress_len = sizeof(clientAddress);
 
         this->reportClientConnected(&clientAddress, clientAddress_len, logger);
 
 
-        //numero de conexiones(modularizar o algo)
+        //Rechazar conexiones
         if(numberOfConnections == MAXPLAYERS){
 
         	to_send.nconnections = numberOfConnections;
@@ -88,20 +88,20 @@ void TCPServer::receive() {
         clientsSockets[numberOfConnections] = newSockFd ->get_fd();
         numberOfConnections++;
 
+        //Aceptar conexiones pero seguir esperando por mas
         if(numberOfConnections != MAXPLAYERS){
 
-        	//string msjNotReady = "Not ready yet. Players:" + to_string(numberOfConnections) + "/2\n";
         	to_send.status = NOT_READY;
         	to_send.nconnections = numberOfConnections;
 
 
-        	//const char* msjNR = msjNotReady.c_str();
         	for(int i = 0; i < numberOfConnections; i++){
         		send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
         	}
         }
+
+        //Maximo de clientes alcanzado, se inicia el juego.
         else{
-        	//char *msjReady = (char*) "READY\n";
         	to_send.status = READY;
         	to_send.nconnections = numberOfConnections;
         	for(int i = 0; i < numberOfConnections; i++){
@@ -111,11 +111,6 @@ void TCPServer::receive() {
         str = inet_ntoa(clientAddress.sin_addr);
         cout << str + "\n";
 
-        //ServerThread* serverThread = new ServerThread(tcpServer);
-
-        //comenzarThread (Caro,yo)
-
-        //pthread_create(&serverThread, NULL, &Task, (void *) newsockfd);
     }
 }
 
@@ -164,6 +159,10 @@ static void* wrapperReceive(void* args){
 
 int TCPServer::createAceptingThread() {
 	return ( pthread_create( &(this->acceptThread), NULL, wrapperReceive, this) );
+}
+
+int TCPServer::getNumberOfConections(){
+	return numberOfConnections;
 }
 
 
