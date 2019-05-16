@@ -150,6 +150,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 	logger->log("Creacion de personajes.", DEBUG);
 
+	// Setiar los characters con su numero de player segun server
+
 	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
 	character1->setZIndex(spidermanConfig["zindex"]);
 	character1->setFilepath(spidermanPath);
@@ -159,28 +161,19 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     character2->setZIndex(wolverineConfig["zindex"]);
     character2->setFilepath(wolverinePath);
 
-
-    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
-    character3->setZIndex(wolverineConfig["zindex"]);
-    character3->setFilepath(wolverinePath);
-
-
-    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
-    character4->setZIndex(spidermanConfig["zindex"]);
-    character4->setFilepath(spidermanPath);
-
-
     logger->log("Creacion de controles.", DEBUG);
 
-    Controls* controlPlayer2 = new WASDControls();
     Controls* controlPlayer1 = new ArrowControls();
 
-    logger->log("Creacion de Jugadores.", DEBUG);
+    logger->log("Creacion de Jugador.", DEBUG);
 
     player1 = new Player(character1, character2, controlPlayer1);
-    player2 = new Player(character3, character4, controlPlayer2);
 
-    logger->log("Definicion de Fondo.", DEBUG);	
+    logger->log("Definicion de Fondo.", DEBUG);
+
+    //tcpClient->receive()          // para armar characteres y players
+
+    //creo los players
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33
     backGround = new Layer(1600,600,6.66667,800);//6.715
@@ -196,6 +189,10 @@ void MCGame::run() {
 	FPSManager fpsManager(SCREEN_FPS);
 
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
+
+
+	//Se encarga de mandar al server los estados del personaje
+	//thread->handle events()
 
 	while(m_Running) {
 		fpsManager.start();
@@ -300,12 +297,21 @@ void MCGame::update() {
 		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
 	}
     logger->log("Actualizacion posicion MCGame.", DEBUG);
+
+    //tcpClient->recive()      // recibimos la struct de update
+    //playersUpdate(structRecived)
+
+
     player1->update(m_Renderer, distancia, player2->getCentro());
-    player2->update(m_Renderer, distancia2, player1->getCentro());
+//    player2->update(m_Renderer, distancia2, player1->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
+
+
+    // Mandamos all characters y lo hace con los que tienen playing = true;
     parallaxController->doParallax(&player1,&player2,logger);
-}
+}    Controls* controlPlayer2 = new WASDControls();
+
 
 void orderBackgroundsByZIndex(json* backgroundList){
 
