@@ -13,4 +13,10 @@ typedef struct{
 	int nconnections;
 } connection_information_t;
 
+typedef struct{
+	int cliente;
+	char* personaje1;
+	char* personaje2;
+} prueba_t;
+
 #endif /* MVC_DATA_STRUCTS */

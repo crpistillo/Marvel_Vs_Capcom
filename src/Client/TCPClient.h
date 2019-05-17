@@ -28,6 +28,8 @@ private:
     int port;
     struct sockaddr_in server;
 
+
+
 public:
     TCPClient();
     bool setup(string address, int port);
@@ -35,6 +37,8 @@ public:
     void* receive(int size = 4096);
     string read();
     void exit();
+
+    int nclient;
 
     Socket* socketClient;
 };

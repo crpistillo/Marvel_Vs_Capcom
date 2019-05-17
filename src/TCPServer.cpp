@@ -210,8 +210,14 @@ static void* ClientReceive(void* args){
 	pthread_mutex_unlock(&mtx);
 
 	int socket_to_read = (server->getClientsSockets())[socket];
+	char personaje[55];
+	recv(socket_to_read, personaje, 55, 0);
+
+
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
-	+ to_string(socket_to_read) +"\n";
+	+ to_string(socket_to_read) + " y el mensaje que recibo es: "+ personaje +"\n";
+
+
 
 	while(1)
 		continue;
