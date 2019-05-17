@@ -29,19 +29,12 @@ public:
 
 private:
 
-    void resetSpriteVariables();
-    void stand();
-    void renderDuckSprite();
+
     void moveRight(int distance, int posContrincante);
     void moveLeft(int distance, int posContrincante);
-    void jump(int *currentSprite, int lastSprite);
-    void jumpVertical();
-    void jumpRight();
-    void jumpLeft();
-    void updateStand();
+
     void walkingSpriteUpdate();
 
-    void makeIntro();
 };
 
 

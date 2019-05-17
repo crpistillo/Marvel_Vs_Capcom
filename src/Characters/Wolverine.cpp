@@ -37,6 +37,15 @@ Wolverine::Wolverine(int PosX, bool secondaryColor, int width, int height, int s
 			height,
 			anchoPantalla
 ) {
+
+    lastStandingSprite = LAST_STANDING_SPRITE;
+    lastWalkingSprite = LAST_WALKING_SPRITE;
+    lastJumpingSprite = LAST_JUMPING_SPRITE;
+    lastJumpingRightSprite = LAST_JUMPING_RIGHT_SPRITE;
+    lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
+    lastWalkbackSprite = LAST_WALKBACK_SPRITE;
+    lastIntroSprite = LAST_INTRO_SPRITE;
+
 	if(secondaryColor)
 		this->loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
 	else
@@ -122,27 +131,6 @@ void Wolverine::load(SDL_Renderer *renderer, int posContrincante) {
 
 }
 
-void Wolverine::resetSpriteVariables() {
-    mPosY = this->INITIAL_POS_Y;
-    currentJumpingSprite = 0;
-    currentWalkbackSprite = 0;
-    currentJumpingRightSprite = 0;
-    currentJumpingLeftSprite = 0;
-    currentWalkingSprite = 0;
-}
-
-void Wolverine::renderDuckSprite() {
-    currentAction = DUCK;
-}
-
-void Wolverine::stand() {
-    currentAction = STANDING;
-    this->resetSpriteVariables();
-    if (currentStandingSprite >= LAST_STANDING_SPRITE)
-        currentStandingSprite = 0;
-}
-
-
 
 void Wolverine::moveLeft(int distance, int posContrincante) {
     currentAction = MOVING;
@@ -199,61 +187,4 @@ void Wolverine::walkingSpriteUpdate() {
 
     if (currentWalkingSprite > LAST_WALKING_SPRITE)
         currentWalkingSprite = 0;
-}
-
-
-void Wolverine::jump(int *currentSprite, int lastSprite) {
-
-    *currentSprite < 10 ? (mPosY -= 3 * CHARACTER_VEL) : (mPosY += 3 * CHARACTER_VEL);
-    (*currentSprite)++;
-    if (*currentSprite > lastSprite) {
-        *currentSprite = 0;
-        mPosY = this->INITIAL_POS_Y;
-        this->currentAction = STANDING;
-        currentStandingSprite = 0;
-    }
-}
-
-void Wolverine::jumpVertical() {
-    this->currentAction = JUMPINGVERTICAL;
-    jump(&currentJumpingSprite, LAST_JUMPING_SPRITE);
-}
-
-void Wolverine::jumpRight() {
-    this->currentAction = JUMPINGRIGHT;
-    jump(&currentJumpingRightSprite, LAST_JUMPING_RIGHT_SPRITE);
-
-}
-
-
-void Wolverine::jumpLeft() {
-    this->currentAction = JUMPINGLEFT;
-    jump(&currentJumpingLeftSprite, LAST_JUMPING_LEFT_SPRITE);
-}
-
-
-
-
-void Wolverine::makeIntro(){
-
-    currentAction=MAKINGINTRO;
-
-	unsigned int currentTime = SDL_GetTicks();
-
-
-	if( currentIntroSprite < LAST_INTRO_SPRITE){
-		++currentIntroSprite;
-		lastTime = currentTime;
-	}
-
-	if(currentIntroSprite >= LAST_INTRO_SPRITE && (currentTime - lastTime) > 500){
-		currentIntroSprite = 0;
-		currentAction = STANDING;
-        currentStandingSprite = 0;
-    }
-}
-
-void Wolverine::updateStand() {
-    if (currentStandingSprite <= LAST_STANDING_SPRITE)
-        currentStandingSprite++;
 }
