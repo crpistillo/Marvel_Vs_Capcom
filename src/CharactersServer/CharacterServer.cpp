@@ -1,12 +1,10 @@
-/*
- * Character.cpp
- *
- *  Created on: 2 abr. 2019
- *      Author: sebastian
- */
+//
+// Created by IgVelasco on 5/17/19.
+//
 
-#include "Character.h"
+#include "CharacterServer.h"
 #include "../tools/logger/Logger.h"
+#include "../Layer.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -14,15 +12,15 @@ const string DEBUG = "DEBUG";
 
 
 // Protected
-Character::Character(
+CharacterServer::CharacterServer(
         int mPosX,
         int mPosY,
-		int width,
-		int sobrante,
+        int width,
+        int sobrante,
         bool isLookingLeft,
-		int widthSprite,
-		int heightSprite,
-		int anchoPantalla
+        int widthSprite,
+        int heightSprite,
+        int anchoPantalla
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -33,9 +31,7 @@ Character::Character(
     this->INITIAL_POS_Y = mPosY;
     this->mVelX = 0;
     this->mVelY = 0;
-    this->ZIndex = 0;
     this->anchoPantalla = anchoPantalla;
-    this->characterFilepath = "";
     this->currentWalkingSprite = 0;
     this->currentStandingSprite = 0;
     this->currentWalkbackSprite = 0;
@@ -46,17 +42,15 @@ Character::Character(
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
 
-    this->loader = NULL;
-    this->characterControls = NULL;
 
     this->lastTime = SDL_GetTicks();
 
 }
 
 // Public:
-void Character::update(SDL_Renderer *renderer, int distance, int posContrincante) {
+void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved) {
+    this->currentAction = actionRecieved;
 
-    InputManager *inputManager = InputManager::getInstance();
 
     bool actionStarted = false;
 
@@ -64,7 +58,7 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
         actionStarted = true;
 
     if (currentAction == MAKINGINTRO){
-    	makeIntro();
+        makeIntro();
     }
 
     if (currentAction == JUMPINGVERTICAL) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
@@ -83,113 +77,69 @@ void Character::update(SDL_Renderer *renderer, int distance, int posContrincante
     }
 
     if(actionStarted){
-        load(renderer, posContrincante);
         return;
     }
 
     //Acciones de dos teclas primero
-    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))
+    if (currentAction == JUMPINGVERTICAL)
         jumpRight(); //send jump rigth
-    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey))
+    else if (currentAction == JUMPINGLEFT)
         jumpLeft(); //send jump left
 
         //Acciones de una sola tecla
-    else if (inputManager->isKeyDown(characterControls->upKey))
+    else if (currentAction == JUMPINGVERTICAL)
         jumpVertical(); //send jump vertical
-    else if (inputManager->isKeyDown(characterControls->downKey))
+    else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
-    else if (inputManager->isKeyDown(characterControls->rightKey) && !inputManager->isKeyUp(characterControls->leftKey))
+    else if (currentAction == MOVING ) //CHANGE TO RIGHT
         moveRight(distance, posContrincante);   //send move right
-    else if (inputManager->isKeyDown(characterControls->leftKey) && !inputManager->isKeyUp(characterControls->rightKey))
+    else if (currentAction == MOVING) //CHANGE TO LEFT
         moveLeft(distance, posContrincante);    //send move left
 
 
-    if (
-            (!inputManager->isKeyUp(characterControls->upKey) &&
-             !inputManager->isKeyUp(characterControls->downKey) &&
-             !inputManager->isKeyUp(characterControls->rightKey) &&
-             !inputManager->isKeyUp(characterControls->leftKey))
-            || (inputManager->isKeyUp(characterControls->rightKey) &&
-                inputManager->isKeyUp(characterControls->leftKey))
-            )
+    if (currentAction == STANDING)
         this->stand(); //send stand
-    load(renderer, posContrincante);
-
     updateStand();
 }
 
-void Character::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-    isLookingLeft = this->getCentro() > posContrincante;
-    m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer); //esto es los valores que se cambian la resolucion
-}
 
 
-int Character::getPosX() {
+int CharacterServer::getPosX() {
     return mPosX;
 }
 
-int Character::getPosY() {
+int CharacterServer::getPosY() {
     return mPosY;
 }
 
-int Character::getWidth() {
+int CharacterServer::getWidth() {
     return width;
 }
 
-int Character::getSobrante() {
+int CharacterServer::getSobrante() {
     return sobrante;
 }
 
-int Character::getCentro() {
+int CharacterServer::getCentro() {
     int centro;
     centro = this->getPosX()+this->getSobrante()+(this->getWidth())/2;
     return centro;
 }
 
-Character::~Character() {
-    delete loader;
-    m_Texture.free();
+CharacterServer::~CharacterServer() {
 }
 
-void Character::positionUpdate(int* x) {
-	/*x tiene el centro del personaje (ubicacion exacta del personaje)
-	 * La posicion en x se calcula con eso*/
+void CharacterServer::positionUpdate(int* x) {
+    /*x tiene el centro del personaje (ubicacion exacta del personaje)
+     * La posicion en x se calcula con eso*/
     mPosX = *x - this->getSobrante() - (this->getWidth()/2);
 }
 
-void Character::setControls(Controls* controls) {
-    characterControls = controls;
-}
-
-void Character::startIntro(){
+void CharacterServer::startIntro(){
     currentAction = MAKINGINTRO;
 }
 
-Controls* Character::getControls()
-{
-	return this->characterControls;
-}
-
-bool Character::isMoving()
-{
-	return (!(this->currentAction == STANDING) || !(this->currentAction == DUCK));
-}
-
-int Character::getZIndex(){
-	return this->ZIndex;
-}
-
-void Character::setZIndex(int z){
-	this->ZIndex = z;
-}
-
-void Character::setFilepath(string fp){
-	this->characterFilepath = fp;
-}
-
-
-
-void Character::resetSpriteVariables() {
+void CharacterServer::resetSpriteVariables() {
     mPosY = this->INITIAL_POS_Y;
     currentJumpingSprite = 0;
     currentWalkingSprite = 0;
@@ -198,7 +148,7 @@ void Character::resetSpriteVariables() {
 
 
 
-void Character::stand() {
+void CharacterServer::stand() {
     currentAction = STANDING;
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
@@ -207,14 +157,45 @@ void Character::stand() {
 
 
 
-void Character::renderDuckSprite() {
+void CharacterServer::renderDuckSprite() {
     currentAction = DUCK;
+}
+
+void CharacterServer::moveLeft(int distance, int posContrincante) {
+
+    currentAction = MOVING;
+    mPosX -= CHARACTER_VEL;
+
+    /*distance va de -800 a 800 (ancho de la pantalla)*/
+    if ((mPosX - CHARACTER_VEL < -CharacterServer::getSobrante()) || (distance < (-anchoPantalla))) {
+        //Move back
+        mPosX += CHARACTER_VEL;
+    }
+
+    walkingSpriteUpdate();
+}
+
+
+void CharacterServer::moveRight(int distance, int posContrincante) {
+
+    currentAction = MOVING;
+
+    mPosX += CHARACTER_VEL;
+
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - CharacterServer::getSobrante() - CharacterServer::getWidth())) ||
+        (distance > anchoPantalla)) {
+        //Move back
+        mPosX -= CHARACTER_VEL;
+    }
+
+    walkingSpriteUpdate();
 }
 
 
 
 
-void Character::jump(int *currentSprite, int lastSprite) {
+
+void CharacterServer::jump(int *currentSprite, int lastSprite) {
 
     *currentSprite < 10 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
     (*currentSprite)++;
@@ -226,25 +207,25 @@ void Character::jump(int *currentSprite, int lastSprite) {
     }
 }
 
-void Character::jumpVertical() {
+void CharacterServer::jumpVertical() {
     this->currentAction = JUMPINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
 }
 
-void Character::jumpRight() {
+void CharacterServer::jumpRight() {
     this->currentAction = JUMPINGRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite);
 
 }
 
 
-void Character::jumpLeft() {
+void CharacterServer::jumpLeft() {
     this->currentAction = JUMPINGLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
 
 
-void Character::makeIntro() {
+void CharacterServer::makeIntro() {
     currentAction = MAKINGINTRO;
 
 
@@ -265,11 +246,12 @@ void Character::makeIntro() {
 
 }
 
-void Character::updateStand() {
+
+
+void CharacterServer::updateStand() {
     if (currentStandingSprite <= lastStandingSprite)
         currentStandingSprite++;
 }
-
 
 
 
