@@ -21,21 +21,10 @@ public:
 	//static const int SOBRANTE = 502;
 
 private:
-    void resetSpriteVariables();
-    void stand();
-    void renderDuckSprite();
+
     void moveRight(int distance, int posContrincante);
     void moveLeft(int distance, int posContrincante);
-    void jumpVertical();
-    void jumpRight();
-    void jumpLeft();
-    void updateStand();
     void walkingSpriteUpdate();
-
-    void makeIntro();
-
-
-    void jump(int *currentSprite, int lastSprite);
 };
 
 

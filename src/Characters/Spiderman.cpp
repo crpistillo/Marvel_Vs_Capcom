@@ -18,6 +18,7 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
 
+
 const unsigned int SECONDARY_RED = 255;
 const unsigned int SECONDARY_GREEN = 200;
 const unsigned int SECONDARY_BLUE = 000;
@@ -36,6 +37,13 @@ Spiderman::Spiderman(int PosX, bool secondaryColor, int width, int height, int s
         height,
         anchoPantalla
 ) {
+    lastStandingSprite = LAST_STANDING_SPRITE;
+    lastWalkingSprite = LAST_WALKING_SPRITE;
+    lastJumpingSprite = LAST_JUMPING_SPRITE;
+    lastJumpingRightSprite = LAST_JUMPING_RIGHT_SPRITE;
+    lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
+    lastIntroSprite = LAST_INTRO_SPRITE;
+
     if (secondaryColor)
         loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
     else
@@ -124,28 +132,6 @@ void Spiderman::load(SDL_Renderer *renderer, int posContrincante) {
 
 }
 
-void Spiderman::resetSpriteVariables() {
-    mPosY = this->INITIAL_POS_Y;
-    currentJumpingSprite = 0;
-    currentWalkingSprite = 0;
-}
-
-
-
-
-void Spiderman::stand() {
-    currentAction = STANDING;
-    this->resetSpriteVariables();
-    if (currentStandingSprite >= LAST_STANDING_SPRITE)
-        currentStandingSprite = 0;
-}
-
-
-
-void Spiderman::renderDuckSprite() {
-    currentAction = DUCK;
-}
-
 void Spiderman::moveLeft(int distance, int posContrincante) {
 
     currentAction = MOVING;
@@ -185,63 +171,5 @@ void Spiderman::walkingSpriteUpdate() {
         currentWalkingSprite = 0;
 }
 
-
-void Spiderman::jump(int *currentSprite, int lastSprite) {
-
-    *currentSprite < 10 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
-    (*currentSprite)++;
-    if (*currentSprite > lastSprite) {
-        *currentSprite = 0;
-        mPosY = this->INITIAL_POS_Y;
-        this->currentAction = STANDING;
-        currentStandingSprite = 0;
-    }
-}
-
-void Spiderman::jumpVertical() {
-    this->currentAction = JUMPINGVERTICAL;
-    jump(&currentJumpingSprite, LAST_JUMPING_SPRITE);
-}
-
-void Spiderman::jumpRight() {
-    this->currentAction = JUMPINGRIGHT;
-    jump(&currentJumpingRightSprite, LAST_JUMPING_RIGHT_SPRITE);
-
-}
-
-
-void Spiderman::jumpLeft() {
-    this->currentAction = JUMPINGLEFT;
-    jump(&currentJumpingLeftSprite, LAST_JUMPING_LEFT_SPRITE);
-}
-
-
-void Spiderman::makeIntro() {
-    currentAction = MAKINGINTRO;
-
-
-    unsigned int currentTime = SDL_GetTicks();
-
-
-    if (currentIntroSprite < LAST_INTRO_SPRITE) {
-        ++currentIntroSprite;
-        lastTime = currentTime;
-    }
-
-
-    if (currentIntroSprite >= LAST_INTRO_SPRITE && (currentTime - lastTime) > 500) {
-        currentIntroSprite = 0;
-        currentAction = STANDING;
-        currentStandingSprite = 0;
-    }
-
-}
-
-
-
-void Spiderman::updateStand() {
-    if (currentStandingSprite <= LAST_STANDING_SPRITE)
-        currentStandingSprite++;
-}
 
 

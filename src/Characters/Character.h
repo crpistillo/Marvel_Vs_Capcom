@@ -93,31 +93,41 @@ protected:
     int currentWalkbackSprite;
     int currentIntroSprite;
 
+    int lastStandingSprite;
+    int lastWalkingSprite;
+    int lastJumpingSprite;
+    int lastJumpingLeftSprite;
+    int lastJumpingRightSprite;
+    int lastWalkbackSprite;
+    int lastIntroSprite;
+
     Controls *characterControls;
 
     unsigned int lastTime;
 
 private:
 
-    virtual void resetSpriteVariables() = 0;
+    virtual void resetSpriteVariables();
 
-    virtual void stand() = 0;
+    virtual void stand();
 
-    virtual void renderDuckSprite() = 0;
+    virtual void renderDuckSprite();
 
     virtual void moveRight( int distance, int posContrincante) = 0;
 
     virtual void moveLeft( int distance, int posContrincante) = 0;
 
-    virtual void jumpVertical() = 0;
+    virtual void jumpVertical();
 
-    virtual void jumpRight() = 0;
+    virtual void jumpRight();
 
-    virtual void jumpLeft() = 0;
+    virtual void jumpLeft();
 
-    virtual void updateStand() = 0;
+    virtual void updateStand();
 
-    virtual void makeIntro() = 0;
+    virtual void makeIntro();
+
+    void jump(int *currentSprite, int lastSprite);
 };
 
 #endif /* CHARACTERS_CHARACTER_H_ */
