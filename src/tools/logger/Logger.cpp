@@ -38,12 +38,13 @@ Logger* Logger::getInstance() {
     return instance;
 }
 
-void Logger::startSession() {
+void Logger::startSession(string mode) {
 	ofs.open(this->filePath.c_str(), ofstream::app);
 	ofs << separator;
 	ofs << "Game started at " + getDate() + "\n";
 	ofs << "FASE: " + FASE + "\n";
 	ofs << "VERSION: " + VERSION + "\n";
+	ofs << "MODE: " + mode + "\n";
 	ofs << separator;
 }
 

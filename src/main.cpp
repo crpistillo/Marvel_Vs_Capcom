@@ -7,6 +7,9 @@
 #include "TCPServer.h"
 #include "tools/logger/Logger.h"
 #include "MCGame.h"
+#include "ServerThread.h"
+#include "data_structs.h"
+#include <sys/socket.h>
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -25,22 +28,22 @@ json parseConfigFile(string logPath) {
 
 Logger *Logger::instance = 0;
 
-TCPServer tcpServer;
-TCPClient tcpClient;
+TCPServer* tcpServer;
+TCPClient* tcpClient;
 MCGame* mcGame;
 
 
-int run_server(int port);
+int run_server(int cantArg, char *dirJson, int port);
 int run_client(int cantArg, char *dirJson, string host, int port);
-void *loop(void *m);
 
 
 int main(int argc, char *argv[]) {
+
     if (strncmp(argv[2], "client", 6) == 0) {
         run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(atoi(argv[3]));
+           return run_server(argc, argv[1], atoi(argv[3]));
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -59,22 +62,72 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int port) {
-    pthread_t msg;
-    if(!tcpServer.setup(port)){
+int run_server(int cantArg, char *dirJson, int port) {
+
+	Logger* logger = Logger::getInstance();
+	logger->startSession("SERVER");
+	tcpServer = new TCPServer();
+
+	logger->log("Logger iniciado.", INFO);
+	json config;
+
+	if(cantArg != 4){
+		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 4.", ERROR);
+		logger->finishSession();
+		return -1;
+	}
+
+	FILE *configFile;
+    if( !(configFile = fopen( dirJson,  "r")) ){ //VVerifico que el archivo que me pasan exista.
+    	logger->log("Archivo de configuracion no existente, cargando el archivo de configuracion por defecto.", INFO);
+	    config = parseConfigFile("config/config_default.json");
+    }
+    else{
+    	fclose(configFile);
+        string configPath = (string) dirJson;
+        logger->log("Procediento a utilizar archivo de configuracion especificado: " + configPath , INFO);
+	    config = parseConfigFile(dirJson);
+    }
+
+    ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
+
+    if(!tcpServer->setup(port, logger)){
         cout << "Error al crear el server" << endl;
         return -1;
     }
-    if (pthread_create(&msg, NULL, loop, NULL) == 0) {
-        tcpServer.receive();
-    }
-    return 0;
+
+    /*if (serverThread->create()) {
+        tcpServer->receive();
+    }*/
+    //tcpServer->receive(logger);
+
+    if( tcpServer->createAceptingThread() )   //Crea el thread que escucha conexiones nuevas.
+    	return -1;
+
+    while( tcpServer->getNumberOfConections() != MAXPLAYERS)	//Espera hasta que se conecten MAXPLAYERS
+    	continue;
+
+    cout << "Numero de jugadores alcanzado! \n";
+
+    tcpServer->createReceivingThreadPerClient();
+    tcpServer->createSendingThreadPerClient();
+
+    logger->finishSession();
+
+    while(1)							//Halt. Aca la aplicacion deberia seguir haciendo otra cosa.
+    	continue;
+
+    exit(0);
 }
 
 int run_client(int cantArg, char *dirJson, string host, int port) {
 
-    Logger* logger = Logger::getInstance();
-    logger->startSession();
+	Logger* logger = Logger::getInstance();
+	logger->startSession("CLIENT");
+
+	tcpClient = new TCPClient();
+
+	//LOGGER//////////
     logger->log("Logger iniciado.", DEBUG);
     json config;
 
@@ -91,19 +144,31 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     int alto = config["window"]["height"];
     logger->log("Configuracion Cargada - Inicio de Ciclo.", INFO);
 
-    if(!tcpClient.setup(host, port)) {                  //MCGame tendria que tener el tcpClient
+    /////////////////
+
+    if(!tcpClient->setup(host, port)) {                  //MCGame tendria que tener el tcpClient
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-    tcpClient.Send("Connection succesfull");
-    /*while (1){
-        string str = tcpClient.receive(17);
-        cout << str <<  endl;
-        if(str == "Connection ready")
-            break;
-    }*/
+//    tcpClient->Send("Connection succesfull");
 
-    mcGame = new MCGame(config, ancho, alto, &tcpClient);
+    void* msj;
+    while(1){
+    	msj = tcpClient->receive(sizeof(connection_information_t));
+    	connection_information_t* buf = (connection_information_t*) msj;
+    	if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
+    		cout << "Connection not allowed. No more players. \n";
+    		return 0;
+    	}
+
+    	if(buf->status == READY)
+    		break;
+    	else{
+    		cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
+    	}
+    }
+
+    mcGame = new MCGame(config, ancho, alto, tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->run();
@@ -112,20 +177,4 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     return 0;
 }
 
-
-
-void *loop(void *m) {
-    pthread_detach(pthread_self());
-    while (1) {
-        string str = tcpServer.getMessage();
-        if (!str.empty()) {
-            cout << "Message:" << str << endl;
-            tcpServer.Send("Connection ready");
-            if(str == "salir")
-                break;
-            tcpServer.clean();
-        }
-    }
-    tcpServer.detach();
-}
 

@@ -16,30 +16,57 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include "Socket.h"
+#include "tools/logger/Logger.h"
+#include "data_structs.h"
+#include <pthread.h>
 
 using namespace std;
 
 #define MAXPACKETSIZE 4096
+#define MAXPLAYERS 2
 
 class TCPServer
 {
+private:
+    static void * Task(void * argv);
+    int numberOfConnections;
+    int port;
+    int clientsSockets[MAXPLAYERS];
+    Logger* logger;
+
+    pthread_t acceptThread;  //Identificador del thread que acepta conexiones
+
+    pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
+
+
 public:
-    int sockfd, newsockfd, n, pid;
-    struct sockaddr_in serverAddress;
-    struct sockaddr_in clientAddress;
-    pthread_t serverThread;
+    Socket* serverSocket;
+    Socket* newSockFd;
+    int n, pid;
+    //struct sockaddr_in serverAddress;
+    //struct sockaddr_in clientAddress;//sockadrr_in es para protocolo IPv4
+    //pthread_t serverThread;
     char msg[ MAXPACKETSIZE ];
     static string Message;
 
-    bool setup(int port);
-    string receive();
+    TCPServer();
+    bool setup(int port, Logger* logger);
+    void receive();
+    void clientReceive(int socket);
     string getMessage();
     void Send(string msg);
     void detach();
     void clean();
+    void initServer();
+    void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
+    int createAceptingThread();
+    int getNumberOfConections();
+    int createReceivingThreadPerClient();
+    int createSendingThreadPerClient();
+    int* getClientsSockets();
 
-private:
-    static void * Task(void * argv);
+
 };
 
 #endif

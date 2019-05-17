@@ -16,6 +16,7 @@
 #include <netdb.h>
 #include <netdb.h>
 #include <vector>
+#include "../Socket.h"
 
 using namespace std;
 
@@ -30,10 +31,12 @@ private:
 public:
     TCPClient();
     bool setup(string address, int port);
-    bool Send(string data);
-    string receive(int size = 4096);
+    bool Send(void* data, size_t size_data);
+    void* receive(int size = 4096);
     string read();
     void exit();
+
+    Socket* socketClient;
 };
 
 #endif

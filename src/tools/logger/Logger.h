@@ -28,7 +28,7 @@ private:
 	bool hasToLog(string requiredLogLevel);
 public:
 	void setLogLevel(string logLevel);
-	void startSession();
+	void startSession(string mode);
 	void log(string message, string requiredLogLevel);
 	void finishSession();
 	static Logger* getInstance();
