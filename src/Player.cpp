@@ -30,7 +30,7 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     InputManager* inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
     if(inputManager->isKeyDown(changeKey) && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
-        changeCharacter();
+        changeCharacter();  //send change character
         setCharacterToChanging();
         isChanging = true;
     }
