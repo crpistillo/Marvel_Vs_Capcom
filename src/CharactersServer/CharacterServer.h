@@ -80,6 +80,13 @@ protected:
     int currentWalkbackSprite;
     int currentIntroSprite;
 
+    int lastStandingSprite;
+    int lastWalkingSprite;
+    int lastJumpingSprite;
+    int lastJumpingLeftSprite;
+    int lastJumpingRightSprite;
+    int lastWalkbackSprite;
+    int lastIntroSprite;
 
     unsigned int lastTime;
 
@@ -87,23 +94,27 @@ private:
 
     virtual void resetSpriteVariables() = 0;
 
-    virtual void stand() = 0;
+    virtual void stand();
 
-    virtual void renderDuckSprite() = 0;
+    virtual void renderDuckSprite();
 
     virtual void moveRight( int distance, int posContrincante) = 0;
 
     virtual void moveLeft( int distance, int posContrincante) = 0;
 
-    virtual void jumpVertical() = 0;
+    virtual void jumpVertical();
 
-    virtual void jumpRight() = 0;
+    virtual void jump(int *currentSprite, int lastSprite);
 
-    virtual void jumpLeft() = 0;
+    virtual void jumpRight();
 
-    virtual void updateStand() = 0;
+    virtual void jumpLeft();
 
-    virtual void makeIntro() = 0;
+    virtual void updateStand();
+
+    virtual void makeIntro();
+
+    virtual void walkingSpriteUpdate() = 0;
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H

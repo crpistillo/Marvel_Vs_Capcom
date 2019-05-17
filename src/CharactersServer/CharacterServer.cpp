@@ -4,6 +4,7 @@
 
 #include "CharacterServer.h"
 #include "../tools/logger/Logger.h"
+#include "../Layer.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -136,6 +137,120 @@ void CharacterServer::positionUpdate(int* x) {
 
 void CharacterServer::startIntro(){
     currentAction = MAKINGINTRO;
+}
+
+void CharacterServer::resetSpriteVariables() {
+    mPosY = this->INITIAL_POS_Y;
+    currentJumpingSprite = 0;
+    currentWalkingSprite = 0;
+}
+
+
+
+
+void CharacterServer::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite >= lastStandingSprite)
+        currentStandingSprite = 0;
+}
+
+
+
+void CharacterServer::renderDuckSprite() {
+    currentAction = DUCK;
+}
+
+void CharacterServer::moveLeft(int distance, int posContrincante) {
+
+    currentAction = MOVING;
+    mPosX -= CHARACTER_VEL;
+
+    /*distance va de -800 a 800 (ancho de la pantalla)*/
+    if ((mPosX - CHARACTER_VEL < -CharacterServer::getSobrante()) || (distance < (-anchoPantalla))) {
+        //Move back
+        mPosX += CHARACTER_VEL;
+    }
+
+    walkingSpriteUpdate();
+}
+
+
+void CharacterServer::moveRight(int distance, int posContrincante) {
+
+    currentAction = MOVING;
+
+    mPosX += CHARACTER_VEL;
+
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - CharacterServer::getSobrante() - CharacterServer::getWidth())) ||
+        (distance > anchoPantalla)) {
+        //Move back
+        mPosX -= CHARACTER_VEL;
+    }
+
+    walkingSpriteUpdate();
+}
+
+
+
+
+
+void CharacterServer::jump(int *currentSprite, int lastSprite) {
+
+    *currentSprite < 10 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
+    (*currentSprite)++;
+    if (*currentSprite > lastSprite) {
+        *currentSprite = 0;
+        mPosY = this->INITIAL_POS_Y;
+        this->currentAction = STANDING;
+        currentStandingSprite = 0;
+    }
+}
+
+void CharacterServer::jumpVertical() {
+    this->currentAction = JUMPINGVERTICAL;
+    jump(&currentJumpingSprite, lastJumpingSprite);
+}
+
+void CharacterServer::jumpRight() {
+    this->currentAction = JUMPINGRIGHT;
+    jump(&currentJumpingRightSprite, lastJumpingRightSprite);
+
+}
+
+
+void CharacterServer::jumpLeft() {
+    this->currentAction = JUMPINGLEFT;
+    jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
+}
+
+
+void CharacterServer::makeIntro() {
+    currentAction = MAKINGINTRO;
+
+
+    unsigned int currentTime = SDL_GetTicks();
+
+
+    if (currentIntroSprite < lastIntroSprite) {
+        ++currentIntroSprite;
+        lastTime = currentTime;
+    }
+
+
+    if (currentIntroSprite >= lastIntroSprite && (currentTime - lastTime) > 500) {
+        currentIntroSprite = 0;
+        currentAction = STANDING;
+        currentStandingSprite = 0;
+    }
+
+}
+
+
+
+void CharacterServer::updateStand() {
+    if (currentStandingSprite <= lastStandingSprite)
+        currentStandingSprite++;
 }
 
 
