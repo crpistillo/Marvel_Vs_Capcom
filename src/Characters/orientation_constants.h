@@ -18,4 +18,10 @@
 #define R 0
 #define L 1
 
+
+typedef enum actions {
+    STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
+    MOVING = M, WALKBACK = WB
+} actions_t;
+
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H

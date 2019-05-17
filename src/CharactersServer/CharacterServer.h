@@ -9,16 +9,15 @@
 #include "../Texture/Texture.h"
 #include "../InputTable.h"
 #include "../InputManager.h"
-#include "../tools/ImageLoader/ImageLoader.h"
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
 #include "../Characters/orientation_constants.h"
-
+/*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
     MOVING = M, WALKBACK = WB
 } actions_t;
-
+*/
 using namespace std;
 
 class CharacterServer {
@@ -90,6 +89,8 @@ protected:
 
     unsigned int lastTime;
 
+    virtual void walkingSpriteUpdate();
+
 private:
 
     virtual void resetSpriteVariables() = 0;
@@ -114,7 +115,6 @@ private:
 
     virtual void makeIntro();
 
-    virtual void walkingSpriteUpdate() = 0;
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H

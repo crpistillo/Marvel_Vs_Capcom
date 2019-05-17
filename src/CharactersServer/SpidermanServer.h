@@ -14,8 +14,6 @@ public:
 private:
     void moveRight(int distance, int posContrincante);
     void moveLeft(int distance, int posContrincante);
-
-    void walkingSpriteUpdate();
 };
 
 

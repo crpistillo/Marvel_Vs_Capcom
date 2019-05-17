@@ -16,10 +16,6 @@
 #include "../tools/logger/Logger.h"
 #include "../Characters/orientation_constants.h"
 
-typedef enum actions {
-    STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
-    MOVING = M, WALKBACK = WB
-} actions_t;
 
 using namespace std;
 

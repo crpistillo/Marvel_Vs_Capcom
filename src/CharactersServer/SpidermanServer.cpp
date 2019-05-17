@@ -68,10 +68,3 @@ void SpidermanServer::moveRight(int distance, int posContrincante) {
 
     walkingSpriteUpdate();
 }
-
-void SpidermanServer::walkingSpriteUpdate() {
-    ++currentWalkingSprite;
-
-    if (currentWalkingSprite > lastWalkingSprite)
-        currentWalkingSprite = 0;
-}

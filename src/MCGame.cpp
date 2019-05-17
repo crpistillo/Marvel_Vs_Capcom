@@ -166,12 +166,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     logger->log("Definicion de Fondo.", DEBUG);
 
-    characterBuilder_t characterBuilder;
+/*    characterBuilder_t characterBuilder;
 
     characterBuilder = tcpClient->receive(sizeof(characterBuilder_t));
 
     character_create(characterBuilder);
-
+*/
 
 
     middleGround = new Layer(2400, 600, 3.33, 400);//3.33

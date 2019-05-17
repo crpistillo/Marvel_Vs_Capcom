@@ -54,10 +54,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     bool actionStarted = false;
 
-    if(this->currentAction == MI || this->currentAction == JV || this->currentAction == JR || this ->currentAction == JL)
+    if (this->currentAction == MI || this->currentAction == JV || this->currentAction == JR ||
+        this->currentAction == JL)
         actionStarted = true;
 
-    if (currentAction == MAKINGINTRO){
+    if (currentAction == MAKINGINTRO) {
         makeIntro();
     }
 
@@ -72,11 +73,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     }
 
     if (currentAction == JUMPINGLEFT) {
-        moveLeft( distance, posContrincante);
+        moveLeft(distance, posContrincante);
         jumpLeft();
     }
 
-    if(actionStarted){
+    if (actionStarted) {
         return;
     }
 
@@ -91,7 +92,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         jumpVertical(); //send jump vertical
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
-    else if (currentAction == MOVING ) //CHANGE TO RIGHT
+    else if (currentAction == MOVING) //CHANGE TO RIGHT
         moveRight(distance, posContrincante);   //send move right
     else if (currentAction == MOVING) //CHANGE TO LEFT
         moveLeft(distance, posContrincante);    //send move left
@@ -101,7 +102,6 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         this->stand(); //send stand
     updateStand();
 }
-
 
 
 int CharacterServer::getPosX() {
@@ -122,20 +122,20 @@ int CharacterServer::getSobrante() {
 
 int CharacterServer::getCentro() {
     int centro;
-    centro = this->getPosX()+this->getSobrante()+(this->getWidth())/2;
+    centro = this->getPosX() + this->getSobrante() + (this->getWidth()) / 2;
     return centro;
 }
 
 CharacterServer::~CharacterServer() {
 }
 
-void CharacterServer::positionUpdate(int* x) {
+void CharacterServer::positionUpdate(int *x) {
     /*x tiene el centro del personaje (ubicacion exacta del personaje)
      * La posicion en x se calcula con eso*/
-    mPosX = *x - this->getSobrante() - (this->getWidth()/2);
+    mPosX = *x - this->getSobrante() - (this->getWidth() / 2);
 }
 
-void CharacterServer::startIntro(){
+void CharacterServer::startIntro() {
     currentAction = MAKINGINTRO;
 }
 
@@ -146,15 +146,12 @@ void CharacterServer::resetSpriteVariables() {
 }
 
 
-
-
 void CharacterServer::stand() {
     currentAction = STANDING;
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
 }
-
 
 
 void CharacterServer::renderDuckSprite() {
@@ -190,9 +187,6 @@ void CharacterServer::moveRight(int distance, int posContrincante) {
 
     walkingSpriteUpdate();
 }
-
-
-
 
 
 void CharacterServer::jump(int *currentSprite, int lastSprite) {
@@ -247,10 +241,17 @@ void CharacterServer::makeIntro() {
 }
 
 
-
 void CharacterServer::updateStand() {
     if (currentStandingSprite <= lastStandingSprite)
         currentStandingSprite++;
+}
+
+void CharacterServer::walkingSpriteUpdate() {
+    ++currentWalkingSprite;
+
+    if (currentWalkingSprite > lastWalkingSprite)
+        currentWalkingSprite = 0;
+
 }
 
 
