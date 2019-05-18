@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "Characters/Spiderman.h"
-#include "Characters/Wolverine.h"
+#include "CharactersClient/SpidermanClient.h"
+#include "CharactersClient/WolverineClient.h"
 #include "tools/FPSManager/FPSManager.h"
 #include "Texture/Texture.h"
 #include "tools/logger/Logger.h"

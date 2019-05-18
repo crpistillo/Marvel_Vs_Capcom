@@ -14,7 +14,7 @@
 #include "../tools/ImageLoader/ImageLoader.h"
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
-#include "../Characters/orientation_constants.h"
+#include "../orientation_constants.h"
 
 
 using namespace std;

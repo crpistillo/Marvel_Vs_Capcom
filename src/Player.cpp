@@ -8,7 +8,7 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-Player::Player(Character *first, Character *second, Controls* controls) {
+Player::Player(CharacterClient *first, CharacterClient *second, Controls *controls) {
 	Logger* logger = Logger::getInstance();
 	logger->log("Inicializacion de personajes para jugador.", DEBUG);
     this->controls = controls;
@@ -36,7 +36,7 @@ void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
     }
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
-    currentCharacter->update(renderer, distance, posContrincante);
+   // currentCharacter->load(renderer, distance, posContrincante);
 }
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
@@ -92,7 +92,7 @@ int Player::getCentro() {
     return currentCharacter->getCentro();
 }
 
-Character* Player::getCurrentCharacter()
+CharacterClient* Player::getCurrentCharacter()
 {
 	return this->currentCharacter;
 }

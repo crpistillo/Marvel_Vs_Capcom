@@ -161,7 +161,7 @@ void CharacterServer::renderDuckSprite() {
 
 void CharacterServer::moveLeft(int distance, int posContrincante) {
 
-    currentAction = MOVING;
+    currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
@@ -176,7 +176,7 @@ void CharacterServer::moveLeft(int distance, int posContrincante) {
 
 void CharacterServer::moveRight(int distance, int posContrincante) {
 
-    currentAction = MOVING;
+    currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
 

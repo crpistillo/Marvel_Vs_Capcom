@@ -6,7 +6,6 @@
 #include "ServerThread.h"
 #include "netdb.h"
 #include "CharactersServer/SpidermanServer.h"
-#include "Characters/Wolverine.h"
 #include "CharactersServer/WolverineServer.h"
 #include <string>
 #include <pthread.h>
