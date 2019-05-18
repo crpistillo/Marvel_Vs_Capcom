@@ -2,6 +2,8 @@
 #define MVC_DATA_STRUCTS
 
 
+#include "Characters/orientation_constants.h"
+
 typedef enum connection_status{
 	NOT_READY = 0,
 	READY = 1,
@@ -18,5 +20,12 @@ typedef struct{
 	char* personaje1;
 	char* personaje2;
 } prueba_t;
+
+typedef struct{
+    int cliente;
+    char* personaje1;
+    int sprite;
+    actions_t action;
+} character_builder_t;
 
 #endif /* MVC_DATA_STRUCTS */
