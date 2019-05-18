@@ -18,7 +18,6 @@ RM := rm -rf
 -include src/Client/subdir.mk
 -include src/CharactersServer/subdir.mk
 -include src/CharactersClient/subdir.mk
--include src/Characters/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

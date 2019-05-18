@@ -334,6 +334,13 @@ void TCPServer::runServer() {
     clientSocket1->sendData(&builder1, sizeof(character_builder_t));
 
 
+    builder2.cliente = 1;
+    builder2.personaje = WOLVERINE;
+    builder2.sprite = 0;
+    builder2.action = STANDING;
+    clientSocket2->sendData(&builder2, sizeof(character_builder_t));
+
+
     //  createReceivingThreadPerClient();
     //createSendingThreadPerClient();
 

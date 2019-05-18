@@ -170,10 +170,14 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     character_builder_t* builder = (character_builder_t*) buf1;
     string character;
 
+    cout << "Builder recibido" << endl;
+
     if(builder->personaje == SPIDERMAN)
     	character = "Spiderman";
     else
     	character= "Wolverine";
+
+    cout << "Recibi el personaje: " + character << endl;
 
     string action;
     if(builder->action == 0)
@@ -181,8 +185,10 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     else
     	action = "NO RECOGNIZED";
 
-    cout << "Recibi del servidor que soy el cliente: " + to_string(builder->cliente) + ". Tengo que renderizar el personaje: "
-    		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;
+    cout << "Recibi la accion: " + action << endl;
+
+    //cout << "Recibi del servidor que soy el cliente: " + to_string(builder->cliente) + ". Tengo que renderizar el personaje: "
+    //		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;
 
 
     logger->log("Creacion de controles.", DEBUG);
