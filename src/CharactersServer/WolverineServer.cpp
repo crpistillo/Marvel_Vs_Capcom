@@ -40,7 +40,7 @@ WolverineServer::WolverineServer(int PosX, bool secondaryColor, int width, int h
 
 
 void WolverineServer::moveLeft(int distance, int posContrincante) {
-    currentAction = MOVING;
+    currentAction = MOVINGLEFT;
 
     //Mover
     mPosX -= CHARACTER_VEL;
@@ -64,7 +64,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante) {
-    currentAction = MOVING;
+    currentAction = MOVINGRIGHT;
 
     //Mover
     mPosX += CHARACTER_VEL;

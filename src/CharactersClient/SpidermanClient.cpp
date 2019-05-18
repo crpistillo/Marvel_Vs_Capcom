@@ -99,7 +99,8 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
-        case MOVING:
+        case MOVINGLEFT:
+        case MOVINGRIGHT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
                                                currentWalkingSprite, FILE_EXTENSION,

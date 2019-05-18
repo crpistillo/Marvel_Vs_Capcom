@@ -93,9 +93,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         jumpVertical(); //send jump vertical
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
-    else if (currentAction == MOVING) //CHANGE TO RIGHT
+    else if (currentAction == MOVINGRIGHT) //CHANGE TO RIGHT
         moveRight(distance, posContrincante);   //send move right
-    else if (currentAction == MOVING) //CHANGE TO LEFT
+    else if (currentAction == MOVINGLEFT) //CHANGE TO LEFT
         moveLeft(distance, posContrincante);    //send move left
 
 
