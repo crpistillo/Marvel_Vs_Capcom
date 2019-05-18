@@ -6,6 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
+#include "data_structs.h"
 
 using namespace std;
 
@@ -162,6 +163,26 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     tcpClient->Send((void*) character2, sizeof(character2) + 1);*/
     tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);
+
+    char buf1[sizeof(character_builder_t)];
+    tcpClient->socketClient->reciveData(&buf1, sizeof(character_builder_t));
+
+    character_builder_t* builder = (character_builder_t*) buf1;
+    string character;
+
+    if(builder->personaje == SPIDERMAN)
+    	character = "Spiderman";
+    else
+    	character= "Wolverine";
+
+    string action;
+    if(builder->action == 0)
+    	action = "STANDING";
+    else
+    	action = "NO RECOGNIZED";
+
+    cout << "Recibi del servidor que soy el cliente: " + to_string(builder->cliente) + ". Tengo que renderizar el personaje: "
+    		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;
 
 
     logger->log("Creacion de controles.", DEBUG);

@@ -323,7 +323,16 @@ void TCPServer::runServer() {
     team1 = new Team(character1, character2, 2);
     team2 = new Team(character3, character4, 2);
 */
+    character_builder_t builder1;
+    character_builder_t builder2;
+    character_builder_t builder3;
+    character_builder_t builder4;
 
+    builder1.cliente = 1;
+    builder1.personaje = SPIDERMAN;
+    builder1.sprite = 0;
+    builder1.action = STANDING;
+    clientSocket1->sendData(&builder1, sizeof(character_builder_t));
 
 
     //  createReceivingThreadPerClient();

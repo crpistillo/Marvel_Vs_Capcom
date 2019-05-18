@@ -21,11 +21,17 @@ typedef struct{
 	char* personaje2;
 } prueba_t;
 
+typedef enum character_number{
+	SPIDERMAN = 0,
+	WOLVERINE = 1
+} character_number_t;
+
 typedef struct{
     int cliente;
-    char* personaje1;
+    character_number_t personaje;
     int sprite;
     actions_t action;
 } character_builder_t;
+
 
 #endif /* MVC_DATA_STRUCTS */

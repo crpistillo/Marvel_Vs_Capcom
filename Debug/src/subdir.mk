@@ -13,6 +13,7 @@ CPP_SRCS += \
 ../src/ServerThread.cpp \
 ../src/Socket.cpp \
 ../src/TCPServer.cpp \
+../src/Team.cpp \
 ../src/main.cpp 
 
 OBJS += \
@@ -25,6 +26,7 @@ OBJS += \
 ./src/ServerThread.o \
 ./src/Socket.o \
 ./src/TCPServer.o \
+./src/Team.o \
 ./src/main.o 
 
 CPP_DEPS += \
@@ -37,6 +39,7 @@ CPP_DEPS += \
 ./src/ServerThread.d \
 ./src/Socket.d \
 ./src/TCPServer.d \
+./src/Team.d \
 ./src/main.d 
 
 
