@@ -22,6 +22,8 @@ TCPServer::TCPServer()
 	this->port = 0;
 	this->serverSocket = new Socket();
 	this->newSockFd = new Socket();
+	this->team1 = NULL;
+	this->team2 = NULL;
 }
 
 typedef struct{
@@ -213,11 +215,8 @@ static void* ClientReceive(void* args){
 	char personaje[55];
 	recv(socket_to_read, personaje, 55, 0);
 
-
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
 	+ to_string(socket_to_read) + " y el mensaje que recibo es: "+ personaje +"\n";
-
-
 
 	while(1)
 		continue;
@@ -299,6 +298,23 @@ int TCPServer::createSendingThreadPerClient(){
 	}
 
 }
+
+void TCPServer::asignTeam(int numeroDeSocket, TCPClient* cliente, string personaje)
+{
+	//No se como obtener el cliente a partir del numero de socket,
+	//asi que pase el cliente como parametro (cambiar!!!)
+	if (!team1->isFull())
+	{
+		team1->addPlayer(personaje,cliente);
+	}
+	else team2->addPlayer(personaje,cliente); //no considere el caso en que se ponen mas de 4
+												//jugadores porque creo que ya se considero antes
+
+}
+
+
+
+
 
 
 

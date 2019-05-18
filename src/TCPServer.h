@@ -20,6 +20,7 @@
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
 #include <pthread.h>
+#include "Team.h"
 
 using namespace std;
 
@@ -29,6 +30,8 @@ using namespace std;
 class TCPServer
 {
 private:
+	Team* team1;
+	Team* team2;
     static void * Task(void * argv);
     int numberOfConnections;
     int port;
@@ -65,6 +68,7 @@ public:
     int createReceivingThreadPerClient();
     int createSendingThreadPerClient();
     int* getClientsSockets();
+    void asignTeam(int numeroDeSocket, TCPClient* cliente, string personaje);
 
 
 };

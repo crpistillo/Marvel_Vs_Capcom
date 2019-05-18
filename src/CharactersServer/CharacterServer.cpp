@@ -41,6 +41,7 @@ CharacterServer::CharacterServer(
     this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
+    this->currentClient = NULL;
 
 
     this->lastTime = SDL_GetTicks();
@@ -252,6 +253,16 @@ void CharacterServer::walkingSpriteUpdate() {
     if (currentWalkingSprite > lastWalkingSprite)
         currentWalkingSprite = 0;
 
+}
+
+void CharacterServer::set_Client(TCPClient* client)
+{
+	this->currentClient = client;
+}
+
+TCPClient* CharacterServer::get_Client()
+{
+	return this->currentClient;
 }
 
 

@@ -89,7 +89,7 @@ int run_server(int cantArg, char *dirJson, int port) {
 	    config = parseConfigFile(dirJson);
     }
 
-    ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
+    //ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
 
     if(!tcpServer->setup(port, logger)){
         cout << "Error al crear el server" << endl;

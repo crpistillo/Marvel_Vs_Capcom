@@ -10,6 +10,7 @@
 #include "../InputTable.h"
 #include "../InputManager.h"
 #include "../Controls/Controls.h"
+#include "../Client/TCPClient.h"
 #include "../tools/logger/Logger.h"
 #include "../Characters/orientation_constants.h"
 /*
@@ -41,6 +42,11 @@ public:
     void positionUpdate(int *x);
     void startIntro();
 
+
+    void set_Client(TCPClient* client);
+
+    TCPClient* get_Client();
+
     actions_t currentAction;
 
 protected:
@@ -54,6 +60,9 @@ protected:
             int heightSprite,
             int anchoPantalla
     );
+
+    TCPClient* currentClient; //indica el cliente al que pertence este personaje
+
     bool isLookingLeft;
     //The X and Y offsets of the character
     int mPosX, mPosY;
@@ -114,6 +123,8 @@ private:
     virtual void updateStand();
 
     virtual void makeIntro();
+
+
 
 };
 
