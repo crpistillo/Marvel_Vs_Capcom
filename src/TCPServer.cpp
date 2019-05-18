@@ -10,20 +10,9 @@
 #include "CharactersServer/WolverineServer.h"
 #include <string>
 #include <pthread.h>
+#include "Constants.h"
 
-
-int widthSpiderman;
-int heightSpiderman;
-int widthWolverine;
-int heightWolverine;
-int spidermanSobrante;
-int spidermanAncho;
-int wolverineSobrante;
-int wolverineAncho;
-
-int INITIAL_POS_X_PLAYER_ONE;
-int INITIAL_POS_X_PLAYER_TWO;
-
+Constants constants;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
@@ -394,10 +383,10 @@ void TCPServer::configJson(json config)
 	   logger->log(msj, ERROR);
     }
 
-    widthSpiderman = spidermanConfig["width"];
-    heightSpiderman = spidermanConfig["height"];
-    widthWolverine = wolverineConfig["width"];
-    heightWolverine = wolverineConfig["height"];
+    constants.widthSpiderman = spidermanConfig["width"];
+    constants.heightSpiderman = spidermanConfig["height"];
+    constants.widthWolverine = wolverineConfig["width"];
+    constants.heightWolverine = wolverineConfig["height"];
 
     string spidermanPath = spidermanConfig["filepath"];
     if (spidermanPath != "images/spiderman/spiderman_")
@@ -406,13 +395,13 @@ void TCPServer::configJson(json config)
     if (wolverinePath != "images/wolverine/wolverine_")
         logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
-    spidermanSobrante = widthSpiderman * 242 / 640;
-    spidermanAncho = widthSpiderman * 110 / 640;
-    wolverineSobrante = widthWolverine * 278 / 640;
-    wolverineAncho = widthWolverine * 87 / 640;
+    constants.spidermanSobrante = constants.widthSpiderman * 242 / 640;
+    constants.spidermanAncho = constants.widthSpiderman * 110 / 640;
+    constants.wolverineSobrante = constants.widthWolverine * 278 / 640;
+    constants.wolverineAncho = constants.widthWolverine * 87 / 640;
 
-    INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - spidermanSobrante) - (spidermanAncho / 2) - 200;
-    INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - wolverineSobrante) - (wolverineAncho / 2) + 200;
+    constants.INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - constants.spidermanSobrante) - (constants.spidermanAncho / 2) - 200;
+    constants.INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - constants.wolverineSobrante) - (constants.wolverineAncho / 2) + 200;
 
     logger->log("Creacion de personajes.", DEBUG);
 
