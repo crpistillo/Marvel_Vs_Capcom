@@ -6,7 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
-#include "data_structs.h"
+
 
 using namespace std;
 
@@ -93,12 +93,13 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
+MCGame::MCGame(json config, int ancho, int alto, TCPClient* client, CharacterClient* characterClient) {
 
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
     this->SCREEN_HEIGHT = alto;
     this->tcpClient = client;
+    this->characterClient = characterClient;
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
@@ -153,11 +154,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     logger->log("Creacion de personajes.", DEBUG);
 
+    //////////////////////////////////////////////////////////////////////
+
     // Setiar los characters con su numero de player segun server
 
     char* character1 = "Spiderman";
     char* character2 = "Wolverine";
-
 
     /*tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);*/
@@ -240,7 +242,7 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*player1) , &(*player2)};
+	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 5; i++){
@@ -359,3 +361,85 @@ void orderBackgroundsByZIndex(json* backgroundList){
 		pos_sel = 0;
 	}
 }
+
+static void* clientRead(void* args)
+{
+	TCPClient *client = (TCPClient*) args;
+
+	void* buf1[sizeof(character_builder_t)];
+
+	client->socketClient->reciveData(&buf1, sizeof(character_builder_t));
+
+	character_builder_t* builder = (character_builder_t*) buf1;
+
+	//this->updateNuevo(builder);
+	//this->renderNuevo();
+
+	//tiene que renderizar en base a lo que recibe en character_builder_t
+	//Esto aca no anda porq no es de la clase, no entiendo si hay que updatear y renderizar en
+	// el thread o afuera o encolar y despues updatear/renderizar
+
+
+
+	return 0;
+}
+
+static void* clientWrite(void* args)
+{
+	TCPClient *client = (TCPClient*) args;
+
+
+
+}
+
+void MCGame::createReadThread()
+{
+	pthread_create( &(this->readThread), NULL, clientRead, this);
+}
+
+void MCGame::createWriteThread()
+{
+	pthread_create( &(this->writeThread),NULL, clientWrite, this);
+}
+
+void MCGame::renderNuevo()
+{
+	logger->log("Inicio render.", DEBUG);
+
+	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
+
+	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
+	orderRenderizableListByZIndex(renderizables);
+
+	for(int i = 0; i < 4; i++){
+		if(renderizables[i] == backGround){
+			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == middleGround){
+			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == frontGround){
+			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+		}
+		else if(renderizables[i] == characterClient){
+			characterClient->render(m_Renderer, camera.x, camera.y, characterClient->getCentro());
+		}
+
+	}
+	logger->log("Fin render.", DEBUG);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
+}
+
+void MCGame::updateNuevo(character_builder_t* builder)
+{
+
+}
+
+
+
+
+
+
+
+

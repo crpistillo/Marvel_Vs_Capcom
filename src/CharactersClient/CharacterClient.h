@@ -15,11 +15,13 @@
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
 #include "../orientation_constants.h"
+#include "../Renderizable.h"
 
 
 using namespace std;
 
-class CharacterClient {
+class CharacterClient: public Renderizable
+{
 public:
     virtual~CharacterClient();
 

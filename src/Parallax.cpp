@@ -34,8 +34,7 @@ Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, i
 bool Parallax::playersAreMoving(Player* player1, Player* player2,Logger* logger)
 {
 	logger->log("Marca personajes en movimiento.", DEBUG);
-//	return player1->getCurrentCharacter()->isMoving() && player2->getCurrentCharacter()->isMoving();
-    return true;
+    return player1->getCurrentCharacter()->isMoving() && player2->getCurrentCharacter()->isMoving();
 }
 
 

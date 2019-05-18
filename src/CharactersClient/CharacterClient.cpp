@@ -86,8 +86,6 @@ actions_t CharacterClient::getNewAction(SDL_Renderer *renderer, int distance, in
     else if (inputManager->isKeyDown(characterControls->leftKey) && !inputManager->isKeyUp(characterControls->rightKey))
         return MOVINGLEFT;  //add moveleft
 
-
-
     else if (
             (!inputManager->isKeyUp(characterControls->upKey) &&
              !inputManager->isKeyUp(characterControls->downKey) &&

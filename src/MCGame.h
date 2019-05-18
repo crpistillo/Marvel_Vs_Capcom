@@ -20,6 +20,7 @@
 #include "Parallax.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Client/TCPClient.h"
+#include "data_structs.h"
 
 using namespace std;
 
@@ -43,6 +44,7 @@ private:
     Parallax* parallaxController;
     json config;
     TCPClient* tcpClient;
+    CharacterClient* characterClient;
 
     void loadGroundTextureByZIndex();
 
@@ -53,7 +55,7 @@ protected:
 
 
 public:
-    MCGame(json config, int ancho, int alto, TCPClient *client);
+    MCGame(json config, int ancho, int alto, TCPClient *client, CharacterClient* characterClient);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
@@ -64,6 +66,23 @@ public:
     void handleEvents();
     void clean();
     SDL_Rect camera;
+
+    pthread_t readThread; //lee del socket la info de cada personaje (accion, posX, posY, etc)
+    					  //y luego renderiza en base a esos datos
+
+    pthread_t writeThread; //ejecuta handleEvents y manda en el socket (al server)
+    						//la informacion de lo que el cliente pretende que el personaje haga
+    						//(caminar,saltar,etc)
+
+    void createReadThread();
+    void createWriteThread();
+    void renderNuevo();
+
+    //update segun lo que recibe del server
+    void updateNuevo(character_builder_t* builder); //Ahora le dejo este tipo de dato, pero
+    												//despues lo cambiamos en base al tipo de
+    												//dato que recibamos
+
 };
 
 

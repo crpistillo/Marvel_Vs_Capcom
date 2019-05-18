@@ -25,6 +25,7 @@ pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 
 TCPServer::TCPServer()
 {
+    this->logger = Logger::getInstance();
 	this->numberOfConnections = 0;
 	this->port = 0;
 	this->serverSocket = new Socket();
@@ -181,8 +182,6 @@ int* TCPServer::getClientsSockets(){
 }
 
 
-
-
 /*Funcion que lee del socket la informacion que los clientes le envian.
  * Esta deberia leer, codificar y encolar eventos en la cola del servidor
  *
@@ -242,6 +241,7 @@ int TCPServer::createReceivingThreadPerClient(){
  *
  * Son los denominados "thread escritura cliente x"
  * */
+
 static void* ClientSend(void* args){
 
 	pthread_t hilo = pthread_self();
@@ -287,7 +287,6 @@ int TCPServer::createSendingThreadPerClient(){
 }
 
 void TCPServer::runServer() {
-
 
     Socket *clientSocket1 = new Socket();
     Socket *clientSocket2 = new Socket();
