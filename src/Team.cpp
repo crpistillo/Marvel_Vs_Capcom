@@ -44,7 +44,7 @@ void Team::changeCharacter()
 void Team::update(int distance, int posContrincante, actions_t action) {
     if(action == MAKINGINTRO && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
         changeCharacter();  //send change character
-        setCharacterToChanging();
+//        setCharacterToChanging();
         isChanging = true;
     }
     if(!(currentCharacter->currentAction == MAKINGINTRO))

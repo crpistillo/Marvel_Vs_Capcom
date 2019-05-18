@@ -32,7 +32,6 @@ class TCPServer
 private:
 	Team* team1;
 	Team* team2;
-    static void * Task(void * argv);
     int numberOfConnections;
     int port;
     int clientsSockets[MAXPLAYERS];
@@ -68,9 +67,10 @@ public:
     int createReceivingThreadPerClient();
     int createSendingThreadPerClient();
     int* getClientsSockets();
-    void asignTeam(int numeroDeSocket, TCPClient* cliente, string personaje);
 
+    void runServer();
 
+    CharacterServer* createServerCharacter(char *character, int clientNumber);
 };
 
 #endif

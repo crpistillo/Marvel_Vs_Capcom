@@ -151,19 +151,15 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     // Setiar los characters con su numero de player segun server
 
-    char* character;
-    /*char* character1 = "Spiderman";
-    char* character2 = "Wolverine";*/
+    char* character1 = "Spiderman";
+    char* character2 = "Wolverine";
 
-    if(tcpClient->nclient == 1)				//Si el cliente es el 1, manda Spiderman. Sino, wolverine (ES SOLO UNA PRUEBA)
-    	character = "Spiderman";
-    else
-    	character = "Wolverine";
 
 
     /*tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);*/
-    tcpClient->Send((void*) character, sizeof(character) + 1);
+    tcpClient->Send((void*) character1, sizeof(character1) + 1);
+    tcpClient->Send((void*) character2, sizeof(character2) + 1);
 
 
     logger->log("Creacion de controles.", DEBUG);

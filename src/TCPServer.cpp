@@ -5,6 +5,9 @@
 #include "TCPServer.h"
 #include "ServerThread.h"
 #include "netdb.h"
+#include "CharactersServer/SpidermanServer.h"
+#include "Characters/Wolverine.h"
+#include "CharactersServer/WolverineServer.h"
 #include <string>
 #include <pthread.h>
 
@@ -31,24 +34,6 @@ typedef struct{
 	int clientSocket;
 } info_for_thread_t;
 
-
-void *TCPServer::Task(void *arg) {
-    int n;
-    int newsockfd = (long) arg;
-    char msg[MAXPACKETSIZE];
-    pthread_detach(pthread_self());
-    while (1) {
-        n = recv(newsockfd, msg, MAXPACKETSIZE, 0);
-        if (n == 0) {
-            close(newsockfd);
-            break;
-        }
-        msg[n] = 0;
-        //send(newsockfd,msg,n,0);
-        Message = string(msg);
-    }
-    return 0;
-}
 
 bool TCPServer::setup(int port, Logger* logger) {
 
@@ -178,8 +163,6 @@ int TCPServer::getNumberOfConections(){
 
 void TCPServer::clientReceive(int socket){
 
-
-
 	int socket_to_read = clientsSockets[socket];
 	pthread_t asd = pthread_self();
 	cout << "Hola! Soy el hilo: " + to_string(asd) + ". Soy el encargado de leer del socket: "
@@ -299,18 +282,76 @@ int TCPServer::createSendingThreadPerClient(){
 
 }
 
-void TCPServer::asignTeam(int numeroDeSocket, TCPClient* cliente, string personaje)
-{
-	//No se como obtener el cliente a partir del numero de socket,
-	//asi que pase el cliente como parametro (cambiar!!!)
-	if (!team1->isFull())
-	{
-		team1->addPlayer(personaje,cliente);
-	}
-	else team2->addPlayer(personaje,cliente); //no considere el caso en que se ponen mas de 4
-												//jugadores porque creo que ya se considero antes
+void TCPServer::runServer() {
+
+
+    Socket *clientSocket1 = new Socket();
+    Socket *clientSocket2 = new Socket();
+
+    clientSocket1->fd = clientsSockets[0];
+    clientSocket2->fd = clientsSockets[1];
+
+    char character[9];
+
+    clientSocket1->reciveData(character,9);
+    CharacterServer* character1 = createServerCharacter(character);
+
+    cout << character << endl;
+
+
+    clientSocket1->reciveData(character, 9);
+    CharacterServer* character2 = createServerCharacter(character);
+
+    cout << character << endl;
+
+
+    clientSocket2->reciveData(character,9);
+    CharacterServer* character3 = createServerCharacter(character);
+
+    cout << character << endl;
+
+    clientSocket2->reciveData(character, 9);
+    CharacterServer* character4 = createServerCharacter(character);
+
+    cout << character << endl;
+/*
+    team1 = new Team(character1, character2, 2);
+    team2 = new Team(character3, character4, 2);
+*/
+
+
+
+
+
+
+
+    //  createReceivingThreadPerClient();
+    //createSendingThreadPerClient();
 
 }
+
+CharacterServer* TCPServer::createServerCharacter(char *character, int clientNumber ) {
+
+ /*   int spidermanSobrante = widthSpiderman*242/640;
+    int spidermanAncho= widthSpiderman*110/640;
+    int wolverineSobrante = widthWolverine*278/640;
+    int wolverineAncho= widthWolverine*87/640;
+
+    int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH/2)-spidermanSobrante)-(spidermanAncho/2)-200;
+    int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
+
+    if(string(character) == "Spiderman")
+        SpidermanServer* characterToReturn = new SpidermanServer();
+    else
+        WolverineServer* characterToReturn = new WolverineServer()*/
+ return NULL;
+
+}
+
+void* receiveInfo(void *infor){
+
+}
+
 
 
 
