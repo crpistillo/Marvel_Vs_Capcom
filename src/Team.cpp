@@ -11,58 +11,52 @@
 
 const int MAX_PLAYERS = 4;
 
-Team::Team()
+Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int teamSize )
 {
-	this->characterA = NULL;
-	this->characterB = NULL;
-	this->sizeOfTeam = 0;
+	this->currentCharacter = firstCharact;
+	this->firstCharacter = firstCharact;
+	this->secondCharacter = secondCharact;
+	this->sizeOfTeam = teamSize;
 	isChanging = false;
-}
-
-void Team::changePlayer(string personaje, TCPClient* cliente)
-{
-	CharacterServer* character = this->typeOfCharacter(personaje);
-
-	if(this->characterA->get_Client()==NULL)
-	{
-		this->characterA = character; //no se si asi esta bien y el typeOfCharacter
-									  //tampoco se si se hace asi
-		this->characterA->set_Client(cliente);
-
-	}
-	else
-	{
-		this->characterB = character;
-		this->characterB->set_Client(cliente);
-	}
-}
-
-void Team::addPlayer(string personaje, TCPClient* cliente)
-{
-	this->sizeOfTeam+=1;
-
-	this->changePlayer(personaje, cliente);
+	clientActive = currentCharacter->clientNumber;
 
 }
 
-CharacterServer* Team::typeOfCharacter(string personaje)
+void Team::changeCharacter()
 {
 
-	CharacterServer* character;
-	if(personaje == "Spiderman")
-	{
-		character = (SpidermanServer*)character;
-	}
-	else if(personaje == "Wolverine")
-	{
-		character = (WolverineServer*)character;
-	}
-	return character;
+    int updateX = currentCharacter->getCentro();
+
+    if(currentCharacter == firstCharacter) {
+        currentCharacter = secondCharacter;
+    }
+    else {
+        currentCharacter = firstCharacter;
+    }
+    currentCharacter->positionUpdate(&updateX);
+
+
+	this->clientActive = currentCharacter->clientNumber;
+
 }
 
 
-bool Team::isFull()
-{
-	return (this->sizeOfTeam==MAX_PLAYERS/2);
+void Team::update(int distance, int posContrincante, actions_t action) {
+    if(action == MAKINGINTRO && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
+        changeCharacter();  //send change character
+        setCharacterToChanging();
+        isChanging = true;
+    }
+    if(!(currentCharacter->currentAction == MAKINGINTRO))
+        isChanging = false;
+    currentCharacter->update(distance, posContrincante, action);
 }
 
+void Team::changeClient(){
+
+    if(currentCharacter == firstCharacter)
+        this->clientActive = secondCharacter->clientNumber;
+    else
+        this->clientActive = firstCharacter->clientNumber;
+
+}

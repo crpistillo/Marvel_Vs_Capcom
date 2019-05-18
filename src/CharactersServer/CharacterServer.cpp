@@ -255,16 +255,6 @@ void CharacterServer::walkingSpriteUpdate() {
 
 }
 
-void CharacterServer::set_Client(TCPClient* client)
-{
-	this->currentClient = client;
-}
-
-TCPClient* CharacterServer::get_Client()
-{
-	return this->currentClient;
-}
-
 
 
 

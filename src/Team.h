@@ -14,18 +14,18 @@ class Team
 {
 private:
 	CharacterServer* currentCharacter;//me falta ver esto y otras cosas
-	CharacterServer* characterA; //personaje del clienteA (cada personaje tiene un cliente)
-	CharacterServer* characterB; //personaje del clienteB
+	CharacterServer* firstCharacter; //personaje del clienteA (cada personaje tiene un cliente)
+	CharacterServer* secondCharacter; //personaje del clienteB
 	int sizeOfTeam;
-	//Controls* controls; //Hacen falta?
-	int changeKey;
 	bool isChanging;
+	int clientActive;
+
+	//numberOfClientsActive
 
 public:
-	Team();
+	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize);
 
-	void addPlayer(string personaje, TCPClient* cliente);
-	void changePlayer(string personaje, TCPClient* cliente); //cambia el character y el cliente del mismo
+	void changePlayer(); //cambia el character y el cliente del mismo
 
 	bool isFull(); //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
 
@@ -34,6 +34,9 @@ public:
 	void changeCharacter();
 	void setCharacterToChanging();
 
+    void update(int distance, int posContrincante, actions_t action);
+
+    void changeClient();
 };
 
 

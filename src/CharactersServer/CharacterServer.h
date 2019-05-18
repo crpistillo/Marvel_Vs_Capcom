@@ -10,7 +10,6 @@
 #include "../InputTable.h"
 #include "../InputManager.h"
 #include "../Controls/Controls.h"
-#include "../Client/TCPClient.h"
 #include "../tools/logger/Logger.h"
 #include "../Characters/orientation_constants.h"
 /*
@@ -43,10 +42,7 @@ public:
     void startIntro();
 
 
-    void set_Client(TCPClient* client);
-
-    TCPClient* get_Client();
-
+    int clientNumber;
     actions_t currentAction;
 
 protected:
@@ -61,7 +57,7 @@ protected:
             int anchoPantalla
     );
 
-    TCPClient* currentClient; //indica el cliente al que pertence este personaje
+    int currentClient; //indica el cliente al que pertence este personaje
 
     bool isLookingLeft;
     //The X and Y offsets of the character

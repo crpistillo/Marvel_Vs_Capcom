@@ -49,7 +49,7 @@ CharacterClient::CharacterClient(
 }
 
 // Public:
-actions_t CharacterClient::getNewState(SDL_Renderer *renderer, int distance, int posContrincante) {
+actions_t CharacterClient::getNewAction(SDL_Renderer *renderer, int distance, int posContrincante) {
 
     InputManager *inputManager = InputManager::getInstance();
 

@@ -38,7 +38,7 @@ public:
     int getWidth();
     int getSobrante();
     int getCentro();
-    actions_t getNewState(SDL_Renderer *renderer, int distance, int posContrincante);
+    actions_t getNewAction(SDL_Renderer *renderer, int distance, int posContrincante);
     void positionUpdate(int *x);
     void setControls(Controls *controls);
     void startIntro();
