@@ -21,6 +21,7 @@
 #include "data_structs.h"
 #include <pthread.h>
 #include "Team.h"
+#include "tools/json/ConfigFileParser/ConfigFileParser.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ private:
 
     pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
+    json config;
 
 public:
     Socket* serverSocket;
@@ -70,7 +72,9 @@ public:
 
     void runServer();
 
-    CharacterServer* createServerCharacter(char *character, int clientNumber);
+    CharacterServer* createServerCharacter(char *character);
+
+    void configJson(json config);
 };
 
 #endif

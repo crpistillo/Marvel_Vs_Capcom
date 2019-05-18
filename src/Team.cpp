@@ -13,7 +13,7 @@ const int MAX_PLAYERS = 4;
 
 Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int teamSize )
 {
-	this->currentCharacter = firstCharact;
+	this->currentCharacter = firstCharact;  //es el que esta jugando ahora
 	this->firstCharacter = firstCharact;
 	this->secondCharacter = secondCharact;
 	this->sizeOfTeam = teamSize;

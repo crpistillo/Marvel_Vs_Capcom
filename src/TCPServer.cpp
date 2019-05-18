@@ -11,6 +11,22 @@
 #include <string>
 #include <pthread.h>
 
+
+int widthSpiderman;
+int heightSpiderman;
+int widthWolverine;
+int heightWolverine;
+int spidermanSobrante;
+int spidermanAncho;
+int wolverineSobrante;
+int wolverineAncho;
+
+int INITIAL_POS_X_PLAYER_ONE;
+int INITIAL_POS_X_PLAYER_TWO;
+
+const int LEVEL_WIDTH = 3200;
+const int LEVEL_HEIGHT = 600;
+
 string TCPServer::Message;
 const int maxConnections = 4;
 const string ERROR = "ERROR";
@@ -289,7 +305,7 @@ void TCPServer::runServer() {
     Socket *clientSocket2 = new Socket();
 
     clientSocket1->fd = clientsSockets[0];
-    clientSocket2->fd = clientsSockets[1];
+    clientSocket2->fd = clientsSockets[1]; //recibe data
 
     char character[9];
 
@@ -321,18 +337,15 @@ void TCPServer::runServer() {
 
 
 
-
-
-
-
     //  createReceivingThreadPerClient();
     //createSendingThreadPerClient();
 
 }
 
-CharacterServer* TCPServer::createServerCharacter(char *character, int clientNumber ) {
+CharacterServer* TCPServer::createServerCharacter(char *character) {
 
- /*   int spidermanSobrante = widthSpiderman*242/640;
+ /*
+    int spidermanSobrante = widthSpiderman*242/640;
     int spidermanAncho= widthSpiderman*110/640;
     int wolverineSobrante = widthWolverine*278/640;
     int wolverineAncho= widthWolverine*87/640;
@@ -349,6 +362,59 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int clientNum
 }
 
 void* receiveInfo(void *infor){
+
+}
+
+void TCPServer::configJson(json config)
+{
+	this->logger = Logger::getInstance();
+
+	this->config = config;
+
+	json spidermanConfig = config["characters"][0];
+	json wolverineConfig = config["characters"][1];
+
+	string msj;
+
+	if (spidermanConfig["name"] != "spiderman") {
+		string name = spidermanConfig["name"];
+	    string filepath = spidermanConfig["filepath"];
+	    msj = "No se reconoce al personaje '" + name + "'."
+	         + " Se intentara cargar las imagenes correspondiente al filepath: " + filepath
+	         + " como las imagenes del personaje 'spiderman'.";
+	    logger->log(msj, ERROR);
+	}
+
+	if (wolverineConfig["name"] != "wolverine") {
+		string name = wolverineConfig["name"];
+	    string filepath = wolverineConfig["filepath"];
+	    msj = "No se reconoce al personaje '" + name + "'."
+	         + " Se cargaran las imagenes correspondiente al filepath: " + filepath
+	         + " como las imagenes del personaje 'wolverine'.";
+	   logger->log(msj, ERROR);
+    }
+
+    widthSpiderman = spidermanConfig["width"];
+    heightSpiderman = spidermanConfig["height"];
+    widthWolverine = wolverineConfig["width"];
+    heightWolverine = wolverineConfig["height"];
+
+    string spidermanPath = spidermanConfig["filepath"];
+    if (spidermanPath != "images/spiderman/spiderman_")
+        logger->log("Filepath para personaje Spiderman incorrecto. Error al cargar imagenes.", ERROR);
+    string wolverinePath = wolverineConfig["filepath"];
+    if (wolverinePath != "images/wolverine/wolverine_")
+        logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
+
+    spidermanSobrante = widthSpiderman * 242 / 640;
+    spidermanAncho = widthSpiderman * 110 / 640;
+    wolverineSobrante = widthWolverine * 278 / 640;
+    wolverineAncho = widthWolverine * 87 / 640;
+
+    INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - spidermanSobrante) - (spidermanAncho / 2) - 200;
+    INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - wolverineSobrante) - (wolverineAncho / 2) + 200;
+
+    logger->log("Creacion de personajes.", DEBUG);
 
 }
 

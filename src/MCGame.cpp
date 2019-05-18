@@ -93,6 +93,7 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
+
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
     this->SCREEN_HEIGHT = alto;
@@ -100,6 +101,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
+
+    ///////////////////////JSON///////////////////
     this->config = config;
 
     json spidermanConfig = config["characters"][0];
@@ -155,7 +158,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     char* character2 = "Wolverine";
 
 
-
     /*tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);*/
     tcpClient->Send((void*) character1, sizeof(character1) + 1);
@@ -179,8 +181,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 */
 
 
-    middleGround = new Layer(2400, 600, 3.33, 400);//3.33
-    backGround = new Layer(1600,600,6.66667,800);//6.715
+    middleGround = new Layer(2400, 600, 3.33, 400); //3.33
+    backGround = new Layer(1600,600,6.66667,800); //6.715
     frontGround = new Layer(3200,600,0,0);
 
     logger->log("Creacion de Parallax.", DEBUG);
