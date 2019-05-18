@@ -12,6 +12,7 @@
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
 #include "../orientation_constants.h"
+#include "../data_structs.h"
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -27,7 +28,7 @@ public:
     //Maximum axis velocity of the character
     static const int CHARACTER_VEL = 10;
 
-    virtual void load(SDL_Renderer *renderer, int posContrincante) = 0;
+   // virtual void load(SDL_Renderer *renderer, int posContrincante) = 0;
 
     //Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
@@ -40,6 +41,7 @@ public:
     void update(int distance, int posContrincante, actions_t actionRecieved);
     void positionUpdate(int *x);
     void startIntro();
+    virtual void makeBuilderStruct(character_builder_t *builder) = 0;
 
 
     int clientNumber;

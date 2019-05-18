@@ -10,10 +10,12 @@
 class SpidermanServer final : public CharacterServer {
 public:
     SpidermanServer(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla);
+    void makeBuilderStruct(character_builder_t *builder);
 
 private:
     void moveRight(int distance, int posContrincante);
     void moveLeft(int distance, int posContrincante);
+    void resetSpriteVariables();
 };
 
 

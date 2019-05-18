@@ -258,4 +258,3 @@ void CharacterServer::walkingSpriteUpdate() {
 
 
 
-

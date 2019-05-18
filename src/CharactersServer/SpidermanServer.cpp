@@ -68,3 +68,14 @@ void SpidermanServer::moveRight(int distance, int posContrincante) {
 
     walkingSpriteUpdate();
 }
+
+void SpidermanServer::resetSpriteVariables(){
+	return;
+}
+
+void SpidermanServer::makeBuilderStruct(character_builder_t* builder){
+	//Completar
+	builder->personaje = SPIDERMAN;
+	builder->sprite = 0;
+	builder->action = STANDING;
+}

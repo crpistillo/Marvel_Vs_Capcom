@@ -110,11 +110,12 @@ int run_server(int cantArg, char *dirJson, int port) {
     cout << "Numero de jugadores alcanzado! \n";
 
 
-
-    logger->finishSession();
-
+    tcpServer->configJson(config);
     tcpServer->runServer();
 
+
+
+    logger->finishSession();
 
   /*  while(1) {
 

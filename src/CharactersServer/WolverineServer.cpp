@@ -88,3 +88,14 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
     }
 
 }
+
+void WolverineServer::resetSpriteVariables(){
+	return;
+}
+
+void WolverineServer::makeBuilderStruct(character_builder_t* builder){
+	builder->personaje = WOLVERINE;
+	builder->sprite = 0;
+	builder->action = STANDING;
+}
+

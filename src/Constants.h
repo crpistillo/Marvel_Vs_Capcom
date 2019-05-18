@@ -20,6 +20,8 @@ typedef struct
 	int wolverineAncho;
 	int INITIAL_POS_X_PLAYER_ONE;
 	int INITIAL_POS_X_PLAYER_TWO;
+	int screenWidth;
+	int screenHeight;
 }Constants;
 
 

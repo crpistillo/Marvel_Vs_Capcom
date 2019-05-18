@@ -72,7 +72,7 @@ public:
 
     void runServer();
 
-    CharacterServer* createServerCharacter(char *character);
+    CharacterServer* createServerCharacter(char *character, int nclient);
 
     void configJson(json config);
 };

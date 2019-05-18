@@ -164,7 +164,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);
 
-    char buf1[sizeof(character_builder_t)];
+    /*char buf1[sizeof(character_builder_t)];
     tcpClient->socketClient->reciveData(&buf1, sizeof(character_builder_t));
 
     character_builder_t* builder = (character_builder_t*) buf1;
@@ -187,8 +187,30 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     cout << "Recibi la accion: " + action << endl;
 
+    cout << "Soy el player: " + to_string(builder->cliente) << endl;
+
     //cout << "Recibi del servidor que soy el cliente: " + to_string(builder->cliente) + ". Tengo que renderizar el personaje: "
-    //		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;
+    //		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;*/
+
+
+    //Construyo los 4 personajes según la configuracion que me mande el server.
+    CharacterClient* character_1;
+    CharacterClient* character_2;
+    CharacterClient* character_3;
+    CharacterClient* character_4;
+
+    char buf[sizeof(character_builder_t)];
+    character_builder_t* builder;
+
+    //Primer personaje
+    tcpClient->socketClient->reciveData(&buf, sizeof(character_builder_t));
+    builder = (character_builder_t*) buf;
+    if(builder->personaje == SPIDERMAN)
+    	//crear spiderman
+    if(builder->personaje == WOLVERINE)
+    	//Crear wolverine
+
+    //Seguir con el resto
 
 
     logger->log("Creacion de controles.", DEBUG);

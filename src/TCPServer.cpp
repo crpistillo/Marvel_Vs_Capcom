@@ -296,73 +296,113 @@ void TCPServer::runServer() {
     clientSocket2->fd = clientsSockets[1]; //recibe data
 
     char character[9];
+    character_builder_t builder1;
+    character_builder_t builder2;
+    character_builder_t builder3;
+    character_builder_t builder4;
 
     clientSocket1->reciveData(character,9);
-    CharacterServer* character1 = createServerCharacter(character);
+    CharacterServer* character1 = createServerCharacter(character, 1);
+    character1->makeBuilderStruct(&builder1);
+    builder1.cliente = 1;
 
     cout << character << endl;
 
 
     clientSocket1->reciveData(character, 9);
-    CharacterServer* character2 = createServerCharacter(character);
-
+    CharacterServer* character2 = createServerCharacter(character, 2);
+    character2->makeBuilderStruct(&builder2);
+    builder2.cliente = 2;
     cout << character << endl;
 
 
     clientSocket2->reciveData(character,9);
-    CharacterServer* character3 = createServerCharacter(character);
+    CharacterServer* character3 = createServerCharacter(character, 3);
+    character3->makeBuilderStruct(&builder3);
+    builder3.cliente = 3;
 
     cout << character << endl;
 
     clientSocket2->reciveData(character, 9);
-    CharacterServer* character4 = createServerCharacter(character);
+    CharacterServer* character4 = createServerCharacter(character, 4);
+    character4->makeBuilderStruct(&builder4);
+    builder4.cliente = 4;
 
     cout << character << endl;
 /*
     team1 = new Team(character1, character2, 2);
     team2 = new Team(character3, character4, 2);
 */
-    character_builder_t builder1;
-    character_builder_t builder2;
-    character_builder_t builder3;
-    character_builder_t builder4;
 
-    builder1.cliente = 1;
-    builder1.personaje = SPIDERMAN;
-    builder1.sprite = 0;
-    builder1.action = STANDING;
     clientSocket1->sendData(&builder1, sizeof(character_builder_t));
+    clientSocket1->sendData(&builder2, sizeof(character_builder_t));
+    clientSocket1->sendData(&builder3, sizeof(character_builder_t));
+    clientSocket1->sendData(&builder4, sizeof(character_builder_t));
 
-
-    builder2.cliente = 1;
-    builder2.personaje = WOLVERINE;
-    builder2.sprite = 0;
-    builder2.action = STANDING;
+    clientSocket2->sendData(&builder1, sizeof(character_builder_t));
     clientSocket2->sendData(&builder2, sizeof(character_builder_t));
-
+    clientSocket2->sendData(&builder3, sizeof(character_builder_t));
+    clientSocket2->sendData(&builder4, sizeof(character_builder_t));
 
     //  createReceivingThreadPerClient();
     //createSendingThreadPerClient();
 
 }
 
-CharacterServer* TCPServer::createServerCharacter(char *character) {
+CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) {
 
- /*
-    int spidermanSobrante = widthSpiderman*242/640;
-    int spidermanAncho= widthSpiderman*110/640;
-    int wolverineSobrante = widthWolverine*278/640;
-    int wolverineAncho= widthWolverine*87/640;
+	CharacterServer* characterServer;
+	character_number_t character_n;
 
-    int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH/2)-spidermanSobrante)-(spidermanAncho/2)-200;
-    int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
+	if( !strcmp(character,"Spiderman") )
+		character_n = SPIDERMAN;
+	if (!strcmp(character,"Wolverine"))
+		character_n = WOLVERINE;
 
-    if(string(character) == "Spiderman")
-        SpidermanServer* characterToReturn = new SpidermanServer();
-    else
-        WolverineServer* characterToReturn = new WolverineServer()*/
- return NULL;
 
+	switch(character_n){
+	case SPIDERMAN:
+		if(nclient <= 2)
+			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
+					false,
+					constants.widthSpiderman,
+					constants.heightSpiderman,
+					constants.spidermanSobrante,
+					constants.spidermanAncho,
+					constants.screenWidth
+					);
+		else
+			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
+					false,
+					constants.widthSpiderman,
+					constants.heightSpiderman,
+					constants.spidermanSobrante,
+					constants.spidermanAncho,
+					constants.screenWidth
+					);
+		break;
+
+	case WOLVERINE:
+		if(nclient <= 2)
+			characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+					false,
+					constants.widthWolverine,
+					constants.heightWolverine,
+					constants.wolverineSobrante,
+					constants.wolverineAncho,
+					constants.screenWidth
+					);
+		else
+			characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+				false,
+				constants.widthWolverine,
+				constants.heightWolverine,
+				constants.wolverineSobrante,
+				constants.wolverineAncho,
+				constants.screenWidth);
+	}
+
+	return characterServer;
 }
 
 void* receiveInfo(void *infor){
@@ -417,6 +457,9 @@ void TCPServer::configJson(json config)
 
     constants.INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - constants.spidermanSobrante) - (constants.spidermanAncho / 2) - 200;
     constants.INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - constants.wolverineSobrante) - (constants.wolverineAncho / 2) + 200;
+
+    constants.screenWidth = config["window"]["width"];
+    constants.screenHeight = config["window"]["height"];
 
     logger->log("Creacion de personajes.", DEBUG);
 
