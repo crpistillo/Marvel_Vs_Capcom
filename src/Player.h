@@ -8,7 +8,6 @@
 
 #include "CharactersClient/CharacterClient.h"
 #include "Controls/Controls.h"
-#include "Renderizable.h"
 #include "tools/logger/Logger.h"
 
 class Player: public Renderizable {
