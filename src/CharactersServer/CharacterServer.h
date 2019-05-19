@@ -56,7 +56,8 @@ protected:
             bool isLookingLeft,
             int widthSprite,
             int heightSprite,
-            int anchoPantalla
+            int anchoPantalla,
+            int numberOfClient
     );
 
     int currentClient; //indica el cliente al que pertence este personaje

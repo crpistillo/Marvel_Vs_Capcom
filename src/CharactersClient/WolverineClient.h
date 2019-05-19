@@ -12,9 +12,11 @@
 class WolverineClient final: public CharacterClient {
 public:
     //Initializes the variables
-    WolverineClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla);
+    WolverineClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla,
+                    int numberOfClient);
 
     void load(SDL_Renderer *renderer, int posContrincante);
 };
 
 #endif //MARVEL_VS_CAPCOM_WOLVERINECLIENT_H
+

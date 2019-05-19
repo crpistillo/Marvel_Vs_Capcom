@@ -20,6 +20,8 @@
 #include "Parallax.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Client/TCPClient.h"
+#include "data_structs.h"
+#include "Constants.h"
 
 using namespace std;
 
@@ -43,8 +45,9 @@ private:
     Parallax* parallaxController;
     json config;
     TCPClient* tcpClient;
-
+    CharacterClient* characters[4];
     void loadGroundTextureByZIndex();
+    Constants* constants = (Constants*) (malloc(sizeof(Constants *)));
 
 
 protected:
@@ -64,6 +67,8 @@ public:
     void handleEvents();
     void clean();
     SDL_Rect camera;
+
+    CharacterClient *characterBuild(character_builder_t *builder);
 };
 
 

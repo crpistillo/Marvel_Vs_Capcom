@@ -15,17 +15,18 @@ const string FILE_EXTENSION = ".png";
 
 
 
-WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla)
+WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
+                                 int anchoPantalla,
+                                 int numberOfClient)
         : CharacterClient(
         PosX,
-        556-(height*297/480),
+        556 - (height * 297 / 480),
         ancho,
         sobrante,
         false,
         width,
         height,
-        anchoPantalla
-) {
+        anchoPantalla, numberOfClient) {
     if(secondaryColor)
         this->loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
     else

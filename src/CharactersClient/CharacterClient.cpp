@@ -12,16 +12,8 @@ const string DEBUG = "DEBUG";
 
 
 // Protected
-CharacterClient::CharacterClient(
-        int mPosX,
-        int mPosY,
-        int width,
-        int sobrante,
-        bool isLookingLeft,
-        int widthSprite,
-        int heightSprite,
-        int anchoPantalla
-) {
+CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
+                                 int heightSprite, int anchoPantalla, int numberOfClient) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -40,6 +32,8 @@ CharacterClient::CharacterClient(
     this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
+
+    this->clientNumber = numberOfClient;
 
     this->loader = NULL;
     this->characterControls = NULL;
@@ -65,6 +59,8 @@ actions_t CharacterClient::getNewAction(SDL_Renderer *renderer, int distance, in
 
     if (currentAction == JUMPINGLEFT)
         return JUMPINGLEFT;
+
+
 
     //Acciones de dos teclas primero
     if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))
@@ -96,12 +92,13 @@ actions_t CharacterClient::getNewAction(SDL_Renderer *renderer, int distance, in
             || (inputManager->isKeyUp(characterControls->rightKey) &&
                 inputManager->isKeyUp(characterControls->leftKey))
             )
-    return STANDING;
+        return STANDING;
 }
 
 void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;
-    m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite, mRenderer); //esto es los valores que se cambian la resolucion
+    m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite,
+                     mRenderer); //esto es los valores que se cambian la resolucion
 }
 
 
@@ -123,7 +120,7 @@ int CharacterClient::getSobrante() {
 
 int CharacterClient::getCentro() {
     int centro;
-    centro = this->getPosX()+this->getSobrante()+(this->getWidth())/2;
+    centro = this->getPosX() + this->getSobrante() + (this->getWidth()) / 2;
     return centro;
 }
 
@@ -132,39 +129,37 @@ CharacterClient::~CharacterClient() {
     m_Texture.free();
 }
 
-void CharacterClient::positionUpdate(int* x) {
+void CharacterClient::positionUpdate(int *x) {
     /*x tiene el centro del personaje (ubicacion exacta del personaje)
      * La posicion en x se calcula con eso*/
-    mPosX = *x - this->getSobrante() - (this->getWidth()/2);
+    mPosX = *x - this->getSobrante() - (this->getWidth() / 2);
 }
 
-void CharacterClient::setControls(Controls* controls) {
+void CharacterClient::setControls(Controls *controls) {
     characterControls = controls;
 }
 
-void CharacterClient::startIntro(){
+void CharacterClient::startIntro() {
     currentAction = MAKINGINTRO;
 }
 
-Controls* CharacterClient::getControls()
-{
+Controls *CharacterClient::getControls() {
     return this->characterControls;
 }
 
-bool CharacterClient::isMoving()
-{
+bool CharacterClient::isMoving() {
     return (!(this->currentAction == STANDING) || !(this->currentAction == DUCK));
 }
 
-int CharacterClient::getZIndex(){
+int CharacterClient::getZIndex() {
     return this->ZIndex;
 }
 
-void CharacterClient::setZIndex(int z){
+void CharacterClient::setZIndex(int z) {
     this->ZIndex = z;
 }
 
-void CharacterClient::setFilepath(string fp){
+void CharacterClient::setFilepath(string fp) {
     this->characterFilepath = fp;
 }
 

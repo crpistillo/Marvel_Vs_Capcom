@@ -20,7 +20,8 @@ CharacterServer::CharacterServer(
         bool isLookingLeft,
         int widthSprite,
         int heightSprite,
-        int anchoPantalla
+        int anchoPantalla,
+        int numberOfClient
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -40,6 +41,7 @@ CharacterServer::CharacterServer(
     this->currentJumpingLeftSprite = 0;
     this->currentIntroSprite = 0;
     this->isLookingLeft = isLookingLeft;
+    this->clientNumber = numberOfClient;
     currentAction = STANDING;
     this->currentClient = NULL;
 

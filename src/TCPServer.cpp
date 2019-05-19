@@ -304,29 +304,25 @@ void TCPServer::runServer() {
     clientSocket1->reciveData(character,9);
     CharacterServer* character1 = createServerCharacter(character, 1);
     character1->makeBuilderStruct(&builder1);
-    builder1.cliente = 1;
 
     cout << character << endl;
 
 
     clientSocket1->reciveData(character, 9);
-    CharacterServer* character2 = createServerCharacter(character, 2);
+    CharacterServer* character2 = createServerCharacter(character, 1);
     character2->makeBuilderStruct(&builder2);
-    builder2.cliente = 2;
     cout << character << endl;
 
 
     clientSocket2->reciveData(character,9);
-    CharacterServer* character3 = createServerCharacter(character, 3);
+    CharacterServer* character3 = createServerCharacter(character, 2);
     character3->makeBuilderStruct(&builder3);
-    builder3.cliente = 3;
 
     cout << character << endl;
 
     clientSocket2->reciveData(character, 9);
-    CharacterServer* character4 = createServerCharacter(character, 4);
+    CharacterServer* character4 = createServerCharacter(character, 2);
     character4->makeBuilderStruct(&builder4);
-    builder4.cliente = 4;
 
     cout << character << endl;
 /*
@@ -362,14 +358,15 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) 
 
 	switch(character_n){
 	case SPIDERMAN:
-		if(nclient <= 2)
+		if(nclient < 2)
 			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
 					false,
 					constants.widthSpiderman,
 					constants.heightSpiderman,
 					constants.spidermanSobrante,
 					constants.spidermanAncho,
-					constants.screenWidth
+					constants.screenWidth,
+					nclient
 					);
 		else
 			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
@@ -378,19 +375,21 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) 
 					constants.heightSpiderman,
 					constants.spidermanSobrante,
 					constants.spidermanAncho,
-					constants.screenWidth
+					constants.screenWidth,
+					nclient
 					);
 		break;
 
 	case WOLVERINE:
-		if(nclient <= 2)
+		if(nclient < 2)
 			characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
 					false,
 					constants.widthWolverine,
 					constants.heightWolverine,
 					constants.wolverineSobrante,
 					constants.wolverineAncho,
-					constants.screenWidth
+					constants.screenWidth,
+					nclient
 					);
 		else
 			characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
@@ -399,7 +398,9 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) 
 				constants.heightWolverine,
 				constants.wolverineSobrante,
 				constants.wolverineAncho,
-				constants.screenWidth);
+				constants.screenWidth,
+				nclient
+				);
 	}
 
 	return characterServer;

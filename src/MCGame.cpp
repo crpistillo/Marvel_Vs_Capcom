@@ -143,13 +143,13 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
 
-    int spidermanSobrante = widthSpiderman * 242 / 640;
-    int spidermanAncho = widthSpiderman * 110 / 640;
-    int wolverineSobrante = widthWolverine * 278 / 640;
-    int wolverineAncho = widthWolverine * 87 / 640;
+    constants->spidermanSobrante = widthSpiderman * 242 / 640;
+    constants->spidermanAncho = widthSpiderman * 110 / 640;
+    constants->wolverineSobrante = widthWolverine * 278 / 640;
+    constants->wolverineAncho = widthWolverine * 87 / 640;
 
-    int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - spidermanSobrante) - (spidermanAncho / 2) - 200;
-    int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - wolverineSobrante) - (wolverineAncho / 2) + 200;
+    constants->INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - constants->spidermanSobrante) - (constants->spidermanAncho / 2) - 200;
+    constants->INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - constants->wolverineSobrante) - (constants->wolverineAncho / 2) + 200;
 
     logger->log("Creacion de personajes.", DEBUG);
 
@@ -157,57 +157,25 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     char* character1 = "Spiderman";
     char* character2 = "Wolverine";
-
-
-    /*tcpClient->Send((void*) character1, sizeof(character1) + 1);
-    tcpClient->Send((void*) character2, sizeof(character2) + 1);*/
     tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);
 
-    /*char buf1[sizeof(character_builder_t)];
-    tcpClient->socketClient->reciveData(&buf1, sizeof(character_builder_t));
 
-    character_builder_t* builder = (character_builder_t*) buf1;
-    string character;
 
-    cout << "Builder recibido" << endl;
-
-    if(builder->personaje == SPIDERMAN)
-    	character = "Spiderman";
-    else
-    	character= "Wolverine";
-
-    cout << "Recibi el personaje: " + character << endl;
-
-    string action;
-    if(builder->action == 0)
-    	action = "STANDING";
-    else
-    	action = "NO RECOGNIZED";
-
-    cout << "Recibi la accion: " + action << endl;
-
-    cout << "Soy el player: " + to_string(builder->cliente) << endl;
-
-    //cout << "Recibi del servidor que soy el cliente: " + to_string(builder->cliente) + ". Tengo que renderizar el personaje: "
-    //		+ character + " con el sprite: " + to_string(builder->sprite) + "y con la accion: " + action;*/
 
 
     //Construyo los 4 personajes según la configuracion que me mande el server.
-    CharacterClient* character_1;
-    CharacterClient* character_2;
-    CharacterClient* character_3;
-    CharacterClient* character_4;
 
-    char buf[sizeof(character_builder_t)];
-    character_builder_t* builder;
+    for (int i = 0; i < 4; ++i) {
+        void* buf1;
+        character_builder_t* builder;
+        tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
+        builder = (character_builder_t*) buf1;
+        characters[i] = characterBuild(builder);
+    }
 
-    //Primer personaje
-    tcpClient->socketClient->reciveData(&buf, sizeof(character_builder_t));
-    builder = (character_builder_t*) buf;
-    if(builder->personaje == SPIDERMAN)
-    	//crear spiderman
-    if(builder->personaje == WOLVERINE)
+
+
     	//Crear wolverine
 
     //Seguir con el resto
@@ -315,6 +283,7 @@ void orderRenderizableListByZIndex(Renderizable** list){
 
 void MCGame::clean() {
     //m_Texture.free();
+    free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete player1;
     delete player2;
@@ -365,6 +334,51 @@ void MCGame::update() {
 
     // Mandamos all characters y lo hace con los que tienen playing = true;
     parallaxController->doParallax(&player1,&player2,logger);
+}
+
+CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
+   CharacterClient* characterClient = nullptr;
+
+
+   switch(builder->personaje){
+        case SPIDERMAN:
+            if(builder->cliente < 2)
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_TWO,
+                                                      true,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
+            break;
+
+        case WOLVERINE:
+            if(builder->cliente < 2)
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      true,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
+    }
+    return characterClient;
 }
 
 

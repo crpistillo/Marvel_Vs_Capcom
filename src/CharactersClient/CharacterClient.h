@@ -49,17 +49,13 @@ public:
     void setFilepath(string fp);
 
     actions_t currentAction;
+
+    int clientNumber;
+
+
 protected:
-    CharacterClient(
-            int mPosX,
-            int mPosY,
-            int width,
-            int sobrante,
-            bool isLookingLeft,
-            int widthSprite,
-            int heightSprite,
-            int anchoPantalla
-    );
+    CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
+                    int heightSprite, int anchoPantalla, int numberOfClient);
     bool isLookingLeft;
     //The X and Y offsets of the character
     int mPosX, mPosY;
