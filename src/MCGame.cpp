@@ -93,13 +93,12 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(json config, int ancho, int alto, TCPClient* client, CharacterClient* characterClient) {
+MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
     this->SCREEN_HEIGHT = alto;
     this->tcpClient = client;
-    this->characterClient = characterClient;
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
@@ -239,7 +238,7 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
+	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 5; i++){
@@ -456,7 +455,7 @@ void MCGame::renderNuevo()
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
+	Renderizable* renderizables[4] = { &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 4; i++){
@@ -469,8 +468,8 @@ void MCGame::renderNuevo()
 		else if(renderizables[i] == frontGround){
 			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
-		else if(renderizables[i] == characterClient){
-			characterClient->render(m_Renderer, camera.x, camera.y, characterClient->getCentro());
+		else if(renderizables[i] == characters[0]){
+			characters[0]->render(m_Renderer, camera.x, camera.y, characters[0]->getCentro());
 		}
 
 	}
@@ -507,9 +506,7 @@ void MCGame::updateNuevo(render_data_t* render_data)
     //tcpClient->recive()      // recibimos la struct de update
     //playersUpdate(structRecived)
 
-
-
-    this->characterClient->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
+    //this->characters[0]->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
 
     player1->update(m_Renderer, distancia, player2->getCentro());
 //  player2->update(m_Renderer, distancia2, player1->getCentro());

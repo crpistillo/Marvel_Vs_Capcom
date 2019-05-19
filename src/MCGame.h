@@ -56,7 +56,7 @@ protected:
 
 
 public:
-    MCGame(json config, int ancho, int alto, TCPClient *client, CharacterClient* characterClient);
+    MCGame(json config, int ancho, int alto, TCPClient *client);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
@@ -82,7 +82,7 @@ public:
     void renderNuevo();
 
     //update segun lo que recibe del server
-    void updateNuevo(character_builder_t* builder); //Ahora le dejo este tipo de dato, pero
+    void updateNuevo(render_data_t* render_data); //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de
     												//dato que recibamos
 
