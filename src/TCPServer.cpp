@@ -54,6 +54,11 @@ bool TCPServer::setup(int port, Logger* logger) {
 
 	bool ret = this->serverSocket->initialize(logger, port, maxConnections);
 
+    for (auto & clientsSocket : clientsSockets) {
+        Socket* sock = new Socket();
+        clientsSocket = sock;
+    }
+
 	//this->setSockfd(this->serverSocket->get_fd());
 
 	return ret;
@@ -86,7 +91,7 @@ void TCPServer::receive() {
         	continue;
 
         }
-        clientsSockets[numberOfConnections] = newSockFd ->get_fd();
+        clientsSockets[numberOfConnections]->fd = newSockFd->fd;
         numberOfConnections++;
 
         //Aceptar conexiones pero seguir esperando por mas
@@ -97,7 +102,9 @@ void TCPServer::receive() {
 
 
         	for(int i = 0; i < numberOfConnections; i++){
-        		send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
+        	    clientsSockets[i]->sendData(&to_send, sizeof(connection_information_t));
+
+        		//send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
         	}
         }
 
@@ -106,7 +113,7 @@ void TCPServer::receive() {
         	to_send.status = READY;
         	to_send.nconnections = numberOfConnections;
         	for(int i = 0; i < numberOfConnections; i++){
-        		send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
+                clientsSockets[i]->sendData(&to_send, sizeof(connection_information_t));
         	}
         }
         str = inet_ntoa(clientAddress.sin_addr);
@@ -168,16 +175,16 @@ int TCPServer::getNumberOfConections(){
 
 void TCPServer::clientReceive(int socket){
 
-	int socket_to_read = clientsSockets[socket];
+	Socket* socket_to_read = clientsSockets[socket];
 	pthread_t asd = pthread_self();
 	cout << "Hola! Soy el hilo: " + to_string(asd) + ". Soy el encargado de leer del socket: "
-	+ to_string(socket_to_read) +"\n";
+	+ to_string(socket_to_read->fd) +"\n";
 
 	while(1)
 		continue;
 }
 
-int* TCPServer::getClientsSockets(){
+Socket** TCPServer::getClientsSockets(){
 	return this->clientsSockets;
 }
 
@@ -197,12 +204,12 @@ static void* ClientReceive(void* args){
 	int socket = arg->clientSocket;
 	pthread_mutex_unlock(&mtx);
 
-	int socket_to_read = (server->getClientsSockets())[socket];
+	Socket* socket_to_read = (server->getClientsSockets())[socket];
 	char personaje[55];
-	recv(socket_to_read, personaje, 55, 0);
+	socket_to_read->reciveData(personaje,55);
 
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
-	+ to_string(socket_to_read) + " y el mensaje que recibo es: "+ personaje +"\n";
+	+ to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ personaje +"\n";
 
 	while(1)
 		continue;
@@ -253,9 +260,9 @@ static void* ClientSend(void* args){
 	int socket = arg->clientSocket;
 	pthread_mutex_unlock(&mtx);
 
-	int socket_to_send = (server->getClientsSockets())[socket];
+	Socket* socket_to_send = (server->getClientsSockets())[socket];
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de mandar datos al socket: "
-	+ to_string(socket_to_send) +"\n";
+	+ to_string(socket_to_send->fd) +"\n";
 
 	while(1)
 		continue;
@@ -288,58 +295,52 @@ int TCPServer::createSendingThreadPerClient(){
 
 void TCPServer::runServer() {
 
-    Socket *clientSocket1 = new Socket();
-    Socket *clientSocket2 = new Socket();
-
-    clientSocket1->fd = clientsSockets[0];
-    clientSocket2->fd = clientsSockets[1]; //recibe data
-
     char character[9];
     character_builder_t builder1;
     character_builder_t builder2;
     character_builder_t builder3;
     character_builder_t builder4;
 
-    clientSocket1->reciveData(character,9);
+    clientsSockets[0]->reciveData(character,9);
     CharacterServer* character1 = createServerCharacter(character, 1);
     character1->makeBuilderStruct(&builder1);
 
     cout << character << endl;
 
 
-    clientSocket1->reciveData(character, 9);
+    clientsSockets[0]->reciveData(character, 9);
     CharacterServer* character2 = createServerCharacter(character, 1);
     character2->makeBuilderStruct(&builder2);
     cout << character << endl;
 
 
-    clientSocket2->reciveData(character,9);
+    clientsSockets[1]->reciveData(character,9);
     CharacterServer* character3 = createServerCharacter(character, 2);
     character3->makeBuilderStruct(&builder3);
 
     cout << character << endl;
 
-    clientSocket2->reciveData(character, 9);
+    clientsSockets[1]->reciveData(character, 9);
     CharacterServer* character4 = createServerCharacter(character, 2);
     character4->makeBuilderStruct(&builder4);
 
     cout << character << endl;
-/*
-    team1 = new Team(character1, character2, 2);
-    team2 = new Team(character3, character4, 2);
-*/
 
-    clientSocket1->sendData(&builder1, sizeof(character_builder_t));
-    clientSocket1->sendData(&builder2, sizeof(character_builder_t));
-    clientSocket1->sendData(&builder3, sizeof(character_builder_t));
-    clientSocket1->sendData(&builder4, sizeof(character_builder_t));
+    team1 = new Team(character1, character2, 1);
+    team2 = new Team(character3, character4, 1);
 
-    clientSocket2->sendData(&builder1, sizeof(character_builder_t));
-    clientSocket2->sendData(&builder2, sizeof(character_builder_t));
-    clientSocket2->sendData(&builder3, sizeof(character_builder_t));
-    clientSocket2->sendData(&builder4, sizeof(character_builder_t));
 
-    //  createReceivingThreadPerClient();
+    clientsSockets[0]->sendData(&builder1, sizeof(character_builder_t));
+    clientsSockets[0]->sendData(&builder2, sizeof(character_builder_t));
+    clientsSockets[0]->sendData(&builder3, sizeof(character_builder_t));
+    clientsSockets[0]->sendData(&builder4, sizeof(character_builder_t));
+
+    clientsSockets[1]->sendData(&builder1, sizeof(character_builder_t));
+    clientsSockets[1]->sendData(&builder2, sizeof(character_builder_t));
+    clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
+    clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
+
+  //  createReceivingThreadPerClient();
     //createSendingThreadPerClient();
 
 }

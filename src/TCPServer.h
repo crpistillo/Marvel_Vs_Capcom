@@ -34,7 +34,7 @@ private:
 	Team* team2;
     int numberOfConnections;
     int port;
-    int clientsSockets[MAXPLAYERS];
+    Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
 
     pthread_t acceptThread;  //Identificador del thread que acepta conexiones
@@ -67,7 +67,7 @@ public:
     int getNumberOfConections();
     int createReceivingThreadPerClient();
     int createSendingThreadPerClient();
-    int* getClientsSockets();
+    Socket** getClientsSockets();
 
     void runServer();
 

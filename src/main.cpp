@@ -164,8 +164,10 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     		return 0;
     	}
 
-    	if(buf->status == READY)
-    		break;
+    	if(buf->status == READY){
+    	    cout<< "Sale" << endl;
+            break;
+        }
     	else{
     		tcpClient->nclient = buf->nconnections;
     		cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
