@@ -40,6 +40,8 @@ public:
     void changeClient();
 
     void makeUpdater(character_updater_t* builder);
+
+    CharacterServer* get_currentCharacter();
 };
 
 
