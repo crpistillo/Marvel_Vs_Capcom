@@ -352,13 +352,15 @@ void MCGame::update() {
     //tcpClient->recive()      // recibimos la struct de update
     //playersUpdate(structRecived)
 
-/*    void* buf1;
+	char buf1[sizeof(character_updater_t)];
 
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
-    character_updater_t* updater = (character_updater_t*) buf1;*/
+    character_updater_t* updater = (character_updater_t*) buf1;
 
- //   players[0]->update(updater);
-//  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
+    if(updater->team == 1)
+    	players[0]->update(updater);
+    else
+    	players[1]->update(updater);
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
 

@@ -298,14 +298,14 @@ static void* ClientSend(void* args){
 
 	character_updater_t updater;
 
-	server->teamOneMakeUpdater(&updater);
-	socket_to_send->sendData(&updater, sizeof(character_updater_t));
 
-	server->teamTwoMakeUpdater(&updater);
-	socket_to_send->sendData(&updater, sizeof(character_updater_t));
+	while(1){
+		server->teamOneMakeUpdater(&updater);
+		socket_to_send->sendData(&updater, sizeof(character_updater_t));
 
-	while(1)
-		continue;
+		server->teamTwoMakeUpdater(&updater);
+		socket_to_send->sendData(&updater, sizeof(character_updater_t));
+	}
 
 	return NULL;
 }
