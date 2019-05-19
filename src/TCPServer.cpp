@@ -173,6 +173,23 @@ int TCPServer::getNumberOfConections(){
 	return numberOfConnections;
 }
 
+int computeDistance(CharacterServer* character1, CharacterServer* character2)
+{
+	int distancia;
+	if (character1->getCentro() > character2->getCentro())
+	{
+		distancia = character1->getPosX() + character1->getSobrante() + character1->getWidth()
+						- (character2->getPosX() + character2->getSobrante());
+	}
+	else
+	{
+		distancia = character1->getPosX() + character1->getSobrante()
+				- (character2->getPosX() + character2->getSobrante() + character2->getWidth());
+	}
+	return distancia;
+}
+
+
 void TCPServer::clientReceive(int socket){
 
 	Socket* socket_to_read = clientsSockets[socket];
@@ -187,8 +204,25 @@ void TCPServer::clientReceive(int socket){
 	   	this->incoming_msges_queue.delete_data();
 
 	   	//update del team
+	    int distancia = computeDistance(team1->get_currentCharacter(),team2->get_currentCharacter());
 
 	   	character_updater_t update_msg;
+
+	    if(incoming_msg.client == 0 || incoming_msg.client == 1)//team1 es de los clientes 1 y 2
+	    {
+	    	team1->update(distancia,team2->get_currentCharacter()->getPosX(), incoming_msg.action);
+	    	update_msg.posX = team1->get_currentCharacter()->getPosX();
+	    	update_msg.posY = team1->get_currentCharacter()->getPosY();
+	    	update_msg.team = 1; //faltan mandar cosas?
+	    }
+	    else
+	    {
+	    	team2->update(distancia,team2->get_currentCharacter()->getPosX(),incoming_msg.action);
+	    	update_msg.posX = team2->get_currentCharacter()->getPosX();
+	        update_msg.posY = team2->get_currentCharacter()->getPosY();
+	        update_msg.team = 2;
+	    }
+
 	   	this->character_updater_queue[incoming_msg.client]->insert(update_msg);
 
 	   	continue;
@@ -198,6 +232,7 @@ void TCPServer::clientReceive(int socket){
 Socket** TCPServer::getClientsSockets(){
 	return this->clientsSockets;
 }
+
 
 
 /*Funcion que lee del socket la informacion que los clientes le envian.

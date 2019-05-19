@@ -43,13 +43,16 @@ void Team::changeCharacter()
 
 
 void Team::update(int distance, int posContrincante, actions_t action) {
-    if(action == MAKINGINTRO && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
-        changeCharacter();  //send change character
-//        setCharacterToChanging();
-        isChanging = true;
-    }
+
+	if(action == CHANGEME)
+	{
+		changeCharacter();
+		isChanging = true;
+	}
+
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
+
     currentCharacter->update(distance, posContrincante, action);
 }
 
@@ -65,4 +68,9 @@ void Team::changeClient(){
 void Team::makeUpdater(character_updater_t* updater){
 	updater->team = this->teamNumber;
 	this->currentCharacter->makeUpdaterStruct(updater);
+}
+
+CharacterServer* Team::get_currentCharacter()
+{
+	return this->currentCharacter;
 }
