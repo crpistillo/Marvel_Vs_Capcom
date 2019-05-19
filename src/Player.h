@@ -9,12 +9,13 @@
 #include "CharactersClient/CharacterClient.h"
 #include "Controls/Controls.h"
 #include "tools/logger/Logger.h"
+#include "data_structs.h"
 
 class Player: public Renderizable {
 public:
     Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(SDL_Renderer* renderer, int distance, int posContrincante);
+    void update(character_builder_t* builder);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 

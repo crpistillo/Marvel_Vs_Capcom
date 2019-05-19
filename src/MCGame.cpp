@@ -356,7 +356,7 @@ void MCGame::update() {
     //playersUpdate(structRecived)
 
 
-    players[0]->update(m_Renderer, distancia, players[1]->getCentro());
+    players[0]->update();
 //  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);

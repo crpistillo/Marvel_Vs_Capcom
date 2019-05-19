@@ -19,7 +19,7 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 }
 
 
-void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
+void Player::update() {
 	Logger* logger = Logger::getInstance();
     InputManager* inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
