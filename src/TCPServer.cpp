@@ -410,49 +410,28 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) 
 
 	switch(character_n){
 	case SPIDERMAN:
-		if(nclient < 2)
-			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
-					false,
-					constants.widthSpiderman,
-					constants.heightSpiderman,
-					constants.spidermanSobrante,
-					constants.spidermanAncho,
-					constants.screenWidth,
-					nclient
-					);
-		else
-			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
-					false,
-					constants.widthSpiderman,
-					constants.heightSpiderman,
-					constants.spidermanSobrante,
-					constants.spidermanAncho,
-					constants.screenWidth,
-					nclient
-					);
+		characterServer = new SpidermanServer(
+			constants.INITIAL_POS_X_PLAYER_ONE,
+			nclient < 2 ? false : true,
+			constants.widthSpiderman,
+			constants.heightSpiderman,
+			constants.spidermanSobrante,
+			constants.spidermanAncho,
+			constants.screenWidth,
+			nclient
+		);
 		break;
 
 	case WOLVERINE:
-		if(nclient < 2)
-			characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-					false,
-					constants.widthWolverine,
-					constants.heightWolverine,
-					constants.wolverineSobrante,
-					constants.wolverineAncho,
-					constants.screenWidth,
-					nclient
-					);
-		else
-			characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-				false,
-				constants.widthWolverine,
-				constants.heightWolverine,
-				constants.wolverineSobrante,
-				constants.wolverineAncho,
-				constants.screenWidth,
-				nclient
-				);
+		characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+			nclient < 2 ? false : true,
+			constants.widthWolverine,
+			constants.heightWolverine,
+			constants.wolverineSobrante,
+			constants.wolverineAncho,
+			constants.screenWidth,
+			nclient
+		);
 	}
 
 	return characterServer;
