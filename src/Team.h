@@ -19,11 +19,12 @@ private:
 	int sizeOfTeam;
 	bool isChanging;
 	int clientActive;
+	int teamNumber;
 
 	//numberOfClientsActive
 
 public:
-	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize);
+	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize, int teamNumber);
 
 	void changePlayer(); //cambia el character y el cliente del mismo
 
@@ -37,6 +38,8 @@ public:
     void update(int distance, int posContrincante, actions_t action);
 
     void changeClient();
+
+    void makeUpdater(character_updater_t* builder);
 };
 
 

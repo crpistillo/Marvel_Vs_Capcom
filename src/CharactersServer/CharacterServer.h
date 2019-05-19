@@ -42,6 +42,7 @@ public:
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder) = 0;
+    void makeUpdaterStruct(character_updater_t* updater);
 
 
     int clientNumber;

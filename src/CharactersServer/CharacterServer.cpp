@@ -257,6 +257,44 @@ void CharacterServer::walkingSpriteUpdate() {
 
 }
 
+void CharacterServer::makeUpdaterStruct(character_updater_t* updater){
+	updater->posX = this->mPosX;
+	updater->posY = this->mPosY;
+	updater->action = this->currentAction;
+
+	switch(this->currentAction){
+	case STANDING:
+		updater->currentSprite = this->currentStandingSprite;
+		break;
+	case JUMPINGLEFT:
+		updater->currentSprite = this->currentJumpingLeftSprite;
+		break;
+	case JUMPINGRIGHT:
+		updater->currentSprite = this->currentJumpingRightSprite;
+		break;
+	case JUMPINGVERTICAL:
+		updater->currentSprite = this->currentJumpingSprite;
+		break;
+	case MAKINGINTRO:
+		updater->currentSprite = this->currentIntroSprite;
+		break;
+	case DUCK:
+		updater->currentSprite = 0;
+		break;
+	case MOVINGRIGHT:
+		updater->currentSprite = this->currentWalkingSprite;
+		break;
+	case MOVINGLEFT:
+		updater->currentSprite = this->currentWalkingSprite;
+		break;
+	case WALKBACK:
+		updater->currentSprite = this->currentWalkbackSprite;
+		break;
+	}
+
+
+
+}
 
 
 

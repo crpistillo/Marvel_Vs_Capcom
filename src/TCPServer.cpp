@@ -264,11 +264,29 @@ static void* ClientSend(void* args){
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de mandar datos al socket: "
 	+ to_string(socket_to_send->fd) +"\n";
 
+	character_updater_t updater;
+
+	server->teamOneMakeUpdater(&updater);
+	socket_to_send->sendData(&updater, sizeof(character_updater_t));
+
+	server->teamTwoMakeUpdater(&updater);
+	socket_to_send->sendData(&updater, sizeof(character_updater_t));
+
 	while(1)
 		continue;
 
 	return NULL;
 }
+
+void TCPServer::teamOneMakeUpdater(character_updater_t* updater){
+	this->team1->makeUpdater(updater);
+}
+
+void TCPServer::teamTwoMakeUpdater(character_updater_t* updater){
+	this->team2->makeUpdater(updater);
+}
+
+
 
 int TCPServer::createSendingThreadPerClient(){
 	info_for_thread_t* args[MAXPLAYERS];
@@ -326,8 +344,8 @@ void TCPServer::runServer() {
 
     cout << character << endl;
 
-    team1 = new Team(character1, character2, 1);
-    team2 = new Team(character3, character4, 1);
+    team1 = new Team(character1, character2, 1, 1);
+    team2 = new Team(character3, character4, 1, 2);
 
 
     clientsSockets[0]->sendData(&builder1, sizeof(character_builder_t));
@@ -340,8 +358,8 @@ void TCPServer::runServer() {
     clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
     clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
 
-  //  createReceivingThreadPerClient();
-    //createSendingThreadPerClient();
+    //createReceivingThreadPerClient();
+    createSendingThreadPerClient();
 
 }
 

@@ -175,6 +175,24 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         characters[i] = characterBuild(builder);
     }
 
+    char bufUpdater[sizeof(character_updater_t)];
+    character_updater_t* up1;
+    character_updater_t* up2;
+
+    tcpClient->socketClient->reciveData(bufUpdater, sizeof(character_updater_t));
+    up1 = (character_updater_t*) bufUpdater;
+    cout << "Posicion X: " + to_string(up1->posX) << endl;
+    cout << "Posicion Y: " + to_string(up1->posY) << endl;
+    cout << "Current Action: "  + to_string(up1->action) << endl;
+    cout << "Team: "  + to_string(up1->team) << endl;
+
+    tcpClient->socketClient->reciveData(bufUpdater, sizeof(character_updater_t));
+    up2 = (character_updater_t*) bufUpdater;
+    cout << "Posicion X: " + to_string(up2->posX) << endl;
+    cout << "Posicion Y: " + to_string(up2->posY) << endl;
+    cout << "Current Action: "  + to_string(up2->action) << endl;
+    cout << "Team: "  + to_string(up2->team) << endl;
+
 
     logger->log("Creacion de controles.", DEBUG);
 

@@ -11,12 +11,13 @@
 
 const int MAX_PLAYERS = 4;
 
-Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int teamSize )
+Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int teamSize, int teamNumber )
 {
 	this->currentCharacter = firstCharact;  //es el que esta jugando ahora
 	this->firstCharacter = firstCharact;
 	this->secondCharacter = secondCharact;
 	this->sizeOfTeam = teamSize;
+	this->teamNumber = teamNumber;
 	isChanging = false;
 	clientActive = currentCharacter->clientNumber;
 
@@ -59,4 +60,9 @@ void Team::changeClient(){
     else
         this->clientActive = firstCharacter->clientNumber;
 
+}
+
+void Team::makeUpdater(character_updater_t* updater){
+	updater->team = this->teamNumber;
+	this->currentCharacter->makeUpdaterStruct(updater);
 }

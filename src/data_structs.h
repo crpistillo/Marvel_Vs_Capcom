@@ -33,6 +33,14 @@ typedef struct{
     actions_t action;
 } character_builder_t;
 
+typedef struct{
+	int posX;
+	int posY;
+	int currentSprite;
+	actions_t action;
+	int team;
+} character_updater_t;
+
 
 //centro de 2 currentPlayers
 //pos player1, sobrante player1, width player1

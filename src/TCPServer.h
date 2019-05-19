@@ -68,6 +68,8 @@ public:
     int createReceivingThreadPerClient();
     int createSendingThreadPerClient();
     Socket** getClientsSockets();
+    void teamOneMakeUpdater(character_updater_t* updater);
+    void teamTwoMakeUpdater(character_updater_t* updater);
 
     void runServer();
 
