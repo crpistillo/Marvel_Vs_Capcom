@@ -6,6 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
+#include <thread>
 
 
 using namespace std;
@@ -164,8 +165,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 
-
-
     //Construyo los 4 personajes según la configuracion que me mande el server.
 
     for (int i = 0; i < 4; ++i) {
@@ -175,12 +174,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         builder = (character_builder_t*) buf1;
         characters[i] = characterBuild(builder);
     }
-
-
-
-    	//Crear wolverine
-
-    //Seguir con el resto
 
 
     logger->log("Creacion de controles.", DEBUG);
@@ -216,8 +209,6 @@ void MCGame::run() {
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
 
-	//Se encarga de mandar al server los estados del personaje
-	//thread->handle events()
 
 	while(m_Running) {
 		fpsManager.start();
@@ -517,4 +508,13 @@ void MCGame::updateNuevo(render_data_t* render_data)
 
     // Mandamos all characters y lo hace con los que tienen playing = true;
     parallaxController->doParallax(&player1,&player2,logger);
+}
+
+void MCGame::action_update() {
+    while (1){
+        handleEvents();
+        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
+        tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+    }
+
 }

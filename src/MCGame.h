@@ -49,6 +49,9 @@ private:
     CharacterClient* characters[4];
     void loadGroundTextureByZIndex();
     Constants* constants = (Constants*) (malloc(sizeof(Constants *)));
+    void action_update();
+    int myCharacter;
+
 
 
 protected:
