@@ -21,6 +21,7 @@
 #include "data_structs.h"
 #include "Team.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
+#include "Queue/Queue.h"
 
 using namespace std;
 
@@ -44,6 +45,11 @@ private:
     json config;
 
 public:
+    Queue<incoming_msg_t> incoming_msges_queue; //cola de los mensajes entrantes del cliente
+
+    Queue<character_updater_t>* character_updater_queue[MAXPLAYERS];
+    				//cola de mensajes de escritura para cada cliente
+
     Socket* serverSocket;
     Socket* newSockFd;
     int n, pid;

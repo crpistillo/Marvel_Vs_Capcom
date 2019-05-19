@@ -16,6 +16,7 @@ class Queue
 private:
 	Node<Data>* first;// Primer elemento de la cola
 	Node<Data>* last; // Ultimo elemento de la cola
+	int size;
 
 public:
 	 Queue();
@@ -24,6 +25,7 @@ public:
 	 void insert(Data data);
 	 Data get_data();
 	 void delete_data();
+	 int get_size();
 
 };
 
@@ -32,6 +34,7 @@ Queue<Data>::Queue()
 {
 	this->first = 0;
 	this->last = 0;
+	this->size = 0;
 }
 
 template <typename Data>
@@ -51,7 +54,7 @@ template <typename Data>
 void Queue<Data>::insert(Data data)
 {
 	Node<Data>* ptrNode = new Node<Data>(data);
-	if (this->empty_queue)
+	if (this->empty_queue())
 	{
 		this->first = ptrNode;
 	}
@@ -61,6 +64,7 @@ void Queue<Data>::insert(Data data)
 	}
 
 	this->last = ptrNode;
+	this->size++;
 }
 
 template <typename Data>
@@ -75,6 +79,13 @@ void Queue<Data>::delete_data()
 	Node<Data>* ptrAux = this->first;
 	this->first = ptrAux->get_nextPointer();
 	delete ptrAux;
+	this->size--;
+}
+
+template <typename Data>
+int Queue<Data>::get_size()
+{
+	return this->size;
 }
 
 #endif /* QUEUE_QUEUE_H_ */
