@@ -241,7 +241,7 @@ void MCGame::run() {
 
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
-    std::thread first (&MCGame::action_update);
+	std::thread first (&MCGame::action_update, this);
 	while(m_Running) {
 		fpsManager.start();
 
