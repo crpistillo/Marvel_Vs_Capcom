@@ -37,6 +37,7 @@ private:
     Texture frontGroundTexture;
     Texture middleGroundTexture;
     Texture backGroundTexture;
+    Texture menuTexture;
     Layer* middleGround;
     Layer* backGround;
     Layer* frontGround;
@@ -62,6 +63,7 @@ public:
     bool init(const char* title, int xpos, int ypos, int width, int
     height, int flags);
     void run();
+    void menu();
     void render();
     void update();
     void handleEvents();

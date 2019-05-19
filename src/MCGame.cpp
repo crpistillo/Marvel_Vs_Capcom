@@ -291,6 +291,7 @@ void MCGame::clean() {
     frontGroundTexture.free();
     middleGroundTexture.free();
     backGroundTexture.free();
+    menuTexture.free();
     logger->log("Liberacion de variables de fondo finalizado.", DEBUG);
     delete backGround;
     delete middleGround;
@@ -519,7 +520,62 @@ void MCGame::updateNuevo(render_data_t* render_data)
 }
 
 
+/*Pensaba hacer que la distribución de personajes en los equipos sea por orden de
+ * eleccion y no conexion. O sea, los primeros dos jugadores tienen total libertad
+ * para elegir, entonces el primero que elige va al team1, y el segundo que elige
+ * al team2. En ese punto se "bloquea" la pantalla, ya que los otros dos jugadores
+ * que quedan en realidad ya no pueden elegir, sino que les toca el personaje que
+ * no eligió el otro */
+void MCGame::menu() {
+	bool bloqueado = false;
+	bool seleccionando = true;
+	bool eligioASpiderman = true; //Por defecto arranca con Spiderman seleccionado
+	menuTexture.loadFromFile("images/menu/menuS.png", m_Renderer);
+	while (seleccionando && !bloqueado){
+		//Aca falta recibir algo del server para saber si está bloqueado
+		InputManager* inputManager = InputManager::getInstance();
+		inputManager->update();
+		if (inputManager->isKeyDown(KEY_RIGHT) && !bloqueado){
+			menuTexture.loadFromFile("images/menu/menuW.png", m_Renderer);
+			eligioASpiderman = false;
+		}
+		if (inputManager->isKeyDown(KEY_LEFT) && !bloqueado){
+			menuTexture.loadFromFile("images/menu/menuS.png", m_Renderer);
+			eligioASpiderman = true;
+		}
+		if(inputManager->quitRequested()) {
+			seleccionando = false;
+			m_Running = false;
+		}
+		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear(m_Renderer);
+		menuTexture.render(0, 0, 800, 600, m_Renderer);
+		SDL_RenderPresent(m_Renderer);
+		if (inputManager->isKeyDown(KEY_RETURN)) {
+			seleccionando = false;
+			bloqueado = true;
+			//Aca tengo que enviar algo al server para que bloque
+			//Tambien debo cargar la pantalla de bloqueo correspondiente
+		}
 
+		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
+		 * deberia quitar de ahi*/
+		char* character1;
+		char* character2;
+		if (eligioASpiderman){
+			character1 = "Spiderman";
+			character2 = "Wolverine";
+		} else {
+			character1 = "Wolverine";
+			character2 = "Spiderman";
+		}
+		if (!bloqueado){
+			tcpClient->Send((void*) character1, sizeof(character1) + 1);
+			tcpClient->Send((void*) character2, sizeof(character2) + 1);
+		}
+
+	}
+}
 
 
 
