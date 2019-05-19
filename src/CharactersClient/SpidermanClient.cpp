@@ -7,10 +7,11 @@
 
 using namespace std;
 
-const unsigned int SECONDARY_RED = 255;
-const unsigned int SECONDARY_GREEN = 200;
-const unsigned int SECONDARY_BLUE = 000;
+const Uint8 SECONDARY_RED = 255;
+const Uint8 SECONDARY_GREEN = 200;
+const Uint8 SECONDARY_BLUE = 000;
 
+const string spidermanPath = "images/spiderman/spiderman_";
 const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
@@ -27,10 +28,11 @@ SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int h
         height,
         anchoPantalla, numberOfClient)
 {
+    this->characterFilepath = spidermanPath;
     if (secondaryColor)
-        loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
+        loader = new ImageLoader(SECONDARY_RED,  SECONDARY_GREEN,  SECONDARY_BLUE);
     else
-        loader = new ImageLoader(255, 255, 255);
+        loader = new ImageLoader((Uint8)255, (Uint8)255, (Uint8)255);
     currentAction = STANDING;
 }
 

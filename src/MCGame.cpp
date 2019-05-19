@@ -232,7 +232,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 void MCGame::action_update() {
 	actions_t lastAction = STANDING; //BORRAR
-	bool threadRunning = true;
     while (true){
         handleEvents();
         actions_t actionToSend = clientControls->getNewAction();
