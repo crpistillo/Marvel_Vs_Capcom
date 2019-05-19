@@ -177,12 +177,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     }
 
 
-
-    	//Crear wolverine
-
-    //Seguir con el resto
-
-
     logger->log("Creacion de controles.", DEBUG);
 
     Controls* controlPlayer1 = new ArrowControls();
