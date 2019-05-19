@@ -147,6 +147,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     constants->widthWolverine = widthWolverine;
     constants->heightSpiderman = heightSpiderman;
     constants->heightWolverine = heightWolverine;
+    constants->zIndexSpiderman = spidermanConfig["zindex"];
+    constants->zIndexWolverine = wolverineConfig["zindex"];
 
 
     constants->spidermanSobrante = widthSpiderman * 242 / 640;
@@ -178,7 +180,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         buf1 = tcpClient->receive(sizeof(character_builder_t));
         builder = (character_builder_t*) buf1;
         characters[i] = characterBuild(builder);
-        characters[i]->setZIndex(99);
     }
 
     char bufUpdater[sizeof(character_updater_t)];
@@ -400,6 +401,7 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
                                                       constants->spidermanSobrante,
                                                       constants->spidermanAncho,
                                                       constants->screenWidth, builder->cliente);
+            characterClient->setZIndex(constants->zIndexSpiderman);
             break;
 
         case WOLVERINE:
@@ -419,6 +421,7 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
                                                       constants->wolverineSobrante,
                                                       constants->wolverineAncho,
                                                       constants->screenWidth, builder->cliente);
+            characterClient->setZIndex(constants->zIndexWolverine);
     }
     return characterClient;
 }

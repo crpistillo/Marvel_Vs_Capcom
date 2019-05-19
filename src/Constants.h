@@ -12,8 +12,10 @@ typedef struct
 {
 	int widthSpiderman;
 	int heightSpiderman;
+	int zIndexSpiderman;
 	int widthWolverine;
 	int heightWolverine;
+	int zIndexWolverine;
 	int spidermanSobrante;
 	int spidermanAncho;
 	int wolverineSobrante;
