@@ -10,7 +10,7 @@
 
 #include "Texture/Texture.h"
 #include "Player.h"
-#include<SDL2/SDL.h>
+#include <SDL2/SDL.h>
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;

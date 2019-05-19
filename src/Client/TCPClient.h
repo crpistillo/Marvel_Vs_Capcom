@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <vector>
 #include "../Socket.h"
+#include <pthread.h>
 
 using namespace std;
 
@@ -27,7 +28,6 @@ private:
     std::string address;
     int port;
     struct sockaddr_in server;
-
 
 
 public:
@@ -41,6 +41,7 @@ public:
     int nclient;
 
     Socket* socketClient;
+
 };
 
 #endif

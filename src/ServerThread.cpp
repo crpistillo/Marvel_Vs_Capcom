@@ -53,6 +53,8 @@ void* ServerThread::loopStatic(void *arg)
 	ServerThread* obj = (ServerThread *)arg;
 	obj->loop();
 }
+
+
 /*
 void ServerThread::join()
 {

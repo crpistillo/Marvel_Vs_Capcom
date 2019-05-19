@@ -19,7 +19,6 @@
 #include "Socket.h"
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
-#include <pthread.h>
 #include "Team.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 

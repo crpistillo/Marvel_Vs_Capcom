@@ -172,7 +172,9 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     	}
     }
 
-    mcGame = new MCGame(config, ancho, alto, tcpClient);
+    CharacterClient* characterClient;//cambiar despues
+
+    mcGame = new MCGame(config, ancho, alto, tcpClient, characterClient);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->run();

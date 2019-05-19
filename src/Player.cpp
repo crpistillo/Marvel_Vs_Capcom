@@ -24,7 +24,6 @@ Player::Player(CharacterClient *first, CharacterClient *second, Controls *contro
 }
 
 
-
 void Player::update(SDL_Renderer *renderer, int distance, int posContrincante) {
 	Logger* logger = Logger::getInstance();
     InputManager* inputManager = InputManager::getInstance();

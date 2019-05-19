@@ -6,7 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
-#include "data_structs.h"
+
 
 using namespace std;
 
@@ -93,12 +93,13 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
+MCGame::MCGame(json config, int ancho, int alto, TCPClient* client, CharacterClient* characterClient) {
 
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
     this->SCREEN_HEIGHT = alto;
     this->tcpClient = client;
+    this->characterClient = characterClient;
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
@@ -152,6 +153,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     constants->INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - constants->wolverineSobrante) - (constants->wolverineAncho / 2) + 200;
 
     logger->log("Creacion de personajes.", DEBUG);
+
+    //////////////////////////////////////////////////////////////////////
 
     // Setiar los characters con su numero de player segun server
 
@@ -236,7 +239,7 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*player1) , &(*player2)};
+	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 5; i++){
@@ -279,8 +282,6 @@ void orderRenderizableListByZIndex(Renderizable** list){
 	}
 }
 
-
-
 void MCGame::clean() {
     //m_Texture.free();
     free(constants);
@@ -307,6 +308,12 @@ void MCGame::handleEvents() {
     inputManager->update();
     if(inputManager->quitRequested()) m_Running = false;
 }
+
+//centro de 2 currentPlayers
+//pos player1, sobrante player1, width player1
+//pos player2, sobrante player2, width player2
+
+
 
 void MCGame::update() {
 
@@ -401,3 +408,123 @@ void orderBackgroundsByZIndex(json* backgroundList){
 		pos_sel = 0;
 	}
 }
+
+static void* clientRead(void* args)
+{
+	TCPClient *client = (TCPClient*) args;
+
+	void* buf1[sizeof(character_builder_t)];
+
+	client->socketClient->reciveData(&buf1, sizeof(character_builder_t));
+
+	character_builder_t* builder = (character_builder_t*) buf1;
+
+	//this->updateNuevo(builder);
+	//this->renderNuevo();
+
+	//tiene que renderizar en base a lo que recibe en character_builder_t
+	//Esto aca no anda porq no es de la clase, no entiendo si hay que updatear y renderizar en
+	// el thread o afuera o encolar y despues updatear/renderizar
+
+
+
+	return 0;
+}
+
+static void* clientWrite(void* args)
+{
+	TCPClient *client = (TCPClient*) args;
+
+
+
+}
+
+void MCGame::createReadThread()
+{
+	pthread_create( &(this->readThread), NULL, clientRead, this);
+}
+
+void MCGame::createWriteThread()
+{
+	pthread_create( &(this->writeThread),NULL, clientWrite, this);
+}
+
+void MCGame::renderNuevo()
+{
+	logger->log("Inicio render.", DEBUG);
+
+	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
+
+	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characterClient)};
+	orderRenderizableListByZIndex(renderizables);
+
+	for(int i = 0; i < 4; i++){
+		if(renderizables[i] == backGround){
+			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == middleGround){
+			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == frontGround){
+			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+		}
+		else if(renderizables[i] == characterClient){
+			characterClient->render(m_Renderer, camera.x, camera.y, characterClient->getCentro());
+		}
+
+	}
+	logger->log("Fin render.", DEBUG);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
+}
+
+void MCGame::updateNuevo(render_data_t* render_data)
+{
+	logger->log("Reubicacion inicio.", DEBUG);
+
+	if (render_data->currentCharacter1.centro > render_data->currentCharacter2.centro)
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante +
+					render_data->currentCharacter1.width -(render_data->currentCharacter2.posX +
+					render_data->currentCharacter2.sobrante);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					 -(render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					 +render_data->currentCharacter1.width);
+	}
+	else
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					-(render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width - (render_data->currentCharacter1.posX
+					+ render_data->currentCharacter1.sobrante);
+	}
+    logger->log("Actualizacion posicion MCGame.", DEBUG);
+
+    //tcpClient->recive()      // recibimos la struct de update
+    //playersUpdate(structRecived)
+
+
+
+    this->characterClient->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
+
+    player1->update(m_Renderer, distancia, player2->getCentro());
+//  player2->update(m_Renderer, distancia2, player1->getCentro());
+
+    logger->log("Actualizacion parallax - MCGame.", DEBUG);
+
+
+    // Mandamos all characters y lo hace con los que tienen playing = true;
+    parallaxController->doParallax(&player1,&player2,logger);
+}
+
+
+
+
+
+
+
+

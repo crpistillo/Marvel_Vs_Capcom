@@ -5,6 +5,7 @@
 #include "TCPClient.h"
 #include "../tools/logger/Logger.h"
 
+
 TCPClient::TCPClient() {
     socketClient = new Socket();
     port = 0;
@@ -51,4 +52,6 @@ void TCPClient::exit() {
     //socketClient->close();
     //delete socketClient;
 }
+
+
 
