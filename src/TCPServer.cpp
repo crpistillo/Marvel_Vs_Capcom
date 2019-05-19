@@ -362,6 +362,9 @@ void TCPServer::runServer() {
     createReceivingThreadPerClient();
     createSendingThreadPerClient();
 
+    while(1)
+    	continue;
+
 }
 
 CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) {
