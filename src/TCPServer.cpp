@@ -181,7 +181,18 @@ void TCPServer::clientReceive(int socket){
 	+ to_string(socket_to_read->fd) +"\n";
 
 	while(1)
-		continue;
+	{
+		//pop msges
+	   	incoming_msg_t incoming_msg = this->incoming_msges_queue.get_data();
+	   	this->incoming_msges_queue.delete_data();
+
+	   	//update del team
+
+	   	character_updater_t update_msg;
+	   	this->character_updater_queue[incoming_msg.client]->insert(update_msg);
+
+	   	continue;
+	}
 }
 
 Socket** TCPServer::getClientsSockets(){
@@ -215,6 +226,14 @@ static void* ClientReceive(void* args){
     while(1){
         socket_to_read->reciveData(accion,sizeof(actions_t));
         actions_t* n = (actions_t*) accion;
+
+        //Agrego elementos a la cola de mensajes entrantes
+        incoming_msg_t aux;
+        aux.action = *n;
+        aux.client = arg->clientSocket;
+        server->incoming_msges_queue.insert(aux);
+        //////////////////////////////////////////////////
+
         string accion_palabra;
         switch (*n){
             case STANDING:
