@@ -15,6 +15,7 @@
 #define ML 6
 #define MR 7
 #define WB 8
+#define CM 9
 
 #define R 0
 #define L 1
@@ -22,7 +23,7 @@
 
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
-    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB
+    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM
 } actions_t;
 
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H

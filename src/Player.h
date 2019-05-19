@@ -15,7 +15,7 @@ class Player: public Renderizable {
 public:
     Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(character_builder_t* builder);
+    void update(character_updater_t* updater);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 

@@ -37,12 +37,12 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite,
+                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH,
-                                               currentStandingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case DUCK:
@@ -55,58 +55,58 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
         case JUMPINGVERTICAL:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,
-                                               currentJumpingSprite,
+                                               currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite,
+                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGRIGHT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH,
-                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH,
-                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGLEFT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH,
-                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH,
-                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
         case MAKINGINTRO:
-            this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite, FILE_EXTENSION,
+            this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
                                            renderer, &m_Texture);
             break;
         case MOVINGLEFT:
         case MOVINGRIGHT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
-                                               currentWalkingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH,
-                                               currentWalkingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case WALKBACK:
             if(isLookingLeft)
 
                 this->loader->loadActionSprite(characterFilepath + "walkbackwards_left", MVC_FILEPATH,
-                                               currentWalkbackSprite, FILE_EXTENSION, renderer, &m_Texture);
+                                               currentSprite, FILE_EXTENSION, renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "walkbackwards_right", MVC_FILEPATH,
-                                               currentWalkbackSprite, FILE_EXTENSION, renderer, &m_Texture);
+                                               currentSprite, FILE_EXTENSION, renderer, &m_Texture);
             break;
 
     }

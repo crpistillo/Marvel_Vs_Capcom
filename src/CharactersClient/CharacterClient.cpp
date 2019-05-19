@@ -23,13 +23,7 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
     this->ZIndex = 0;
     this->anchoPantalla = anchoPantalla;
     this->characterFilepath = "";
-    this->currentWalkingSprite = 0;
-    this->currentStandingSprite = 0;
-    this->currentWalkbackSprite = 0;
-    this->currentJumpingSprite = 0;
-    this->currentJumpingRightSprite = 0;
-    this->currentJumpingLeftSprite = 0;
-    this->currentIntroSprite = 0;
+    this->currentSprite = 0;
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
 
@@ -113,6 +107,14 @@ void CharacterClient::setZIndex(int z) {
 
 void CharacterClient::setFilepath(string fp) {
     this->characterFilepath = fp;
+}
+
+void CharacterClient::update(character_updater_t *updater) {
+    if (updater->action != CHANGEME)
+        currentAction = updater->action;
+    mPosX = updater->posX;
+    mPosY = updater->posY;
+    currentSprite = updater->currentSprite;
 }
 
 

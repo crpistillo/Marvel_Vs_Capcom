@@ -16,6 +16,7 @@
 #include "../tools/logger/Logger.h"
 #include "../orientation_constants.h"
 #include "../Renderizable.h"
+#include "../data_structs.h"
 
 
 using namespace std;
@@ -55,6 +56,8 @@ public:
     int clientNumber;
 
 
+    void update(character_updater_t *ptr);
+
 protected:
     CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
@@ -76,13 +79,7 @@ protected:
     Texture m_Texture;
     ImageLoader *loader;
 
-    int currentStandingSprite;
-    int currentWalkingSprite;
-    int currentJumpingSprite;
-    int currentJumpingRightSprite;
-    int currentJumpingLeftSprite;
-    int currentWalkbackSprite;
-    int currentIntroSprite;
+    int currentSprite;
 
     Controls *characterControls;
 
@@ -90,31 +87,6 @@ protected:
 
   //  int mVelX, mVelY;
 
-
-    /*
-private:
-
-    virtual void resetSpriteVariables() = 0;
-
-    virtual void stand() = 0;
-
-    virtual void renderDuckSprite() = 0;
-
-    virtual void moveRight( int distance, int posContrincante) = 0;
-
-    virtual void moveLeft( int distance, int posContrincante) = 0;
-
-    virtual void jumpVertical() = 0;
-
-    virtual void jumpRight() = 0;
-
-    virtual void jumpLeft() = 0;
-
-    virtual void updateStand() = 0;
-
-    virtual void makeIntro() = 0;
-
-     */
 };
 
 

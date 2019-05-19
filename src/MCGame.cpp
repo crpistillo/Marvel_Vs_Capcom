@@ -228,6 +228,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger, SCREEN_WIDTH);
 }
 
+
+
 void MCGame::action_update() {
 	actions_t lastAction = STANDING; //BORRAR
 	bool threadRunning = true;
@@ -249,7 +251,6 @@ void MCGame::run() {
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
 	std::thread first (&MCGame::action_update, this);
-    InputManager* inputManager = InputManager::getInstance();
     while(m_Running) {
 		fpsManager.start();
 
@@ -257,10 +258,6 @@ void MCGame::run() {
 		render();
 
 		fpsManager.stop();
-        if(inputManager->quitRequested()) {
-            m_Running = false;
-            first.detach();
-        }
     }
 
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
@@ -355,8 +352,12 @@ void MCGame::update() {
     //tcpClient->recive()      // recibimos la struct de update
     //playersUpdate(structRecived)
 
+/*    void* buf1;
 
-    players[0]->update();
+    tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+    character_updater_t* updater = (character_updater_t*) buf1;*/
+
+ //   players[0]->update(updater);
 //  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);

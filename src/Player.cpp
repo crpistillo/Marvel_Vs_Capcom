@@ -19,19 +19,24 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 }
 
 
-void Player::update() {
-	Logger* logger = Logger::getInstance();
-    InputManager* inputManager = InputManager::getInstance();
-    logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
-    if(inputManager->isKeyDown(changeKey) && !(currentCharacter->currentAction == MAKINGINTRO) && currentCharacter->currentAction == STANDING){
+void Player::update(character_updater_t* updater) {
+
+
+    if(updater->action == CHANGEME){
         changeCharacter();  //send change character
         setCharacterToChanging();
         isChanging = true;
     }
+    currentCharacter->update(updater);
+	Logger* logger = Logger::getInstance();
+    InputManager* inputManager = InputManager::getInstance();
+    logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
+
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
    // currentCharacter->load(renderer, distance, posContrincante);
 }
+
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
 	Logger* logger = Logger::getInstance();
@@ -102,5 +107,7 @@ int Player::getZIndex(){
 	return this->currentCharacter->getZIndex();
 
 }
+
+
 
 

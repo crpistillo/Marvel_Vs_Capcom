@@ -43,12 +43,12 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentStandingSprite,
+                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH,
-                                               currentStandingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case DUCK:
@@ -62,42 +62,42 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
         case JUMPINGVERTICAL:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,
-                                               currentJumpingSprite,
+                                               currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentJumpingSprite,
+                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGRIGHT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH,
-                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH,
-                                               currentJumpingRightSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGLEFT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH,
-                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH,
-                                               currentJumpingLeftSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
         case MAKINGINTRO:
-            if (!isLookingLeft && 10 <= currentIntroSprite && currentIntroSprite <= 16)
-                this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentIntroSprite,
+            if (!isLookingLeft && 10 <= currentSprite && currentSprite <= 16)
+                this->loader->loadActionSprite(characterFilepath + "intro", "/MVC2_SpiderManR_", currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentIntroSprite,
+                this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
@@ -105,11 +105,11 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
         case MOVINGRIGHT:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
-                                               currentWalkingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
                 this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH,
-                                               currentWalkingSprite, FILE_EXTENSION,
+                                               currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
     }
