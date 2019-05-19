@@ -57,8 +57,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                player1->loads(m_Renderer, 0);
-                player2->loads(m_Renderer, 1);
+                players[0]->loads(m_Renderer, 0);
+                players[1]->loads(m_Renderer, 1);
 
 
                 loadGroundTextureByZIndex();
@@ -194,9 +194,15 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     cout << "Team: "  + to_string(up2->team) << endl;
 
 
+
     logger->log("Creacion de controles.", DEBUG);
 
     Controls* controlPlayer1 = new ArrowControls();
+
+    players[0] = new Player(characters[0], characters[1], controlPlayer1);
+
+    players[1] = new Player(characters[2], characters[3], controlPlayer1);
+
 
     logger->log("Creacion de Jugador.", DEBUG);
 
@@ -220,18 +226,25 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger, SCREEN_WIDTH);
 }
 
+void MCGame::action_update() {
+    while (1){
+        handleEvents();
+        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
+        tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+    }
+
+}
+
 void MCGame::run() {
 	m_Running = true;
 	FPSManager fpsManager(SCREEN_FPS);
 
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
-
-
+    std::thread first (&MCGame::action_update);
 	while(m_Running) {
 		fpsManager.start();
 
-		handleEvents();
 		update();
 		render();
 
@@ -247,7 +260,7 @@ void MCGame::render() {
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[4] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
+	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*players[0]) , &(*players[1])};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 5; i++){
@@ -260,11 +273,11 @@ void MCGame::render() {
 		else if(renderizables[i] == frontGround){
 			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
-		else if(renderizables[i] == player2){
-			player2->render(m_Renderer, camera.x, camera.y, player1->getCentro());
+		else if(renderizables[i] == players[1]){
+			players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
 		}
-		else if(renderizables[i] == player1){
-			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro());
+		else if(renderizables[i] == players[0]){
+			players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
 		}
 	}
 	logger->log("Fin render.", DEBUG);
@@ -294,8 +307,8 @@ void MCGame::clean() {
     //m_Texture.free();
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
-    delete player1;
-    delete player2;
+    delete players[0];
+    delete players[1];
     logger->log("Borrado de jugadores finalizado.", DEBUG);   
     frontGroundTexture.free();
     middleGroundTexture.free();
@@ -319,22 +332,22 @@ void MCGame::handleEvents() {
 }
 
 //centro de 2 currentPlayers
-//pos player1, sobrante player1, width player1
-//pos player2, sobrante player2, width player2
+//pos players[0], sobrante players[0], width players[0]
+//pos players[1], sobrante players[1], width players[1]
 
 
 
 void MCGame::update() {
 
 	logger->log("Reubicacion inicio.", DEBUG);
-	//distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
-	//distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
-	if (player1->getCentro() > player2->getCentro()) {
-		distancia = player1->getPosX()+player1->getSobrante()+player1->getWidth() - (player2->getPosX()+player2->getSobrante());
-		distancia2 = player2->getPosX()+player2->getSobrante() - (player1->getPosX()+player1->getSobrante()+player1->getWidth());
+	//distancia = players[0]->getPosX() + (198/2) - players[1]->getPosX() + (157/2);
+	//distancia2 = players[1]->getPosX() + (157/2) - players[0]->getPosX() + (198/2);
+	if (players[0]->getCentro() > players[1]->getCentro()) {
+		distancia = players[0]->getPosX()+players[0]->getSobrante()+players[0]->getWidth() - (players[1]->getPosX()+players[1]->getSobrante());
+		distancia2 = players[1]->getPosX()+players[1]->getSobrante() - (players[0]->getPosX()+players[0]->getSobrante()+players[0]->getWidth());
 	} else {
-		distancia = player1->getPosX()+player1->getSobrante() - (player2->getPosX()+player2->getSobrante()+player2->getWidth());
-		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
+		distancia = players[0]->getPosX()+players[0]->getSobrante() - (players[1]->getPosX()+players[1]->getSobrante()+players[1]->getWidth());
+		distancia2 = players[1]->getPosX()+players[1]->getSobrante()+players[1]->getWidth() - (players[0]->getPosX()+players[0]->getSobrante());
 	}
     logger->log("Actualizacion posicion MCGame.", DEBUG);
 
@@ -342,14 +355,14 @@ void MCGame::update() {
     //playersUpdate(structRecived)
 
 
-    player1->update(m_Renderer, distancia, player2->getCentro());
-//  player2->update(m_Renderer, distancia2, player1->getCentro());
+    players[0]->update(m_Renderer, distancia, players[1]->getCentro());
+//  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
 
 
     // Mandamos all characters y lo hace con los que tienen playing = true;
-    parallaxController->doParallax(&player1,&player2,logger);
+    parallaxController->doParallax(&players[0],&players[1],logger);
 }
 
 CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
@@ -518,21 +531,13 @@ void MCGame::updateNuevo(render_data_t* render_data)
 
     //this->characters[0]->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
 
-    player1->update(m_Renderer, distancia, player2->getCentro());
-//  player2->update(m_Renderer, distancia2, player1->getCentro());
+    players[0]->update(m_Renderer, distancia, players[1]->getCentro());
+//  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
 
 
     // Mandamos all characters y lo hace con los que tienen playing = true;
-    parallaxController->doParallax(&player1,&player2,logger);
+    parallaxController->doParallax(&players[0],&players[1],logger);
 }
 
-void MCGame::action_update() {
-    while (1){
-        handleEvents();
-        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
-        tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-    }
-
-}

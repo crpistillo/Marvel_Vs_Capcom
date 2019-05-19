@@ -197,7 +197,7 @@ static void* ClientReceive(void* args){
 
 	pthread_t hilo = pthread_self();
 
-	//Recibo los argumentos y los casteo en el orden que corresponde.
+	/*//Recibo los argumentos y los casteo en el orden que corresponde.
 	pthread_mutex_lock(&mtx);
 	info_for_thread_t* arg = (info_for_thread_t*) args;
 	TCPServer* server = arg->server;
@@ -210,6 +210,7 @@ static void* ClientReceive(void* args){
 
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
 	+ to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ personaje +"\n";
+	 */
 
 	while(1)
 		continue;
@@ -358,7 +359,7 @@ void TCPServer::runServer() {
     clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
     clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
 
-    //createReceivingThreadPerClient();
+    createReceivingThreadPerClient();
     createSendingThreadPerClient();
 
 }
