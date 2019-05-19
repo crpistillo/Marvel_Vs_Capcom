@@ -43,6 +43,7 @@ private:
     Layer* frontGround;
     Player* players[2];
     Parallax* parallaxController;
+    Controls* clientControls;
     json config;
     TCPClient* tcpClient;
     CharacterClient* characters[4];
@@ -83,10 +84,8 @@ public:
 
     void createReadThread();
     void createWriteThread();
-    void renderNuevo();
 
-    //update segun lo que recibe del server
-    void updateNuevo(render_data_t* render_data); //Ahora le dejo este tipo de dato, pero
+    //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de
     												//dato que recibamos
 

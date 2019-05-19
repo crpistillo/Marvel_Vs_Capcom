@@ -195,57 +195,58 @@ Socket** TCPServer::getClientsSockets(){
  * Son los denominados "thread lectura cliente x"*/
 static void* ClientReceive(void* args){
 
-	pthread_t hilo = pthread_self();
 
-	//Recibo los argumentos y los casteo en el orden que corresponde.
-	pthread_mutex_lock(&mtx);
-	info_for_thread_t* arg = (info_for_thread_t*) args;
-	TCPServer* server = arg->server;
-	int socket = arg->clientSocket;
-	pthread_mutex_unlock(&mtx);
+    pthread_t hilo = pthread_self();
 
-	Socket* socket_to_read = (server->getClientsSockets())[socket];
-	char accion[sizeof(actions_t)];
-	socket_to_read->reciveData(accion,sizeof(actions_t));
+    //Recibo los argumentos y los casteo en el orden que corresponde.
+    pthread_mutex_lock(&mtx);
+    info_for_thread_t* arg = (info_for_thread_t*) args;
+    TCPServer* server = arg->server;
+    int socket = arg->clientSocket;
+    pthread_mutex_unlock(&mtx);
 
-	/*cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
-	+ to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ accion +"\n";*/
+    Socket* socket_to_read = (server->getClientsSockets())[socket];
+    char accion[sizeof(actions_t)];
+    socket_to_read->reciveData(accion,sizeof(actions_t));
 
-	while(1){
-		socket_to_read->reciveData(accion,sizeof(actions_t));
-		actions_t* n = (actions_t*) accion;
-		string accion_palabra;
-		switch (*n){
-		case STANDING:
-			accion_palabra = "STANDING";
-			break;
-		case MOVINGRIGHT:
-			accion_palabra = "MOVINGRIGHT";
-			break;
-		case MOVINGLEFT:
-			accion_palabra = "MOVINGLEFT";
-			break;
-		case JUMPINGVERTICAL:
-			accion_palabra = "JUMPINGVERTICAL";
-			break;
-		case DUCK:
-			accion_palabra = "DUCK";
-			break;
-		case JUMPINGRIGHT:
-			accion_palabra = "JUMPINGRIGHT";
-			break;
-		case JUMPINGLEFT:
-			accion_palabra = "JUMPINGLEFT";
-			break;
-		default:
-			accion_palabra = "ALGUNA OTRA COSA";
-			break;
-		}
-		cout << accion_palabra << endl;
-		continue;
-	}
+    /*cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
+    + to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ accion +"\n";*/
 
-	return NULL;
+    while(1){
+        socket_to_read->reciveData(accion,sizeof(actions_t));
+        actions_t* n = (actions_t*) accion;
+        string accion_palabra;
+        switch (*n){
+            case STANDING:
+                accion_palabra = "STANDING";
+                break;
+            case MOVINGRIGHT:
+                accion_palabra = "MOVINGRIGHT";
+                break;
+            case MOVINGLEFT:
+                accion_palabra = "MOVINGLEFT";
+                break;
+            case JUMPINGVERTICAL:
+                accion_palabra = "JUMPINGVERTICAL";
+                break;
+            case DUCK:
+                accion_palabra = "DUCK";
+                break;
+            case JUMPINGRIGHT:
+                accion_palabra = "JUMPINGRIGHT";
+                break;
+            case JUMPINGLEFT:
+                accion_palabra = "JUMPINGLEFT";
+                break;
+            default:
+                accion_palabra = "ALGUNA OTRA COSA";
+                break;
+        }
+        cout << accion_palabra << endl;
+        continue;
+    }
+
+    return NULL;
 }
 
 int TCPServer::createReceivingThreadPerClient(){
@@ -410,28 +411,49 @@ CharacterServer* TCPServer::createServerCharacter(char *character, int nclient) 
 
 	switch(character_n){
 	case SPIDERMAN:
-		characterServer = new SpidermanServer(
-			constants.INITIAL_POS_X_PLAYER_ONE,
-			nclient < 2 ? false : true,
-			constants.widthSpiderman,
-			constants.heightSpiderman,
-			constants.spidermanSobrante,
-			constants.spidermanAncho,
-			constants.screenWidth,
-			nclient
-		);
+		if(nclient < 2)
+			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
+					false,
+					constants.widthSpiderman,
+					constants.heightSpiderman,
+					constants.spidermanSobrante,
+					constants.spidermanAncho,
+					constants.screenWidth,
+					nclient
+					);
+		else
+			characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
+					false,
+					constants.widthSpiderman,
+					constants.heightSpiderman,
+					constants.spidermanSobrante,
+					constants.spidermanAncho,
+					constants.screenWidth,
+					nclient
+					);
 		break;
 
 	case WOLVERINE:
-		characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-			nclient < 2 ? false : true,
-			constants.widthWolverine,
-			constants.heightWolverine,
-			constants.wolverineSobrante,
-			constants.wolverineAncho,
-			constants.screenWidth,
-			nclient
-		);
+		if(nclient < 2)
+			characterServer =  new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+					false,
+					constants.widthWolverine,
+					constants.heightWolverine,
+					constants.wolverineSobrante,
+					constants.wolverineAncho,
+					constants.screenWidth,
+					nclient
+					);
+		else
+			characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+				false,
+				constants.widthWolverine,
+				constants.heightWolverine,
+				constants.wolverineSobrante,
+				constants.wolverineAncho,
+				constants.screenWidth,
+				nclient
+				);
 	}
 
 	return characterServer;

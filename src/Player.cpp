@@ -8,19 +8,14 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-Player::Player(CharacterClient *first, CharacterClient *second, Controls *controls) {
+Player::Player(CharacterClient *first, CharacterClient *second) {
 	Logger* logger = Logger::getInstance();
 	logger->log("Inicializacion de personajes para jugador.", DEBUG);
-    this->controls = controls;
-    currentCharacter = first;
+	currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
     isChanging = false;
 
-    changeKey = controls->changeKey;
-    logger->log("Inicializacion de controles para jugador.", DEBUG);
-    firstCharacter->setControls(controls);
-    secondCharacter->setControls(controls);
 }
 
 

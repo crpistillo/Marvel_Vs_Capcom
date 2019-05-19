@@ -197,12 +197,13 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     logger->log("Creacion de controles.", DEBUG);
 
-    Controls* controlPlayer1 = new ArrowControls();
-    Controls* controlPlayer2 = new WASDControls();
+    Controls* controlPlayer = new ArrowControls();
 
-    players[0] = new Player(characters[0], characters[1], controlPlayer1);
+    this->clientControls = controlPlayer;
 
-    players[1] = new Player(characters[2], characters[3], controlPlayer2);
+    players[0] = new Player(characters[0], characters[1]);
+
+    players[1] = new Player(characters[2], characters[3]);
 
 
     logger->log("Creacion de Jugador.", DEBUG);
@@ -229,13 +230,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 void MCGame::action_update() {
 	actions_t lastAction = STANDING; //BORRAR
-    while (1){
+	bool threadRunning = true;
+    while (true){
         handleEvents();
-        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
+        actions_t actionToSend = clientControls->getNewAction();
         if(actionToSend == STANDING && lastAction == STANDING) //BORRAR
         	continue; //BORRAR
-        if(!m_Running)
-            break;
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
         lastAction = actionToSend; //BORRAR
     }
@@ -257,18 +257,19 @@ void MCGame::run() {
 		render();
 
 		fpsManager.stop();
-        if(inputManager->quitRequested()) m_Running = false;
-
+        if(inputManager->quitRequested()) {
+            m_Running = false;
+            first.detach();
+        }
     }
 
-	first.join();
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
 
 void orderRenderizableListByZIndex(Renderizable** list);
 
 void MCGame::render() {
-	logger->log("Inicio render.", DEBUG);	
+	logger->log("Inicio render.", DEBUG);
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
@@ -321,7 +322,7 @@ void MCGame::clean() {
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
     delete players[1];
-    logger->log("Borrado de jugadores finalizado.", DEBUG);   
+    logger->log("Borrado de jugadores finalizado.", DEBUG);
     frontGroundTexture.free();
     middleGroundTexture.free();
     backGroundTexture.free();
@@ -350,17 +351,6 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
 
-	logger->log("Reubicacion inicio.", DEBUG);
-	//distancia = players[0]->getPosX() + (198/2) - players[1]->getPosX() + (157/2);
-	//distancia2 = players[1]->getPosX() + (157/2) - players[0]->getPosX() + (198/2);
-	if (players[0]->getCentro() > players[1]->getCentro()) {
-		distancia = players[0]->getPosX()+players[0]->getSobrante()+players[0]->getWidth() - (players[1]->getPosX()+players[1]->getSobrante());
-		distancia2 = players[1]->getPosX()+players[1]->getSobrante() - (players[0]->getPosX()+players[0]->getSobrante()+players[0]->getWidth());
-	} else {
-		distancia = players[0]->getPosX()+players[0]->getSobrante() - (players[1]->getPosX()+players[1]->getSobrante()+players[1]->getWidth());
-		distancia2 = players[1]->getPosX()+players[1]->getSobrante()+players[1]->getWidth() - (players[0]->getPosX()+players[0]->getSobrante());
-	}
-    logger->log("Actualizacion posicion MCGame.", DEBUG);
 
     //tcpClient->recive()      // recibimos la struct de update
     //playersUpdate(structRecived)
@@ -382,29 +372,41 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
 
    switch(builder->personaje){
         case SPIDERMAN:
-			characterClient = new SpidermanClient(
-				constants->INITIAL_POS_X_PLAYER_ONE,
-				builder->cliente < 2 ? false : true,
-				constants->widthSpiderman,
-				constants->heightSpiderman,
-				constants->spidermanSobrante,
-				constants->spidermanAncho,
-				constants->screenWidth,
-				builder->cliente
-			);
+            if(builder->cliente < 2)
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_TWO,
+                                                      true,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
             break;
 
         case WOLVERINE:
-			characterClient = new WolverineClient(
-				constants->INITIAL_POS_X_PLAYER_ONE,
-				builder->cliente < 2 ? false : true,
-				constants->widthWolverine,
-				constants->heightWolverine,
-				constants->wolverineSobrante,
-				constants->wolverineAncho,
-				constants->screenWidth,
-				builder->cliente
-			);
+            if(builder->cliente < 2)
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      true,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
     }
     return characterClient;
 }
@@ -431,76 +433,4 @@ void orderBackgroundsByZIndex(json* backgroundList){
 }
 
 
-
-
-
-void MCGame::renderNuevo()
-{
-	logger->log("Inicio render.", DEBUG);
-
-	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
-
-	Renderizable* renderizables[4] = { &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
-	orderRenderizableListByZIndex(renderizables);
-
-	for(int i = 0; i < 4; i++){
-		if(renderizables[i] == backGround){
-			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
-		}
-		else if(renderizables[i] == middleGround){
-			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
-		}
-		else if(renderizables[i] == frontGround){
-			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
-		}
-		else if(renderizables[i] == characters[0]){
-			characters[0]->render(m_Renderer, camera.x, camera.y, characters[0]->getCentro());
-		}
-
-	}
-	logger->log("Fin render.", DEBUG);
-    SDL_RenderPresent(m_Renderer); // draw to the screen
-}
-
-void MCGame::updateNuevo(render_data_t* render_data)
-{
-	logger->log("Reubicacion inicio.", DEBUG);
-
-	if (render_data->currentCharacter1.centro > render_data->currentCharacter2.centro)
-	{
-		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante +
-					render_data->currentCharacter1.width -(render_data->currentCharacter2.posX +
-					render_data->currentCharacter2.sobrante);
-
-		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					 -(render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
-					 +render_data->currentCharacter1.width);
-	}
-	else
-	{
-		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
-					-(render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					+ render_data->currentCharacter2.width);
-
-		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					+ render_data->currentCharacter2.width - (render_data->currentCharacter1.posX
-					+ render_data->currentCharacter1.sobrante);
-	}
-    logger->log("Actualizacion posicion MCGame.", DEBUG);
-
-    //tcpClient->recive()      // recibimos la struct de update
-    //playersUpdate(structRecived)
-
-    //this->characters[0]->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
-
-    players[0]->update(m_Renderer, distancia, players[1]->getCentro());
-//  players[1]->update(m_Renderer, distancia2, players[0]->getCentro());
-
-    logger->log("Actualizacion parallax - MCGame.", DEBUG);
-
-
-    // Mandamos all characters y lo hace con los que tienen playing = true;
-    parallaxController->doParallax(&players[0],&players[1],logger);
-}
 

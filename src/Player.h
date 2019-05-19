@@ -12,7 +12,7 @@
 
 class Player: public Renderizable {
 public:
-    Player(CharacterClient *first, CharacterClient *second, Controls *controls);
+    Player(CharacterClient *first, CharacterClient *second);
     ~Player();
     void update(SDL_Renderer* renderer, int distance, int posContrincante);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);

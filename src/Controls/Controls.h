@@ -6,6 +6,8 @@
 #define MARVEL_VS_CAPCOM_CONTROLS_H
 
 
+#include "../orientation_constants.h"
+
 class Controls {
 public:
     int upKey;
@@ -13,6 +15,8 @@ public:
     int rightKey;
     int leftKey;
     int changeKey;
+
+    actions_t getNewAction();
 
 protected:
     Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey);

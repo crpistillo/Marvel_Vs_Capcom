@@ -45,37 +45,6 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
 // Public:
 actions_t CharacterClient::getNewAction() {
 
-    InputManager *inputManager = InputManager::getInstance();
-
-    //Acciones de dos teclas primero
-    if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))
-        return JUMPINGRIGHT;
-
-    else if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->leftKey))
-        return JUMPINGLEFT;
-        //Acciones de una sola tecla
-
-    else if (inputManager->isKeyDown(characterControls->upKey))
-        return JUMPINGVERTICAL;
-
-    else if (inputManager->isKeyDown(characterControls->downKey))
-        return DUCK;
-
-    else if (inputManager->isKeyDown(characterControls->rightKey) && !inputManager->isKeyUp(characterControls->leftKey))
-        return MOVINGRIGHT;
-
-    else if (inputManager->isKeyDown(characterControls->leftKey) && !inputManager->isKeyUp(characterControls->rightKey))
-        return MOVINGLEFT;  //add moveleft
-
-    else if (
-            (!inputManager->isKeyUp(characterControls->upKey) &&
-             !inputManager->isKeyUp(characterControls->downKey) &&
-             !inputManager->isKeyUp(characterControls->rightKey) &&
-             !inputManager->isKeyUp(characterControls->leftKey))
-            || (inputManager->isKeyUp(characterControls->rightKey) &&
-                inputManager->isKeyUp(characterControls->leftKey))
-            )
-        return STANDING;
 }
 
 void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
