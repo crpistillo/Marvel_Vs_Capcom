@@ -229,7 +229,9 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 void MCGame::action_update() {
     while (1){
         handleEvents();
-        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
+        if(!m_Running)
+            break;
+        actions_t actionToSend = characters[this->myCharacter]->getNewAction();
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
     }
 
@@ -242,14 +244,19 @@ void MCGame::run() {
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
 	std::thread first (&MCGame::action_update, this);
-	while(m_Running) {
+    InputManager* inputManager = InputManager::getInstance();
+    while(m_Running) {
 		fpsManager.start();
 
 		update();
 		render();
 
 		fpsManager.stop();
-	}
+        if(inputManager->quitRequested()) m_Running = false;
+
+    }
+
+	first.join();
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
 
@@ -328,7 +335,6 @@ void MCGame::clean() {
 void MCGame::handleEvents() {
 	InputManager* inputManager = InputManager::getInstance();
     inputManager->update();
-    if(inputManager->quitRequested()) m_Running = false;
 }
 
 //centro de 2 currentPlayers
@@ -431,45 +437,9 @@ void orderBackgroundsByZIndex(json* backgroundList){
 	}
 }
 
-static void* clientRead(void* args)
-{
-	TCPClient *client = (TCPClient*) args;
-
-	void* buf1[sizeof(character_builder_t)];
-
-	client->socketClient->reciveData(&buf1, sizeof(character_builder_t));
-
-	character_builder_t* builder = (character_builder_t*) buf1;
-
-	//this->updateNuevo(builder);
-	//this->renderNuevo();
-
-	//tiene que renderizar en base a lo que recibe en character_builder_t
-	//Esto aca no anda porq no es de la clase, no entiendo si hay que updatear y renderizar en
-	// el thread o afuera o encolar y despues updatear/renderizar
 
 
 
-	return 0;
-}
-
-static void* clientWrite(void* args)
-{
-	TCPClient *client = (TCPClient*) args;
-
-
-
-}
-
-void MCGame::createReadThread()
-{
-	pthread_create( &(this->readThread), NULL, clientRead, this);
-}
-
-void MCGame::createWriteThread()
-{
-	pthread_create( &(this->writeThread),NULL, clientWrite, this);
-}
 
 void MCGame::renderNuevo()
 {
