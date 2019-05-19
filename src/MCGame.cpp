@@ -143,6 +143,11 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     if (wolverinePath != "images/wolverine/wolverine_")
         logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
+    constants->widthSpiderman = widthSpiderman;
+    constants->widthWolverine = widthWolverine;
+    constants->heightSpiderman = heightSpiderman;
+    constants->heightWolverine = heightWolverine;
+
 
     constants->spidermanSobrante = widthSpiderman * 242 / 640;
     constants->spidermanAncho = widthSpiderman * 110 / 640;
@@ -170,9 +175,10 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     for (int i = 0; i < 4; ++i) {
         void* buf1;
         character_builder_t* builder;
-        tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
+        buf1 = tcpClient->receive(sizeof(character_builder_t));
         builder = (character_builder_t*) buf1;
         characters[i] = characterBuild(builder);
+        free(buf1);
     }
 
     char bufUpdater[sizeof(character_updater_t)];
@@ -274,13 +280,13 @@ void MCGame::render() {
 
 	for(int i = 0; i < 5; i++){
 		if(renderizables[i] == backGround){
-			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+		//	backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
 		}
 		else if(renderizables[i] == middleGround){
-			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+		//	middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
 		}
 		else if(renderizables[i] == frontGround){
-			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+		//	frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
 		else if(renderizables[i] == players[1]){
 			players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
