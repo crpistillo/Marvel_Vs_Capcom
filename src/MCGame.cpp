@@ -286,6 +286,10 @@ void MCGame::clean() {
     middleGroundTexture.free();
     backGroundTexture.free();
     menuTexture.free();
+    cliente1.free();
+    cliente2.free();
+    cliente3.free();
+    cliente4.free();
     logger->log("Liberacion de variables de fondo finalizado.", DEBUG);
     delete backGround;
     delete middleGround;
@@ -514,27 +518,26 @@ void MCGame::updateNuevo(render_data_t* render_data)
 }
 
 
-/*Pensaba hacer que la distribución de personajes en los equipos sea por orden de
- * eleccion y no conexion. O sea, los primeros dos jugadores tienen total libertad
- * para elegir, entonces el primero que elige va al team1, y el segundo que elige
- * al team2. En ese punto se "bloquea" la pantalla, ya que los otros dos jugadores
- * que quedan en realidad ya no pueden elegir, sino que les toca el personaje que
- * no eligió el otro */
+
 void MCGame::menu() {
 	bool bloqueado = false;
 	bool seleccionando = true;
 	bool eligioASpiderman = true; //Por defecto arranca con Spiderman seleccionado
-	menuTexture.loadFromFile("images/menu/menuS.png", m_Renderer);
+	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
+	cliente1.loadFromFile("images/menu/cliente1.png", m_Renderer);
+	cliente2.loadFromFile("images/menu/cliente2.png", m_Renderer);
+	cliente3.loadFromFile("images/menu/cliente3.png", m_Renderer);
+	cliente4.loadFromFile("images/menu/cliente4.png", m_Renderer);
 	while (seleccionando && !bloqueado){
 		//Aca falta recibir algo del server para saber si está bloqueado
 		InputManager* inputManager = InputManager::getInstance();
 		inputManager->update();
 		if (inputManager->isKeyDown(KEY_RIGHT) && !bloqueado){
-			menuTexture.loadFromFile("images/menu/menuW.png", m_Renderer);
+			//Necesito mover el cliente.png
 			eligioASpiderman = false;
 		}
 		if (inputManager->isKeyDown(KEY_LEFT) && !bloqueado){
-			menuTexture.loadFromFile("images/menu/menuS.png", m_Renderer);
+			//Necesito mover el cliente.png
 			eligioASpiderman = true;
 		}
 		if(inputManager->quitRequested()) {
@@ -544,12 +547,15 @@ void MCGame::menu() {
 		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(m_Renderer);
 		menuTexture.render(0, 0, 800, 600, m_Renderer);
+		cliente1.render(97, 61, 254, 221, m_Renderer);
+		cliente2.render(449, 61, 254, 221, m_Renderer);
+		cliente3.render(97, 353, 254, 221, m_Renderer);
+		cliente4.render(449, 353, 254, 221, m_Renderer);
 		SDL_RenderPresent(m_Renderer);
 		if (inputManager->isKeyDown(KEY_RETURN)) {
 			seleccionando = false;
 			bloqueado = true;
 			//Aca tengo que enviar algo al server para que bloque
-			//Tambien debo cargar la pantalla de bloqueo correspondiente
 		}
 
 		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
