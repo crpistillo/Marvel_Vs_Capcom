@@ -198,10 +198,11 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     logger->log("Creacion de controles.", DEBUG);
 
     Controls* controlPlayer1 = new ArrowControls();
+    Controls* controlPlayer2 = new WASDControls();
 
     players[0] = new Player(characters[0], characters[1], controlPlayer1);
 
-    players[1] = new Player(characters[2], characters[3], controlPlayer1);
+    players[1] = new Player(characters[2], characters[3], controlPlayer2);
 
 
     logger->log("Creacion de Jugador.", DEBUG);
@@ -227,12 +228,16 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 }
 
 void MCGame::action_update() {
+	actions_t lastAction = STANDING; //BORRAR
     while (1){
         handleEvents();
+        actions_t actionToSend =characters[this->myCharacter]->getNewAction();
+        if(actionToSend == STANDING && lastAction == STANDING) //BORRAR
+        	continue; //BORRAR
         if(!m_Running)
             break;
-        actions_t actionToSend = characters[this->myCharacter]->getNewAction();
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        lastAction = actionToSend; //BORRAR
     }
 
 }
