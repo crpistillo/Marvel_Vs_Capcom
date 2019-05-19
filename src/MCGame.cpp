@@ -178,7 +178,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         buf1 = tcpClient->receive(sizeof(character_builder_t));
         builder = (character_builder_t*) buf1;
         characters[i] = characterBuild(builder);
-        free(buf1);
+        characters[i]->setZIndex(99);
     }
 
     char bufUpdater[sizeof(character_updater_t)];
