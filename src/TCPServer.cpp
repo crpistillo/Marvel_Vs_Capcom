@@ -208,13 +208,40 @@ static void* ClientReceive(void* args){
 	char accion[sizeof(actions_t)];
 	socket_to_read->reciveData(accion,sizeof(actions_t));
 
-	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
-	+ to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ accion +"\n";
+	/*cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
+	+ to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ accion +"\n";*/
 
 	while(1){
 		socket_to_read->reciveData(accion,sizeof(actions_t));
 		actions_t* n = (actions_t*) accion;
-		cout << to_string(*n) << endl;
+		string accion_palabra;
+		switch (*n){
+		case STANDING:
+			accion_palabra = "STANDING";
+			break;
+		case MOVINGRIGHT:
+			accion_palabra = "MOVINGRIGHT";
+			break;
+		case MOVINGLEFT:
+			accion_palabra = "MOVINGLEFT";
+			break;
+		case JUMPINGVERTICAL:
+			accion_palabra = "JUMPINGVERTICAL";
+			break;
+		case DUCK:
+			accion_palabra = "DUCK";
+			break;
+		case JUMPINGRIGHT:
+			accion_palabra = "JUMPINGRIGHT";
+			break;
+		case JUMPINGLEFT:
+			accion_palabra = "JUMPINGLEFT";
+			break;
+		default:
+			accion_palabra = "ALGUNA OTRA COSA";
+			break;
+		}
+		cout << accion_palabra << endl;
 		continue;
 	}
 
