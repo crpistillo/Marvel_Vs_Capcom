@@ -47,21 +47,6 @@ actions_t CharacterClient::getNewAction() {
 
     InputManager *inputManager = InputManager::getInstance();
 
-
-    if (currentAction == MAKINGINTRO)
-        return MAKINGINTRO;
-
-    if (currentAction == JUMPINGVERTICAL)     //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
-        return JUMPINGVERTICAL;
-
-    if (currentAction == JUMPINGRIGHT)        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
-        return JUMPINGRIGHT;
-
-    if (currentAction == JUMPINGLEFT)
-        return JUMPINGLEFT;
-
-
-
     //Acciones de dos teclas primero
     if (inputManager->isKeyDown(characterControls->upKey) && inputManager->isKeyDown(characterControls->rightKey))
         return JUMPINGRIGHT;

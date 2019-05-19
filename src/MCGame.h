@@ -41,8 +41,7 @@ private:
     Layer* middleGround;
     Layer* backGround;
     Layer* frontGround;
-    Player* player1;
-    Player* player2;
+    Player* players[2];
     Parallax* parallaxController;
     json config;
     TCPClient* tcpClient;
