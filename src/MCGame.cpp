@@ -285,8 +285,6 @@ void orderRenderizableListByZIndex(Renderizable** list){
 	}
 }
 
-
-
 void MCGame::clean() {
     //m_Texture.free();
     logger->log("Inicio limpieza MCGame.", INFO);
@@ -312,6 +310,12 @@ void MCGame::handleEvents() {
     inputManager->update();
     if(inputManager->quitRequested()) m_Running = false;
 }
+
+//centro de 2 currentPlayers
+//pos player1, sobrante player1, width player1
+//pos player2, sobrante player2, width player2
+
+
 
 void MCGame::update() {
 
@@ -431,9 +435,47 @@ void MCGame::renderNuevo()
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
-void MCGame::updateNuevo(character_builder_t* builder)
+void MCGame::updateNuevo(render_data_t* render_data)
 {
+	logger->log("Reubicacion inicio.", DEBUG);
 
+	if (render_data->currentCharacter1.centro > render_data->currentCharacter2.centro)
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante +
+					render_data->currentCharacter1.width -(render_data->currentCharacter2.posX +
+					render_data->currentCharacter2.sobrante);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					 -(render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					 +render_data->currentCharacter1.width);
+	}
+	else
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					-(render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width - (render_data->currentCharacter1.posX
+					+ render_data->currentCharacter1.sobrante);
+	}
+    logger->log("Actualizacion posicion MCGame.", DEBUG);
+
+    //tcpClient->recive()      // recibimos la struct de update
+    //playersUpdate(structRecived)
+
+
+
+    this->characterClient->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
+
+    player1->update(m_Renderer, distancia, player2->getCentro());
+//  player2->update(m_Renderer, distancia2, player1->getCentro());
+
+    logger->log("Actualizacion parallax - MCGame.", DEBUG);
+
+
+    // Mandamos all characters y lo hace con los que tienen playing = true;
+    parallaxController->doParallax(&player1,&player2,logger);
 }
 
 

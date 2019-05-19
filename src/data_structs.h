@@ -34,4 +34,24 @@ typedef struct{
 } character_builder_t;
 
 
+//centro de 2 currentPlayers
+//pos player1, sobrante player1, width player1
+//pos player2, sobrante player2, width player2
+
+
+typedef struct
+{
+	int centro;
+	int posX;
+	int sobrante;
+	int width;
+}character_render_data_t;
+
+typedef struct
+{
+	character_render_data_t currentCharacter1;
+	character_render_data_t currentCharacter2;
+}render_data_t;
+
+
 #endif /* MVC_DATA_STRUCTS */
