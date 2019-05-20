@@ -221,7 +221,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 void MCGame::action_update() {
-    FPSManager fpsManager(3);
+    FPSManager fpsManager(10);
 
 
     while (true){
