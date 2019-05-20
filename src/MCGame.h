@@ -57,7 +57,6 @@ private:
     std::mutex m;
 
 
-
 protected:
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;

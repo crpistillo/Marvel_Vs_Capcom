@@ -48,7 +48,7 @@ public:
     Queue<incoming_msg_t> incoming_msges_queue; //cola de los mensajes entrantes del cliente
 
     Queue<character_updater_t>* character_updater_queue[MAXPLAYERS];
-    				//cola de mensajes de escritura para cada cliente
+    				//colas de mensajes de escritura para cada cliente
 
     Socket* serverSocket;
     Socket* newSockFd;

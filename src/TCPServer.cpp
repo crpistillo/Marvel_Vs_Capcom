@@ -199,8 +199,9 @@ void TCPServer::clientReceive(int socket){
 
 	while(1)
 	{
+		incoming_msg_t* incoming_msg = new incoming_msg_t;
 		//pop msges
-	   	incoming_msg_t incoming_msg = this->incoming_msges_queue.get_data();
+	   	*incoming_msg = this->incoming_msges_queue.get_data();
 	   	this->incoming_msges_queue.delete_data();
 
 	   	//update del team
@@ -208,22 +209,24 @@ void TCPServer::clientReceive(int socket){
 
 	   	character_updater_t update_msg;
 
-	    if(incoming_msg.client == 0 || incoming_msg.client == 1)//team1 es de los clientes 1 y 2
+	    if(incoming_msg->client == 0 || incoming_msg->client == 1)//team1 es de los clientes 1 y 2
 	    {
-	    	team1->update(distancia,team2->get_currentCharacter()->getPosX(), incoming_msg.action);
+	    	team1->update(distancia,team2->get_currentCharacter()->getPosX(), incoming_msg->action);
 	    	update_msg.posX = team1->get_currentCharacter()->getPosX();
 	    	update_msg.posY = team1->get_currentCharacter()->getPosY();
 	    	update_msg.team = 1; //faltan mandar cosas?
 	    }
 	    else
 	    {
-	    	team2->update(distancia,team2->get_currentCharacter()->getPosX(),incoming_msg.action);
+	    	team2->update(distancia,team2->get_currentCharacter()->getPosX(),incoming_msg->action);
 	    	update_msg.posX = team2->get_currentCharacter()->getPosX();
 	        update_msg.posY = team2->get_currentCharacter()->getPosY();
 	        update_msg.team = 2;
 	    }
 
-	   	this->character_updater_queue[incoming_msg.client]->insert(update_msg);
+	   	this->character_updater_queue[incoming_msg->client]->insert(update_msg);
+
+	   	delete incoming_msg;
 
 	   	continue;
 	}
@@ -233,14 +236,11 @@ Socket** TCPServer::getClientsSockets(){
 	return this->clientsSockets;
 }
 
-
-
 /*Funcion que lee del socket la informacion que los clientes le envian.
  * Esta deberia leer, codificar y encolar eventos en la cola del servidor
  *
  * Son los denominados "thread lectura cliente x"*/
 static void* ClientReceive(void* args){
-
 
     pthread_t hilo = pthread_self();
 
@@ -350,23 +350,31 @@ static void* ClientSend(void* args){
 	cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de mandar datos al socket: "
 	+ to_string(socket_to_send->fd) +"\n";
 
-	character_updater_t updater;
+	//character_updater_t updater;
 
 	int i = 0;
 	while(1){
+	character_updater_t* updater = new character_updater_t;
 
-		if(i == 10)
-			i = 0;
+	//pop msges
+	*updater = server->character_updater_queue[socket]->get_data();
+	server->character_updater_queue[socket]->delete_data();
 
-		server->teamOneMakeUpdater(&updater);
-		updater.currentSprite = i;
-		socket_to_send->sendData(&updater, sizeof(character_updater_t));
+	if(i == 8)
+		i = 0;
 
-		server->teamTwoMakeUpdater(&updater);
-		updater.currentSprite = i;
-		socket_to_send->sendData(&updater, sizeof(character_updater_t));
+	server->teamOneMakeUpdater(&(*updater));
+	updater->currentSprite = i;
+	socket_to_send->sendData(&updater, sizeof(character_updater_t));
 
-		i++;
+	server->teamTwoMakeUpdater(&(*updater));
+	updater->currentSprite = i;
+	socket_to_send->sendData(&updater, sizeof(character_updater_t));
+
+	i++;
+
+	delete updater;
+
 	}
 
 	return NULL;
