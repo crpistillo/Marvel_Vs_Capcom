@@ -108,6 +108,9 @@ int Player::getZIndex(){
 
 }
 
+void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
+    currentCharacter->load(pRenderer, posContrincante);
+}
 
 
 

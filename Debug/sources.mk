@@ -28,7 +28,6 @@ src/CharactersServer \
 src/Client \
 src \
 src/Controls \
-src/Queue \
 src/Texture \
 src/tools/FPSManager \
 src/tools/ImageLoader \

@@ -352,13 +352,21 @@ static void* ClientSend(void* args){
 
 	character_updater_t updater;
 
-
+	int i = 0;
 	while(1){
+
+		if(i == 10)
+			i = 0;
+
 		server->teamOneMakeUpdater(&updater);
+		updater.currentSprite = i;
 		socket_to_send->sendData(&updater, sizeof(character_updater_t));
 
 		server->teamTwoMakeUpdater(&updater);
+		updater.currentSprite = i;
 		socket_to_send->sendData(&updater, sizeof(character_updater_t));
+
+		i++;
 	}
 
 	return NULL;

@@ -33,6 +33,8 @@ public:
     int getCentro();
     int getZIndex();
 
+    void load(SDL_Renderer *pRenderer, int posContrincante);
+
 private:
     CharacterClient* currentCharacter;
     CharacterClient* firstCharacter;

@@ -280,13 +280,13 @@ void MCGame::render() {
 
 	for(int i = 0; i < 5; i++){
 		if(renderizables[i] == backGround){
-		//	backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
 		}
 		else if(renderizables[i] == middleGround){
-		//	middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
 		}
 		else if(renderizables[i] == frontGround){
-		//	frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
 		else if(renderizables[i] == players[1]){
 			players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
@@ -362,10 +362,14 @@ void MCGame::update() {
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
     character_updater_t* updater = (character_updater_t*) buf1;
 
-    if(updater->team == 1)
-    	players[0]->update(updater);
-    else
-    	players[1]->update(updater);
+    if(updater->team == 1) {
+            players[0]->update(updater);
+            players[0]->load(m_Renderer, players[1]->getCentro());
+        }
+    else{
+            players[1]->update(updater);
+            players[1]->load(m_Renderer, players[0]->getCentro());
+        }
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
 
