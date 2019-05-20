@@ -52,8 +52,6 @@ CharacterServer::CharacterServer(
 
 // Public:
 void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved) {
-    this->currentAction = actionRecieved;
-
 
     bool actionStarted = false;
 
@@ -84,6 +82,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         return;
     }
 
+    this->currentAction = actionRecieved;
+
     //Acciones de dos teclas primero
     if (currentAction == JUMPINGVERTICAL)
         jumpRight(); //send jump rigth
@@ -95,9 +95,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         jumpVertical(); //send jump vertical
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
-    else if (currentAction == MOVINGRIGHT) //CHANGE TO RIGHT
+    else if (currentAction == MOVINGRIGHT)
         moveRight(distance, posContrincante);   //send move right
-    else if (currentAction == MOVINGLEFT) //CHANGE TO LEFT
+    else if (currentAction == MOVINGLEFT)
         moveLeft(distance, posContrincante);    //send move left
 
 

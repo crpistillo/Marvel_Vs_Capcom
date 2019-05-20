@@ -83,6 +83,7 @@ void SpidermanServer::makeBuilderStruct(character_builder_t* builder){
 
 }
 
+
 int SpidermanServer::getSpriteNumber(){
     int spriteNumber;
     switch (this->currentAction){
