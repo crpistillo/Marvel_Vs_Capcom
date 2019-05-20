@@ -221,16 +221,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 void MCGame::action_update() {
-	actions_t lastAction = STANDING; //BORRAR
     while (true){
         handleEvents();
         if(!threadRunning)
             break;
         actions_t actionToSend = clientControls->getNewAction();
-        if(actionToSend == STANDING && lastAction == STANDING) //BORRAR
-        	continue; //BORRAR
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-        lastAction = actionToSend; //BORRAR
     }
     std::unique_lock<std::mutex> lock(m);
     m_Running = false;

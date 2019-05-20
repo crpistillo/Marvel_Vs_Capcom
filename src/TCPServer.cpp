@@ -263,7 +263,7 @@ void TCPServer::sendToClient(int clientSocket) {
     while (1) {
 
         character_updater_t *updater;
-        if (updater == nullptr)
+        if(character_updater_queue[clientSocket]->empty_queue())
             continue;
         updater = character_updater_queue[clientSocket]->get_data();
         socket->sendData(updater, sizeof(character_updater_t));
@@ -336,9 +336,9 @@ void TCPServer::runServer() {
 
     while (1) {
         incoming_msg_t *incoming_msg;
-        incoming_msg = this->incoming_msges_queue->get_data();
-        if (incoming_msg == nullptr)
+        if(incoming_msges_queue->empty_queue())
             continue;
+        incoming_msg = this->incoming_msges_queue->get_data();
 
 
 
@@ -363,9 +363,19 @@ void TCPServer::runServer() {
             update_msg->action = team2->get_currentCharacter()->getCurrentAction();
         }
 
+        character_updater_t* update[MAXPLAYERS];
+        for (int j = 0; j < MAXPLAYERS; ++j) {
+            update[j] = new character_updater_t;
+            update[j]->team = update_msg->team;
+            update[j]->posX = update_msg->posX;
+            update[j]->posY = update_msg->posY;
+            update[j]->currentSprite = update_msg->currentSprite;
+            update[j]->action = update_msg->action;
+        }
+
         for (int i = 0; i < MAXPLAYERS; ++i) {
             std::unique_lock<std::mutex> lock(m);
-            this->character_updater_queue[i]->insert(update_msg);
+            this->character_updater_queue[i]->insert(update[i]);
         }
 
         incoming_msges_queue->delete_data();
@@ -431,10 +441,6 @@ CharacterServer *TCPServer::createServerCharacter(char *character, int nclient) 
                 );
     }
     return characterServer;
-}
-
-void *receiveInfo(void *infor) {
-
 }
 
 void TCPServer::configJson(json config) {

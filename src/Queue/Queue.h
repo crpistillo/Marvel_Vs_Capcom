@@ -70,7 +70,9 @@ void Queue<Data>::insert(Data data)
 template <typename Data>
 Data Queue<Data>::get_data()
 {
-	return this->first->get_data();
+    if(first != NULL)
+	    return this->first->get_data();
+    return NULL;
 }
 
 template <typename Data>
