@@ -3,7 +3,6 @@
 //
 
 #include "TCPServer.h"
-#include "ServerThread.h"
 #include "netdb.h"
 #include "CharactersServer/SpidermanServer.h"
 #include "CharactersServer/WolverineServer.h"

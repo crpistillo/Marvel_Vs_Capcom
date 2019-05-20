@@ -7,7 +7,6 @@
 #include "TCPServer.h"
 #include "tools/logger/Logger.h"
 #include "MCGame.h"
-#include "ServerThread.h"
 #include "data_structs.h"
 #include <sys/socket.h>
 

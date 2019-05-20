@@ -15,7 +15,7 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-const int SCREEN_FPS = 40;
+const int SCREEN_FPS = 60;
 
 int centerBefore,centerLater=-1000;
 
@@ -221,7 +221,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 void MCGame::action_update() {
-    FPSManager fpsManager(10);
+    FPSManager fpsManager(18);
 
 
     while (true){
