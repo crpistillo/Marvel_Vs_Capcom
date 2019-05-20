@@ -22,6 +22,8 @@
 #include "Client/TCPClient.h"
 #include "data_structs.h"
 #include "Constants.h"
+#include <mutex>
+
 
 using namespace std;
 
@@ -29,6 +31,7 @@ using namespace std;
 class MCGame {
 private:
     bool m_Running;
+    bool threadRunning;
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
     SDL_Joystick* gGameController = NULL;
@@ -48,9 +51,10 @@ private:
     TCPClient* tcpClient;
     CharacterClient* characters[4];
     void loadGroundTextureByZIndex();
-    Constants* constants = (Constants*) (malloc(sizeof(Constants *)));
+    Constants* constants;
     void action_update();
     int myCharacter;
+    std::mutex m;
 
 
 

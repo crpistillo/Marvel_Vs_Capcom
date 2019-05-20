@@ -95,7 +95,7 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
-
+    constants = (Constants*) (malloc(sizeof(Constants *)));
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
     this->SCREEN_HEIGHT = alto;
@@ -143,6 +143,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     if (wolverinePath != "images/wolverine/wolverine_")
         logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
+
     constants->widthSpiderman = widthSpiderman;
     constants->widthWolverine = widthWolverine;
     constants->heightSpiderman = heightSpiderman;
@@ -163,13 +164,16 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     //////////////////////////////////////////////////////////////////////
 
-    // Setiar los characters con su numero de player segun server
+    // MENU
+
+
 
     char* character1 = "Spiderman";
     char* character2 = "Wolverine";
     tcpClient->Send((void*) character1, sizeof(character1) + 1);
     tcpClient->Send((void*) character2, sizeof(character2) + 1);
 
+    //MENU
 
 
     //Construyo los 4 personajes según la configuracion que me mande el server.
@@ -181,25 +185,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
         builder = (character_builder_t*) buf1;
         characters[i] = characterBuild(builder);
     }
-
-    char bufUpdater[sizeof(character_updater_t)];
-    character_updater_t* up1;
-    character_updater_t* up2;
-
-    tcpClient->socketClient->reciveData(bufUpdater, sizeof(character_updater_t));
-    up1 = (character_updater_t*) bufUpdater;
-    cout << "Posicion X: " + to_string(up1->posX) << endl;
-    cout << "Posicion Y: " + to_string(up1->posY) << endl;
-    cout << "Current Action: "  + to_string(up1->action) << endl;
-    cout << "Team: "  + to_string(up1->team) << endl;
-
-    tcpClient->socketClient->reciveData(bufUpdater, sizeof(character_updater_t));
-    up2 = (character_updater_t*) bufUpdater;
-    cout << "Posicion X: " + to_string(up2->posX) << endl;
-    cout << "Posicion Y: " + to_string(up2->posY) << endl;
-    cout << "Current Action: "  + to_string(up2->action) << endl;
-    cout << "Team: "  + to_string(up2->team) << endl;
-
 
 
     logger->log("Creacion de controles.", DEBUG);
@@ -241,12 +226,16 @@ void MCGame::action_update() {
 	actions_t lastAction = STANDING; //BORRAR
     while (true){
         handleEvents();
+        if(!threadRunning)
+            break;
         actions_t actionToSend = clientControls->getNewAction();
         if(actionToSend == STANDING && lastAction == STANDING) //BORRAR
         	continue; //BORRAR
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
         lastAction = actionToSend; //BORRAR
     }
+    std::unique_lock<std::mutex> lock(m);
+    m_Running = false;
 
 }
 
@@ -256,7 +245,8 @@ void MCGame::run() {
 
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
-	std::thread first (&MCGame::action_update, this);
+	std::thread send (&MCGame::action_update, this);
+	threadRunning=true;
     while(m_Running) {
 		fpsManager.start();
 
@@ -344,22 +334,14 @@ void MCGame::clean() {
 void MCGame::handleEvents() {
 	InputManager* inputManager = InputManager::getInstance();
     inputManager->update();
+    if(inputManager->quitRequested()) threadRunning = false;
 }
-
-//centro de 2 currentPlayers
-//pos players[0], sobrante players[0], width players[0]
-//pos players[1], sobrante players[1], width players[1]
-
-
 
 void MCGame::update() {
 
 
-    //tcpClient->recive()      // recibimos la struct de update
-    //playersUpdate(structRecived)
 
 	char buf1[sizeof(character_updater_t)];
-
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
     character_updater_t* updater = (character_updater_t*) buf1;
 
@@ -373,9 +355,6 @@ void MCGame::update() {
         }
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
-
-
-    // Mandamos all characters y lo hace con los que tienen playing = true;
     parallaxController->doParallax(&players[0],&players[1],logger);
 }
 
