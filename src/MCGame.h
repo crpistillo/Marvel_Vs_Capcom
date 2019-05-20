@@ -53,6 +53,7 @@ private:
     CharacterClient* characters[4];
     void loadGroundTextureByZIndex();
     Constants* constants = (Constants*) (malloc(sizeof(Constants *)));
+    int numberTeam;
 
 
 protected:

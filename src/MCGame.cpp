@@ -518,9 +518,28 @@ void MCGame::updateNuevo(render_data_t* render_data)
 }
 
 
-
+/*Por ahora considero que se conectan 4 clientes (luego voy a considerar cuando se
+ * conectan 2 o 3.
+ * Es solo un boceto, ahora quito los booleanos y veo bien los datos a enviar al server*/
 void MCGame::menu() {
-	bool bloqueado = false;
+	int numeroDeClientes; //Esto despues vuela
+	switch(tcpClient->nclient)
+	{
+	   case 1:
+	      numberTeam = 1;
+	      break;
+	   case 2:
+		   if (numeroDeClientes==2) numberTeam = 2;
+		   else numberTeam = 1;
+		   break;
+	   case 3:
+		   numberTeam = 2;
+	      break;
+	   case 4:
+		   numberTeam = 2;
+	}
+
+	bool bloqueado = false; //Se bloquea cuando el primer cliente de un equipo selecciona un personaje
 	bool seleccionando = true;
 	bool eligioASpiderman = true; //Por defecto arranca con Spiderman seleccionado
 	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
@@ -534,10 +553,12 @@ void MCGame::menu() {
 		inputManager->update();
 		if (inputManager->isKeyDown(KEY_RIGHT) && !bloqueado){
 			//Necesito mover el cliente.png
+			//Necesito enviar al server el cambio de posicion
 			eligioASpiderman = false;
 		}
 		if (inputManager->isKeyDown(KEY_LEFT) && !bloqueado){
 			//Necesito mover el cliente.png
+			//Necesito enviar al server el cambio de posicion
 			eligioASpiderman = true;
 		}
 		if(inputManager->quitRequested()) {
@@ -547,15 +568,17 @@ void MCGame::menu() {
 		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(m_Renderer);
 		menuTexture.render(0, 0, 800, 600, m_Renderer);
+		//Necesito recibir por server la posicion de los otros clientes
 		cliente1.render(97, 61, 254, 221, m_Renderer);
 		cliente2.render(449, 61, 254, 221, m_Renderer);
 		cliente3.render(97, 353, 254, 221, m_Renderer);
 		cliente4.render(449, 353, 254, 221, m_Renderer);
 		SDL_RenderPresent(m_Renderer);
-		if (inputManager->isKeyDown(KEY_RETURN)) {
+		if (inputManager->isKeyDown(KEY_RETURN) && !bloqueado){
 			seleccionando = false;
 			bloqueado = true;
 			//Aca tengo que enviar algo al server para que bloque
+			//Tengo que mover el cliente.png de mi compañero de equipo al de al lado
 		}
 
 		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
