@@ -336,8 +336,6 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
 
-
-
 	char buf1[sizeof(character_updater_t)];
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
     character_updater_t* updater = (character_updater_t*) buf1;
