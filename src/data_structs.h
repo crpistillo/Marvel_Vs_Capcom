@@ -53,5 +53,12 @@ typedef struct
 	character_render_data_t currentCharacter2;
 }render_data_t;
 
+typedef struct
+{
+	int cliente;
+	int posX;
+	int team;
+}cliente_menu;
+
 
 #endif /* MVC_DATA_STRUCTS */

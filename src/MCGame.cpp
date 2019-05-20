@@ -6,6 +6,7 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
+#include "clienteMenu.h"
 
 
 using namespace std;
@@ -539,25 +540,30 @@ void MCGame::menu() {
 		   numberTeam = 2;
 	}
 
+
 	bool bloqueado = false; //Se bloquea cuando el primer cliente de un equipo selecciona un personaje
 	bool seleccionando = true;
 	bool eligioASpiderman = true; //Por defecto arranca con Spiderman seleccionado
 	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
-	cliente1.loadFromFile("images/menu/cliente1.png", m_Renderer);
-	cliente2.loadFromFile("images/menu/cliente2.png", m_Renderer);
-	cliente3.loadFromFile("images/menu/cliente3.png", m_Renderer);
-	cliente4.loadFromFile("images/menu/cliente4.png", m_Renderer);
+	clienteMenu* cliente1 = new clienteMenu(97, 1);
+	clienteMenu* cliente2 = new clienteMenu(449, 1);
+	clienteMenu* cliente3 = new clienteMenu(97, 2);
+	clienteMenu* cliente4 = new clienteMenu(449, 2);
+	cliente1->load(m_Renderer,"images/menu/cliente1.png");
+	cliente2->load(m_Renderer,"images/menu/cliente2.png");
+	cliente3->load(m_Renderer,"images/menu/cliente3.png");
+	cliente4->load(m_Renderer,"images/menu/cliente4.png");
 	while (seleccionando && !bloqueado){
 		//Aca falta recibir algo del server para saber si está bloqueado
 		InputManager* inputManager = InputManager::getInstance();
 		inputManager->update();
 		if (inputManager->isKeyDown(KEY_RIGHT) && !bloqueado){
-			//Necesito mover el cliente.png
+			cliente1->moveRight(m_Renderer);
 			//Necesito enviar al server el cambio de posicion
 			eligioASpiderman = false;
 		}
 		if (inputManager->isKeyDown(KEY_LEFT) && !bloqueado){
-			//Necesito mover el cliente.png
+			cliente1->moveLeft(m_Renderer);
 			//Necesito enviar al server el cambio de posicion
 			eligioASpiderman = true;
 		}
@@ -569,10 +575,10 @@ void MCGame::menu() {
 		SDL_RenderClear(m_Renderer);
 		menuTexture.render(0, 0, 800, 600, m_Renderer);
 		//Necesito recibir por server la posicion de los otros clientes
-		cliente1.render(97, 61, 254, 221, m_Renderer);
-		cliente2.render(449, 61, 254, 221, m_Renderer);
-		cliente3.render(97, 353, 254, 221, m_Renderer);
-		cliente4.render(449, 353, 254, 221, m_Renderer);
+		cliente1->render(m_Renderer);
+		cliente2->render(m_Renderer);
+		cliente3->render(m_Renderer);
+		cliente4->render(m_Renderer);
 		SDL_RenderPresent(m_Renderer);
 		if (inputManager->isKeyDown(KEY_RETURN) && !bloqueado){
 			seleccionando = false;
