@@ -170,6 +170,23 @@ int computeDistance(CharacterServer *character1, CharacterServer *character2) {
     return distancia;
 }
 
+int computeDistance2(CharacterServer *character1, CharacterServer *character2)
+{
+	int distancia2;
+	if (character1->getCentro() > character2->getCentro())
+	{
+			distancia2 = character2->getPosX()+character2->getSobrante()
+					- (character1->getPosX()+character1->getSobrante()+character1->getWidth());
+	}
+	else
+	{
+		distancia2 = character2->getPosX()+character2->getSobrante()
+				 + character2->getWidth() - (character1->getPosX() + character1->getSobrante());
+	}
+
+	return distancia2;
+
+}
 
 /*Funcion que lee del socket la informacion que los clientes le envian.
  * Esta deberia leer, codificar y encolar eventos en la cola del servidor
@@ -310,9 +327,9 @@ void TCPServer::runServer() {
             continue;
         incoming_msg = this->incoming_msges_queue->get_data();
 
-
-
         int distancia = computeDistance(team1->get_currentCharacter(), team2->get_currentCharacter());
+
+        int distancia2 = computeDistance2(team1->get_currentCharacter(),team2->get_currentCharacter());
 
         character_updater_t *update_msg = new character_updater_t;
 
@@ -325,7 +342,7 @@ void TCPServer::runServer() {
             update_msg->currentSprite = team1->get_currentCharacter()->getSpriteNumber();
             update_msg->action = team1->get_currentCharacter()->getCurrentAction();
         } else {
-            team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+            team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
             update_msg->posX = team2->get_currentCharacter()->getPosX();
             update_msg->posY = team2->get_currentCharacter()->getPosY();
             update_msg->team = 2;
