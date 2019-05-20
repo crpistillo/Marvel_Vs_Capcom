@@ -236,7 +236,6 @@ void MCGame::action_update() {
     }
     std::unique_lock<std::mutex> lock(m);
     m_Running = false;
-
 }
 
 void MCGame::run() {
@@ -255,6 +254,7 @@ void MCGame::run() {
 
 		fpsManager.stop();
     }
+    send.join();
 
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
