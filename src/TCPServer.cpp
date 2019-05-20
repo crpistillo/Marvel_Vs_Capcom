@@ -325,7 +325,7 @@ void TCPServer::runServer() {
             update_msg->currentSprite = team1->get_currentCharacter()->getSpriteNumber();
             update_msg->action = team1->get_currentCharacter()->getCurrentAction();
         } else {
-            team2->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
+            team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
             update_msg->posX = team2->get_currentCharacter()->getPosX();
             update_msg->posY = team2->get_currentCharacter()->getPosY();
             update_msg->team = 2;
