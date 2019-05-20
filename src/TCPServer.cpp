@@ -200,36 +200,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
         msgQueue->action = *accion;
         msgQueue->client = clientSocket;
         this->incoming_msges_queue->insert(msgQueue);
-        //////////////////////////////////////////////////
 
-        string accion_palabra;
-        switch (*accion) {
-            case STANDING:
-                accion_palabra = "STANDING";
-                break;
-            case MOVINGRIGHT:
-                accion_palabra = "MOVINGRIGHT";
-                break;
-            case MOVINGLEFT:
-                accion_palabra = "MOVINGLEFT";
-                break;
-            case JUMPINGVERTICAL:
-                accion_palabra = "JUMPINGVERTICAL";
-                break;
-            case DUCK:
-                accion_palabra = "DUCK";
-                break;
-            case JUMPINGRIGHT:
-                accion_palabra = "JUMPINGRIGHT";
-                break;
-            case JUMPINGLEFT:
-                accion_palabra = "JUMPINGLEFT";
-                break;
-            default:
-                accion_palabra = "ALGUNA OTRA COSA";
-                break;
-        }
-        cout << accion_palabra << endl;
         continue;
     }
 }
@@ -346,7 +317,7 @@ void TCPServer::runServer() {
 
         character_updater_t *update_msg = new character_updater_t;
 
-        if (incoming_msg->client == 0 || incoming_msg->client == 1)//team1 es de los clientes 1 y 2
+        if (incoming_msg->client == 0)//team1 es de los clientes 1 y 2
         {
             team1->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
             update_msg->posX = team1->get_currentCharacter()->getPosX();

@@ -221,12 +221,19 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 void MCGame::action_update() {
+    FPSManager fpsManager(3);
+
+
     while (true){
+        fpsManager.start();
+
         handleEvents();
         if(!threadRunning)
             break;
         actions_t actionToSend = clientControls->getNewAction();
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        fpsManager.stop();
+
     }
     std::unique_lock<std::mutex> lock(m);
     m_Running = false;
