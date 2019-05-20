@@ -292,8 +292,12 @@ void CharacterServer::makeUpdaterStruct(character_updater_t* updater){
 		break;
 	}
 
+}
 
 
+actions_t CharacterServer::getCurrentAction()
+{
+	return this->currentAction;
 }
 
 

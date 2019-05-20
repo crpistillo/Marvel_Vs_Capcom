@@ -93,7 +93,7 @@ int SpidermanServer::getSpriteNumber(){
             spriteNumber = currentJumpingSprite;
             break;
         case JUMPINGLEFT:
-            spriteNumber = currentJumpingLeftSprite
+            spriteNumber = currentJumpingLeftSprite;
             break;
         case JUMPINGRIGHT:
             spriteNumber = currentJumpingRightSprite;

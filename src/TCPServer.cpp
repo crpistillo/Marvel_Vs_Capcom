@@ -197,39 +197,6 @@ void TCPServer::clientReceive(int socket){
 	cout << "Hola! Soy el hilo: " + to_string(asd) + ". Soy el encargado de leer del socket: "
 	+ to_string(socket_to_read->fd) +"\n";
 
-	while(1)
-	{
-		incoming_msg_t* incoming_msg = new incoming_msg_t;
-		//pop msges
-	   	*incoming_msg = this->incoming_msges_queue.get_data();
-	   	this->incoming_msges_queue.delete_data();
-
-	   	//update del team
-	    int distancia = computeDistance(team1->get_currentCharacter(),team2->get_currentCharacter());
-
-	   	character_updater_t update_msg;
-
-	    if(incoming_msg->client == 0 || incoming_msg->client == 1)//team1 es de los clientes 1 y 2
-	    {
-	    	team1->update(distancia,team2->get_currentCharacter()->getPosX(), incoming_msg->action);
-	    	update_msg.posX = team1->get_currentCharacter()->getPosX();
-	    	update_msg.posY = team1->get_currentCharacter()->getPosY();
-	    	update_msg.team = 1; //faltan mandar cosas?
-	    }
-	    else
-	    {
-	    	team2->update(distancia,team2->get_currentCharacter()->getPosX(),incoming_msg->action);
-	    	update_msg.posX = team2->get_currentCharacter()->getPosX();
-	        update_msg.posY = team2->get_currentCharacter()->getPosY();
-	        update_msg.team = 2;
-	    }
-
-	   	this->character_updater_queue[incoming_msg->client]->insert(update_msg);
-
-	   	delete incoming_msg;
-
-	   	continue;
-	}
 }
 
 Socket** TCPServer::getClientsSockets(){
@@ -463,8 +430,45 @@ void TCPServer::runServer() {
     createReceivingThreadPerClient();
     createSendingThreadPerClient();
 
-    while(1)
-    	continue;
+	while(1)
+	{
+		incoming_msg_t* incoming_msg = new incoming_msg_t;
+		//pop msges
+	   	*incoming_msg = this->incoming_msges_queue.get_data();
+	   	if(incoming_msg!=NULL)
+	   		continue;
+	   	this->incoming_msges_queue.delete_data();
+
+	   	//update del team
+	    int distancia = computeDistance(team1->get_currentCharacter(),team2->get_currentCharacter());
+
+	   	character_updater_t update_msg;
+
+	    if(incoming_msg->client == 0 || incoming_msg->client == 1)//team1 es de los clientes 1 y 2
+	    {
+	    	team1->update(distancia,team2->get_currentCharacter()->getPosX(), incoming_msg->action);
+	    	update_msg.posX = team1->get_currentCharacter()->getPosX();
+	    	update_msg.posY = team1->get_currentCharacter()->getPosY();
+	    	update_msg.team = 1;
+	    	update_msg.currentSprite = team1->get_currentCharacter()->getSpriteNumber();
+	    	update_msg.action = team1->get_currentCharacter()->getCurrentAction();
+	    }
+	    else
+	    {
+	    	team2->update(distancia,team2->get_currentCharacter()->getPosX(),incoming_msg->action);
+	    	update_msg.posX = team2->get_currentCharacter()->getPosX();
+	        update_msg.posY = team2->get_currentCharacter()->getPosY();
+	        update_msg.team = 2;
+	        update_msg.currentSprite = team2->get_currentCharacter()->getSpriteNumber();
+	        update_msg.action = team2->get_currentCharacter()->getCurrentAction();
+	    }
+
+	   	this->character_updater_queue[incoming_msg->client]->insert(update_msg);
+
+	   	delete incoming_msg;
+
+	   	continue;
+	}
 
 }
 
