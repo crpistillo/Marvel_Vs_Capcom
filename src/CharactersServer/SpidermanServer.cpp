@@ -82,3 +82,31 @@ void SpidermanServer::makeBuilderStruct(character_builder_t* builder){
 	builder->action = STANDING;
 
 }
+
+int SpidermanServer::getSpriteNumber(){
+    int spriteNumber;
+    switch (this->currentAction){
+        case STANDING:
+            spriteNumber = currentStandingSprite;
+            break;
+        case JUMPINGVERTICAL:
+            spriteNumber = currentJumpingSprite;
+            break;
+        case JUMPINGLEFT:
+            spriteNumber = currentJumpingLeftSprite
+            break;
+        case JUMPINGRIGHT:
+            spriteNumber = currentJumpingRightSprite;
+            break;
+        case MOVINGRIGHT:
+        case MOVINGLEFT:
+            spriteNumber = currentWalkingSprite;
+            break;
+        case DUCK:
+            spriteNumber = 0;
+        case MAKINGINTRO:
+            spriteNumber = currentIntroSprite;
+            break;
+    }
+    return spriteNumber;
+}

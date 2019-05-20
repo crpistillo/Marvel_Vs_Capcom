@@ -43,6 +43,7 @@ public:
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder) = 0;
     void makeUpdaterStruct(character_updater_t* updater);
+    virtual int getSpriteNumber() = 0;
 
 
     int clientNumber;

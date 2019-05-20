@@ -15,10 +15,8 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-const int SCREEN_FPS = 30;
+const int SCREEN_FPS = 40;
 
-int distancia;
-int distancia2;
 int centerBefore,centerLater=-1000;
 
 
@@ -241,7 +239,6 @@ void MCGame::action_update() {
 void MCGame::run() {
 	m_Running = true;
 	FPSManager fpsManager(SCREEN_FPS);
-
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
 	std::thread send (&MCGame::action_update, this);

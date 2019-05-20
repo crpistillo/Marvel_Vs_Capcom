@@ -16,6 +16,8 @@ private:
     void moveRight(int distance, int posContrincante);
     void moveLeft(int distance, int posContrincante);
     void resetSpriteVariables();
+
+    int getSpriteNumber();
 };
 
 #endif //MARVEL_VS_CAPCOM_WOLVERINESERVER_H
