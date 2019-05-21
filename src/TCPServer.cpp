@@ -337,11 +337,16 @@ void TCPServer::runServer() {
 
         if (incoming_msg->client == 0)//team1 es de los clientes 1 y 2
         {
-            if(team1->get_currentCharacter()->currentAction == STANDING && incoming_msg->action == CHANGEME) {
+            if(team1->get_currentCharacter()->isStanding() && incoming_msg->action == CHANGEME){
                 update_msg->action = CHANGEME;
                 team1->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
-
-            }else{
+            }
+            else if (team1->invalidIntroAction() && incoming_msg->action == CHANGEME){
+            	update_msg->action = team1->get_currentCharacter()->currentAction;
+            	team1->update(distancia, team2->get_currentCharacter()->getPosX(),
+            			team1->get_currentCharacter()->currentAction);
+            }
+            else{
                 team1->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
                 update_msg->action = team1->get_currentCharacter()->getCurrentAction();
             }
@@ -350,11 +355,20 @@ void TCPServer::runServer() {
             update_msg->team = 1;
             update_msg->currentSprite = team1->get_currentCharacter()->getSpriteNumber();
         } else {
-            if(team2->get_currentCharacter()->currentAction == STANDING && incoming_msg->action == CHANGEME){
+            if(team2->get_currentCharacter()->isStanding() && incoming_msg->action == CHANGEME)
+            {
                 update_msg->action = CHANGEME;
-                team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
-            }else{
-                team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+                team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+            }
+            else if (team2->invalidIntroAction() && incoming_msg->action == CHANGEME)
+            {
+                update_msg->action = team2->get_currentCharacter()->currentAction;
+                team2->update(distancia2, team1->get_currentCharacter()->getPosX(),
+                		team2->get_currentCharacter()->currentAction);
+            }
+            else
+            {
+                team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
                 update_msg->action = team2->get_currentCharacter()->getCurrentAction();
             }
             update_msg->posX = team2->get_currentCharacter()->getPosX();

@@ -42,6 +42,9 @@ public:
     void makeUpdater(character_updater_t* builder);
 
     CharacterServer* get_currentCharacter();
+
+    bool invalidIntroAction();
+
 };
 
 

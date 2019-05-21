@@ -45,7 +45,7 @@ public:
     void makeUpdaterStruct(character_updater_t* updater);
     virtual int getSpriteNumber() = 0;
     actions_t getCurrentAction();
-
+    bool isStanding();
 
 
     int clientNumber;
@@ -126,7 +126,6 @@ private:
     virtual void updateStand();
 
     virtual void makeIntro();
-
 
 
 };

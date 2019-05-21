@@ -85,6 +85,8 @@ public:
     void sendToClient(int clientSocket);
 
     Socket *getClientSocket(int i);
+
+    bool invalidIntroAction(actions_t action);
 };
 
 #endif

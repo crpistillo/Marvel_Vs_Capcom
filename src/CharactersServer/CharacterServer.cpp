@@ -295,11 +295,14 @@ void CharacterServer::makeUpdaterStruct(character_updater_t* updater){
 
 }
 
-
 actions_t CharacterServer::getCurrentAction()
 {
 	return this->currentAction;
 }
 
+bool CharacterServer::isStanding()
+{
+	return this->currentAction == STANDING;
+}
 
 

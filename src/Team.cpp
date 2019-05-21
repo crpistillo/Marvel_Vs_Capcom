@@ -75,3 +75,12 @@ CharacterServer* Team::get_currentCharacter()
 {
 	return this->currentCharacter;
 }
+
+bool Team::invalidIntroAction()
+{
+	actions_t action = currentCharacter->currentAction;
+
+	return ( (action == JUMPINGLEFT) || (action == JUMPINGRIGHT) || (action == JUMPINGVERTICAL)
+			|| (action == DUCK) || (action == MOVINGRIGHT) || (action == MOVINGLEFT)
+			|| (action == WALKBACK) );
+}
