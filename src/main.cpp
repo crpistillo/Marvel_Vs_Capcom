@@ -7,7 +7,6 @@
 #include "TCPServer.h"
 #include "tools/logger/Logger.h"
 #include "MCGame.h"
-#include "ServerThread.h"
 #include "data_structs.h"
 #include <sys/socket.h>
 
@@ -96,24 +95,8 @@ int run_server(int cantArg, char *dirJson, int port) {
         return -1;
     }
 
-    /*if (serverThread->create()) {
-        tcpServer->receive();
-    }*/
-    //tcpServer->receive(logger);
-
-    if( tcpServer->createAceptingThread() )   //Crea el thread que escucha conexiones nuevas.
-    	return -1;
-
-    while( tcpServer->getNumberOfConections() != MAXPLAYERS)	//Espera hasta que se conecten MAXPLAYERS
-    	continue;
-
-    cout << "Numero de jugadores alcanzado! \n";
-
-
     tcpServer->configJson(config);
     tcpServer->runServer();
-
-
 
     logger->finishSession();
 
@@ -153,7 +136,6 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
         cout << "Failed to setup Client" << endl;
         return -1;
     }
-//    tcpClient->Send("Connection succesfull");
 
     void* msj;
     while(1){

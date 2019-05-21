@@ -15,7 +15,7 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-const int SCREEN_FPS = 40;
+const int SCREEN_FPS = 60;
 
 int centerBefore,centerLater=-1000;
 
@@ -221,16 +221,19 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
 
 void MCGame::action_update() {
-	actions_t lastAction = STANDING; //BORRAR
+    FPSManager fpsManager(20);
+
+
     while (true){
+        fpsManager.start();
+
         handleEvents();
         if(!threadRunning)
             break;
         actions_t actionToSend = clientControls->getNewAction();
-        if(actionToSend == STANDING && lastAction == STANDING) //BORRAR
-        	continue; //BORRAR
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-        lastAction = actionToSend; //BORRAR
+        fpsManager.stop();
+
     }
     std::unique_lock<std::mutex> lock(m);
     m_Running = false;
@@ -335,8 +338,6 @@ void MCGame::handleEvents() {
 }
 
 void MCGame::update() {
-
-
 
 	char buf1[sizeof(character_updater_t)];
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));

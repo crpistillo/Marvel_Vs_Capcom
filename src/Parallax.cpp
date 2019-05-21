@@ -70,9 +70,9 @@ void Parallax::setCenterBefore(Logger* logger)
 void Parallax::keepCameraAndCenterInBounds(Logger* logger)
 {
 	logger->log("Parallax - ajusta posicion segun camara.", DEBUG);
-	if ((this->camera->x) < 2)
+	if ((this->camera->x) < 9) //antes era 2
 	{
-		this->camera->x = 2;
+		this->camera->x = 9; //antes era 2
 		(*(this->centerBefore)) = this->screenWidth/2;
 		(*(this->middleGround))->adjustPosX(0.400009);
 		(*(this->backGround))->adjustPosX(0.914982);

@@ -22,6 +22,8 @@
 #include "Team.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Queue/Queue.h"
+#include <mutex>
+
 
 using namespace std;
 
@@ -43,11 +45,13 @@ private:
     pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
     json config;
+    std::mutex m;
+
 
 public:
-    Queue<incoming_msg_t> incoming_msges_queue; //cola de los mensajes entrantes del cliente
+    Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
 
-    Queue<character_updater_t>* character_updater_queue[MAXPLAYERS];
+    Queue<character_updater_t*>* character_updater_queue[MAXPLAYERS];
     				//colas de mensajes de escritura para cada cliente
 
     Socket* serverSocket;
@@ -62,26 +66,25 @@ public:
     TCPServer();
     bool setup(int port, Logger* logger);
     void receive();
-    void clientReceive(int socket);
-    string getMessage();
-    void Send(string msg);
+
     void detach();
     void clean();
     void initServer();
     void reportClientConnected(const struct sockaddr_in* clientAddress, socklen_t clientAddress_len, Logger* logger);
-    int createAceptingThread();
+
     int getNumberOfConections();
-    int createReceivingThreadPerClient();
-    int createSendingThreadPerClient();
-    Socket** getClientsSockets();
-    void teamOneMakeUpdater(character_updater_t* updater);
-    void teamTwoMakeUpdater(character_updater_t* updater);
 
     void runServer();
 
     CharacterServer* createServerCharacter(char *character, int nclient);
 
     void configJson(json config);
+
+    void receiveFromClient(int clientSocket);
+
+    void sendToClient(int clientSocket);
+
+    Socket *getClientSocket(int i);
 };
 
 #endif

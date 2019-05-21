@@ -86,7 +86,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     //Acciones de dos teclas primero
     if (currentAction == JUMPINGVERTICAL)
-        jumpRight(); //send jump rigth
+        jumpVertical(); //send jump rigth
     else if (currentAction == JUMPINGLEFT)
         jumpLeft(); //send jump left
 
