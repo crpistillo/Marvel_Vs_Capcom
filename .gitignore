@@ -37,7 +37,6 @@
 
 # Logs
 *.log
-/CMakeLists.txt
 /cmake-build-debug/
 
 # Eclipse
@@ -49,3 +48,5 @@
 .settings/language.settings.xml
 /Debug/marvel-vs-capcom/
 /Debug/sources.mk
+
+Debug/marvel-vs-capcom
