@@ -91,6 +91,8 @@ public:
 
     void createReadThread();
     void createWriteThread();
+    void renderNuevo();
+    void updateNuevo(render_data_t* render_data);
 
     //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de

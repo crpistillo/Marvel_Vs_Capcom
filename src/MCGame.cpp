@@ -431,7 +431,13 @@ void orderBackgroundsByZIndex(json* backgroundList){
 }
 
 
+static void* clientRead(void* args){
 
+	TCPClient *client = (TCPClient*) args;
+
+	void* buf1[sizeof(character_builder_t)];
+
+	client->socketClient->reciveData(&buf1, sizeof(character_builder_t));
 
 	character_builder_t* builder = (character_builder_t*) buf1;
 
@@ -494,7 +500,7 @@ void MCGame::renderNuevo()
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
-void MCGame::updateNuevo(render_data_t* render_data)
+/*void MCGame::updateNuevo(render_data_t* render_data)
 {
 	logger->log("Reubicacion inicio.", DEBUG);
 
@@ -533,7 +539,7 @@ void MCGame::updateNuevo(render_data_t* render_data)
 
     // Mandamos all characters y lo hace con los que tienen playing = true;
     parallaxController->doParallax(&player1,&player2,logger);
-}
+}*/
 
 
 /*Por ahora considero que se conectan 4 clientes (luego voy a considerar cuando se
