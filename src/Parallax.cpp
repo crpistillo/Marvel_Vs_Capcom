@@ -29,29 +29,14 @@ Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, i
 	this->screenWidth = screenWidth;
 	logger->log("Definicion levelWidth Parallax.", DEBUG);
 	this->levelWidth= 3200;
+	(*middleGround)->changeVel(1.665);
+	(*backGround)->changeVel(3.3575);
 }
 
 bool Parallax::playersAreMoving(Player* player1, Player* player2,Logger* logger)
 {
 	logger->log("Marca personajes en movimiento.", DEBUG);
     return player1->getCurrentCharacter()->isMoving() && player2->getCurrentCharacter()->isMoving();
-}
-
-
-void Parallax::adjustLayerVelocity(Player** player1, Player** player2,Logger* logger)
-{
-	if(this->playersAreMoving(*player1, *player2,logger))
-	{
-		logger->log("Def. velocidad de movimiento parallax con jg. en mov.", DEBUG);
-		(*middleGround)->changeVel(3.33);
-	   	(*backGround)->changeVel(6.715);
-	}
-    else
-    {
-    	logger->log("Def. velocidad de movimiento parallax con jg. estaticos.", DEBUG);
-        (*middleGround)->changeVel(1.665);
-        (*backGround)->changeVel(3.3575);
-	}
 }
 
 void Parallax::centerCamera(Player** player1, Player** player2,Logger* logger)
@@ -103,9 +88,6 @@ void Parallax::setCenterLater(Logger* logger)
 
 void Parallax::doParallax(Player** player1, Player** player2,Logger* logger)
 {
-	logger->log("Parallax - llama Ajusta velocidad del layer.", DEBUG);
-	this->adjustLayerVelocity(player1,player2,logger);
-
 	logger->log("Parallax - llama Centra camara.", DEBUG);
 	this->centerCamera(player1, player2,logger);
 
