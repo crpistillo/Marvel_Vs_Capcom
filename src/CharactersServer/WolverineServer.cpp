@@ -121,13 +121,15 @@ int WolverineServer::getSpriteNumber(){
         case MOVINGLEFT:
             spriteNumber = currentWalkingSprite;
             break;
-        case DUCK:
-            spriteNumber = 0;
         case MAKINGINTRO:
             spriteNumber = currentIntroSprite;
             break;
         case WALKBACK:
             spriteNumber = currentWalkbackSprite;
+            break;
+        default:
+            spriteNumber = 0;
+            break;
     }
     return spriteNumber;
 }

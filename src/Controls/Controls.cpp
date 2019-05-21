@@ -18,12 +18,17 @@ actions_t Controls::getNewAction() {
     InputManager *inputManager = InputManager::getInstance();
 
     //Acciones de dos teclas primero
+
     if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey))
         return JUMPINGLEFT;
-        //Acciones de una sola tecla
+
+    //Acciones de una sola tecla
+
+    else if(inputManager->isKeyDown(changeKey))
+        return CHANGEME;
 
     else if (inputManager->isKeyDown(upKey))
         return JUMPINGVERTICAL;

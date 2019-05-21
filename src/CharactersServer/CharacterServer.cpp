@@ -146,6 +146,7 @@ void CharacterServer::resetSpriteVariables() {
     mPosY = this->INITIAL_POS_Y;
     currentJumpingSprite = 0;
     currentWalkingSprite = 0;
+    currentIntroSprite = 0;
 }
 
 

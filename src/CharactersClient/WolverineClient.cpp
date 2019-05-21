@@ -37,75 +37,75 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "standing_left", MVC_FILEPATH, currentSprite,
+                this->loader->loadActionSprite(wolverinePath + "standing_left", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "standing_right", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "standing_right", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case DUCK:
             if (isLookingLeft) {
-                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 39, FILE_EXTENSION, renderer, &m_Texture);
+                this->loader->loadActionSprite(wolverinePath + "duck", MVC_FILEPATH, 39, FILE_EXTENSION, renderer, &m_Texture);
             } else {
-                this->loader->loadActionSprite(characterFilepath + "duck", MVC_FILEPATH, 38, FILE_EXTENSION, renderer, &m_Texture);
+                this->loader->loadActionSprite(wolverinePath + "duck", MVC_FILEPATH, 38, FILE_EXTENSION, renderer, &m_Texture);
             }
             break;
         case JUMPINGVERTICAL:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "jumping_inverted", MVC_FILEPATH,
                                                currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "jumping", MVC_FILEPATH, currentSprite,
+                this->loader->loadActionSprite(wolverinePath + "jumping", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGRIGHT:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "jumping_right_inverted", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "jumping_right_inverted", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "jumping_right", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "jumping_right", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case JUMPINGLEFT:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "jumping_left", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "jumping_left", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "jumping_left_inverted", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "jumping_left_inverted", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
         case MAKINGINTRO:
-            this->loader->loadActionSprite(characterFilepath + "intro", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
+            this->loader->loadActionSprite(wolverinePath + "intro", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
                                            renderer, &m_Texture);
             break;
         case MOVINGLEFT:
         case MOVINGRIGHT:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "walking_left", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "walking_left", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "walking_right", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "walking_right", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
         case WALKBACK:
             if(isLookingLeft)
 
-                this->loader->loadActionSprite(characterFilepath + "walkbackwards_left", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "walkbackwards_left", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION, renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "walkbackwards_right", MVC_FILEPATH,
+                this->loader->loadActionSprite(wolverinePath + "walkbackwards_right", MVC_FILEPATH,
                                                currentSprite, FILE_EXTENSION, renderer, &m_Texture);
             break;
 

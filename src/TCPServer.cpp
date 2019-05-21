@@ -353,11 +353,14 @@ void TCPServer::runServer() {
         character_updater_t* update[MAXPLAYERS];
         for (int j = 0; j < MAXPLAYERS; ++j) {
             update[j] = new character_updater_t;
+            if(incoming_msg->action == CHANGEME)
+                update[j]->action = CHANGEME;
+            else
+                update[j]->action = update_msg->action;
             update[j]->team = update_msg->team;
             update[j]->posX = update_msg->posX;
             update[j]->posY = update_msg->posY;
             update[j]->currentSprite = update_msg->currentSprite;
-            update[j]->action = update_msg->action;
         }
 
         for (int i = 0; i < MAXPLAYERS; ++i) {

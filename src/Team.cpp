@@ -44,7 +44,7 @@ void Team::changeCharacter()
 
 void Team::update(int distance, int posContrincante, actions_t action) {
 
-	if(action == CHANGEME)
+	if(action == CHANGEME && !isChanging)
 	{
 		changeCharacter();
 		isChanging = true;

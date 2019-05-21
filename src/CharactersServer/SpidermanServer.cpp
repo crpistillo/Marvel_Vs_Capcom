@@ -103,10 +103,11 @@ int SpidermanServer::getSpriteNumber(){
         case MOVINGLEFT:
             spriteNumber = currentWalkingSprite;
             break;
-        case DUCK:
-            spriteNumber = 0;
         case MAKINGINTRO:
             spriteNumber = currentIntroSprite;
+            break;
+        default:
+            spriteNumber = 0;
             break;
     }
     return spriteNumber;
