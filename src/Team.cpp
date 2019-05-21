@@ -38,13 +38,14 @@ void Team::changeCharacter()
 
 
 	this->clientActive = currentCharacter->clientNumber;
+	this->currentCharacter->currentAction = MAKINGINTRO;
 
 }
 
 
 void Team::update(int distance, int posContrincante, actions_t action) {
 
-	if(action == CHANGEME && !isChanging)
+	if(action == CHANGEME && currentCharacter->currentAction == STANDING)
 	{
 		changeCharacter();
 		isChanging = true;

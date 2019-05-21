@@ -333,30 +333,40 @@ void TCPServer::runServer() {
 
         character_updater_t *update_msg = new character_updater_t;
 
+        bool changeAvailable = false;
+
         if (incoming_msg->client == 0)//team1 es de los clientes 1 y 2
         {
-            team1->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
+            if(team1->get_currentCharacter()->currentAction == STANDING && incoming_msg->action == CHANGEME) {
+                update_msg->action = CHANGEME;
+                team1->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+
+            }else{
+                team1->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
+                update_msg->action = team1->get_currentCharacter()->getCurrentAction();
+            }
             update_msg->posX = team1->get_currentCharacter()->getPosX();
             update_msg->posY = team1->get_currentCharacter()->getPosY();
             update_msg->team = 1;
             update_msg->currentSprite = team1->get_currentCharacter()->getSpriteNumber();
-            update_msg->action = team1->get_currentCharacter()->getCurrentAction();
         } else {
-            team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+            if(team2->get_currentCharacter()->currentAction == STANDING && incoming_msg->action == CHANGEME){
+                update_msg->action = CHANGEME;
+                team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+            }else{
+                team2->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
+                update_msg->action = team2->get_currentCharacter()->getCurrentAction();
+            }
             update_msg->posX = team2->get_currentCharacter()->getPosX();
             update_msg->posY = team2->get_currentCharacter()->getPosY();
             update_msg->team = 2;
             update_msg->currentSprite = team2->get_currentCharacter()->getSpriteNumber();
-            update_msg->action = team2->get_currentCharacter()->getCurrentAction();
         }
 
         character_updater_t* update[MAXPLAYERS];
         for (int j = 0; j < MAXPLAYERS; ++j) {
             update[j] = new character_updater_t;
-            if(incoming_msg->action == CHANGEME)
-                update[j]->action = CHANGEME;
-            else
-                update[j]->action = update_msg->action;
+            update[j]->action = update_msg->action;
             update[j]->team = update_msg->team;
             update[j]->posX = update_msg->posX;
             update[j]->posY = update_msg->posY;
