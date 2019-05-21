@@ -41,6 +41,10 @@ private:
     Texture middleGroundTexture;
     Texture backGroundTexture;
     Texture menuTexture;
+    Texture cliente1;
+    Texture cliente2;
+    Texture cliente3;
+    Texture cliente4;
     Layer* middleGround;
     Layer* backGround;
     Layer* frontGround;

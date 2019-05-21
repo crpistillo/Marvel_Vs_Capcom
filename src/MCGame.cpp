@@ -7,6 +7,7 @@
 #include "Controls/ArrowControls.h"
 #include <queue>
 #include <thread>
+#include "clienteMenu.h"
 
 
 using namespace std;
@@ -194,6 +195,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     players[0] = new Player(characters[0], characters[1]);
 
     players[1] = new Player(characters[2], characters[3]);
+    logger->log("Creacion de controles.", DEBUG);
 
 
     logger->log("Creacion de Jugador.", DEBUG);
@@ -320,6 +322,10 @@ void MCGame::clean() {
     middleGroundTexture.free();
     backGroundTexture.free();
     menuTexture.free();
+    cliente1.free();
+    cliente2.free();
+    cliente3.free();
+    cliente4.free();
     logger->log("Liberacion de variables de fondo finalizado.", DEBUG);
     delete backGround;
     delete middleGround;
@@ -423,6 +429,205 @@ void orderBackgroundsByZIndex(json* backgroundList){
 		pos_sel = 0;
 	}
 }
+
+
+
+
+	character_builder_t* builder = (character_builder_t*) buf1;
+
+	//this->updateNuevo(builder);
+	//this->renderNuevo();
+
+	//tiene que renderizar en base a lo que recibe en character_builder_t
+	//Esto aca no anda porq no es de la clase, no entiendo si hay que updatear y renderizar en
+	// el thread o afuera o encolar y despues updatear/renderizar
+
+
+
+	return 0;
+}
+
+static void* clientWrite(void* args)
+{
+	TCPClient *client = (TCPClient*) args;
+
+
+
+}
+
+void MCGame::createReadThread()
+{
+	pthread_create( &(this->readThread), NULL, clientRead, this);
+}
+
+void MCGame::createWriteThread()
+{
+	pthread_create( &(this->writeThread),NULL, clientWrite, this);
+}
+
+void MCGame::renderNuevo()
+{
+	logger->log("Inicio render.", DEBUG);
+
+	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
+
+	Renderizable* renderizables[4] = { &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
+	orderRenderizableListByZIndex(renderizables);
+
+	for(int i = 0; i < 4; i++){
+		if(renderizables[i] == backGround){
+			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == middleGround){
+			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+		}
+		else if(renderizables[i] == frontGround){
+			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
+		}
+		else if(renderizables[i] == characters[0]){
+			characters[0]->render(m_Renderer, camera.x, camera.y, characters[0]->getCentro());
+		}
+
+	}
+	logger->log("Fin render.", DEBUG);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
+}
+
+void MCGame::updateNuevo(render_data_t* render_data)
+{
+	logger->log("Reubicacion inicio.", DEBUG);
+
+	if (render_data->currentCharacter1.centro > render_data->currentCharacter2.centro)
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante +
+					render_data->currentCharacter1.width -(render_data->currentCharacter2.posX +
+					render_data->currentCharacter2.sobrante);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					 -(render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					 +render_data->currentCharacter1.width);
+	}
+	else
+	{
+		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
+					-(render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width);
+
+		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
+					+ render_data->currentCharacter2.width - (render_data->currentCharacter1.posX
+					+ render_data->currentCharacter1.sobrante);
+	}
+    logger->log("Actualizacion posicion MCGame.", DEBUG);
+
+    //tcpClient->recive()      // recibimos la struct de update
+    //playersUpdate(structRecived)
+
+    //this->characters[0]->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
+
+    player1->update(m_Renderer, distancia, player2->getCentro());
+//  player2->update(m_Renderer, distancia2, player1->getCentro());
+
+    logger->log("Actualizacion parallax - MCGame.", DEBUG);
+
+
+    // Mandamos all characters y lo hace con los que tienen playing = true;
+    parallaxController->doParallax(&player1,&player2,logger);
+}
+
+
+/*Por ahora considero que se conectan 4 clientes (luego voy a considerar cuando se
+ * conectan 2 o 3.
+ * Es solo un boceto, ahora quito los booleanos y veo bien los datos a enviar al server*/
+void MCGame::menu() {
+	/* Posiblemente innecesario
+	 * int numeroDeClientes; //Esto despues vuela
+	switch(tcpClient->nclient)
+	{
+	   case 1:
+	      numberTeam = 1;
+	      break;
+	   case 2:
+		   if (numeroDeClientes==2) numberTeam = 2;
+		   else numberTeam = 1;
+		   break;
+	   case 3:
+		   numberTeam = 2;
+	      break;
+	   case 4:
+		   numberTeam = 2;
+	}*/
+
+
+	bool terminar = false; //sto despues vuela (El servidor envia terminar cuando los dos team se bloquean (quedaron seleccionados todos los personajes)
+	bool eligioASpiderman = true;
+	bool teamBloqueado = false; //Esto despues vuela (es lo que voy a recibir del server)
+	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
+	clienteMenu* cliente1 = new clienteMenu(97, 1);
+	clienteMenu* cliente2 = new clienteMenu(449, 1);
+	clienteMenu* cliente3 = new clienteMenu(97, 2);
+	clienteMenu* cliente4 = new clienteMenu(449, 2);
+	cliente1->load(m_Renderer,"images/menu/cliente1.png");
+	cliente2->load(m_Renderer,"images/menu/cliente2.png");
+	cliente3->load(m_Renderer,"images/menu/cliente3.png");
+	cliente4->load(m_Renderer,"images/menu/cliente4.png");
+	while (!terminar){
+		InputManager* inputManager = InputManager::getInstance();
+		inputManager->update();
+		if (inputManager->isKeyDown(KEY_RIGHT)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
+			eligioASpiderman = false;
+		}
+		if (inputManager->isKeyDown(KEY_LEFT)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
+			eligioASpiderman = true;
+		}
+		if (inputManager->isKeyDown(KEY_RETURN)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
+		}
+		if(inputManager->quitRequested()) {
+			terminar = true;
+			m_Running = false;
+		}
+		//recibo la posicion en x de todos los clientes, si se bloqueo el equipo y si debo terminar 	ARREGLAR
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+
+		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+		SDL_RenderClear(m_Renderer);
+		menuTexture.render(0, 0, 800, 600, m_Renderer);
+
+		/*cliente1->render(m_Renderer,posX);	ARREGLAR
+		cliente2->render(m_Renderer,posX);
+		cliente3->render(m_Renderer,posX);
+		cliente4->render(m_Renderer,posX);*/
+		SDL_RenderPresent(m_Renderer);
+		}
+
+		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
+		 * deberia quitar de ahi*/
+		char* character1;
+		char* character2;
+		if (eligioASpiderman){
+			character1 = "Spiderman";
+			character2 = "Wolverine";
+		} else {
+			character1 = "Wolverine";
+			character2 = "Spiderman";
+		}
+		/*Aprovecho que cuando elige un cliente, el otro cliente ya queda determinado,
+		 * entonces un cliente de un equipo hace dos send y el otro cliente del mismo
+		 * equipo no envia nada*/
+		if (!teamBloqueado){
+			tcpClient->Send((void*) character1, sizeof(character1) + 1);
+			tcpClient->Send((void*) character2, sizeof(character2) + 1);
+		}
+
+}
+
+
 
 
 
