@@ -8,39 +8,40 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-Player::Player(Character *first, Character *second, Controls* controls,Logger* logger) {
+Player::Player(CharacterClient *first, CharacterClient *second) {
+	Logger* logger = Logger::getInstance();
 	logger->log("Inicializacion de personajes para jugador.", DEBUG);
-    this->controls = controls;
-    currentCharacter = first;
+	currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
     isChanging = false;
 
-    changeKey = controls->changeKey;
-    logger->log("Inicializacion de controles para jugador.", DEBUG);
-    firstCharacter->setControls(controls);
-    secondCharacter->setControls(controls);
 }
 
 
+void Player::update(character_updater_t* updater) {
 
-void Player::update(SDL_Renderer *renderer, int distance, int posContrincante,Logger* logger) {
 
-    InputManager* inputManager = InputManager::getInstance();
-    logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
-    if(inputManager->isKeyDown(changeKey) && !isChanging && !(currentCharacter->isJumpingVertical || currentCharacter->isJumpingRight || currentCharacter->isJumpingLeft)){
-        changeCharacter();
+    if(updater->action == CHANGEME){
+        changeCharacter();  //send change character
         setCharacterToChanging();
         isChanging = true;
     }
-    if(!currentCharacter->isMakingIntro)
+    currentCharacter->update(updater);
+	Logger* logger = Logger::getInstance();
+    InputManager* inputManager = InputManager::getInstance();
+    logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
+
+    if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
-    currentCharacter->update(renderer, distance, posContrincante,logger);
+   // currentCharacter->load(renderer, distance, posContrincante);
 }
 
-void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante,Logger* logger) {
+
+void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+	Logger* logger = Logger::getInstance();
 	logger->log("Renderizado de personaje - Render.", DEBUG);
-	currentCharacter->render(mRenderer, camX, camY, posContrincante,logger);
+	currentCharacter->render(mRenderer, camX, camY, posContrincante);
 }
 
 void Player::free() {
@@ -68,9 +69,9 @@ void Player::setCharacterToChanging(){
 	currentCharacter->startIntro();
 }
 
-void Player::loads(SDL_Renderer *pRenderer) {
-    firstCharacter->load(pRenderer);
-    secondCharacter->load(pRenderer);
+void Player::loads(SDL_Renderer *pRenderer, int posContrincante) {
+    firstCharacter->load(pRenderer, posContrincante);
+    secondCharacter->load(pRenderer, posContrincante);
 }
 
 int Player::getPosX() {
@@ -90,7 +91,7 @@ int Player::getCentro() {
     return currentCharacter->getCentro();
 }
 
-Character* Player::getCurrentCharacter()
+CharacterClient* Player::getCurrentCharacter()
 {
 	return this->currentCharacter;
 }
@@ -106,5 +107,10 @@ int Player::getZIndex(){
 	return this->currentCharacter->getZIndex();
 
 }
+
+void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
+    currentCharacter->load(pRenderer, posContrincante);
+}
+
 
 

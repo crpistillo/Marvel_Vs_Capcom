@@ -40,8 +40,6 @@ void InputManager::update() {
 
 		case SDL_KEYDOWN:
 
-
-
 			if(event.key.repeat)
 				this->keyHold[SDL_GetScancodeFromKey(event.key.keysym.sym)] = 1;
 

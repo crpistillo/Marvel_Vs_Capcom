@@ -14,7 +14,9 @@ RM := rm -rf
 -include src/tools/FPSManager/subdir.mk
 -include src/Texture/subdir.mk
 -include src/Controls/subdir.mk
--include src/Characters/subdir.mk
+-include src/Client/subdir.mk
+-include src/CharactersServer/subdir.mk
+-include src/CharactersClient/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

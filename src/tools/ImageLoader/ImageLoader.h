@@ -10,16 +10,16 @@ using namespace std;
 class ImageLoader{
 
 public:
-	ImageLoader(unsigned int r, unsigned int g, unsigned int b);
+	ImageLoader(Uint8 r, Uint8 g, Uint8 b);
 	~ImageLoader();
 
 	void loadActionSprite(string actionPath, string characterMVC, int currentSprite, string extension, SDL_Renderer *renderer, Texture* texture);
 
 
 private:
-	unsigned int r_value;
-	unsigned int g_value;
-	unsigned int b_value;
+    Uint8 r_value;
+    Uint8 g_value;
+    Uint8 b_value;
 };
 
 

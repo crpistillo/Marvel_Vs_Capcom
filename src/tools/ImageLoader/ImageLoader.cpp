@@ -1,7 +1,7 @@
 #include "ImageLoader.h"
 
 
-ImageLoader::ImageLoader(unsigned int r, unsigned int g, unsigned int b){
+ImageLoader::ImageLoader(Uint8 r, Uint8 g, Uint8 b){
 	this->r_value = r;
 	this->g_value = g;
 	this->b_value = b;

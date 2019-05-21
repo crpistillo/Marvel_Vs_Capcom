@@ -11,8 +11,8 @@
 #include "Layer.h"
 #include "tools/logger/Logger.h"
 
-const int MIDDLE_GROUND_VEL = 3.33;
-const int BACK_GROUND_VEL = 6.66667;
+const int MIDDLE_GROUND_VEL = 1.665;//antes 3.33
+const int BACK_GROUND_VEL = 3.3575; //antes: 6.66667
 
 class Parallax
 {
@@ -29,8 +29,6 @@ public:
 	Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, int* centerBefore, int* centerLater, Logger* logger, int screenWidth);
 
 	bool playersAreMoving(Player* player1, Player* player2,Logger* logger);
-
-	void adjustLayerVelocity(Player** player1, Player** player2,Logger* logger);
 
 	//centra la camara entre los personajes
 	void centerCamera(Player** player1, Player** player2,Logger* logger);

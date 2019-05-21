@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "Characters/Spiderman.h"
-#include "Characters/Wolverine.h"
+#include "CharactersClient/SpidermanClient.h"
+#include "CharactersClient/WolverineClient.h"
 #include "tools/FPSManager/FPSManager.h"
 #include "Texture/Texture.h"
 #include "tools/logger/Logger.h"
@@ -19,6 +19,11 @@
 #include "Layer.h"
 #include "Parallax.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
+#include "Client/TCPClient.h"
+#include "data_structs.h"
+#include "Constants.h"
+#include <mutex>
+
 
 using namespace std;
 
@@ -26,6 +31,7 @@ using namespace std;
 class MCGame {
 private:
     bool m_Running;
+    bool threadRunning;
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
     SDL_Joystick* gGameController = NULL;
@@ -34,15 +40,21 @@ private:
     Texture frontGroundTexture;
     Texture middleGroundTexture;
     Texture backGroundTexture;
+    Texture menuTexture;
     Layer* middleGround;
     Layer* backGround;
     Layer* frontGround;
-    Player* player1;
-    Player* player2;
+    Player* players[2];
     Parallax* parallaxController;
+    Controls* clientControls;
     json config;
-
+    TCPClient* tcpClient;
+    CharacterClient* characters[4];
     void loadGroundTextureByZIndex();
+    Constants* constants;
+    void action_update();
+    int myCharacter;
+    std::mutex m;
 
 
 protected:
@@ -51,17 +63,35 @@ protected:
 
 
 public:
-    MCGame(json config, int ancho, int alto);
+    MCGame(json config, int ancho, int alto, TCPClient *client);
     ~MCGame(){}
     void init() { m_Running = true; }
     bool init(const char* title, int xpos, int ypos, int width, int
     height, int flags);
     void run();
+    void menu();
     void render();
     void update();
     void handleEvents();
     void clean();
     SDL_Rect camera;
+
+    CharacterClient *characterBuild(character_builder_t *builder);
+
+    pthread_t readThread; //lee del socket la info de cada personaje (accion, posX, posY, etc)
+    					  //y luego renderiza en base a esos datos
+
+    pthread_t writeThread; //ejecuta handleEvents y manda en el socket (al server)
+    						//la informacion de lo que el cliente pretende que el personaje haga
+    						//(caminar,saltar,etc)
+
+    void createReadThread();
+    void createWriteThread();
+
+    //Ahora le dejo este tipo de dato, pero
+    												//despues lo cambiamos en base al tipo de
+    												//dato que recibamos
+
 };
 
 

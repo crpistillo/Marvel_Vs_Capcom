@@ -6,25 +6,25 @@
 #define MARVEL_VS_CAPCOM_PLAYER_H
 
 
-#include "Characters/Character.h"
+#include "CharactersClient/CharacterClient.h"
 #include "Controls/Controls.h"
-#include "Renderizable.h"
 #include "tools/logger/Logger.h"
+#include "data_structs.h"
 
 class Player: public Renderizable {
 public:
-    Player(Character* first, Character* second, Controls* controls,Logger* logger);
+    Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(SDL_Renderer* renderer, int distance, int posContrincante,Logger* logger);
-    void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante,Logger* logger);
+    void update(character_updater_t* updater);
+    void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 
 
-    void loads(SDL_Renderer *pRenderer);
+    void loads(SDL_Renderer *pRenderer, int posContrincante);
 
     int getPosX();
 
-    Character* getCurrentCharacter();
+    CharacterClient* getCurrentCharacter();
 
     int getWidth();
 
@@ -33,10 +33,12 @@ public:
     int getCentro();
     int getZIndex();
 
+    void load(SDL_Renderer *pRenderer, int posContrincante);
+
 private:
-    Character* currentCharacter;
-    Character* firstCharacter;
-    Character* secondCharacter;
+    CharacterClient* currentCharacter;
+    CharacterClient* firstCharacter;
+    CharacterClient* secondCharacter;
     Controls* controls;
     int changeKey;
     bool isChanging;

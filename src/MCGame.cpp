@@ -6,6 +6,8 @@
 #include "Controls/WASDControls.h"
 #include "Controls/ArrowControls.h"
 #include <queue>
+#include <thread>
+
 
 using namespace std;
 
@@ -13,10 +15,8 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
-const int SCREEN_FPS = 30;
+const int SCREEN_FPS = 60;
 
-int distancia;
-int distancia2;
 int centerBefore,centerLater=-1000;
 
 
@@ -55,8 +55,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                player1->loads(m_Renderer);
-                player2->loads(m_Renderer);
+                players[0]->loads(m_Renderer, 0);
+                players[1]->loads(m_Renderer, 1);
 
 
                 loadGroundTextureByZIndex();
@@ -92,97 +92,125 @@ void MCGame::loadGroundTextureByZIndex(){
 
 
 
-MCGame::MCGame(json config, int ancho, int alto){
-	this->logger = Logger::getInstance();
-	this->SCREEN_WIDTH = ancho;
-	this->SCREEN_HEIGHT = alto;
-	m_Window = NULL;
-	m_Renderer = NULL;
-	m_Running = false;
-	this->config = config;
+MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
+    constants = (Constants*) (malloc(sizeof(Constants *)));
+    this->logger = Logger::getInstance();
+    this->SCREEN_WIDTH = ancho;
+    this->SCREEN_HEIGHT = alto;
+    this->tcpClient = client;
+    m_Window = NULL;
+    m_Renderer = NULL;
+    m_Running = false;
 
-	json spidermanConfig = config["characters"][0];
-	json wolverineConfig = config["characters"][1];
+    ///////////////////////JSON///////////////////
+    this->config = config;
 
-	string msj;
+    json spidermanConfig = config["characters"][0];
+    json wolverineConfig = config["characters"][1];
 
-	if (spidermanConfig["name"] != "spiderman"){
-		string name = spidermanConfig["name"];
-		string filepath = spidermanConfig["filepath"];
-		msj = "No se reconoce al personaje '" + name + "'."
-				+ " Se intentara cargar las imagenes correspondiente al filepath: " + filepath
-				+ " como las imagenes del personaje 'spiderman'.";
-		logger->log(msj, ERROR);
-	}
+    string msj;
 
-	if (wolverineConfig["name"] != "wolverine"){
-		string name = wolverineConfig["name"];
-		string filepath = wolverineConfig["filepath"];
-		msj = "No se reconoce al personaje '" + name + "'."
-						+ " Se cargaran las imagenes correspondiente al filepath: " + filepath
-						+ " como las imagenes del personaje 'wolverine'.";
-				logger->log(msj, ERROR);
-	}
+    if (spidermanConfig["name"] != "spiderman") {
+        string name = spidermanConfig["name"];
+        string filepath = spidermanConfig["filepath"];
+        msj = "No se reconoce al personaje '" + name + "'."
+              + " Se intentara cargar las imagenes correspondiente al filepath: " + filepath
+              + " como las imagenes del personaje 'spiderman'.";
+        logger->log(msj, ERROR);
+    }
 
-
-
-	int widthSpiderman = spidermanConfig["width"];
-	int heightSpiderman = spidermanConfig["height"];
-	int widthWolverine = wolverineConfig["width"];
-	int heightWolverine = wolverineConfig["height"];
-
-	string spidermanPath = spidermanConfig["filepath"];
-	if(spidermanPath != "images/spiderman/spiderman_")
-		logger->log("Filepath para personaje Spiderman incorrecto. Error al cargar imagenes.", ERROR);
-	string wolverinePath = wolverineConfig["filepath"];
-	if(wolverinePath != "images/wolverine/wolverine_")
-		logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
+    if (wolverineConfig["name"] != "wolverine") {
+        string name = wolverineConfig["name"];
+        string filepath = wolverineConfig["filepath"];
+        msj = "No se reconoce al personaje '" + name + "'."
+              + " Se cargaran las imagenes correspondiente al filepath: " + filepath
+              + " como las imagenes del personaje 'wolverine'.";
+        logger->log(msj, ERROR);
+    }
 
 
-	int spidermanSobrante = widthSpiderman*242/640;
-	int spidermanAncho= widthSpiderman*110/640;
-	int wolverineSobrante = widthWolverine*278/640;
-	int wolverineAncho= widthWolverine*87/640;
+    int widthSpiderman = spidermanConfig["width"];
+    int heightSpiderman = spidermanConfig["height"];
+    int widthWolverine = wolverineConfig["width"];
+    int heightWolverine = wolverineConfig["height"];
 
-	int INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH/2)-spidermanSobrante)-(spidermanAncho/2)-200;
-	int INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH/2)-wolverineSobrante)-(wolverineAncho/2)+200;
-
-	logger->log("Creacion de personajes.", DEBUG);
-
-	Character* character1 = new Spiderman(INITIAL_POS_X_PLAYER_ONE, false, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
-	character1->setZIndex(spidermanConfig["zindex"]);
-	character1->setFilepath(spidermanPath);
+    string spidermanPath = spidermanConfig["filepath"];
+    if (spidermanPath != "images/spiderman/spiderman_")
+        logger->log("Filepath para personaje Spiderman incorrecto. Error al cargar imagenes.", ERROR);
+    string wolverinePath = wolverineConfig["filepath"];
+    if (wolverinePath != "images/wolverine/wolverine_")
+        logger->log("Filepath para personaje Wolverine incorrecto. Error al cargar imagenes.", ERROR);
 
 
-    Character* character2 = new Wolverine(INITIAL_POS_X_PLAYER_ONE, false, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
-    character2->setZIndex(wolverineConfig["zindex"]);
-    character2->setFilepath(wolverinePath);
+    constants->widthSpiderman = widthSpiderman;
+    constants->widthWolverine = widthWolverine;
+    constants->heightSpiderman = heightSpiderman;
+    constants->heightWolverine = heightWolverine;
+    constants->zIndexSpiderman = spidermanConfig["zindex"];
+    constants->zIndexWolverine = wolverineConfig["zindex"];
 
 
-    Character* character3 = new Wolverine(INITIAL_POS_X_PLAYER_TWO, true, widthWolverine, heightWolverine, wolverineSobrante, wolverineAncho, SCREEN_WIDTH);
-    character3->setZIndex(wolverineConfig["zindex"]);
-    character3->setFilepath(wolverinePath);
+    constants->spidermanSobrante = widthSpiderman * 242 / 640;
+    constants->spidermanAncho = widthSpiderman * 110 / 640;
+    constants->wolverineSobrante = widthWolverine * 278 / 640;
+    constants->wolverineAncho = widthWolverine * 87 / 640;
+
+    constants->INITIAL_POS_X_PLAYER_ONE = ((LEVEL_WIDTH / 2) - constants->spidermanSobrante) - (constants->spidermanAncho / 2) - 200;
+    constants->INITIAL_POS_X_PLAYER_TWO = ((LEVEL_WIDTH / 2) - constants->wolverineSobrante) - (constants->wolverineAncho / 2) + 200;
+
+    logger->log("Creacion de personajes.", DEBUG);
+
+    //////////////////////////////////////////////////////////////////////
+
+    // MENU
 
 
-    Character* character4 = new Spiderman(INITIAL_POS_X_PLAYER_TWO, true, widthSpiderman, heightSpiderman, spidermanSobrante, spidermanAncho, SCREEN_WIDTH);
-    character4->setZIndex(spidermanConfig["zindex"]);
-    character4->setFilepath(spidermanPath);
+
+    char* character1 = "Spiderman";
+    char* character2 = "Wolverine";
+    tcpClient->Send((void*) character1, sizeof(character1) + 1);
+    tcpClient->Send((void*) character2, sizeof(character2) + 1);
+
+    //MENU
+
+
+    //Construyo los 4 personajes según la configuracion que me mande el server.
+
+    for (int i = 0; i < 4; ++i) {
+        void* buf1;
+        character_builder_t* builder;
+        buf1 = tcpClient->receive(sizeof(character_builder_t));
+        builder = (character_builder_t*) buf1;
+        characters[i] = characterBuild(builder);
+    }
 
 
     logger->log("Creacion de controles.", DEBUG);
 
-    Controls* controlPlayer2 = new WASDControls();
-    Controls* controlPlayer1 = new ArrowControls();
+    Controls* controlPlayer = new ArrowControls();
 
-    logger->log("Creacion de Jugadores.", DEBUG);
+    this->clientControls = controlPlayer;
 
-    player1 = new Player(character1, character2, controlPlayer1,logger);
-    player2 = new Player(character3, character4, controlPlayer2,logger);
+    players[0] = new Player(characters[0], characters[1]);
 
-    logger->log("Definicion de Fondo.", DEBUG);	
+    players[1] = new Player(characters[2], characters[3]);
 
-    middleGround = new Layer(2400, 600, 3.33, 400);//3.33
-    backGround = new Layer(1600,600,6.66667,800);//6.715
+
+    logger->log("Creacion de Jugador.", DEBUG);
+
+
+    logger->log("Definicion de Fondo.", DEBUG);
+
+/*    characterBuilder_t characterBuilder;
+
+    characterBuilder = tcpClient->receive(sizeof(characterBuilder_t));
+
+    character_create(characterBuilder);
+*/
+
+
+    middleGround = new Layer(2400, 600, 3.33, 400); //3.33
+    backGround = new Layer(1600,600,6.66667,800); //6.715
     frontGround = new Layer(3200,600,0,0);
 
     logger->log("Creacion de Parallax.", DEBUG);
@@ -190,32 +218,55 @@ MCGame::MCGame(json config, int ancho, int alto){
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger, SCREEN_WIDTH);
 }
 
+
+
+void MCGame::action_update() {
+    FPSManager fpsManager(25);
+
+
+    while (true){
+        fpsManager.start();
+
+        handleEvents();
+        if(!threadRunning)
+            break;
+        actions_t actionToSend = clientControls->getNewAction();
+        tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        fpsManager.stop();
+
+    }
+    std::unique_lock<std::mutex> lock(m);
+    m_Running = false;
+}
+
 void MCGame::run() {
 	m_Running = true;
 	FPSManager fpsManager(SCREEN_FPS);
-
 	logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
-	while(m_Running) {
+	std::thread send (&MCGame::action_update, this);
+	threadRunning=true;
+    while(m_Running) {
 		fpsManager.start();
 
-		handleEvents();
 		update();
 		render();
 
 		fpsManager.stop();
-	}
+    }
+    send.join();
+
 	logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
 
 void orderRenderizableListByZIndex(Renderizable** list);
 
 void MCGame::render() {
-	logger->log("Inicio render.", DEBUG);	
+	logger->log("Inicio render.", DEBUG);
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*player1) , &(*player2)};
+	Renderizable* renderizables[5] = {  &(*middleGround), &(*backGround), &(*frontGround) , &(*players[0]) , &(*players[1])};
 	orderRenderizableListByZIndex(renderizables);
 
 	for(int i = 0; i < 5; i++){
@@ -228,11 +279,11 @@ void MCGame::render() {
 		else if(renderizables[i] == frontGround){
 			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
 		}
-		else if(renderizables[i] == player2){
-			player2->render(m_Renderer, camera.x, camera.y, player1->getCentro(),logger);
+		else if(renderizables[i] == players[1]){
+			players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
 		}
-		else if(renderizables[i] == player1){
-			player1->render(m_Renderer, camera.x, camera.y, player2->getCentro(),logger);
+		else if(renderizables[i] == players[0]){
+			players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
 		}
 	}
 	logger->log("Fin render.", DEBUG);
@@ -258,17 +309,17 @@ void orderRenderizableListByZIndex(Renderizable** list){
 	}
 }
 
-
-
 void MCGame::clean() {
     //m_Texture.free();
+    free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
-    delete player1;
-    delete player2;
-    logger->log("Borrado de jugadores finalizado.", DEBUG);   
+    delete players[0];
+    delete players[1];
+    logger->log("Borrado de jugadores finalizado.", DEBUG);
     frontGroundTexture.free();
     middleGroundTexture.free();
     backGroundTexture.free();
+    menuTexture.free();
     logger->log("Liberacion de variables de fondo finalizado.", DEBUG);
     delete backGround;
     delete middleGround;
@@ -283,28 +334,75 @@ void MCGame::clean() {
 void MCGame::handleEvents() {
 	InputManager* inputManager = InputManager::getInstance();
     inputManager->update();
-    if(inputManager->quitRequested()) m_Running = false;
+    if(inputManager->quitRequested()) threadRunning = false;
 }
 
 void MCGame::update() {
 
-	logger->log("Reubicacion inicio.", DEBUG);
-	//distancia = player1->getPosX() + (198/2) - player2->getPosX() + (157/2);
-	//distancia2 = player2->getPosX() + (157/2) - player1->getPosX() + (198/2);
-	if (player1->getCentro() > player2->getCentro()) {
-		distancia = player1->getPosX()+player1->getSobrante()+player1->getWidth() - (player2->getPosX()+player2->getSobrante());
-		distancia2 = player2->getPosX()+player2->getSobrante() - (player1->getPosX()+player1->getSobrante()+player1->getWidth());
-	} else {
-		distancia = player1->getPosX()+player1->getSobrante() - (player2->getPosX()+player2->getSobrante()+player2->getWidth());
-		distancia2 = player2->getPosX()+player2->getSobrante()+player2->getWidth() - (player1->getPosX()+player1->getSobrante());
-	}
-    logger->log("Actualizacion posicion MCGame.", DEBUG);
-    player1->update(m_Renderer, distancia, player2->getCentro(),logger);
-    player2->update(m_Renderer, distancia2, player1->getCentro(),logger);
+	char buf1[sizeof(character_updater_t)];
+    tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+    character_updater_t* updater = (character_updater_t*) buf1;
+
+    if(updater->team == 1) {
+            players[0]->update(updater);
+            players[0]->load(m_Renderer, players[1]->getCentro());
+        }
+    else{
+            players[1]->update(updater);
+            players[1]->load(m_Renderer, players[0]->getCentro());
+        }
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
-    parallaxController->doParallax(&player1,&player2,logger);
+    parallaxController->doParallax(&players[0],&players[1],logger);
 }
+
+CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
+   CharacterClient* characterClient = nullptr;
+
+
+   switch(builder->personaje){
+        case SPIDERMAN:
+            if(builder->cliente < 2)
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_TWO,
+                                                      true,
+                                                      constants->widthSpiderman,
+                                                      constants->heightSpiderman,
+                                                      constants->spidermanSobrante,
+                                                      constants->spidermanAncho,
+                                                      constants->screenWidth, builder->cliente);
+            characterClient->setZIndex(constants->zIndexSpiderman);
+            break;
+
+        case WOLVERINE:
+            if(builder->cliente < 2)
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      false,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
+            else
+                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
+                                                      true,
+                                                      constants->widthWolverine,
+                                                      constants->heightWolverine,
+                                                      constants->wolverineSobrante,
+                                                      constants->wolverineAncho,
+                                                      constants->screenWidth, builder->cliente);
+            characterClient->setZIndex(constants->zIndexWolverine);
+    }
+    return characterClient;
+}
+
 
 void orderBackgroundsByZIndex(json* backgroundList){
 
@@ -325,3 +423,6 @@ void orderBackgroundsByZIndex(json* backgroundList){
 		pos_sel = 0;
 	}
 }
+
+
+
