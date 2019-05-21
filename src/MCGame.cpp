@@ -523,7 +523,8 @@ void MCGame::updateNuevo(render_data_t* render_data)
  * conectan 2 o 3.
  * Es solo un boceto, ahora quito los booleanos y veo bien los datos a enviar al server*/
 void MCGame::menu() {
-	int numeroDeClientes; //Esto despues vuela
+	/* Posiblemente innecesario
+	 * int numeroDeClientes; //Esto despues vuela
 	switch(tcpClient->nclient)
 	{
 	   case 1:
@@ -538,12 +539,12 @@ void MCGame::menu() {
 	      break;
 	   case 4:
 		   numberTeam = 2;
-	}
+	}*/
 
 
-	bool bloqueado = false; //Se bloquea cuando el primer cliente de un equipo selecciona un personaje
-	bool seleccionando = true;
-	bool eligioASpiderman = true; //Por defecto arranca con Spiderman seleccionado
+	bool terminar = false; //sto despues vuela (El servidor envia terminar cuando los dos team se bloquean (quedaron seleccionados todos los personajes)
+	bool eligioASpiderman = true;
+	bool teamBloqueado = false; //Esto despues vuela (es lo que voy a recibir del server)
 	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
 	clienteMenu* cliente1 = new clienteMenu(97, 1);
 	clienteMenu* cliente2 = new clienteMenu(449, 1);
@@ -553,38 +554,39 @@ void MCGame::menu() {
 	cliente2->load(m_Renderer,"images/menu/cliente2.png");
 	cliente3->load(m_Renderer,"images/menu/cliente3.png");
 	cliente4->load(m_Renderer,"images/menu/cliente4.png");
-	while (seleccionando && !bloqueado){
-		//Aca falta recibir algo del server para saber si está bloqueado
+	while (!terminar){
 		InputManager* inputManager = InputManager::getInstance();
 		inputManager->update();
-		if (inputManager->isKeyDown(KEY_RIGHT) && !bloqueado){
-			cliente1->moveRight(m_Renderer);
-			//Necesito enviar al server el cambio de posicion
+		if (inputManager->isKeyDown(KEY_RIGHT)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
 			eligioASpiderman = false;
 		}
-		if (inputManager->isKeyDown(KEY_LEFT) && !bloqueado){
-			cliente1->moveLeft(m_Renderer);
-			//Necesito enviar al server el cambio de posicion
+		if (inputManager->isKeyDown(KEY_LEFT)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
 			eligioASpiderman = true;
 		}
+		if (inputManager->isKeyDown(KEY_RETURN)){
+			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
+		}
 		if(inputManager->quitRequested()) {
-			seleccionando = false;
+			terminar = true;
 			m_Running = false;
 		}
+		//recibo la posicion en x de todos los clientes, si se bloqueo el equipo y si debo terminar 	ARREGLAR
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
+
 		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 		SDL_RenderClear(m_Renderer);
 		menuTexture.render(0, 0, 800, 600, m_Renderer);
-		//Necesito recibir por server la posicion de los otros clientes
-		cliente1->render(m_Renderer);
-		cliente2->render(m_Renderer);
-		cliente3->render(m_Renderer);
-		cliente4->render(m_Renderer);
+
+		/*cliente1->render(m_Renderer,posX);	ARREGLAR
+		cliente2->render(m_Renderer,posX);
+		cliente3->render(m_Renderer,posX);
+		cliente4->render(m_Renderer,posX);*/
 		SDL_RenderPresent(m_Renderer);
-		if (inputManager->isKeyDown(KEY_RETURN) && !bloqueado){
-			seleccionando = false;
-			bloqueado = true;
-			//Aca tengo que enviar algo al server para que bloque
-			//Tengo que mover el cliente.png de mi compañero de equipo al de al lado
 		}
 
 		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
@@ -598,12 +600,14 @@ void MCGame::menu() {
 			character1 = "Wolverine";
 			character2 = "Spiderman";
 		}
-		if (!bloqueado){
+		/*Aprovecho que cuando elige un cliente, el otro cliente ya queda determinado,
+		 * entonces un cliente de un equipo hace dos send y el otro cliente del mismo
+		 * equipo no envia nada*/
+		if (!teamBloqueado){
 			tcpClient->Send((void*) character1, sizeof(character1) + 1);
 			tcpClient->Send((void*) character2, sizeof(character2) + 1);
 		}
 
-	}
 }
 
 

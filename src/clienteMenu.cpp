@@ -16,7 +16,7 @@ clienteMenu::clienteMenu(int posX, int team) {
 }
 
 
-void clienteMenu::moveLeft(SDL_Renderer *renderer) {
+/*void clienteMenu::moveLeft(SDL_Renderer *renderer) {
 	posX = 97;
 
 }
@@ -24,10 +24,10 @@ void clienteMenu::moveLeft(SDL_Renderer *renderer) {
 
 void clienteMenu::moveRight(SDL_Renderer *renderer) {
     posX = 449;
-}
+}*/
 
 
-void clienteMenu::render(SDL_Renderer *mRenderer) {
+void clienteMenu::render(SDL_Renderer *mRenderer, int posX) {
 	int posY;
 	if (team == 1) posY = 61;
 	else posY = 353;

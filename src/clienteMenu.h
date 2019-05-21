@@ -18,10 +18,10 @@ public:
     void free();
 
     void load(SDL_Renderer* renderer, string path);
-    void render(SDL_Renderer* mRenderer);
+    void render(SDL_Renderer* mRenderer, int posX);
 
-    void moveRight(SDL_Renderer *renderer);
-    void moveLeft(SDL_Renderer *renderer);
+    /*void moveRight(SDL_Renderer *renderer);
+    void moveLeft(SDL_Renderer *renderer);*/
 
 
 
