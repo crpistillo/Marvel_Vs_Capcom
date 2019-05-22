@@ -484,26 +484,8 @@ void TCPServer::runMenuPhase(){
 		bool validMenuAction = processMenuAction(incoming_msg);
 
 		/* Solo envio información a los clientes si hubo algun cambio */
-		if(validMenuAction){
-
-			cursor_updater_t* update[4];
-
-			for (int i = 0; i < 4; i++){
-				update[i] = new cursor_updater_t;
-				update[i]->cliente = i;
-				update[i]->menuTerminated = false;
-				serverCursors[i]->makeMenuUpdater(update[i]);
-			}
-
-			menuClient.lock();
-			for (int i = 0; i < MAXPLAYERS; ++i) {
-				for (int j = 0; j < 4; j++ ){
-					this->cursor_updater_queue[i]->insert(update[j]);
-				}
-			}
-
-			menuClient.unlock();
-		}
+		if(validMenuAction)
+			sendUpdaters(false);
 
 
 		incoming_menu_actions_queue->delete_data();
@@ -515,11 +497,39 @@ void TCPServer::runMenuPhase(){
 			break;
 	}
 
+	//cursor_updater_t* finalUpdaterC1 = new cursor_updater_t;
+
+
+
+
 	while(1)
 		cout << "SELECCION TERMINADA!" << endl;
 
 
 }
+
+void TCPServer::sendUpdaters(bool finalUpdater){
+
+	cursor_updater_t* update[4];
+
+	for (int i = 0; i < 4; i++){
+		update[i] = new cursor_updater_t;
+		update[i]->cliente = i;
+		update[i]->menuTerminated = finalUpdater;
+		serverCursors[i]->makeMenuUpdater(update[i]);
+	}
+
+	menuClient.lock();
+	for (int i = 0; i < MAXPLAYERS; ++i) {
+		for (int j = 0; j < 4; j++ ){
+			this->cursor_updater_queue[i]->insert(update[j]);
+		}
+	}
+
+	menuClient.unlock();
+}
+
+
 
 int TCPServer::getNumberOfCharactersSelected(){
 

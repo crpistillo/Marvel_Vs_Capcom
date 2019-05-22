@@ -100,6 +100,7 @@ public:
     void sendCursorUpdaterToClient(int clientSocket);
     bool processMenuAction(cliente_menu_t *action_msg);
     int getNumberOfCharactersSelected();
+    void sendUpdaters(bool finalUpdater);
 };
 
 #endif
