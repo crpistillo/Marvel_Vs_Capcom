@@ -586,6 +586,9 @@ void MCGame::runMenu(){
 	for(int i = 0; i < 4; i++)
 		clientCursors[i] = new ClientCursor(0, 0, this->m_Renderer);
 
+	renderMenuBackImage();
+	SDL_RenderPresent(m_Renderer);
+
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
 }
@@ -628,9 +631,7 @@ void MCGame::renderMenu(){
 	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(m_Renderer);
 
-	Texture menuBackImage;
-	menuBackImage.loadFromFile("images/menu/menu.png", this->m_Renderer);
-	menuBackImage.render(0, 0, 254, 221, m_Renderer);
+	renderMenuBackImage();
 
 	for(int i = 0; i < 4; i++)
 		clientCursors[i]->render(this->m_Renderer);
@@ -638,6 +639,12 @@ void MCGame::renderMenu(){
 	logger->log("Fin render Menu.", DEBUG);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 
+}
+
+void MCGame::renderMenuBackImage(){
+	Texture menuBackImage;
+	menuBackImage.loadFromFile("images/menu/menu.png", this->m_Renderer);
+	menuBackImage.render(0, 0, 800, 600, m_Renderer);
 }
 
 

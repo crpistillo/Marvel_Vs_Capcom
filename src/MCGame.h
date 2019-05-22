@@ -62,6 +62,7 @@ private:
     std::mutex m;
     void sendMenuEvents();
     ClientCursor* clientCursors[4];
+    void renderMenuBackImage();
 
 
 
