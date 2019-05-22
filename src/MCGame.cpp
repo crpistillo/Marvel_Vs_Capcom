@@ -554,7 +554,7 @@ void MCGame::renderNuevo()
 
 void MCGame::sendMenuEvents(){
 
-    FPSManager fpsManager(25);
+    FPSManager fpsManager(10);
     this->threadRunning = true;
 
     while (true){
@@ -606,7 +606,7 @@ void MCGame::menu() {
 	      break;
 	   case 4:
 		   numberTeam = 2;
-	}*/
+	}
 
 
 	bool terminar = false; //sto despues vuela (El servidor envia terminar cuando los dos team se bloquean (quedaron seleccionados todos los personajes)
@@ -652,12 +652,12 @@ void MCGame::menu() {
 		/*cliente1->render(m_Renderer,posX);	ARREGLAR
 		cliente2->render(m_Renderer,posX);
 		cliente3->render(m_Renderer,posX);
-		cliente4->render(m_Renderer,posX);*/
+		cliente4->render(m_Renderer,posX);
 		SDL_RenderPresent(m_Renderer);
 		}
 
 		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
-		 * deberia quitar de ahi*/
+		 * deberia quitar de ahi
 		char* character1;
 		char* character2;
 		if (eligioASpiderman){
@@ -669,11 +669,11 @@ void MCGame::menu() {
 		}
 		/*Aprovecho que cuando elige un cliente, el otro cliente ya queda determinado,
 		 * entonces un cliente de un equipo hace dos send y el otro cliente del mismo
-		 * equipo no envia nada*/
+		 * equipo no envia nada
 		if (!teamBloqueado){
 			tcpClient->Send((void*) character1, sizeof(character1) + 1);
 			tcpClient->Send((void*) character2, sizeof(character2) + 1);
-		}
+		}*/
 
 }
 

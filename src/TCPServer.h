@@ -47,6 +47,8 @@ private:
     json config;
     std::mutex m;
 
+    std::mutex menuClient;
+
 
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
@@ -55,6 +57,7 @@ public:
     				//colas de mensajes de escritura para cada cliente
 
     Queue<cliente_menu_t*>* incoming_menu_actions_queue;
+    Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
     Socket* serverSocket;
     Socket* newSockFd;
@@ -92,6 +95,7 @@ public:
 
     void runMenuPhase();
     void receiveMenuActionsFromClient(int clientSocket);
+    void sendCursorUpdaterToClient(int clientSocket);
 };
 
 #endif

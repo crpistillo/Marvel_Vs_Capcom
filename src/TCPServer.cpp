@@ -65,6 +65,10 @@ bool TCPServer::setup(int port, Logger *logger) {
     for (int i = 0; i < MAXPLAYERS; ++i) {
         this->character_updater_queue[i] = new Queue<character_updater_t *>;
     }
+
+    for (int i = 0; i < MAXPLAYERS; ++i) {
+        this->cursor_updater_queue[i] = new Queue<cursor_updater_t*>;
+    }
     //this->setSockfd(this->serverSocket->get_fd());
 
     return ret;
@@ -247,7 +251,6 @@ void TCPServer::sendToClient(int clientSocket) {
 
     //character_updater_t updater;
 
-    int i = 0;
     while (1) {
 
         character_updater_t *updater;
@@ -424,15 +427,47 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket){
 
 }
 
+void TCPServer::sendCursorUpdaterToClient(int clientSocket){
+	pthread_mutex_lock(&mtx);
+    Socket *socket = getClientSocket(clientSocket);
+    pthread_mutex_unlock(&mtx);
+
+    while(1){
+
+        cursor_updater_t *updater;
+        if(cursor_updater_queue[clientSocket]->empty_queue())
+            continue;
+
+        menuClient.lock();
+        updater = cursor_updater_queue[clientSocket]->get_data();
+        menuClient.unlock();
+
+        socket->sendData(updater, sizeof(cursor_updater_t));
+        menuClient.lock();
+        cursor_updater_queue[clientSocket]->delete_data();
+        menuClient.unlock();
+        delete updater;
+    }
+}
+
 
 void TCPServer::runMenuPhase(){
 
 	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
-	std::thread threadCliente1 (&TCPServer::receiveMenuActionsFromClient, this, 0);
-	threadCliente1.detach();
-	std::thread threadCliente2 (&TCPServer::receiveMenuActionsFromClient, this, 1);
-	threadCliente2.detach();
+	std::thread threadReceiveCliente1 (&TCPServer::receiveMenuActionsFromClient, this, 0);
+	threadReceiveCliente1.detach();
+	std::thread threadReceiveCliente2 (&TCPServer::receiveMenuActionsFromClient, this, 1);
+	threadReceiveCliente2.detach();
 
+	//Crear hilos de escritura a los clientes
+	std::thread threadSendCliente1 (&TCPServer::sendCursorUpdaterToClient, this, 0);
+	threadSendCliente1.detach();
+	std::thread threadSendCliente2 (&TCPServer::sendCursorUpdaterToClient, this, 1);
+	threadSendCliente2.detach();
+
+
+
+	//Procesar eventos que vengan de incoming_menu_actions_queue
 	while(1){
 		cliente_menu_t *incoming_msg;
 		if(this->incoming_menu_actions_queue->empty_queue())
@@ -442,15 +477,39 @@ void TCPServer::runMenuPhase(){
 		cout << "Accion del cliente " + to_string(incoming_msg->cliente) + " : "
 				+ to_string(incoming_msg->accion) << endl;
 
+
+
+		/*======================================
+		 * Aca
+		 * Procesar el evento del menu que viene
+		 *
+		 =======================================*/
+
+
+        cursor_updater_t* update[MAXPLAYERS];
+        for (int j = 0; j < MAXPLAYERS; ++j) {
+            update[j] = new cursor_updater_t;
+            update[j]->cliente = j;
+            update[j]->posX = 97;
+            update[j]->posY = 100;
+            update[j]->teamBloqueado = false;
+            update[j]->terminar = false;
+        }
+
+        menuClient.lock();
+        for (int i = 0; i < MAXPLAYERS; ++i) {
+            this->cursor_updater_queue[i]->insert(update[i]);
+        }
+        menuClient.unlock();
+
+
 		incoming_menu_actions_queue->delete_data();
 		delete incoming_msg;
 	}
 
 	while(1)
 		continue;
-	//Crear hilos de escritura a los clientes
 
-	//Procesar eventos que vengan de incoming_menu_actions_queue
 
 }
 
