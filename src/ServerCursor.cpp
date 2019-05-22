@@ -78,6 +78,10 @@ bool ServerCursor::getFinalSelection(){
 	return this->finalSelection;
 }
 
+character_number_t ServerCursor::getCharacterSelected(){
+	return this->characterSelected;
+}
+
 void ServerCursor::makeMenuUpdater(cursor_updater_t* updater){
 	updater->posX = this->posX;
 	updater->posY = this->posY;

@@ -162,7 +162,11 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
     mcGame->runMenu();
+    mcGame->loadSelectedCharacters();
     mcGame->loadInitialTextures();
+    mcGame->render();
+    while(1)
+    	continue;
     mcGame->run();
 
 

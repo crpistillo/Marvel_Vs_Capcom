@@ -319,6 +319,10 @@ void TCPServer::runServer() {
 
 
     runMenuPhase();  //Pongo al servidor en modo "Menu"
+    sendSelectedCharacters();
+
+    while(1)
+    	continue;
 
     //Cuando termina el menu, empieza el juego
     std::thread receive1(&TCPServer::receiveFromClient, this, 0);
@@ -403,6 +407,97 @@ void TCPServer::runServer() {
 
 }
 
+void TCPServer::sendSelectedCharacters(){
+
+
+    character_builder_t builder1;
+    character_builder_t builder2;
+    character_builder_t builder3;
+    character_builder_t builder4;
+
+    CharacterServer *character1 = createServerCharacterFromCursor(serverCursors[0], 1);
+    character1->makeBuilderStruct(&builder1);
+
+    CharacterServer *character2 = createServerCharacterFromCursor(serverCursors[1], 1);
+    character2->makeBuilderStruct(&builder2);
+
+    /*CharacterServer *character3 = createServerCharacterFromCursor(serverCursors[2], 2);
+    character3->makeBuilderStruct(&builder3);
+
+    CharacterServer *character4 = createServerCharacterFromCursor(serverCursors[3], 2);
+    character4->makeBuilderStruct(&builder4);*/
+
+
+    team1 = new Team(character1, character2, 1, 1);
+    //team2 = new Team(character3, character4, 1, 2);
+
+
+    clientsSockets[0]->sendData(&builder1, sizeof(character_builder_t));
+    clientsSockets[0]->sendData(&builder2, sizeof(character_builder_t));
+    //clientsSockets[0]->sendData(&builder3, sizeof(character_builder_t));
+    //clientsSockets[0]->sendData(&builder4, sizeof(character_builder_t));
+
+    clientsSockets[1]->sendData(&builder1, sizeof(character_builder_t));
+    clientsSockets[1]->sendData(&builder2, sizeof(character_builder_t));
+    //clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
+    //clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
+
+}
+
+CharacterServer* TCPServer::createServerCharacterFromCursor(ServerCursor* cursor, int nclient){
+	CharacterServer *character;
+
+	switch(cursor->getCharacterSelected()){
+    case SPIDERMAN:
+        if (nclient < 2)
+            character = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
+                                                  false,
+                                                  constants.widthSpiderman,
+                                                  constants.heightSpiderman,
+                                                  constants.spidermanSobrante,
+                                                  constants.spidermanAncho,
+                                                  constants.screenWidth,
+                                                  nclient
+            );
+        else
+            character = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
+                                                  false,
+                                                  constants.widthSpiderman,
+                                                  constants.heightSpiderman,
+                                                  constants.spidermanSobrante,
+                                                  constants.spidermanAncho,
+                                                  constants.screenWidth,
+                                                  nclient
+            );
+        break;
+
+    case WOLVERINE:
+        if (nclient < 2)
+            character = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+                                                  false,
+                                                  constants.widthWolverine,
+                                                  constants.heightWolverine,
+                                                  constants.wolverineSobrante,
+                                                  constants.wolverineAncho,
+                                                  constants.screenWidth,
+                                                  nclient
+            );
+        else
+            character = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
+                                                  false,
+                                                  constants.widthWolverine,
+                                                  constants.heightWolverine,
+                                                  constants.wolverineSobrante,
+                                                  constants.wolverineAncho,
+                                                  constants.screenWidth,
+                                                  nclient
+            );
+        break;
+	}
+	return character;
+
+}
+
 void TCPServer::receiveMenuActionsFromClient(int clientSocket){
 
 	pthread_mutex_lock(&mtx);
@@ -446,7 +541,12 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket){
         menuClient.lock();
         cursor_updater_queue[clientSocket]->delete_data();
         menuClient.unlock();
+
+        if (updater->menuTerminated)
+        	break;
     }
+
+    cout << "Bye" << endl;
 }
 
 
@@ -497,13 +597,10 @@ void TCPServer::runMenuPhase(){
 			break;
 	}
 
+	threadReceiveCliente1.~thread();
+	threadReceiveCliente2.~thread();
 
 	sendUpdaters(true);
-
-	while(1)
-		cout << "SELECCION TERMINADA!" << endl;
-
-
 }
 
 void TCPServer::sendUpdaters(bool finalUpdater){

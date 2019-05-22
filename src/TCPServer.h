@@ -101,6 +101,8 @@ public:
     bool processMenuAction(cliente_menu_t *action_msg);
     int getNumberOfCharactersSelected();
     void sendUpdaters(bool finalUpdater);
+    void sendSelectedCharacters();
+    CharacterServer* createServerCharacterFromCursor(ServerCursor* cursor, int nclient);
 };
 
 #endif

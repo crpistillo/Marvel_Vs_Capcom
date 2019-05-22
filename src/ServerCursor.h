@@ -18,6 +18,7 @@ public:
 	void makeMenuUpdater(cursor_updater_t* updater);
 
 	bool getFinalSelection();
+	character_number_t getCharacterSelected();
 
 
 private:

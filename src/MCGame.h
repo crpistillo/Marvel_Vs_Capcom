@@ -103,6 +103,7 @@ public:
     void runMenu();
     void updateMenu();
     void renderMenu();
+    void loadSelectedCharacters();
 
     //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de

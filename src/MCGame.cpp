@@ -614,6 +614,7 @@ void MCGame::runMenu(){
 
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
+	sendMenuEventsThread.~thread();
 }
 
 void MCGame::menu() {
@@ -634,9 +635,6 @@ void MCGame::menu() {
     }
 
 	logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
-
-	while(1)
-		cout << "Ya eligieron todos!" << endl;
 
 }
 
@@ -676,6 +674,21 @@ void MCGame::renderMenuBackImage(){
 	menuBackImage.render(0, 0, 800, 600, m_Renderer);
 }
 
+void MCGame::loadSelectedCharacters(){
+
+    for (int i = 0; i < 2; ++i) {
+        char buf1[sizeof(character_builder_t)];
+        character_builder_t* builder;
+        tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
+        builder = (character_builder_t*) buf1;
+        characters[i] = characterBuild(builder);
+    }
+
+    players[0] = new Player(characters[0], characters[1]);
+
+    //players[1] = new Player(characters[2], characters[3]);
+
+}
 
 
 
