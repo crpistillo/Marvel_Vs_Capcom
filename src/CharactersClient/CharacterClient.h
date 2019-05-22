@@ -14,7 +14,7 @@
 #include "../tools/ImageLoader/ImageLoader.h"
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
-#include "../orientation_constants.h"
+#include "../action_constants.h"
 #include "../Renderizable.h"
 #include "../data_structs.h"
 

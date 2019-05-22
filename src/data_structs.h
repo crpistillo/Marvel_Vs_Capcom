@@ -2,7 +2,7 @@
 #define MVC_DATA_STRUCTS
 
 
-#include "orientation_constants.h"
+#include "action_constants.h"
 
 typedef enum connection_status{
 	NOT_READY = 0,
@@ -22,6 +22,7 @@ typedef struct{
 } prueba_t;
 
 typedef enum character_number{
+	NOT_VALID = -1,
 	SPIDERMAN = 0,
 	WOLVERINE = 1
 } character_number_t;

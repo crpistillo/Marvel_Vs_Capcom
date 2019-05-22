@@ -6,7 +6,7 @@
 #define MARVEL_VS_CAPCOM_CONTROLS_H
 
 
-#include "../orientation_constants.h"
+#include "../action_constants.h"
 #include "../data_structs.h"
 
 class Controls {
