@@ -59,6 +59,7 @@ bool TCPServer::setup(int port, Logger *logger) {
     }
 
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
+    this->incoming_menu_actions_queue = new Queue<cliente_menu_t*>;
 
 
     for (int i = 0; i < MAXPLAYERS; ++i) {
@@ -412,28 +413,38 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket){
         socket->reciveData(buf, sizeof(menu_action_t));
         menu_action_t *accion = (menu_action_t *) buf;
 
-        cout << "Accion del cliente " + to_string(clientSocket) + " : "
-        		+ to_string(*accion) << endl;
+        //cout << "Accion del cliente " + to_string(clientSocket) + " : "
+        //		+ to_string(*accion) << endl;
 
-        //Agrego elementos a la cola de mensajes entrantes
-        //void* action = malloc(sizeof(incoming_msg_t));
-        //incoming_msg_t *msgQueue = new incoming_msg_t;
-        //msgQueue->action = *accion;
-        //msgQueue->client = clientSocket;
-        //this->incoming_msges_queue->insert(msgQueue);
+        cliente_menu_t *msgMenuQueue = new cliente_menu_t;
+        msgMenuQueue->cliente = clientSocket;
+        msgMenuQueue->accion = *accion;
+        this->incoming_menu_actions_queue->insert(msgMenuQueue);
     }
 
 }
 
 
 void TCPServer::runMenuPhase(){
-	//Queue<cliente_menu_t*>* incoming_menu_actions_queue = new Queue<cliente_menu_t*>;
 
 	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
 	std::thread threadCliente1 (&TCPServer::receiveMenuActionsFromClient, this, 0);
 	threadCliente1.detach();
 	std::thread threadCliente2 (&TCPServer::receiveMenuActionsFromClient, this, 1);
 	threadCliente2.detach();
+
+	while(1){
+		cliente_menu_t *incoming_msg;
+		if(this->incoming_menu_actions_queue->empty_queue())
+			continue;
+		incoming_msg = this->incoming_menu_actions_queue->get_data();
+
+		cout << "Accion del cliente " + to_string(incoming_msg->cliente) + " : "
+				+ to_string(incoming_msg->accion) << endl;
+
+		incoming_menu_actions_queue->delete_data();
+		delete incoming_msg;
+	}
 
 	while(1)
 		continue;

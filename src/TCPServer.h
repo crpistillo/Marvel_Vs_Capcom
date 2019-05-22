@@ -54,6 +54,8 @@ public:
     Queue<character_updater_t*>* character_updater_queue[MAXPLAYERS];
     				//colas de mensajes de escritura para cada cliente
 
+    Queue<cliente_menu_t*>* incoming_menu_actions_queue;
+
     Socket* serverSocket;
     Socket* newSockFd;
     int n, pid;
