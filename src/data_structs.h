@@ -83,8 +83,8 @@ typedef struct {
 	int cliente;
 	int posX;
 	int posY;
-	bool terminar; //el server enevia true si los dos equipos terminaron de elegir
-	bool teamBloqueado; //true si tu compañero de equipo ya eligió
+	bool finalSelection;
+	bool menuTerminated;
 } cursor_updater_t;
 
 

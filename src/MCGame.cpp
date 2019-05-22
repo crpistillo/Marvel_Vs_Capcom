@@ -583,7 +583,8 @@ void MCGame::runMenu(){
 	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
 	sendMenuEventsThread.detach();
 
-	//sendMenuEventsThread.join(); //Solo util para esta primera parte de printear del lado del servidor.
+	for(int i = 0; i < 4; i++)
+		clientCursors[i] = new ClientCursor(0, 0, this->m_Renderer);
 
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
@@ -595,124 +596,47 @@ void MCGame::menu() {
 	logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
 
 	threadRunning = true;
-	cursor_updater_t* updaterMenu;
-	char buf[sizeof(cursor_updater_t)];
+
 
     while(m_Running) {
 		fpsManager.start();
 
-		tcpClient->socketClient->reciveData(buf, sizeof(cursor_updater_t));
-		updaterMenu = (cursor_updater_t *) buf;
+		updateMenu();
+		renderMenu();
 
-		cout << "Cliente: " + to_string(updaterMenu->cliente) << endl;
-		cout << "PosX: " + to_string(updaterMenu->posX) << endl;
-		cout << "PosY: " + to_string(updaterMenu->posY) << endl;
-		cout << "TeamBloqueado: " + to_string(updaterMenu->teamBloqueado) << endl;
-		cout << "Terminar: " + to_string(updaterMenu->terminar) << endl;
-		//updateMenu();
-		//renderMenu();
-
-		//update();
 		fpsManager.stop();
     }
 
 	logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
 
+}
 
 
+void MCGame::updateMenu(){
 
+	cursor_updater_t* updaterMenu;
+	char buf[sizeof(cursor_updater_t)];
 
+	tcpClient->socketClient->reciveData(buf, sizeof(cursor_updater_t));
+	updaterMenu = (cursor_updater_t *) buf;
 
+	clientCursors[updaterMenu->cliente]->update(updaterMenu);
+}
 
+void MCGame::renderMenu(){
+	logger->log("Inicio render Menu.", DEBUG);
+	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(m_Renderer);
 
+	Texture menuBackImage;
+	menuBackImage.loadFromFile("images/menu/menu.png", this->m_Renderer);
+	menuBackImage.render(0, 0, 254, 221, m_Renderer);
 
+	for(int i = 0; i < 4; i++)
+		clientCursors[i]->render(this->m_Renderer);
 
-
-
-	/* Posiblemente innecesario
-	 * int numeroDeClientes; //Esto despues vuela
-	switch(tcpClient->nclient)
-	{
-	   case 1:
-	      numberTeam = 1;
-	      break;
-	   case 2:
-		   if (numeroDeClientes==2) numberTeam = 2;
-		   else numberTeam = 1;
-		   break;
-	   case 3:
-		   numberTeam = 2;
-	      break;
-	   case 4:
-		   numberTeam = 2;
-	}
-
-
-	bool terminar = false; //sto despues vuela (El servidor envia terminar cuando los dos team se bloquean (quedaron seleccionados todos los personajes)
-	bool eligioASpiderman = true;
-	bool teamBloqueado = false; //Esto despues vuela (es lo que voy a recibir del server)
-	menuTexture.loadFromFile("images/menu/menu.png", m_Renderer);
-	clienteMenu* cliente1 = new clienteMenu(97, 1);
-	clienteMenu* cliente2 = new clienteMenu(449, 1);
-	clienteMenu* cliente3 = new clienteMenu(97, 2);
-	clienteMenu* cliente4 = new clienteMenu(449, 2);
-	cliente1->load(m_Renderer,"images/menu/cliente1.png");
-	cliente2->load(m_Renderer,"images/menu/cliente2.png");
-	cliente3->load(m_Renderer,"images/menu/cliente3.png");
-	cliente4->load(m_Renderer,"images/menu/cliente4.png");
-	while (!terminar){
-		InputManager* inputManager = InputManager::getInstance();
-		inputManager->update();
-		if (inputManager->isKeyDown(KEY_RIGHT)){
-			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
-			eligioASpiderman = false;
-		}
-		if (inputManager->isKeyDown(KEY_LEFT)){
-			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
-			eligioASpiderman = true;
-		}
-		if (inputManager->isKeyDown(KEY_RETURN)){
-			//tcpClient->socketClient->sendData(&accion, sizeof(accion));	ARREGLAR
-		}
-		if(inputManager->quitRequested()) {
-			terminar = true;
-			m_Running = false;
-		}
-		//recibo la posicion en x de todos los clientes, si se bloqueo el equipo y si debo terminar 	ARREGLAR
-		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
-		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
-		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
-		//tcpClient->socketClient->reciveData(m_d, sizeof(menu_data));
-
-		SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-		SDL_RenderClear(m_Renderer);
-		menuTexture.render(0, 0, 800, 600, m_Renderer);
-
-		/*cliente1->render(m_Renderer,posX);	ARREGLAR
-		cliente2->render(m_Renderer,posX);
-		cliente3->render(m_Renderer,posX);
-		cliente4->render(m_Renderer,posX);
-		SDL_RenderPresent(m_Renderer);
-		}
-
-		/*Esto ahora se encuentra en MCGame::MCGame(). Si llegase a funcionar se
-		 * deberia quitar de ahi
-		char* character1;
-		char* character2;
-		if (eligioASpiderman){
-			character1 = "Spiderman";
-			character2 = "Wolverine";
-		} else {
-			character1 = "Wolverine";
-			character2 = "Spiderman";
-		}
-		/*Aprovecho que cuando elige un cliente, el otro cliente ya queda determinado,
-		 * entonces un cliente de un equipo hace dos send y el otro cliente del mismo
-		 * equipo no envia nada
-		if (!teamBloqueado){
-			tcpClient->Send((void*) character1, sizeof(character1) + 1);
-			tcpClient->Send((void*) character2, sizeof(character2) + 1);
-		}*/
+	logger->log("Fin render Menu.", DEBUG);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
 
 }
 

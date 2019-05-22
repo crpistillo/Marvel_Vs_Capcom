@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/ClientCursor.cpp \
 ../src/ClientsThread.cpp \
 ../src/InputManager.cpp \
 ../src/Layer.cpp \
@@ -17,6 +18,7 @@ CPP_SRCS += \
 ../src/main.cpp 
 
 OBJS += \
+./src/ClientCursor.o \
 ./src/ClientsThread.o \
 ./src/InputManager.o \
 ./src/Layer.o \
@@ -30,6 +32,7 @@ OBJS += \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/ClientCursor.d \
 ./src/ClientsThread.d \
 ./src/InputManager.d \
 ./src/Layer.d \

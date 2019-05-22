@@ -22,6 +22,7 @@
 #include "Client/TCPClient.h"
 #include "data_structs.h"
 #include "Constants.h"
+#include "ClientCursor.h"
 #include <mutex>
 
 
@@ -60,6 +61,8 @@ private:
     int myCharacter;
     std::mutex m;
     void sendMenuEvents();
+    ClientCursor* clientCursors[4];
+
 
 
 protected:
@@ -97,6 +100,8 @@ public:
 
     void loadInitialTextures();
     void runMenu();
+    void updateMenu();
+    void renderMenu();
 
     //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de

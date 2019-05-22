@@ -446,7 +446,6 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket){
         menuClient.lock();
         cursor_updater_queue[clientSocket]->delete_data();
         menuClient.unlock();
-        delete updater;
     }
 }
 
@@ -464,8 +463,6 @@ void TCPServer::runMenuPhase(){
 	threadSendCliente1.detach();
 	std::thread threadSendCliente2 (&TCPServer::sendCursorUpdaterToClient, this, 1);
 	threadSendCliente2.detach();
-
-
 
 	//Procesar eventos que vengan de incoming_menu_actions_queue
 	while(1){
@@ -486,19 +483,36 @@ void TCPServer::runMenuPhase(){
 		 =======================================*/
 
 
-        cursor_updater_t* update[MAXPLAYERS];
-        for (int j = 0; j < MAXPLAYERS; ++j) {
+        cursor_updater_t* update[4];
+        for (int j = 0; j < 4; ++j) {
             update[j] = new cursor_updater_t;
             update[j]->cliente = j;
+            if( j == 0 ){
             update[j]->posX = 97;
-            update[j]->posY = 100;
-            update[j]->teamBloqueado = false;
-            update[j]->terminar = false;
+            update[j]->posY = 61;
+            }
+            else if ( j == 1 ){
+                update[j]->posX = 449;
+                update[j]->posY = 61;
+            }
+            else if ( j == 2 ){
+                update[j]->posX = 97;
+                update[j]->posY = 353;
+            }
+            else if ( j == 3 ){
+                update[j]->posX = 449;
+                update[j]->posY = 353;
+            }
+
+            update[j]->finalSelection = false;
+            update[j]->menuTerminated = false;
         }
 
         menuClient.lock();
         for (int i = 0; i < MAXPLAYERS; ++i) {
-            this->cursor_updater_queue[i]->insert(update[i]);
+        	for (int j = 0; j < 4; j++ ){
+        		this->cursor_updater_queue[i]->insert(update[j]);
+        	}
         }
         menuClient.unlock();
 
