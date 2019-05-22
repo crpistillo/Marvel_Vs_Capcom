@@ -66,25 +66,25 @@ typedef struct
 	int client;
 	actions_t action;
 }incoming_msg_t;
-typedef enum accion{
+
+typedef enum menuAction{
 	RIGHT = 0,
 	LEFT = 1,
-	ENTER = 3
-} accion_t;
+	ENTER = 3,
+	INVALID_MENU_ACTION = 99
+} menu_action_t;
 
-typedef struct
-{
+typedef struct {
 	int cliente;
-	accion_t accion;
-}cliente_menu;
+	menu_action_t accion;
+} cliente_menu_t;
 
-typedef struct
-{
+typedef struct {
 	int cliente;
 	int posX;
 	bool terminar; //el server enevia true si los dos equipos terminaron de elegir
 	bool teamBloqueado; //true si tu compañero de equipo ya eligió
-}menu_data;
+} menu_data_t;
 
 
 #endif /* MVC_DATA_STRUCTS */

@@ -7,6 +7,7 @@
 
 
 #include "../orientation_constants.h"
+#include "../data_structs.h"
 
 class Controls {
 public:
@@ -17,6 +18,7 @@ public:
     int changeKey;
 
     actions_t getNewAction();
+    menu_action_t getNewMenuAction();
 
 protected:
     Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey);

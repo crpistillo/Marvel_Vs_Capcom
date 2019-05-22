@@ -52,3 +52,19 @@ actions_t Controls::getNewAction() {
             )
         return STANDING;
 }
+
+menu_action_t Controls::getNewMenuAction(){
+
+	InputManager *inputManager = InputManager::getInstance();
+
+	if(inputManager->isKeyDown(leftKey) && !inputManager->isKeyDown(rightKey))
+		return LEFT;
+
+	else if(!inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(rightKey))
+		return RIGHT;
+
+	else if(inputManager->isKeyDown(KEY_RETURN))
+		return ENTER;
+
+	return INVALID_MENU_ACTION;
+}

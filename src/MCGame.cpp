@@ -56,17 +56,25 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                players[0]->loads(m_Renderer, 0);
-                players[1]->loads(m_Renderer, 1);
+                //players[0]->loads(m_Renderer, 0);
+                //players[1]->loads(m_Renderer, 1);
 
 
-                loadGroundTextureByZIndex();
+                //loadGroundTextureByZIndex();
             }
         }
     }
 
     // everything inited successfully,
     return true;
+}
+
+void MCGame::loadInitialTextures(){
+    players[0]->loads(m_Renderer, 0);
+    players[1]->loads(m_Renderer, 1);
+
+
+    loadGroundTextureByZIndex();
 }
 
 void MCGame::loadGroundTextureByZIndex(){
@@ -542,9 +550,43 @@ void MCGame::renderNuevo()
 }*/
 
 
-/*Por ahora considero que se conectan 4 clientes (luego voy a considerar cuando se
- * conectan 2 o 3.
- * Es solo un boceto, ahora quito los booleanos y veo bien los datos a enviar al server*/
+
+
+void MCGame::sendMenuEvents(){
+
+    FPSManager fpsManager(25);
+
+    while (true){
+        fpsManager.start();
+
+        handleEvents();
+        if(!threadRunning)
+            break;
+        menu_action_t menuActionToSend = clientControls->getNewMenuAction();
+        if(menuActionToSend != INVALID_MENU_ACTION)
+        	tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
+        fpsManager.stop();
+
+    }
+    std::unique_lock<std::mutex> lock(m);
+    m_Running = false;
+
+}
+
+
+
+void MCGame::runMenu(){
+
+	//Crear hilo que manda eventos de SDL
+	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
+
+	sendMenuEventsThread.join(); //Solo util para esta primera parte de printear del lado del servidor.
+
+
+	//Continuar con la ejecucion de MCGame::menu
+	//menu();
+}
+
 void MCGame::menu() {
 	/* Posiblemente innecesario
 	 * int numeroDeClientes; //Esto despues vuela

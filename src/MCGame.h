@@ -59,6 +59,7 @@ private:
     void action_update();
     int myCharacter;
     std::mutex m;
+    void sendMenuEvents();
 
 
 protected:
@@ -93,6 +94,9 @@ public:
     void createWriteThread();
     void renderNuevo();
     void updateNuevo(render_data_t* render_data);
+
+    void loadInitialTextures();
+    void runMenu();
 
     //Ahora le dejo este tipo de dato, pero
     												//despues lo cambiamos en base al tipo de
