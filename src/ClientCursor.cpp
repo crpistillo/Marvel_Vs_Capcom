@@ -14,22 +14,14 @@ ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer){
 	this->posY = posY;
 	this->finalSelection = false;
 
-	if(numberOfCursors == 0){
+	if(numberOfCursors == 0)
 		this->cursorTexture.loadFromFile(PATH_CURSOR_CLIENT_1, renderer);
-		this->posY = 61;
-	}
-	else if(numberOfCursors == 1){
+	else if(numberOfCursors == 1)
 		this->cursorTexture.loadFromFile(PATH_CURSOR_CLIENT_2, renderer);
-		this->posY = 61;
-	}
-	else if(numberOfCursors == 2){
+	else if(numberOfCursors == 2)
 		this->cursorTexture.loadFromFile(PATH_CURSOR_CLIENT_3, renderer);
-		this->posY = 353;
-	}
-	else if(numberOfCursors == 3){
+	else if(numberOfCursors == 3)
 		this->cursorTexture.loadFromFile(PATH_CURSOR_CLIENT_4, renderer);
-		this->posY = 353;
-	}
 
 	numberOfCursors++;
 }

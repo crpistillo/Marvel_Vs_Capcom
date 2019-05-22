@@ -578,14 +578,37 @@ void MCGame::sendMenuEvents(){
 
 
 void MCGame::runMenu(){
+	int numeroDeClientes = 4; /*Para crear 4 cursores. Me tira error si pongo menos*/
 
 	//Crear hilo que manda eventos de SDL
 	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
 	sendMenuEventsThread.detach();
 
-	for(int i = 0; i < 4; i++)
-		clientCursors[i] = new ClientCursor(0, 0, this->m_Renderer);
-
+	int posX, posY;
+	for(int i = 0; i < numeroDeClientes; i++){
+		if (i==0){
+			posX = 97;
+			posY = 61;
+		}
+		if (i==2){
+			posX = 97;
+			posY = 353;
+		}
+		if (i==3){
+			posX = 449;
+			posY = 353;
+		}
+		if (i==1)
+			if (numeroDeClientes==2){
+				posX = 97;
+				posY = 353;
+			}
+			else{
+				posX = 449;
+				posY = 61;
+			}
+		clientCursors[i] = new ClientCursor(posX, posY, this->m_Renderer);
+	}
 	renderMenuBackImage();
 	SDL_RenderPresent(m_Renderer);
 
