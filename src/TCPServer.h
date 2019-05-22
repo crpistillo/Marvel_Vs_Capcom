@@ -87,6 +87,8 @@ public:
     Socket *getClientSocket(int i);
 
     bool invalidIntroAction(actions_t action);
+
+    void runMenuPhase();
 };
 
 #endif

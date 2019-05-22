@@ -314,7 +314,9 @@ void TCPServer::runServer() {
     clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
 
 
+    runMenuPhase();  //Pongo al servidor en modo "Menu"
 
+    //Cuando termina el menu, empieza el juego
     std::thread receive1(&TCPServer::receiveFromClient, this, 0);
     std::thread receive2(&TCPServer::receiveFromClient, this, 1);
 
@@ -394,6 +396,17 @@ void TCPServer::runServer() {
 
         incoming_msges_queue->delete_data();
     }
+
+}
+
+void TCPServer::runMenuPhase(){
+	//Queue<cliente_menu_t*>* incoming_menu_actions_queue = new Queue<cliente_menu_t*>;
+
+	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
+
+	//Crear hilos de escritura a los clientes
+
+	//Procesar eventos que vengan de incoming_menu_actions_queue
 
 }
 
