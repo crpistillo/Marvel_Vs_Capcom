@@ -490,7 +490,16 @@ void TCPServer::runMenuPhase(){
 
 
         cursor_updater_t* update[4];
-        for (int j = 0; j < 4; ++j) {
+
+        for (int i = 0; i < 4; i++){
+        	update[i] = new cursor_updater_t;
+        	update[i]->cliente = i;
+        	update[i]->menuTerminated = false;
+        	serverCursors[i]->makeMenuUpdater(update[i]);
+        }
+
+
+        /*for (int j = 0; j < 4; ++j) {
             update[j] = new cursor_updater_t;
             update[j]->cliente = j;
             if( j == 0 ){
@@ -513,6 +522,8 @@ void TCPServer::runMenuPhase(){
             update[j]->finalSelection = false;
             update[j]->menuTerminated = false;
         }
+        */
+
 
         menuClient.lock();
         for (int i = 0; i < MAXPLAYERS; ++i) {
@@ -520,6 +531,7 @@ void TCPServer::runMenuPhase(){
         		this->cursor_updater_queue[i]->insert(update[j]);
         	}
         }
+
         menuClient.unlock();
 
 

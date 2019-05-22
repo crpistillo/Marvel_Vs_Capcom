@@ -54,4 +54,10 @@ void ServerCursor::update(cliente_menu_t* action_msg){
 	return;
 }
 
+void ServerCursor::makeMenuUpdater(cursor_updater_t* updater){
+	updater->posX = this->posX;
+	updater->posY = this->posY;
+	updater->finalSelection = this->finalSelection;
+}
+
 

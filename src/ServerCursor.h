@@ -14,6 +14,8 @@ public:
 
 	void update(cliente_menu_t* action_msg);
 
+	void makeMenuUpdater(cursor_updater_t* updater);
+
 
 private:
 
