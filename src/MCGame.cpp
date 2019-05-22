@@ -565,7 +565,6 @@ void MCGame::sendMenuEvents(){
             break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
         if(menuActionToSend != INVALID_MENU_ACTION){
-        	cout << menuActionToSend;
         	tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
         fpsManager.stop();
@@ -582,14 +581,54 @@ void MCGame::runMenu(){
 
 	//Crear hilo que manda eventos de SDL
 	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
+	sendMenuEventsThread.detach();
 
-	sendMenuEventsThread.join(); //Solo util para esta primera parte de printear del lado del servidor.
+	//sendMenuEventsThread.join(); //Solo util para esta primera parte de printear del lado del servidor.
 
 	//Continuar con la ejecucion de MCGame::menu
-	//menu();
+	menu();
 }
 
 void MCGame::menu() {
+	m_Running = true;
+	FPSManager fpsManager(SCREEN_FPS);
+	logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
+
+	threadRunning = true;
+	cursor_updater_t* updaterMenu;
+	char buf[sizeof(cursor_updater_t)];
+
+    while(m_Running) {
+		fpsManager.start();
+
+		tcpClient->socketClient->reciveData(buf, sizeof(cursor_updater_t));
+		updaterMenu = (cursor_updater_t *) buf;
+
+		cout << "Cliente: " + to_string(updaterMenu->cliente) << endl;
+		cout << "PosX: " + to_string(updaterMenu->posX) << endl;
+		cout << "PosY: " + to_string(updaterMenu->posY) << endl;
+		cout << "TeamBloqueado: " + to_string(updaterMenu->teamBloqueado) << endl;
+		cout << "Terminar: " + to_string(updaterMenu->terminar) << endl;
+		//updateMenu();
+		//renderMenu();
+
+		//update();
+		fpsManager.stop();
+    }
+
+	logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
+
+
+
+
+
+
+
+
+
+
+
+
 	/* Posiblemente innecesario
 	 * int numeroDeClientes; //Esto despues vuela
 	switch(tcpClient->nclient)
