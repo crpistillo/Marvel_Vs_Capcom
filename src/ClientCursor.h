@@ -22,6 +22,7 @@ public:
 private:
 
     int posX, posY;
+    int clientRepresenting;
     bool finalSelection;
 
     Texture cursorTexture;
