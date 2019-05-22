@@ -99,6 +99,7 @@ public:
     void receiveMenuActionsFromClient(int clientSocket);
     void sendCursorUpdaterToClient(int clientSocket);
     bool processMenuAction(cliente_menu_t *action_msg);
+    int getNumberOfCharactersSelected();
 };
 
 #endif

@@ -480,14 +480,10 @@ void TCPServer::runMenuPhase(){
 				+ to_string(incoming_msg->accion) << endl;
 
 
-
-		/*======================================
-		 * Aca
-		 * Procesar el evento del menu que viene
-		 *
-		 =======================================*/
+		/* Proceso el evento */
 		bool validMenuAction = processMenuAction(incoming_msg);
 
+		/* Solo envio información a los clientes si hubo algun cambio */
 		if(validMenuAction){
 
 			cursor_updater_t* update[4];
@@ -509,13 +505,31 @@ void TCPServer::runMenuPhase(){
 			menuClient.unlock();
 		}
 
+
 		incoming_menu_actions_queue->delete_data();
 		delete incoming_msg;
+
+		/* Verifico si ya seleccionaron todos */
+		int charactersSelected = getNumberOfCharactersSelected();
+		if (charactersSelected == 2)
+			break;
 	}
 
 	while(1)
-		continue;
+		cout << "SELECCION TERMINADA!" << endl;
 
+
+}
+
+int TCPServer::getNumberOfCharactersSelected(){
+
+	int n = 0;
+	for (int i = 0; i < MAXPLAYERS; i++){
+		if(serverCursors[i]->getFinalSelection())
+			n++;
+	}
+
+	return n;
 
 }
 

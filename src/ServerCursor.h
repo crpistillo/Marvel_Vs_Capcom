@@ -17,6 +17,8 @@ public:
 
 	void makeMenuUpdater(cursor_updater_t* updater);
 
+	bool getFinalSelection();
+
 
 private:
 
