@@ -11,6 +11,9 @@ ServerCursor::ServerCursor(int posX, int posY){
 
 bool ServerCursor::moveRight(){
 
+	if(this->finalSelection)
+		return false;
+
 	if (posX == 97){
 		posX = 449;
 		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
@@ -23,6 +26,10 @@ bool ServerCursor::moveRight(){
 
 
 bool ServerCursor::moveLeft(){
+
+	if(this->finalSelection)
+		return false;
+
 	if (posX == 449){
 		posX = 97;
 		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
@@ -31,6 +38,22 @@ bool ServerCursor::moveLeft(){
 
 	cout << "Cursor no puede moverse \n";
 	return false;		//Si el movimiento es invalido, devuelvo false
+}
+
+bool ServerCursor::selectCharacter(){
+	if(this->finalSelection)
+		return false;
+
+	if(this->posX == 97){
+		this->characterSelected = SPIDERMAN;
+		this->finalSelection = true;
+	}
+	else if(this->posX == 449){
+		this->characterSelected = WOLVERINE;
+		this->finalSelection = true;
+	}
+	return true;
+
 }
 
 bool ServerCursor::update(cliente_menu_t* action_msg){
@@ -43,7 +66,7 @@ bool ServerCursor::update(cliente_menu_t* action_msg){
 		return this->moveLeft();
 
 	case ENTER:
-		return false;
+		return this->selectCharacter();
 
 	default:
 		return false;

@@ -11,6 +11,7 @@ public:
 
 	bool moveRight();
 	bool moveLeft();
+	bool selectCharacter();
 
 	bool update(cliente_menu_t* action_msg);
 
