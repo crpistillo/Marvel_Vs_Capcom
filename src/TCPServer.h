@@ -98,7 +98,7 @@ public:
     void runMenuPhase();
     void receiveMenuActionsFromClient(int clientSocket);
     void sendCursorUpdaterToClient(int clientSocket);
-    void processMenuAction(cliente_menu_t *action_msg);
+    bool processMenuAction(cliente_menu_t *action_msg);
 };
 
 #endif

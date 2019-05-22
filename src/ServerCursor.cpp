@@ -9,49 +9,46 @@ ServerCursor::ServerCursor(int posX, int posY){
 	this->characterSelected = NOT_VALID;
 }
 
-void ServerCursor::moveRight(){
+bool ServerCursor::moveRight(){
 
 	if (posX == 97){
 		posX = 449;
 		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
-		return;
+		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
 	cout << "Cursor no puede moverse \n";
-	return;
+	return false;		//Si el movimiento es invalido, devuelvo false
 }
 
 
-void ServerCursor::moveLeft(){
+bool ServerCursor::moveLeft(){
 	if (posX == 449){
 		posX = 97;
 		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
-		return;
+		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
 	cout << "Cursor no puede moverse \n";
-	return;
+	return false;		//Si el movimiento es invalido, devuelvo false
 }
 
-void ServerCursor::update(cliente_menu_t* action_msg){
+bool ServerCursor::update(cliente_menu_t* action_msg){
 
 	switch(action_msg->accion){
 	case RIGHT:
-		this->moveRight();
-		break;
+		return this->moveRight();
+
 	case LEFT:
-		this->moveLeft();
-		break;
+		return this->moveLeft();
 
 	case ENTER:
-		return;
+		return false;
 
 	default:
-		return;
+		return false;
 	}
 
-
-	return;
 }
 
 void ServerCursor::makeMenuUpdater(cursor_updater_t* updater){

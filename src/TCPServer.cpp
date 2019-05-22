@@ -486,54 +486,28 @@ void TCPServer::runMenuPhase(){
 		 * Procesar el evento del menu que viene
 		 *
 		 =======================================*/
-		processMenuAction(incoming_msg);
+		bool validMenuAction = processMenuAction(incoming_msg);
 
+		if(validMenuAction){
 
-        cursor_updater_t* update[4];
+			cursor_updater_t* update[4];
 
-        for (int i = 0; i < 4; i++){
-        	update[i] = new cursor_updater_t;
-        	update[i]->cliente = i;
-        	update[i]->menuTerminated = false;
-        	serverCursors[i]->makeMenuUpdater(update[i]);
-        }
+			for (int i = 0; i < 4; i++){
+				update[i] = new cursor_updater_t;
+				update[i]->cliente = i;
+				update[i]->menuTerminated = false;
+				serverCursors[i]->makeMenuUpdater(update[i]);
+			}
 
+			menuClient.lock();
+			for (int i = 0; i < MAXPLAYERS; ++i) {
+				for (int j = 0; j < 4; j++ ){
+					this->cursor_updater_queue[i]->insert(update[j]);
+				}
+			}
 
-        /*for (int j = 0; j < 4; ++j) {
-            update[j] = new cursor_updater_t;
-            update[j]->cliente = j;
-            if( j == 0 ){
-            update[j]->posX = 97;
-            update[j]->posY = 61;
-            }
-            else if ( j == 1 ){
-                update[j]->posX = 449;
-                update[j]->posY = 61;
-            }
-            else if ( j == 2 ){
-                update[j]->posX = 97;
-                update[j]->posY = 353;
-            }
-            else if ( j == 3 ){
-                update[j]->posX = 449;
-                update[j]->posY = 353;
-            }
-
-            update[j]->finalSelection = false;
-            update[j]->menuTerminated = false;
-        }
-        */
-
-
-        menuClient.lock();
-        for (int i = 0; i < MAXPLAYERS; ++i) {
-        	for (int j = 0; j < 4; j++ ){
-        		this->cursor_updater_queue[i]->insert(update[j]);
-        	}
-        }
-
-        menuClient.unlock();
-
+			menuClient.unlock();
+		}
 
 		incoming_menu_actions_queue->delete_data();
 		delete incoming_msg;
@@ -545,8 +519,8 @@ void TCPServer::runMenuPhase(){
 
 }
 
-void TCPServer::processMenuAction(cliente_menu_t *action_msg){
-	this->serverCursors[action_msg->cliente]->update(action_msg);
+bool TCPServer::processMenuAction(cliente_menu_t *action_msg){
+	return this->serverCursors[action_msg->cliente]->update(action_msg);
 }
 
 CharacterServer *TCPServer::createServerCharacter(char *character, int nclient) {
@@ -605,6 +579,7 @@ CharacterServer *TCPServer::createServerCharacter(char *character, int nclient) 
                                                       constants.screenWidth,
                                                       nclient
                 );
+            break;
     }
     return characterServer;
 }

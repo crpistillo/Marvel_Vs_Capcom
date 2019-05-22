@@ -9,10 +9,10 @@ public:
 
 	ServerCursor(int posX, int posY);
 
-	void moveRight();
-	void moveLeft();
+	bool moveRight();
+	bool moveLeft();
 
-	void update(cliente_menu_t* action_msg);
+	bool update(cliente_menu_t* action_msg);
 
 	void makeMenuUpdater(cursor_updater_t* updater);
 
