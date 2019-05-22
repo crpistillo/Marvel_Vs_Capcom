@@ -89,6 +89,7 @@ public:
     bool invalidIntroAction(actions_t action);
 
     void runMenuPhase();
+    void receiveMenuActionsFromClient(int clientSocket);
 };
 
 #endif

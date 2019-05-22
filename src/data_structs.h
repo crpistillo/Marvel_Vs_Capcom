@@ -68,9 +68,9 @@ typedef struct
 }incoming_msg_t;
 
 typedef enum menuAction{
-	RIGHT = 0,
-	LEFT = 1,
-	ENTER = 3,
+	RIGHT = 96,
+	LEFT = 97,
+	ENTER = 98,
 	INVALID_MENU_ACTION = 99
 } menu_action_t;
 

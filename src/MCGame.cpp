@@ -555,6 +555,7 @@ void MCGame::renderNuevo()
 void MCGame::sendMenuEvents(){
 
     FPSManager fpsManager(25);
+    this->threadRunning = true;
 
     while (true){
         fpsManager.start();
@@ -563,8 +564,10 @@ void MCGame::sendMenuEvents(){
         if(!threadRunning)
             break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
-        if(menuActionToSend != INVALID_MENU_ACTION)
+        if(menuActionToSend != INVALID_MENU_ACTION){
+        	cout << menuActionToSend;
         	tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
+        }
         fpsManager.stop();
 
     }
@@ -581,7 +584,6 @@ void MCGame::runMenu(){
 	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
 
 	sendMenuEventsThread.join(); //Solo util para esta primera parte de printear del lado del servidor.
-
 
 	//Continuar con la ejecucion de MCGame::menu
 	//menu();

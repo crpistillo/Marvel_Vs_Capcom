@@ -399,11 +399,44 @@ void TCPServer::runServer() {
 
 }
 
+void TCPServer::receiveMenuActionsFromClient(int clientSocket){
+
+	pthread_mutex_lock(&mtx);
+    Socket *socket = getClientSocket(clientSocket);
+    pthread_mutex_unlock(&mtx);
+
+    char buf[sizeof(menu_action_t)];
+
+    while (1) {
+
+        socket->reciveData(buf, sizeof(menu_action_t));
+        menu_action_t *accion = (menu_action_t *) buf;
+
+        cout << "Accion del cliente " + to_string(clientSocket) + " : "
+        		+ to_string(*accion) << endl;
+
+        //Agrego elementos a la cola de mensajes entrantes
+        //void* action = malloc(sizeof(incoming_msg_t));
+        //incoming_msg_t *msgQueue = new incoming_msg_t;
+        //msgQueue->action = *accion;
+        //msgQueue->client = clientSocket;
+        //this->incoming_msges_queue->insert(msgQueue);
+    }
+
+}
+
+
 void TCPServer::runMenuPhase(){
 	//Queue<cliente_menu_t*>* incoming_menu_actions_queue = new Queue<cliente_menu_t*>;
 
 	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
+	std::thread threadCliente1 (&TCPServer::receiveMenuActionsFromClient, this, 0);
+	threadCliente1.detach();
+	std::thread threadCliente2 (&TCPServer::receiveMenuActionsFromClient, this, 1);
+	threadCliente2.detach();
 
+	while(1)
+		continue;
 	//Crear hilos de escritura a los clientes
 
 	//Procesar eventos que vengan de incoming_menu_actions_queue
