@@ -635,6 +635,9 @@ void MCGame::menu() {
 
 	logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
 
+	while(1)
+		cout << "Ya eligieron todos!" << endl;
+
 }
 
 
@@ -647,6 +650,9 @@ void MCGame::updateMenu(){
 	updaterMenu = (cursor_updater_t *) buf;
 
 	clientCursors[updaterMenu->cliente]->update(updaterMenu);
+
+	if(updaterMenu->menuTerminated)
+		m_Running = false;
 }
 
 void MCGame::renderMenu(){

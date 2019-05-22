@@ -497,10 +497,8 @@ void TCPServer::runMenuPhase(){
 			break;
 	}
 
-	//cursor_updater_t* finalUpdaterC1 = new cursor_updater_t;
 
-
-
+	sendUpdaters(true);
 
 	while(1)
 		cout << "SELECCION TERMINADA!" << endl;
