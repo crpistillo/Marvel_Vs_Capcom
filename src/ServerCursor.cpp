@@ -10,11 +10,47 @@ ServerCursor::ServerCursor(int posX, int posY){
 }
 
 void ServerCursor::moveRight(){
+
+	if (posX == 97){
+		posX = 449;
+		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
+		return;
+	}
+
+	cout << "Cursor no puede moverse \n";
 	return;
 }
 
 
 void ServerCursor::moveLeft(){
+	if (posX == 449){
+		posX = 97;
+		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
+		return;
+	}
+
+	cout << "Cursor no puede moverse \n";
+	return;
+}
+
+void ServerCursor::update(cliente_menu_t* action_msg){
+
+	switch(action_msg->accion){
+	case RIGHT:
+		this->moveRight();
+		break;
+	case LEFT:
+		this->moveLeft();
+		break;
+
+	case ENTER:
+		return;
+
+	default:
+		return;
+	}
+
+
 	return;
 }
 

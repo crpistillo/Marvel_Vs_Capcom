@@ -22,6 +22,7 @@
 #include "Team.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Queue/Queue.h"
+#include "ServerCursor.h"
 #include <mutex>
 
 
@@ -48,6 +49,7 @@ private:
     std::mutex m;
 
     std::mutex menuClient;
+    ServerCursor* serverCursors[MAXPLAYERS];
 
 
 public:
@@ -96,6 +98,7 @@ public:
     void runMenuPhase();
     void receiveMenuActionsFromClient(int clientSocket);
     void sendCursorUpdaterToClient(int clientSocket);
+    void processMenuAction(cliente_menu_t *action_msg);
 };
 
 #endif

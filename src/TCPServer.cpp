@@ -145,7 +145,7 @@ void TCPServer::detach() {
 void
 TCPServer::reportClientConnected(const struct sockaddr_in *clientAddress, socklen_t clientAddress_len, Logger *logger) {
 
-    char hostbuf[NI_MAXHOST];
+    char hostbuf[NI_MAXHOST];using namespace std;
     char portbuf[NI_MAXSERV];
     if (getnameinfo((struct sockaddr *) clientAddress, clientAddress_len,
                     hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, 0) == 0) {
@@ -464,6 +464,11 @@ void TCPServer::runMenuPhase(){
 	std::thread threadSendCliente2 (&TCPServer::sendCursorUpdaterToClient, this, 1);
 	threadSendCliente2.detach();
 
+	serverCursors[0] = new ServerCursor(97, 61);
+	serverCursors[1] = new ServerCursor(449, 61);
+	serverCursors[2] = new ServerCursor(97, 353);
+	serverCursors[3] = new ServerCursor(449, 353);
+
 	//Procesar eventos que vengan de incoming_menu_actions_queue
 	while(1){
 		cliente_menu_t *incoming_msg;
@@ -481,6 +486,7 @@ void TCPServer::runMenuPhase(){
 		 * Procesar el evento del menu que viene
 		 *
 		 =======================================*/
+		processMenuAction(incoming_msg);
 
 
         cursor_updater_t* update[4];
@@ -525,6 +531,10 @@ void TCPServer::runMenuPhase(){
 		continue;
 
 
+}
+
+void TCPServer::processMenuAction(cliente_menu_t *action_msg){
+	this->serverCursors[action_msg->cliente]->update(action_msg);
 }
 
 CharacterServer *TCPServer::createServerCharacter(char *character, int nclient) {

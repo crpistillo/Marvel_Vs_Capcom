@@ -2,7 +2,7 @@
 #define SERVER_CURSOR_H
 
 #include "data_structs.h"
-
+#include <iostream>
 
 class ServerCursor{
 public:
@@ -11,6 +11,8 @@ public:
 
 	void moveRight();
 	void moveLeft();
+
+	void update(cliente_menu_t* action_msg);
 
 
 private:
