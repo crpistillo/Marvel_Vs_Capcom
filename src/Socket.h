@@ -41,6 +41,8 @@ public:
     bool sendData(void* to_send, size_t size_data);
 
     bool reciveData(void* data, int size);
+
+    bool receivingFromClient;
 };
 
 

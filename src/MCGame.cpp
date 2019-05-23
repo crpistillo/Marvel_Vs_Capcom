@@ -55,12 +55,6 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 	logger->log("SDL_image no pudo inicializarse.", ERROR);
                     return false;
                 }
-
-                //players[0]->loads(m_Renderer, 0);
-                //players[1]->loads(m_Renderer, 1);
-
-
-                //loadGroundTextureByZIndex();
             }
         }
     }
@@ -70,10 +64,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
 }
 
 void MCGame::loadInitialTextures(){
-    players[0]->loads(m_Renderer, 0);
-    players[1]->loads(m_Renderer, 1);
-
-
+    players[0]->loads(m_Renderer, 3200);
+    players[1]->loads(m_Renderer, 0);
     loadGroundTextureByZIndex();
 }
 
@@ -169,55 +161,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
 
     logger->log("Creacion de personajes.", DEBUG);
 
+    this->clientControls = new ArrowControls();
+
     //////////////////////////////////////////////////////////////////////
 
-    // MENU
-
-
-
-    char* character1 = "Spiderman";
-    char* character2 = "Wolverine";
-    tcpClient->Send((void*) character1, sizeof(character1) + 1);
-    tcpClient->Send((void*) character2, sizeof(character2) + 1);
-
-    //MENU
-
-
-    //Construyo los 4 personajes según la configuracion que me mande el server.
-
-    for (int i = 0; i < 4; ++i) {
-        void* buf1;
-        character_builder_t* builder;
-        buf1 = tcpClient->receive(sizeof(character_builder_t));
-        builder = (character_builder_t*) buf1;
-        characters[i] = characterBuild(builder);
-    }
-
-
-    logger->log("Creacion de controles.", DEBUG);
-
-    Controls* controlPlayer = new ArrowControls();
-
-    this->clientControls = controlPlayer;
-
-    players[0] = new Player(characters[0], characters[1]);
-
-    players[1] = new Player(characters[2], characters[3]);
-    logger->log("Creacion de controles.", DEBUG);
-
-
-    logger->log("Creacion de Jugador.", DEBUG);
-
-
-    logger->log("Definicion de Fondo.", DEBUG);
-
-/*    characterBuilder_t characterBuilder;
-
-    characterBuilder = tcpClient->receive(sizeof(characterBuilder_t));
-
-    character_create(characterBuilder);
-*/
-
+    tcpClient->socketClient->reciveData(&numberOfPlayers,sizeof(int));
+    cout << numberOfPlayers<< endl;
 
     middleGround = new Layer(2400, 600, 3.33, 400); //3.33
     backGround = new Layer(1600,600,6.66667,800); //6.715
@@ -348,7 +297,8 @@ void MCGame::clean() {
 void MCGame::handleEvents() {
 	InputManager* inputManager = InputManager::getInstance();
     inputManager->update();
-    if(inputManager->quitRequested()) threadRunning = false;
+    if(inputManager->quitRequested())
+        threadRunning = false;
 }
 
 void MCGame::update() {
@@ -371,47 +321,34 @@ void MCGame::update() {
 }
 
 CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
-   CharacterClient* characterClient = nullptr;
+    CharacterClient *characterClient = nullptr;
 
+    int pos;
+    if (builder->isFirstTeam)
+        pos = constants->INITIAL_POS_X_PLAYER_ONE;
+    else
+        pos = constants->INITIAL_POS_X_PLAYER_TWO;
 
-   switch(builder->personaje){
+    switch(builder->personaje){
         case SPIDERMAN:
-            if(builder->cliente < 2)
-                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_ONE,
-                                                      false,
-                                                      constants->widthSpiderman,
-                                                      constants->heightSpiderman,
-                                                      constants->spidermanSobrante,
-                                                      constants->spidermanAncho,
-                                                      constants->screenWidth, builder->cliente);
-            else
-                characterClient = new SpidermanClient(constants->INITIAL_POS_X_PLAYER_TWO,
-                                                      true,
-                                                      constants->widthSpiderman,
-                                                      constants->heightSpiderman,
-                                                      constants->spidermanSobrante,
-                                                      constants->spidermanAncho,
-                                                      constants->screenWidth, builder->cliente);
+            characterClient = new SpidermanClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthSpiderman,
+                                                  constants->heightSpiderman,
+                                                  constants->spidermanSobrante,
+                                                  constants->spidermanAncho,
+                                                  constants->screenWidth);
             characterClient->setZIndex(constants->zIndexSpiderman);
             break;
 
         case WOLVERINE:
-            if(builder->cliente < 2)
-                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
-                                                      false,
-                                                      constants->widthWolverine,
-                                                      constants->heightWolverine,
-                                                      constants->wolverineSobrante,
-                                                      constants->wolverineAncho,
-                                                      constants->screenWidth, builder->cliente);
-            else
-                characterClient = new WolverineClient(constants->INITIAL_POS_X_PLAYER_ONE,
-                                                      true,
-                                                      constants->widthWolverine,
-                                                      constants->heightWolverine,
-                                                      constants->wolverineSobrante,
-                                                      constants->wolverineAncho,
-                                                      constants->screenWidth, builder->cliente);
+            characterClient = new WolverineClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthWolverine,
+                                                  constants->heightWolverine,
+                                                  constants->wolverineSobrante,
+                                                  constants->wolverineAncho,
+                                                  constants->screenWidth);
             characterClient->setZIndex(constants->zIndexWolverine);
     }
     return characterClient;
@@ -439,116 +376,6 @@ void orderBackgroundsByZIndex(json* backgroundList){
 }
 
 
-static void* clientRead(void* args){
-
-	TCPClient *client = (TCPClient*) args;
-
-	void* buf1[sizeof(character_builder_t)];
-
-	client->socketClient->reciveData(&buf1, sizeof(character_builder_t));
-
-	character_builder_t* builder = (character_builder_t*) buf1;
-
-	//this->updateNuevo(builder);
-	//this->renderNuevo();
-
-	//tiene que renderizar en base a lo que recibe en character_builder_t
-	//Esto aca no anda porq no es de la clase, no entiendo si hay que updatear y renderizar en
-	// el thread o afuera o encolar y despues updatear/renderizar
-
-
-
-	return 0;
-}
-
-static void* clientWrite(void* args)
-{
-	TCPClient *client = (TCPClient*) args;
-
-
-
-}
-
-void MCGame::createReadThread()
-{
-	pthread_create( &(this->readThread), NULL, clientRead, this);
-}
-
-void MCGame::createWriteThread()
-{
-	pthread_create( &(this->writeThread),NULL, clientWrite, this);
-}
-
-void MCGame::renderNuevo()
-{
-	logger->log("Inicio render.", DEBUG);
-
-	SDL_SetRenderDrawColor( m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-	SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
-
-	Renderizable* renderizables[4] = { &(*middleGround), &(*backGround), &(*frontGround) , &(*characters[0])};
-	orderRenderizableListByZIndex(renderizables);
-
-	for(int i = 0; i < 4; i++){
-		if(renderizables[i] == backGround){
-			backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
-		}
-		else if(renderizables[i] == middleGround){
-			middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
-		}
-		else if(renderizables[i] == frontGround){
-			frontGround->render(0, 0, m_Renderer, &frontGroundTexture,&camera);
-		}
-		else if(renderizables[i] == characters[0]){
-			characters[0]->render(m_Renderer, camera.x, camera.y, characters[0]->getCentro());
-		}
-
-	}
-	logger->log("Fin render.", DEBUG);
-    SDL_RenderPresent(m_Renderer); // draw to the screen
-}
-
-/*void MCGame::updateNuevo(render_data_t* render_data)
-{
-	logger->log("Reubicacion inicio.", DEBUG);
-
-	if (render_data->currentCharacter1.centro > render_data->currentCharacter2.centro)
-	{
-		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante +
-					render_data->currentCharacter1.width -(render_data->currentCharacter2.posX +
-					render_data->currentCharacter2.sobrante);
-
-		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					 -(render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
-					 +render_data->currentCharacter1.width);
-	}
-	else
-	{
-		distancia = render_data->currentCharacter1.posX + render_data->currentCharacter1.sobrante
-					-(render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					+ render_data->currentCharacter2.width);
-
-		distancia2 = render_data->currentCharacter2.posX + render_data->currentCharacter2.sobrante
-					+ render_data->currentCharacter2.width - (render_data->currentCharacter1.posX
-					+ render_data->currentCharacter1.sobrante);
-	}
-    logger->log("Actualizacion posicion MCGame.", DEBUG);
-
-    //tcpClient->recive()      // recibimos la struct de update
-    //playersUpdate(structRecived)
-
-    //this->characters[0]->update(m_Renderer,distancia,render_data->currentCharacter2.centro)
-
-    player1->update(m_Renderer, distancia, player2->getCentro());
-//  player2->update(m_Renderer, distancia2, player1->getCentro());
-
-    logger->log("Actualizacion parallax - MCGame.", DEBUG);
-
-
-    // Mandamos all characters y lo hace con los que tienen playing = true;
-    parallaxController->doParallax(&player1,&player2,logger);
-}*/
-
 
 
 
@@ -564,6 +391,8 @@ void MCGame::sendMenuEvents(){
         if(!threadRunning)
             break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
+        if(menuActionToSend == RIGHT)
+            cout << "entra" << endl;
         if(menuActionToSend != INVALID_MENU_ACTION){
         	tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
@@ -578,43 +407,14 @@ void MCGame::sendMenuEvents(){
 
 
 void MCGame::runMenu(){
-	int numeroDeClientes = 4; /*Para crear 4 cursores. Me tira error si pongo menos*/
 
 	//Crear hilo que manda eventos de SDL
-	std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
-	sendMenuEventsThread.detach();
+    std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
 
-	int posX, posY;
-	for(int i = 0; i < numeroDeClientes; i++){
-		if (i==0){
-			posX = 97;
-			posY = 61;
-		}
-		if (i==2){
-			posX = 97;
-			posY = 353;
-		}
-		if (i==3){
-			posX = 449;
-			posY = 353;
-		}
-		if (i==1)
-			if (numeroDeClientes==2){
-				posX = 97;
-				posY = 353;
-			}
-			else{
-				posX = 449;
-				posY = 61;
-			}
-		clientCursors[i] = new ClientCursor(posX, posY, this->m_Renderer);
-	}
-	renderMenuBackImage();
-	SDL_RenderPresent(m_Renderer);
-
+	setCursors();
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
-	sendMenuEventsThread.~thread();
+    sendMenuEventsThread.join();
 }
 
 void MCGame::menu() {
@@ -622,7 +422,6 @@ void MCGame::menu() {
 	FPSManager fpsManager(SCREEN_FPS);
 	logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
 
-	threadRunning = true;
 
 
     while(m_Running) {
@@ -660,7 +459,7 @@ void MCGame::renderMenu(){
 
 	renderMenuBackImage();
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < numberOfPlayers; i++)
 		clientCursors[i]->render(this->m_Renderer);
 
 	logger->log("Fin render Menu.", DEBUG);
@@ -676,7 +475,7 @@ void MCGame::renderMenuBackImage(){
 
 void MCGame::loadSelectedCharacters(){
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 4; ++i) {
         char buf1[sizeof(character_builder_t)];
         character_builder_t* builder;
         tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
@@ -686,10 +485,39 @@ void MCGame::loadSelectedCharacters(){
 
     players[0] = new Player(characters[0], characters[1]);
 
-    //players[1] = new Player(characters[2], characters[3]);
+    players[1] = new Player(characters[2], characters[3]);
 
 }
 
+void MCGame::setCursors() {
+    int posX, posY;
+
+    for(int i = 0; i < numberOfPlayers; i++){
+        if (i==0){
+            posX = 97;
+            posY = 61;
+        }
+        if (i==2){
+            posX = 97;
+            posY = 353;
+        }
+        if (i==3){
+            posX = 449;
+            posY = 353;
+        }
+        if (i==1) {
+            posX = 449;
+            if (numberOfPlayers == 2) {
+                posY = 353;
+            } else {
+                posY = 61;
+            }
+        }
+        clientCursors[i] = new ClientCursor(posX, posY, this->m_Renderer);
+    }
+    renderMenuBackImage(); //FALTA DIBUJAR LOS CURSORES EN SU LUGAR DEFAULT
+    SDL_RenderPresent(m_Renderer);
+}
 
 
 

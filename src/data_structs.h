@@ -27,11 +27,13 @@ typedef enum character_number{
 	WOLVERINE = 1
 } character_number_t;
 
+
 typedef struct{
     int cliente;
     character_number_t personaje;
     int sprite;
     actions_t action;
+    bool isFirstTeam;
 } character_builder_t;
 
 typedef struct{
@@ -67,13 +69,6 @@ typedef struct
 	int client;
 	actions_t action;
 }incoming_msg_t;
-
-typedef enum menuAction{
-	RIGHT = 96,
-	LEFT = 97,
-	ENTER = 98,
-	INVALID_MENU_ACTION = 99
-} menu_action_t;
 
 typedef struct {
 	int cliente;

@@ -13,7 +13,7 @@ const string DEBUG = "DEBUG";
 
 // Protected
 CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
-                                 int heightSprite, int anchoPantalla, int numberOfClient) {
+                                 int heightSprite, int anchoPantalla) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -26,8 +26,6 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
     this->currentSprite = 0;
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
-
-    this->clientNumber = numberOfClient;
 
     this->loader = NULL;
     this->characterControls = NULL;

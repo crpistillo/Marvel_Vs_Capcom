@@ -23,9 +23,9 @@ Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int te
 
 }
 
-void Team::changeCharacter()
+void Team::changeCharacter(Socket** sockets)
 {
-
+    sockets[currentCharacter->clientNumber]->receivingFromClient = false;
     int updateX = currentCharacter->getCentro();
 
     if(currentCharacter == firstCharacter) {
@@ -36,20 +36,20 @@ void Team::changeCharacter()
     }
     currentCharacter->positionUpdate(&updateX);
 
-
-	this->clientActive = currentCharacter->clientNumber;
-	this->currentCharacter->currentAction = MAKINGINTRO;
+    sockets[currentCharacter->clientNumber]->receivingFromClient = true;
+    this->clientActive = currentCharacter->clientNumber;
+    this->currentCharacter->currentAction = MAKINGINTRO;
 
 }
 
 
-void Team::update(int distance, int posContrincante, actions_t action) {
+void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets) {
 
-	if(action == CHANGEME && currentCharacter->currentAction == STANDING)
-	{
-		changeCharacter();
-		isChanging = true;
-	}
+    if(action == CHANGEME && currentCharacter->currentAction == STANDING)
+    {
+        changeCharacter(sockets);
+        isChanging = true;
+    }
 
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;

@@ -32,17 +32,17 @@ TCPClient* tcpClient;
 MCGame* mcGame;
 
 
-int run_server(int cantArg, char *dirJson, int port);
+int run_server(int cantArg, char *dirJson, int port, int numOfPlayers);
 int run_client(int cantArg, char *dirJson, string host, int port);
 
 
 int main(int argc, char *argv[]) {
 
     if (strncmp(argv[2], "client", 6) == 0) {
-        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
+        run_client(argc, argv[1], string(argv[3]),atoi(argv[4])); //le estoy mandando de a cuantos armo el server esto tiene que ir en el json
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(argc, argv[1], atoi(argv[3]));
+           return run_server(argc, argv[1], atoi(argv[3]), atoi(argv[4]));
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int cantArg, char *dirJson, int port) {
+int run_server(int cantArg, char *dirJson, int port, int numOfPlayers) {
 
 	Logger* logger = Logger::getInstance();
 	logger->startSession("SERVER");
@@ -70,7 +70,7 @@ int run_server(int cantArg, char *dirJson, int port) {
 	logger->log("Logger iniciado.", INFO);
 	json config;
 
-	if(cantArg != 4){
+	if(cantArg != 5){
 		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 4.", ERROR);
 		logger->finishSession();
 		return -1;
@@ -90,7 +90,7 @@ int run_server(int cantArg, char *dirJson, int port) {
 
     //ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
 
-    if(!tcpServer->setup(port, logger)){
+    if(!tcpServer->setup(port, logger, numOfPlayers)){
         cout << "Error al crear el server" << endl;
         return -1;
     }
@@ -165,8 +165,6 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     mcGame->loadSelectedCharacters();
     mcGame->loadInitialTextures();
     mcGame->render();
-    while(1)
-    	continue;
     mcGame->run();
 
 

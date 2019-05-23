@@ -29,13 +29,12 @@
 using namespace std;
 
 #define MAXPACKETSIZE 4096
-#define MAXPLAYERS 2
+#define MAXPLAYERS 4
 
 class TCPServer
 {
 private:
-	Team* team1;
-	Team* team2;
+	Team* team[2];
     int numberOfConnections;
     int port;
     Socket* clientsSockets[MAXPLAYERS];
@@ -55,7 +54,7 @@ private:
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
 
-    Queue<character_updater_t*>* character_updater_queue[MAXPLAYERS];
+    Queue<character_updater_t*>* client_updater_queue[MAXPLAYERS];
     				//colas de mensajes de escritura para cada cliente
 
     Queue<cliente_menu_t*>* incoming_menu_actions_queue;
@@ -63,15 +62,12 @@ public:
 
     Socket* serverSocket;
     Socket* newSockFd;
-    int n, pid;
-    //struct sockaddr_in serverAddress;
-    //struct sockaddr_in clientAddress;//sockadrr_in es para protocolo IPv4
-    //pthread_t serverThread;
+    int n;
+
     char msg[ MAXPACKETSIZE ];
-    static string Message;
 
     TCPServer();
-    bool setup(int port, Logger* logger);
+    bool setup(int port, Logger* logger, int numberOfPlayers);
     void receive();
 
     void detach();
@@ -82,8 +78,6 @@ public:
     int getNumberOfConections();
 
     void runServer();
-
-    CharacterServer* createServerCharacter(char *character, int nclient);
 
     void configJson(json config);
 
@@ -102,7 +96,11 @@ public:
     int getNumberOfCharactersSelected();
     void sendUpdaters(bool finalUpdater);
     void sendSelectedCharacters();
-    CharacterServer* createServerCharacterFromCursor(ServerCursor* cursor, int nclient);
+    CharacterServer *createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber);
+
+    int numberOfPlayers;
+
+    void updateModel();
 };
 
 #endif

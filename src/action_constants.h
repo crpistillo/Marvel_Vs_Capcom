@@ -26,4 +26,11 @@ typedef enum actions {
     MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM
 } actions_t;
 
+typedef enum menuAction{
+    RIGHT = 96,
+    LEFT = 97,
+    ENTER = 98,
+    INVALID_MENU_ACTION = 99
+} menu_action_t;
+
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H

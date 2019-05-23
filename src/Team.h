@@ -9,6 +9,7 @@
 #define TEAM_H_
 
 #include "CharactersServer/CharacterServer.h"
+#include "Socket.h"
 
 class Team
 {
@@ -32,10 +33,10 @@ public:
 
 	CharacterServer* typeOfCharacter(string personaje);
 
-	void changeCharacter();
+	void changeCharacter(Socket** sockets);
 	void setCharacterToChanging();
 
-    void update(int distance, int posContrincante, actions_t action);
+    void update(int distance, int posContrincante, actions_t action, Socket** sockets);
 
     void changeClient();
 

@@ -15,7 +15,6 @@ Constants constants;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-string TCPServer::Message;
 const int maxConnections = 4;
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -29,8 +28,7 @@ TCPServer::TCPServer() {
     this->port = 0;
     this->serverSocket = new Socket();
     this->newSockFd = new Socket();
-    this->team1 = NULL;
-    this->team2 = NULL;
+
 }
 
 typedef struct {
@@ -39,10 +37,11 @@ typedef struct {
 } info_for_thread_t;
 
 
-bool TCPServer::setup(int port, Logger *logger) {
+bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
+
+    this->numberOfPlayers = numberOfPlayers;
 
     this->logger = logger;
-
     logger->log("Comienza a iniciarse el servidor", INFO);
     logger->log("Se crea el socket de escucha del servidor", INFO);
 
@@ -51,25 +50,28 @@ bool TCPServer::setup(int port, Logger *logger) {
     cout << msgInfo << endl;
     logger->log(msgInfo, INFO);
 
-    bool ret = this->serverSocket->initialize(logger, port, maxConnections);
+    bool ret = this->serverSocket->initialize(logger, port, numberOfPlayers);
 
     for (auto &clientsSocket : clientsSockets) {
         Socket *sock = new Socket();
         clientsSocket = sock;
     }
 
+    if (numberOfPlayers == 2) { //good hardcodeo
+        clientsSockets[0]->receivingFromClient = true;
+        clientsSockets[1]->receivingFromClient = true;
+    } else {
+        clientsSockets[0]->receivingFromClient = true;
+        clientsSockets[3]->receivingFromClient = true;
+    }
+
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
     this->incoming_menu_actions_queue = new Queue<cliente_menu_t*>;
 
-
-    for (int i = 0; i < MAXPLAYERS; ++i) {
-        this->character_updater_queue[i] = new Queue<character_updater_t *>;
-    }
-
-    for (int i = 0; i < MAXPLAYERS; ++i) {
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        this->client_updater_queue[i] = new Queue<character_updater_t *>;
         this->cursor_updater_queue[i] = new Queue<cursor_updater_t*>;
     }
-    //this->setSockfd(this->serverSocket->get_fd());
 
     return ret;
 }
@@ -91,7 +93,7 @@ void TCPServer::receive() {
 
 
         //Rechazar conexiones
-        if (numberOfConnections == MAXPLAYERS) {
+        if (numberOfConnections == numberOfPlayers) {
 
             to_send.nconnections = numberOfConnections;
             to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
@@ -105,7 +107,7 @@ void TCPServer::receive() {
         numberOfConnections++;
 
         //Aceptar conexiones pero seguir esperando por mas
-        if (numberOfConnections != MAXPLAYERS) {
+        if (numberOfConnections != numberOfPlayers) {
 
             to_send.status = NOT_READY;
             to_send.nconnections = numberOfConnections;
@@ -133,7 +135,6 @@ void TCPServer::receive() {
 }
 
 void TCPServer::clean() {
-    Message = "";
     memset(msg, 0, MAXPACKETSIZE);
 }
 
@@ -175,23 +176,7 @@ int computeDistance(CharacterServer *character1, CharacterServer *character2) {
     return distancia;
 }
 
-int computeDistance2(CharacterServer *character1, CharacterServer *character2)
-{
-	int distancia2;
-	if (character1->getCentro() > character2->getCentro())
-	{
-			distancia2 = character2->getPosX()+character2->getSobrante()
-					- (character1->getPosX()+character1->getSobrante()+character1->getWidth());
-	}
-	else
-	{
-		distancia2 = character2->getPosX()+character2->getSobrante()
-				 + character2->getWidth() - (character1->getPosX() + character1->getSobrante());
-	}
 
-	return distancia2;
-
-}
 
 /*Funcion que lee del socket la informacion que los clientes le envian.
  * Esta deberia leer, codificar y encolar eventos en la cola del servidor
@@ -201,15 +186,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
 
     //Recibo los argumentos y los casteo en el orden que corresponde.
-    pthread_mutex_lock(&mtx);
     Socket *socket = getClientSocket(clientSocket);
-    pthread_mutex_unlock(&mtx);
 
     char buf[sizeof(actions_t)];
-
-    /*cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de leer del socket: "
-    + to_string(socket_to_read->fd) + " y el mensaje que recibo es: "+ accion +"\n";*/
-
     while (1) {
 
         socket->reciveData(buf, sizeof(actions_t));
@@ -222,7 +201,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
         msgQueue->client = clientSocket;
         this->incoming_msges_queue->insert(msgQueue);
 
-        continue;
     }
 }
 
@@ -239,26 +217,18 @@ Socket* TCPServer::getClientSocket(int i){
 
 void TCPServer::sendToClient(int clientSocket) {
 
-    pthread_t hilo = pthread_self();
-
     //Recibo los argumentos y los casteo en el orden que corresponde.
-    pthread_mutex_lock(&mtx);
     Socket *socket = getClientSocket(clientSocket);
-    pthread_mutex_unlock(&mtx);
 
-    cout << "Hola! Soy el hilo: " + to_string(hilo) + ". Soy el encargado de mandar datos al socket: "
-            + to_string(socket->fd) + "\n";
-
-    //character_updater_t updater;
 
     while (1) {
 
         character_updater_t *updater;
-        if(character_updater_queue[clientSocket]->empty_queue())
+        if(client_updater_queue[clientSocket]->empty_queue())
             continue;
-        updater = character_updater_queue[clientSocket]->get_data();
+        updater = client_updater_queue[clientSocket]->get_data();
         socket->sendData(updater, sizeof(character_updater_t));
-        character_updater_queue[clientSocket]->delete_data();
+        client_updater_queue[clientSocket]->delete_data();
     }
 }
 
@@ -266,243 +236,104 @@ void TCPServer::sendToClient(int clientSocket) {
 void TCPServer::runServer() {
 
     std::thread receive(&TCPServer::receive, this);
-    while (getNumberOfConections() != MAXPLAYERS)    //Espera hasta que se conecten MAXPLAYERS
+    while (getNumberOfConections() != numberOfPlayers)    //Espera hasta que se conecten MAXPLAYERS
         continue;
 
     cout << "Numero de jugadores alcanzado! \n";
 
-
-    char character[9];
-    character_builder_t builder1;
-    character_builder_t builder2;
-    character_builder_t builder3;
-    character_builder_t builder4;
-
-    clientsSockets[0]->reciveData(character, 9);
-    CharacterServer *character1 = createServerCharacter(character, 1);
-    character1->makeBuilderStruct(&builder1);
-
-    cout << character << endl;
-
-
-    clientsSockets[0]->reciveData(character, 9);
-    CharacterServer *character2 = createServerCharacter(character, 1);
-    character2->makeBuilderStruct(&builder2);
-    cout << character << endl;
-
-
-    clientsSockets[1]->reciveData(character, 9);
-    CharacterServer *character3 = createServerCharacter(character, 2);
-    character3->makeBuilderStruct(&builder3);
-
-    cout << character << endl;
-
-    clientsSockets[1]->reciveData(character, 9);
-    CharacterServer *character4 = createServerCharacter(character, 2);
-    character4->makeBuilderStruct(&builder4);
-
-    cout << character << endl;
-
-    team1 = new Team(character1, character2, 1, 1);
-    team2 = new Team(character3, character4, 1, 2);
-
-
-    clientsSockets[0]->sendData(&builder1, sizeof(character_builder_t));
-    clientsSockets[0]->sendData(&builder2, sizeof(character_builder_t));
-    clientsSockets[0]->sendData(&builder3, sizeof(character_builder_t));
-    clientsSockets[0]->sendData(&builder4, sizeof(character_builder_t));
-
-    clientsSockets[1]->sendData(&builder1, sizeof(character_builder_t));
-    clientsSockets[1]->sendData(&builder2, sizeof(character_builder_t));
-    clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
-    clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
-
-
+    for (int j = 0; j < numberOfPlayers; ++j) {
+        clientsSockets[j]->sendData(&numberOfPlayers,sizeof(int));
+    }
     runMenuPhase();  //Pongo al servidor en modo "Menu"
     sendSelectedCharacters();
 
-    while(1)
-    	continue;
+    std::thread receiveFromClienThreads[numberOfPlayers];
+    std::thread sendToClientThreats[numberOfPlayers];
 
-    //Cuando termina el menu, empieza el juego
-    std::thread receive1(&TCPServer::receiveFromClient, this, 0);
-    std::thread receive2(&TCPServer::receiveFromClient, this, 1);
-
-    std::thread send1(&TCPServer::sendToClient, this, 0);
-    std::thread send2(&TCPServer::sendToClient, this, 1);
-
-    while (1) {
-        incoming_msg_t *incoming_msg;
-        if(incoming_msges_queue->empty_queue())
-            continue;
-        incoming_msg = this->incoming_msges_queue->get_data();
-
-        int distancia = computeDistance(team1->get_currentCharacter(), team2->get_currentCharacter());
-
-        int distancia2 = computeDistance2(team1->get_currentCharacter(),team2->get_currentCharacter());
-
-        character_updater_t *update_msg = new character_updater_t;
-
-        bool changeAvailable = false;
-
-        if (incoming_msg->client == 0)//team1 es de los clientes 1 y 2
-        {
-            if(team1->get_currentCharacter()->isStanding() && incoming_msg->action == CHANGEME){
-                update_msg->action = CHANGEME;
-                team1->update(distancia, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
-            }
-            else if (team1->invalidIntroAction() && incoming_msg->action == CHANGEME){
-            	update_msg->action = team1->get_currentCharacter()->currentAction;
-            	team1->update(distancia, team2->get_currentCharacter()->getPosX(),
-            			team1->get_currentCharacter()->currentAction);
-            }
-            else{
-                team1->update(distancia, team2->get_currentCharacter()->getPosX(), incoming_msg->action);
-                update_msg->action = team1->get_currentCharacter()->getCurrentAction();
-            }
-            update_msg->posX = team1->get_currentCharacter()->getPosX();
-            update_msg->posY = team1->get_currentCharacter()->getPosY();
-            update_msg->team = 1;
-            update_msg->currentSprite = team1->get_currentCharacter()->getSpriteNumber();
-        } else {
-            if(team2->get_currentCharacter()->isStanding() && incoming_msg->action == CHANGEME)
-            {
-                update_msg->action = CHANGEME;
-                team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
-            }
-            else if (team2->invalidIntroAction() && incoming_msg->action == CHANGEME)
-            {
-                update_msg->action = team2->get_currentCharacter()->currentAction;
-                team2->update(distancia2, team1->get_currentCharacter()->getPosX(),
-                		team2->get_currentCharacter()->currentAction);
-            }
-            else
-            {
-                team2->update(distancia2, team1->get_currentCharacter()->getPosX(), incoming_msg->action);
-                update_msg->action = team2->get_currentCharacter()->getCurrentAction();
-            }
-            update_msg->posX = team2->get_currentCharacter()->getPosX();
-            update_msg->posY = team2->get_currentCharacter()->getPosY();
-            update_msg->team = 2;
-            update_msg->currentSprite = team2->get_currentCharacter()->getSpriteNumber();
-        }
-
-        character_updater_t* update[MAXPLAYERS];
-        for (int j = 0; j < MAXPLAYERS; ++j) {
-            update[j] = new character_updater_t;
-            update[j]->action = update_msg->action;
-            update[j]->team = update_msg->team;
-            update[j]->posX = update_msg->posX;
-            update[j]->posY = update_msg->posY;
-            update[j]->currentSprite = update_msg->currentSprite;
-        }
-
-        for (int i = 0; i < MAXPLAYERS; ++i) {
-            std::unique_lock<std::mutex> lock(m);
-            this->character_updater_queue[i]->insert(update[i]);
-        }
-
-        incoming_msges_queue->delete_data();
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        receiveFromClienThreads[i] = std::thread(&TCPServer::receiveFromClient, this, i);
+        sendToClientThreats[i] = std::thread(&TCPServer::sendToClient, this, i);
     }
 
+    updateModel();
 }
+
+
 
 void TCPServer::sendSelectedCharacters(){
 
+    int charactersPerClient;
 
-    character_builder_t builder1;
-    character_builder_t builder2;
-    character_builder_t builder3;
-    character_builder_t builder4;
+    if (2 == numberOfPlayers)   // si el maximo de players es 2 elijen 2
+        charactersPerClient = 2;
+    else
+        charactersPerClient = 1;
 
-    CharacterServer *character1 = createServerCharacterFromCursor(serverCursors[0], 1);
-    character1->makeBuilderStruct(&builder1);
+    CharacterServer *characters[MAXPLAYERS];
+    character_builder_t builders[MAXPLAYERS];
 
-    CharacterServer *character2 = createServerCharacterFromCursor(serverCursors[1], 1);
-    character2->makeBuilderStruct(&builder2);
+    char character[9];
 
-    /*CharacterServer *character3 = createServerCharacterFromCursor(serverCursors[2], 2);
-    character3->makeBuilderStruct(&builder3);
+    int nclient = 0;
+    int nCharacter = 0;
+    for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
+        for (int j = 0; j < charactersPerClient; j++) {  // si characters es 1 entra 1 vez
+            characters[nCharacter] = createServerCharacterFromCursor(serverCursors[nCharacter], nclient, nCharacter);
+            characters[nCharacter]->makeBuilderStruct(&builders[nCharacter], nCharacter < 2);
+            nCharacter++;
+        }
+        nclient++;
+    }
 
-    CharacterServer *character4 = createServerCharacterFromCursor(serverCursors[3], 2);
-    character4->makeBuilderStruct(&builder4);*/
+    team[0] = new Team(characters[0], characters[1], 1, 1);
+    team[1] = new Team(characters[2], characters[3], 1, 2);
 
-
-    team1 = new Team(character1, character2, 1, 1);
-    //team2 = new Team(character3, character4, 1, 2);
-
-
-    clientsSockets[0]->sendData(&builder1, sizeof(character_builder_t));
-    clientsSockets[0]->sendData(&builder2, sizeof(character_builder_t));
-    //clientsSockets[0]->sendData(&builder3, sizeof(character_builder_t));
-    //clientsSockets[0]->sendData(&builder4, sizeof(character_builder_t));
-
-    clientsSockets[1]->sendData(&builder1, sizeof(character_builder_t));
-    clientsSockets[1]->sendData(&builder2, sizeof(character_builder_t));
-    //clientsSockets[1]->sendData(&builder3, sizeof(character_builder_t));
-    //clientsSockets[1]->sendData(&builder4, sizeof(character_builder_t));
-
+    for (auto &builder : builders) {
+        for (int i = 0; i < numberOfPlayers; ++i) {
+            clientsSockets[i]->sendData(&builder, sizeof(character_builder_t));
+        }
+    }
 }
 
-CharacterServer* TCPServer::createServerCharacterFromCursor(ServerCursor* cursor, int nclient){
-	CharacterServer *character;
 
-	switch(cursor->getCharacterSelected()){
-    case SPIDERMAN:
-        if (nclient < 2)
-            character = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                  false,
-                                                  constants.widthSpiderman,
+//nclient = numero del cliente
+//characterNumber  = numero del personaje es decir el team 1 tiene 1 y 2 y el team 2 tiene 3 y 4 no importa el numero
+//de clientes
+CharacterServer * TCPServer::createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber) {
+
+    CharacterServer *characterServer;
+    int pos;
+    if (characterNumber < 2)
+        pos = constants.INITIAL_POS_X_PLAYER_ONE;
+    else
+        pos = constants.INITIAL_POS_X_PLAYER_TWO;
+
+
+    switch (cursor->getCharacterSelected()) {
+        case SPIDERMAN:
+            characterServer = new SpidermanServer(pos,
                                                   constants.heightSpiderman,
                                                   constants.spidermanSobrante,
                                                   constants.spidermanAncho,
                                                   constants.screenWidth,
-                                                  nclient
-            );
-        else
-            character = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
-                                                  false,
-                                                  constants.widthSpiderman,
-                                                  constants.heightSpiderman,
-                                                  constants.spidermanSobrante,
-                                                  constants.spidermanAncho,
-                                                  constants.screenWidth,
-                                                  nclient
-            );
-        break;
+                                                  nclient, 0);
+            break;
 
-    case WOLVERINE:
-        if (nclient < 2)
-            character = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                  false,
-                                                  constants.widthWolverine,
+        case WOLVERINE:
+            characterServer = new WolverineServer(pos,
                                                   constants.heightWolverine,
                                                   constants.wolverineSobrante,
                                                   constants.wolverineAncho,
                                                   constants.screenWidth,
-                                                  nclient
-            );
-        else
-            character = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                  false,
-                                                  constants.widthWolverine,
-                                                  constants.heightWolverine,
-                                                  constants.wolverineSobrante,
-                                                  constants.wolverineAncho,
-                                                  constants.screenWidth,
-                                                  nclient
-            );
-        break;
-	}
-	return character;
-
+                                                  nclient, 0);
+    }
+    return characterServer;
 }
 
 void TCPServer::receiveMenuActionsFromClient(int clientSocket){
 
-	pthread_mutex_lock(&mtx);
+
     Socket *socket = getClientSocket(clientSocket);
-    pthread_mutex_unlock(&mtx);
 
     char buf[sizeof(menu_action_t)];
 
@@ -511,21 +342,20 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket){
         socket->reciveData(buf, sizeof(menu_action_t));
         menu_action_t *accion = (menu_action_t *) buf;
 
-        //cout << "Accion del cliente " + to_string(clientSocket) + " : "
-        //		+ to_string(*accion) << endl;
+        cout << "Accion del cliente " + to_string(clientSocket) + " : "
+        		+ to_string(*accion) << endl;
 
         cliente_menu_t *msgMenuQueue = new cliente_menu_t;
         msgMenuQueue->cliente = clientSocket;
         msgMenuQueue->accion = *accion;
+
         this->incoming_menu_actions_queue->insert(msgMenuQueue);
     }
 
 }
 
 void TCPServer::sendCursorUpdaterToClient(int clientSocket){
-	pthread_mutex_lock(&mtx);
     Socket *socket = getClientSocket(clientSocket);
-    pthread_mutex_unlock(&mtx);
 
     while(1){
 
@@ -553,19 +383,20 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket){
 void TCPServer::runMenuPhase(){
 
 	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
-	std::thread threadReceiveCliente1 (&TCPServer::receiveMenuActionsFromClient, this, 0);
-	threadReceiveCliente1.detach();
-	std::thread threadReceiveCliente2 (&TCPServer::receiveMenuActionsFromClient, this, 1);
-	threadReceiveCliente2.detach();
 
-	//Crear hilos de escritura a los clientes
-	std::thread threadSendCliente1 (&TCPServer::sendCursorUpdaterToClient, this, 0);
-	threadSendCliente1.detach();
-	std::thread threadSendCliente2 (&TCPServer::sendCursorUpdaterToClient, this, 1);
-	threadSendCliente2.detach();
+    std::thread receiveFromClientThreads[numberOfPlayers];
+    std::thread sendToClientThreats[numberOfPlayers];
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        receiveFromClientThreads[i] = std::thread(&TCPServer::receiveMenuActionsFromClient, this, i);
+        receiveFromClientThreads[i].detach();
+        sendToClientThreats[i] = std::thread(&TCPServer::sendCursorUpdaterToClient, this, i);
+        sendToClientThreats[i].detach();
+    }
+
 
 	serverCursors[0] = new ServerCursor(97, 61);
-	serverCursors[1] = new ServerCursor(449, 61);
+	serverCursors[1] = new ServerCursor(449, 353);
 	serverCursors[2] = new ServerCursor(97, 353);
 	serverCursors[3] = new ServerCursor(449, 353);
 
@@ -575,9 +406,6 @@ void TCPServer::runMenuPhase(){
 		if(this->incoming_menu_actions_queue->empty_queue())
 			continue;
 		incoming_msg = this->incoming_menu_actions_queue->get_data();
-
-		cout << "Accion del cliente " + to_string(incoming_msg->cliente) + " : "
-				+ to_string(incoming_msg->accion) << endl;
 
 
 		/* Proceso el evento */
@@ -597,8 +425,10 @@ void TCPServer::runMenuPhase(){
 			break;
 	}
 
-	threadReceiveCliente1.~thread();
-	threadReceiveCliente2.~thread();
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        receiveFromClientThreads[i].~thread();
+        sendToClientThreats[i].~thread();
+    }
 
 	sendUpdaters(true);
 }
@@ -615,8 +445,8 @@ void TCPServer::sendUpdaters(bool finalUpdater){
 	}
 
 	menuClient.lock();
-	for (int i = 0; i < MAXPLAYERS; ++i) {
-		for (int j = 0; j < 4; j++ ){
+	for (int i = 0; i < numberOfPlayers; ++i) {
+		for (int j = 0; j < numberOfPlayers; j++ ){
 			this->cursor_updater_queue[i]->insert(update[j]);
 		}
 	}
@@ -640,67 +470,6 @@ int TCPServer::getNumberOfCharactersSelected(){
 
 bool TCPServer::processMenuAction(cliente_menu_t *action_msg){
 	return this->serverCursors[action_msg->cliente]->update(action_msg);
-}
-
-CharacterServer *TCPServer::createServerCharacter(char *character, int nclient) {
-
-    CharacterServer *characterServer;
-    character_number_t character_n;
-
-    if (!strcmp(character, "Spiderman"))
-        character_n = SPIDERMAN;
-    if (!strcmp(character, "Wolverine"))
-        character_n = WOLVERINE;
-
-
-    switch (character_n) {
-        case SPIDERMAN:
-            if (nclient < 2)
-                characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                      false,
-                                                      constants.widthSpiderman,
-                                                      constants.heightSpiderman,
-                                                      constants.spidermanSobrante,
-                                                      constants.spidermanAncho,
-                                                      constants.screenWidth,
-                                                      nclient
-                );
-            else
-                characterServer = new SpidermanServer(constants.INITIAL_POS_X_PLAYER_TWO,
-                                                      false,
-                                                      constants.widthSpiderman,
-                                                      constants.heightSpiderman,
-                                                      constants.spidermanSobrante,
-                                                      constants.spidermanAncho,
-                                                      constants.screenWidth,
-                                                      nclient
-                );
-            break;
-
-        case WOLVERINE:
-            if (nclient < 2)
-                characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                      false,
-                                                      constants.widthWolverine,
-                                                      constants.heightWolverine,
-                                                      constants.wolverineSobrante,
-                                                      constants.wolverineAncho,
-                                                      constants.screenWidth,
-                                                      nclient
-                );
-            else
-                characterServer = new WolverineServer(constants.INITIAL_POS_X_PLAYER_ONE,
-                                                      false,
-                                                      constants.widthWolverine,
-                                                      constants.heightWolverine,
-                                                      constants.wolverineSobrante,
-                                                      constants.wolverineAncho,
-                                                      constants.screenWidth,
-                                                      nclient
-                );
-            break;
-    }
-    return characterServer;
 }
 
 void TCPServer::configJson(json config) {
@@ -758,6 +527,69 @@ void TCPServer::configJson(json config) {
 
     logger->log("Creacion de personajes.", DEBUG);
 
+}
+
+void TCPServer::updateModel() {
+
+    while (1) {
+        incoming_msg_t *incoming_msg;
+        if (incoming_msges_queue->empty_queue())
+            continue;
+        incoming_msg = this->incoming_msges_queue->get_data();
+
+        int distancia[2];
+        distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
+        distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
+
+        character_updater_t *update_msg = new character_updater_t;
+
+        int teamToUpdate;
+        int enemyTeam;
+        if (incoming_msg->client == 0 || incoming_msg->client == 1) {//team1 es de los clientes 1 y 2
+            teamToUpdate = 0;
+            enemyTeam = 1;
+        } else {
+            teamToUpdate = 1;
+            enemyTeam = 0;
+        }
+
+        if (team[teamToUpdate]->get_currentCharacter()->isStanding() && incoming_msg->action == CHANGEME) {
+            update_msg->action = CHANGEME;
+            team[teamToUpdate]->update(distancia[teamToUpdate], team[teamToUpdate]->get_currentCharacter()->getPosX(),
+                                       incoming_msg->action, this->clientsSockets);
+        } else if (team[teamToUpdate]->invalidIntroAction() && incoming_msg->action == CHANGEME) {
+            update_msg->action = team[teamToUpdate]->get_currentCharacter()->currentAction;
+            team[teamToUpdate]->update(distancia[teamToUpdate], team[enemyTeam]->get_currentCharacter()->getPosX(),
+                                       team[teamToUpdate]->get_currentCharacter()->currentAction, this->clientsSockets);
+        } else {
+            team[teamToUpdate]->update(distancia[teamToUpdate], team[enemyTeam]->get_currentCharacter()->getPosX(),
+                                       incoming_msg->action, this->clientsSockets);
+            update_msg->action = team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
+        }
+
+        update_msg->posX = team[teamToUpdate]->get_currentCharacter()->getPosX();
+        update_msg->posY = team[teamToUpdate]->get_currentCharacter()->getPosY();
+        update_msg->team = teamToUpdate;
+        update_msg->currentSprite = team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
+
+
+        character_updater_t *update[numberOfPlayers];
+        for (int j = 0; j < numberOfPlayers; ++j) {
+            update[j] = new character_updater_t;
+            update[j]->action = update_msg->action;
+            update[j]->team = update_msg->team;
+            update[j]->posX = update_msg->posX;
+            update[j]->posY = update_msg->posY;
+            update[j]->currentSprite = update_msg->currentSprite;
+        }
+
+        for (int i = 0; i < numberOfPlayers; ++i) {
+            std::unique_lock<std::mutex> lock(m);
+            this->client_updater_queue[i]->insert(update[i]);
+        }
+
+        incoming_msges_queue->delete_data();
+    }
 }
 
 

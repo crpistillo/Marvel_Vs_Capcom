@@ -60,7 +60,7 @@ public:
 
 protected:
     CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
-                    int heightSprite, int anchoPantalla, int numberOfClient);
+                    int heightSprite, int anchoPantalla);
     bool isLookingLeft;
     //The X and Y offsets of the character
     int mPosX, mPosY;

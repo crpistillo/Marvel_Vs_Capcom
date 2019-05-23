@@ -11,8 +11,8 @@
 class SpidermanClient final: public CharacterClient{
 public:
     //Initializes the variables
-    SpidermanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                    int numberOfClient);
+    SpidermanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
+                    int anchoPantalla);
     ~SpidermanClient();
     void load(SDL_Renderer *renderer, int posContrincante);
 };

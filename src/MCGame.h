@@ -87,17 +87,6 @@ public:
 
     CharacterClient *characterBuild(character_builder_t *builder);
 
-    pthread_t readThread; //lee del socket la info de cada personaje (accion, posX, posY, etc)
-    					  //y luego renderiza en base a esos datos
-
-    pthread_t writeThread; //ejecuta handleEvents y manda en el socket (al server)
-    						//la informacion de lo que el cliente pretende que el personaje haga
-    						//(caminar,saltar,etc)
-
-    void createReadThread();
-    void createWriteThread();
-    void renderNuevo();
-    void updateNuevo(render_data_t* render_data);
 
     void loadInitialTextures();
     void runMenu();
@@ -105,10 +94,10 @@ public:
     void renderMenu();
     void loadSelectedCharacters();
 
-    //Ahora le dejo este tipo de dato, pero
-    												//despues lo cambiamos en base al tipo de
-    												//dato que recibamos
 
+    void setCursors();
+
+    int numberOfPlayers;
 };
 
 
