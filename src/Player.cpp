@@ -19,22 +19,25 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 }
 
 
-void Player::update(character_updater_t* updater) {
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive) {
 
 
     if(updater->action == CHANGEME){
+        m.lock();
+        if(becomeActive)
+            *isSending = !(*isSending);
+        m.unlock();
         changeCharacter();  //send change character
         setCharacterToChanging();
         isChanging = true;
     }
     currentCharacter->update(updater);
-	Logger* logger = Logger::getInstance();
+    Logger* logger = Logger::getInstance();
     InputManager* inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
 
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
-   // currentCharacter->load(renderer, distance, posContrincante);
 }
 
 

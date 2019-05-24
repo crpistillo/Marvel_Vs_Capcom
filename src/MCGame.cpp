@@ -168,6 +168,23 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     tcpClient->socketClient->reciveData(&numberOfPlayers,sizeof(int));
     cout << numberOfPlayers<< endl;
 
+    if(numberOfPlayers == 3){
+        if(tcpClient->nclient == 1)
+            team = 0;
+        else
+            team = 1;
+
+        isSending = true;
+    }else{
+        if(tcpClient->nclient < 3)
+            team = 0;
+        else
+             team = 1;
+        isSending = tcpClient->nclient == 1 || tcpClient->nclient == 3;
+
+    }
+
+
     middleGround = new Layer(2400, 600, 3.33, 400); //3.33
     backGround = new Layer(1600,600,6.66667,800); //6.715
     frontGround = new Layer(3200,600,0,0);
@@ -189,6 +206,8 @@ void MCGame::action_update() {
         handleEvents();
         if(!threadRunning)
             break;
+        if(!isActive())
+            continue;
         actions_t actionToSend = clientControls->getNewAction();
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
         fpsManager.stop();
@@ -308,13 +327,12 @@ void MCGame::update() {
     character_updater_t* updater = (character_updater_t*) buf1;
 
     if(updater->team == 1) {
-            players[0]->update(updater);
-            players[0]->load(m_Renderer, players[1]->getCentro());
-        }
-    else{
-            players[1]->update(updater);
-            players[1]->load(m_Renderer, players[0]->getCentro());
-        }
+        players[0]->update(updater, &isSending, false);
+        players[0]->load(m_Renderer, players[1]->getCentro());
+    }else{
+        players[1]->update(updater, &isSending, false);
+        players[1]->load(m_Renderer, players[0]->getCentro());
+    }
 
     logger->log("Actualizacion parallax - MCGame.", DEBUG);
     parallaxController->doParallax(&players[0],&players[1],logger);
@@ -381,7 +399,7 @@ void orderBackgroundsByZIndex(json* backgroundList){
 
 void MCGame::sendMenuEvents(){
 
-    FPSManager fpsManager(10);
+    FPSManager fpsManager(25);
     this->threadRunning = true;
 
     while (true){
@@ -410,11 +428,11 @@ void MCGame::runMenu(){
 
 	//Crear hilo que manda eventos de SDL
     std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
-
+    sendMenuEventsThread.detach();
 	setCursors();
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
-    sendMenuEventsThread.join();
+    sendMenuEventsThread.~thread();
 }
 
 void MCGame::menu() {
@@ -475,12 +493,12 @@ void MCGame::renderMenuBackImage(){
 
 void MCGame::loadSelectedCharacters(){
 
-    for (int i = 0; i < 4; ++i) {
+    for (auto & character : characters) {
         char buf1[sizeof(character_builder_t)];
         character_builder_t* builder;
         tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
         builder = (character_builder_t*) buf1;
-        characters[i] = characterBuild(builder);
+        character = characterBuild(builder);
     }
 
     players[0] = new Player(characters[0], characters[1]);
@@ -519,5 +537,9 @@ void MCGame::setCursors() {
     SDL_RenderPresent(m_Renderer);
 }
 
+bool MCGame::isActive() {
+    std::unique_lock<std::mutex> lock(m);
+    return isSending;
+}
 
 

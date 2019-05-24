@@ -33,10 +33,10 @@ class MCGame {
 private:
     bool m_Running;
     bool threadRunning;
-    SDL_Window* m_Window;
-    SDL_Renderer* m_Renderer;
-    SDL_Joystick* gGameController = NULL;
-    Logger* logger;
+    SDL_Window *m_Window;
+    SDL_Renderer *m_Renderer;
+    SDL_Joystick *gGameController = NULL;
+    Logger *logger;
     // Scene textures
     Texture frontGroundTexture;
     Texture middleGroundTexture;
@@ -46,24 +46,30 @@ private:
     Texture cliente2;
     Texture cliente3;
     Texture cliente4;
-    Layer* middleGround;
-    Layer* backGround;
-    Layer* frontGround;
-    Player* players[2];
-    Parallax* parallaxController;
-    Controls* clientControls;
+    Layer *middleGround;
+    Layer *backGround;
+    Layer *frontGround;
+    Player *players[2];
+    Parallax *parallaxController;
+    Controls *clientControls;
     json config;
-    TCPClient* tcpClient;
-    CharacterClient* characters[4];
+    TCPClient *tcpClient;
+    CharacterClient *characters[4];
+
     void loadGroundTextureByZIndex();
-    Constants* constants;
+
+    Constants *constants;
+
     void action_update();
+
     int myCharacter;
     std::mutex m;
-    void sendMenuEvents();
-    ClientCursor* clientCursors[4];
-    void renderMenuBackImage();
 
+    void sendMenuEvents();
+
+    ClientCursor *clientCursors[4];
+
+    void renderMenuBackImage();
 
 
 protected:
@@ -73,31 +79,50 @@ protected:
 
 public:
     MCGame(json config, int ancho, int alto, TCPClient *client);
-    ~MCGame(){}
+
+    ~MCGame() {}
+
     void init() { m_Running = true; }
-    bool init(const char* title, int xpos, int ypos, int width, int
+
+    bool init(const char *title, int xpos, int ypos, int width, int
     height, int flags);
+
     void run();
+
     void menu();
+
     void render();
+
     void update();
+
     void handleEvents();
+
     void clean();
+
     SDL_Rect camera;
 
     CharacterClient *characterBuild(character_builder_t *builder);
 
 
     void loadInitialTextures();
+
     void runMenu();
+
     void updateMenu();
+
     void renderMenu();
+
     void loadSelectedCharacters();
 
 
     void setCursors();
 
     int numberOfPlayers;
+
+    bool isActive();
+
+    bool isSending;
+    int team;
 };
 
 

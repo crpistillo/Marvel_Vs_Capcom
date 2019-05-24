@@ -312,20 +312,22 @@ CharacterServer * TCPServer::createServerCharacterFromCursor(ServerCursor *curso
     switch (cursor->getCharacterSelected()) {
         case SPIDERMAN:
             characterServer = new SpidermanServer(pos,
+                                                  constants.widthSpiderman,
                                                   constants.heightSpiderman,
                                                   constants.spidermanSobrante,
                                                   constants.spidermanAncho,
                                                   constants.screenWidth,
-                                                  nclient, 0);
+                                                  nclient);
             break;
 
         case WOLVERINE:
             characterServer = new WolverineServer(pos,
+                                                  constants.widthWolverine,
                                                   constants.heightWolverine,
                                                   constants.wolverineSobrante,
                                                   constants.wolverineAncho,
                                                   constants.screenWidth,
-                                                  nclient, 0);
+                                                  nclient);
     }
     return characterServer;
 }
@@ -380,9 +382,9 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket){
 }
 
 
-void TCPServer::runMenuPhase(){
+void TCPServer::runMenuPhase() {
 
-	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
+    //Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
 
     std::thread receiveFromClientThreads[numberOfPlayers];
     std::thread sendToClientThreats[numberOfPlayers];
@@ -391,46 +393,52 @@ void TCPServer::runMenuPhase(){
         receiveFromClientThreads[i] = std::thread(&TCPServer::receiveMenuActionsFromClient, this, i);
         receiveFromClientThreads[i].detach();
         sendToClientThreats[i] = std::thread(&TCPServer::sendCursorUpdaterToClient, this, i);
-        sendToClientThreats[i].detach();
     }
 
 
-	serverCursors[0] = new ServerCursor(97, 61);
-	serverCursors[1] = new ServerCursor(449, 353);
-	serverCursors[2] = new ServerCursor(97, 353);
-	serverCursors[3] = new ServerCursor(449, 353);
+    serverCursors[0] = new ServerCursor(97, 61);
+    serverCursors[1] = new ServerCursor(449, 353);
+    serverCursors[2] = new ServerCursor(97, 353);
+    serverCursors[3] = new ServerCursor(449, 353);
 
-	//Procesar eventos que vengan de incoming_menu_actions_queue
-	while(1){
-		cliente_menu_t *incoming_msg;
-		if(this->incoming_menu_actions_queue->empty_queue())
-			continue;
-		incoming_msg = this->incoming_menu_actions_queue->get_data();
-
-
-		/* Proceso el evento */
-		bool validMenuAction = processMenuAction(incoming_msg);
-
-		/* Solo envio información a los clientes si hubo algun cambio */
-		if(validMenuAction)
-			sendUpdaters(false);
+    //Procesar eventos que vengan de incoming_menu_actions_queue
+    while (1) {
+        cliente_menu_t *incoming_msg;
+        if (this->incoming_menu_actions_queue->empty_queue())
+            continue;
+        incoming_msg = this->incoming_menu_actions_queue->get_data();
 
 
-		incoming_menu_actions_queue->delete_data();
-		delete incoming_msg;
+        /* Proceso el evento */
+        bool validMenuAction = processMenuAction(incoming_msg);
 
-		/* Verifico si ya seleccionaron todos */
-		int charactersSelected = getNumberOfCharactersSelected();
-		if (charactersSelected == 2)
-			break;
-	}
+        /* Solo envio información a los clientes si hubo algun cambio */
+        if (validMenuAction)
+            sendUpdaters(false);
+
+
+        incoming_menu_actions_queue->delete_data();
+        delete incoming_msg;
+
+        /* Verifico si ya seleccionaron todos */
+        int charactersSelected = getNumberOfCharactersSelected();
+        if (charactersSelected == MAXPLAYERS)
+            break;
+
+    }
+
 
     for (int i = 0; i < numberOfPlayers; ++i) {
         receiveFromClientThreads[i].~thread();
-        sendToClientThreats[i].~thread();
     }
+    sendUpdaters(true);
 
-	sendUpdaters(true);
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        sendToClientThreats[i].join();
+        delete cursor_updater_queue[i];
+
+    }
+    delete incoming_menu_actions_queue;
 }
 
 void TCPServer::sendUpdaters(bool finalUpdater){
