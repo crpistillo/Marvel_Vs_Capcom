@@ -42,7 +42,6 @@ private:
     CharacterClient* firstCharacter;
     CharacterClient* secondCharacter;
     Controls* controls;
-    bool isChanging;
 
     void changeCharacter();
     void setCharacterToChanging();

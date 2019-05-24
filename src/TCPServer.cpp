@@ -344,8 +344,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket){
         socket->reciveData(buf, sizeof(menu_action_t));
         menu_action_t *accion = (menu_action_t *) buf;
 
-        cout << "Accion del cliente " + to_string(clientSocket) + " : "
-        		+ to_string(*accion) << endl;
 
         cliente_menu_t *msgMenuQueue = new cliente_menu_t;
         msgMenuQueue->cliente = clientSocket;
@@ -378,7 +376,6 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket){
         	break;
     }
 
-    cout << "Bye" << endl;
 }
 
 

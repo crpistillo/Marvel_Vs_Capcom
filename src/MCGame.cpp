@@ -168,12 +168,11 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient* client) {
     tcpClient->socketClient->reciveData(&numberOfPlayers,sizeof(int));
     cout << numberOfPlayers<< endl;
 
-    if(numberOfPlayers == 3){
+    if(numberOfPlayers == 2){
         if(tcpClient->nclient == 1)
             team = 0;
         else
             team = 1;
-
         isSending = true;
     }else{
         if(tcpClient->nclient < 3)
@@ -206,7 +205,7 @@ void MCGame::action_update() {
         handleEvents();
         if(!threadRunning)
             break;
-        if(!isActive())
+        if(isActive())
             continue;
         actions_t actionToSend = clientControls->getNewAction();
         tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
@@ -326,11 +325,11 @@ void MCGame::update() {
     tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
     character_updater_t* updater = (character_updater_t*) buf1;
 
-    if(updater->team == 1) {
-        players[0]->update(updater, &isSending, false);
+    if(updater->team == 0) {
+        players[0]->update(updater, &isSending, 0 == team);
         players[0]->load(m_Renderer, players[1]->getCentro());
     }else{
-        players[1]->update(updater, &isSending, false);
+        players[1]->update(updater, &isSending, 1 == team);
         players[1]->load(m_Renderer, players[0]->getCentro());
     }
 
@@ -414,6 +413,8 @@ void MCGame::sendMenuEvents(){
         if(menuActionToSend != INVALID_MENU_ACTION){
         	tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
+        if(menuActionToSend == ENTER)
+            return;
         fpsManager.stop();
 
     }
@@ -428,11 +429,10 @@ void MCGame::runMenu(){
 
 	//Crear hilo que manda eventos de SDL
     std::thread sendMenuEventsThread (&MCGame::sendMenuEvents, this);
-    sendMenuEventsThread.detach();
 	setCursors();
 	//Continuar con la ejecucion de MCGame::menu
 	menu();
-    sendMenuEventsThread.~thread();
+	sendMenuEventsThread.join();
 }
 
 void MCGame::menu() {

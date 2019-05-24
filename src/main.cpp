@@ -138,25 +138,32 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     }
 
     void* msj;
+    bool connectionMade = false;
+    int connection = -1;
     while(1){
-    	msj = tcpClient->receive(sizeof(connection_information_t));
-    	connection_information_t* buf = (connection_information_t*) msj;
-    	if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
-    		cout << "Connection not allowed. No more players. \n";
-    		return 0;
-    	}
 
-    	if(buf->status == READY){
-    	    cout<< "Sale" << endl;
+        msj = tcpClient->receive(sizeof(connection_information_t));
+        connection_information_t* buf = (connection_information_t*) msj;
+        if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
+            cout << "Connection not allowed. No more players. \n";
+            return 0;
+        }
+
+        if(buf->status == READY){
+            if(connection == -1)
+                tcpClient->nclient = buf->nconnections;
+
             break;
         }
-    	else{
-    		tcpClient->nclient = buf->nconnections;
-    		cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
-    	}
+        else{
+            if(connection == -1)
+                tcpClient->nclient = buf->nconnections;
+            connection = 0;
+            cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
+        }
     }
+    cout << tcpClient->nclient << endl;
 
-    CharacterClient* characterClient;//cambiar despues
 
     mcGame = new MCGame(config, ancho, alto, tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };
