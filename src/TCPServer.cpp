@@ -348,8 +348,9 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket){
         cliente_menu_t *msgMenuQueue = new cliente_menu_t;
         msgMenuQueue->cliente = clientSocket;
         msgMenuQueue->accion = *accion;
-
         this->incoming_menu_actions_queue->insert(msgMenuQueue);
+        if(*accion == ENTER)
+            return;
     }
 
 }
@@ -388,8 +389,8 @@ void TCPServer::runMenuPhase() {
 
     for (int i = 0; i < numberOfPlayers; ++i) {
         receiveFromClientThreads[i] = std::thread(&TCPServer::receiveMenuActionsFromClient, this, i);
-        receiveFromClientThreads[i].detach();
         sendToClientThreats[i] = std::thread(&TCPServer::sendCursorUpdaterToClient, this, i);
+        receiveFromClientThreads[i].detach();
     }
 
 
@@ -432,6 +433,7 @@ void TCPServer::runMenuPhase() {
 
     for (int i = 0; i < numberOfPlayers; ++i) {
         sendToClientThreats[i].join();
+        sendToClientThreats[i].~thread();
         delete cursor_updater_queue[i];
 
     }
