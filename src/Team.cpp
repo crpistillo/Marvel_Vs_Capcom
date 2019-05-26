@@ -45,6 +45,11 @@ void Team::changeCharacter(Socket** sockets)
 
 void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets) {
 
+	if(action == WINDOWCLOSED)
+	{
+		changeClient();
+	}
+
     if(action == CHANGEME && currentCharacter->currentAction == STANDING)
     {
         changeCharacter(sockets);

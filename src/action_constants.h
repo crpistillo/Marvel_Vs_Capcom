@@ -16,6 +16,7 @@
 #define MR 7
 #define WB 8
 #define CM 9
+#define WC 10
 
 #define R 0
 #define L 1
@@ -23,10 +24,11 @@
 
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
-    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM
+    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM, WINDOWCLOSED = WC
 } actions_t;
 
 typedef enum menuAction{
+	MENU_WINDOWCLOSED = 95,
     RIGHT = 96,
     LEFT = 97,
     ENTER = 98,

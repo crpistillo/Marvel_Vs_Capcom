@@ -159,7 +159,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
             if(connection == -1)
                 tcpClient->nclient = buf->nconnections;
             connection = 0;
-            cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
+            cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/4\n";
         }
     }
     cout << tcpClient->nclient << endl;

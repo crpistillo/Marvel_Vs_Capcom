@@ -112,6 +112,13 @@ bool Socket::reciveData(void* data, int size) {
     return true;
 }
 
+void Socket::closeFd()
+{
+	close(this->fd);
+}
 
-
+void Socket::closeConnection()
+{
+	shutdown(this->fd, SHUT_RDWR);
+}
 

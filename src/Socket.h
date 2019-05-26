@@ -43,6 +43,10 @@ public:
     bool reciveData(void* data, int size);
 
     bool receivingFromClient;
+
+    void closeFd();
+
+    void closeConnection();
 };
 
 

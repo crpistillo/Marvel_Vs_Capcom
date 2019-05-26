@@ -8,6 +8,7 @@
 #include <queue>
 #include <thread>
 #include "clienteMenu.h"
+#include<iostream>
 
 
 using namespace std;
@@ -313,10 +314,18 @@ void MCGame::clean() {
 }
 
 void MCGame::handleEvents() {
+	int windowsClosed = 0;
 	InputManager* inputManager = InputManager::getInstance();
     inputManager->update();
-    if(inputManager->quitRequested())
-        threadRunning = false;
+
+    if(inputManager->closeWindowRequested())
+    {
+    	windowsClosed++;
+    	//inputManager->windowHasntClosed();
+    	SDL_HideWindow(m_Window);
+    	//threadRunning = false;
+    }
+
 }
 
 void MCGame::update() {

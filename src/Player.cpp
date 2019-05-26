@@ -19,6 +19,14 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive) {
 
+	if(updater->action == WINDOWCLOSED)
+	{
+		m.lock();
+		if(becomeActive)
+	    *isSending = !(*isSending);
+		m.unlock();
+		//changeCharacter();  //send change character
+	}
 
     if(updater->action == CHANGEME){
         m.lock();

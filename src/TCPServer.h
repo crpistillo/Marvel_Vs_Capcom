@@ -39,6 +39,7 @@ private:
     int port;
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
+    int clientsConnected;
 
     pthread_t acceptThread;  //Identificador del thread que acepta conexiones
 
@@ -101,6 +102,8 @@ public:
     int numberOfPlayers;
 
     void updateModel();
+
+    void disconnectionsManager(incoming_msg_t *incoming_msg);
 };
 
 #endif
