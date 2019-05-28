@@ -45,7 +45,7 @@ void Team::changeCharacter(Socket** sockets)
 
 void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets) {
 
-	if(action == WINDOWCLOSED)
+	if(action == DISCONNECTEDCLIENT)
 	{
 		changeClient();
 	}
@@ -67,12 +67,10 @@ void Team::changeClient(){
     if(currentCharacter == firstCharacter)
     {
         this->clientActive = secondCharacter->clientNumber;
-        cout<<"Pasa lo primero"<<endl;
     }
 
     else
     {
-    	cout<<"Pasa lo segundo"<<endl;
     	this->clientActive = firstCharacter->clientNumber;
     }
 
@@ -98,14 +96,3 @@ bool Team::invalidIntroAction()
 			|| (action == WALKBACK) );
 }
 
-void Team::manageDisconection(int clientSocket)
-{
-	//si era el cliente activo
-	if(this->clientActive == clientSocket)
-	{
-		cout<<"Se desconecto el cliente activo: "<<clientSocket<<endl;
-		changeClient();
-		cout<<"El cliente activo pasa a ser el "<<clientActive<<endl;
-		//this->clientActive = secondCharacter->clientNumber;
-	}
-}

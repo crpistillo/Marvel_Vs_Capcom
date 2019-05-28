@@ -19,9 +19,8 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive) {
 
-	if(updater->action == WINDOWCLOSED)
+	if(updater->action == DISCONNECTEDCLIENT)
 	{
-		cout<<"se recibe cambio del lado client"<<endl;
 		m.lock();
 		if(becomeActive)
 	    *isSending = !(*isSending);

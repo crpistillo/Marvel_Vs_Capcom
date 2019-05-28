@@ -220,18 +220,11 @@ void TCPServer::receiveFromClient(int clientSocket) {
 		else if(rc == 0)
 		{
 			cout << "SE DESCONECTO EL CLIENTE "<< clientSocket << endl;
-			incoming_msg_t *msgQueue = new incoming_msg_t;
-			msgQueue->action = WINDOWCLOSED;
-			msgQueue->client = clientSocket;
-			this->incoming_msges_queue->insert(msgQueue);
-
 			this->manageDisconnection(clientSocket);
-// TENES QUE FIJARTE EN EL UPDATE, QUE SE FIJE SI EL CLIENTE ESTA ACTIVO O NO, Y HAGA EL CHANGE CLIENT EL!
 			socket->closeConnection();
 			socket->closeFd();
 			activeClients[clientSocket] = false;
 			clientsConnected--;
-
 			break;
 		}
 
@@ -245,13 +238,14 @@ void TCPServer::receiveFromClient(int clientSocket) {
 			msgQueue->client = clientSocket;
 			this->incoming_msges_queue->insert(msgQueue);
 
-			//cout<<"El cliente "<<clientSocket<<"esta activo"<<endl;
 
-			if(msgQueue-> action == WINDOWCLOSED)
+			if(msgQueue-> action == DISCONNECTEDCLIENT)
 			{
-				cout<<"Server is not receiving from socket "<<clientSocket +1 <<endl;
+				cout<<"SE DESCONECTO EL CLIENTE "<<clientSocket <<endl;
 				socket->closeConnection();
 				socket->closeFd();
+				activeClients[clientSocket] = false;
+				clientsConnected--;
 				break;
 			}
 
@@ -681,33 +675,6 @@ void TCPServer::updateModel() {
 	}
 }
 
-void TCPServer::disconnectionsManager(incoming_msg_t *incoming_msg)
-{
-	if(incoming_msg->client == 0 && incoming_msg->action == WINDOWCLOSED)
-	{
-		cout << "Se ha desconectado el cliente 1 " << endl;
-		this->clientsConnected--;
-	}
-
-	else if(incoming_msg->client == 1 && incoming_msg->action == WINDOWCLOSED)
-	{
-		cout << "Se ha desconectado el cliente 2 " << endl;
-		this->clientsConnected--;
-	}
-
-	else if(incoming_msg->client == 2 && incoming_msg->action == WINDOWCLOSED)
-	{
-		cout << "Se ha desconectado el cliente 3 " << endl;
-		this->clientsConnected--;
-	}
-
-	else if(incoming_msg->client == 3 && incoming_msg->action == WINDOWCLOSED)
-	{
-		cout << "Se ha desconectado el cliente 4 " << endl;
-		this->clientsConnected--;
-	}
-
-}
 
 void TCPServer::changeClient(int clientSocket)
 {
@@ -727,9 +694,14 @@ bool TCPServer::clientIsActive(int clientSocket)
 
 void TCPServer::manageDisconnection(int clientSocket)
 {
-	if(clientSocket == 0 || clientSocket == 1)
+	if(this->clientIsActive(clientSocket))
 	{
-		team[0]->manageDisconection(clientSocket);
+		incoming_msg_t *msgQueue = new incoming_msg_t;
+		msgQueue->action = DISCONNECTEDCLIENT;
+		msgQueue->client = clientSocket;
+		this->incoming_msges_queue->insert(msgQueue);
+		return;
 	}
-	else team[1]->manageDisconection(clientSocket);
+	else return;
+
 }

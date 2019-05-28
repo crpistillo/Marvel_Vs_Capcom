@@ -24,7 +24,7 @@ actions_t Controls::getNewAction() {
     {
         inputManager->windowNotClosing();
         std::cout<<"Detecta window closed"<<std::endl;
-        return WINDOWCLOSED;
+        return DISCONNECTEDCLIENT;
     }
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))

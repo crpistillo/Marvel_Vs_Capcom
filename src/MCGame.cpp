@@ -215,7 +215,7 @@ void MCGame::action_update() {
 		{
 			char aliveBit = 1;
 			tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
-			sleep(5); //lo manda cada 5 segundos
+			sleep(1); //lo manda cada 1 segundo //CAMBIA ALGO EN LA DESCONECCION ESTE TIEMPO??
 		}
 
         fpsManager.stop();
