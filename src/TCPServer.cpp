@@ -10,6 +10,7 @@
 #include <pthread.h>
 #include <thread>
 #include "Constants.h"
+#include <sys/poll.h>
 
 Constants constants;
 const int LEVEL_WIDTH = 3200;
@@ -29,6 +30,10 @@ TCPServer::TCPServer() {
 	this->serverSocket = new Socket();
 	this->newSockFd = new Socket();
 	this->clientsConnected = 4; //hardcodeo
+	for (int i = 0; i < 4; i++) //hardcodeo
+	{
+		this->activeClients[i] = true;
+	}
 
 }
 
@@ -187,32 +192,76 @@ int computeDistance(CharacterServer *character1, CharacterServer *character2) {
  * Son los denominados "thread lectura cliente x"*/
 void TCPServer::receiveFromClient(int clientSocket) {
 
+	struct pollfd fds[1];
+	memset(fds, 0, sizeof(fds));
+
+	fds[0].fd = clientsSockets[clientSocket]->get_fd();
+	fds[0].events = POLLIN;
+
+	int timeout = (7 * 1000);
+
 	//Recibo los argumentos y los casteo en el orden que corresponde.
 	Socket *socket = getClientSocket(clientSocket);
 
-	char buf[sizeof(actions_t)];
+	char bufAction[sizeof(actions_t)];
+	char bufAlive[sizeof(char)];
+
 	int receive = true;
-	while (receive) {
+	while (true) {
+
+		//Me fijo si el socket esta apto para recibir
+		int rc = poll(fds, 1, timeout);
 
 
-		socket->reciveData(buf, sizeof(actions_t));
-		actions_t *accion = (actions_t *) buf;
+		if(rc < 0)
+			cout << "Error en poll" << endl;
 
-		//Agrego elementos a la cola de mensajes entrantes
-		//void* action = malloc(sizeof(incoming_msg_t));
-		incoming_msg_t *msgQueue = new incoming_msg_t;
-		msgQueue->action = *accion;
-		msgQueue->client = clientSocket;
 
-		if(msgQueue-> action == WINDOWCLOSED)
+		else if(rc == 0)
 		{
-			receive = false;
-			cout<<"Server is not receiving from socket "<<clientSocket +1 <<endl;
+			cout << "SE DESCONECTO EL CLIENTE "<< clientSocket << endl;
+			incoming_msg_t *msgQueue = new incoming_msg_t;
+			msgQueue->action = WINDOWCLOSED;
+			msgQueue->client = clientSocket;
+			this->incoming_msges_queue->insert(msgQueue);
+
+			this->manageDisconnection(clientSocket);
+// TENES QUE FIJARTE EN EL UPDATE, QUE SE FIJE SI EL CLIENTE ESTA ACTIVO O NO, Y HAGA EL CHANGE CLIENT EL!
 			socket->closeConnection();
 			socket->closeFd();
+			activeClients[clientSocket] = false;
+			clientsConnected--;
+
+			break;
 		}
 
-		this->incoming_msges_queue->insert(msgQueue);
+		else if (rc > 0 && this->clientIsActive(clientSocket))
+		{
+			socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
+			actions_t *accion = (actions_t *) bufAction;
+			//Agrego elementos a la cola de mensajes entrantes
+			incoming_msg_t *msgQueue = new incoming_msg_t;
+			msgQueue->action = *accion;
+			msgQueue->client = clientSocket;
+			this->incoming_msges_queue->insert(msgQueue);
+
+			//cout<<"El cliente "<<clientSocket<<"esta activo"<<endl;
+
+			if(msgQueue-> action == WINDOWCLOSED)
+			{
+				cout<<"Server is not receiving from socket "<<clientSocket +1 <<endl;
+				socket->closeConnection();
+				socket->closeFd();
+				break;
+			}
+
+		}
+
+		else if (rc > 0)
+		{
+			socket->reciveData(bufAlive, sizeof(char));
+			cout << "El cliente -" << clientSocket << "- esta vivo!!!" << endl;
+		}
 
 	}
 }
@@ -555,7 +604,7 @@ void TCPServer::updateModel() {
 
 	while (this->clientsConnected != 0) {
 
-			cout<<"clientsConnected: "<<clientsConnected<<endl;
+			//cout<<"clientsConnected: "<<clientsConnected<<endl;
 
 				incoming_msg_t *incoming_msg;
 				if (incoming_msges_queue->empty_queue())
@@ -625,7 +674,7 @@ void TCPServer::updateModel() {
 					this->client_updater_queue[i]->insert(update[i]);
 				}
 
-		disconnectionsManager(incoming_msg);
+		//disconnectionsManager(incoming_msg);
 
 		incoming_msges_queue->delete_data();
 
@@ -660,6 +709,27 @@ void TCPServer::disconnectionsManager(incoming_msg_t *incoming_msg)
 
 }
 
+void TCPServer::changeClient(int clientSocket)
+{
+	if (clientSocket == 0 || clientSocket == 1)
+	{
+		team[0]->changeClient();
+	}
+	else
+		team[1]->changeClient();
+}
 
+bool TCPServer::clientIsActive(int clientSocket)
+{
+	return (team[0]->clientActive == clientSocket
+			|| team[1]->clientActive == clientSocket);
+}
 
-
+void TCPServer::manageDisconnection(int clientSocket)
+{
+	if(clientSocket == 0 || clientSocket == 1)
+	{
+		team[0]->manageDisconection(clientSocket);
+	}
+	else team[1]->manageDisconection(clientSocket);
+}

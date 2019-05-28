@@ -65,9 +65,17 @@ void Team::update(int distance, int posContrincante, actions_t action, Socket** 
 void Team::changeClient(){
 
     if(currentCharacter == firstCharacter)
+    {
         this->clientActive = secondCharacter->clientNumber;
+        cout<<"Pasa lo primero"<<endl;
+    }
+
     else
-        this->clientActive = firstCharacter->clientNumber;
+    {
+    	cout<<"Pasa lo segundo"<<endl;
+    	this->clientActive = firstCharacter->clientNumber;
+    }
+
 
 }
 
@@ -88,4 +96,16 @@ bool Team::invalidIntroAction()
 	return ( (action == JUMPINGLEFT) || (action == JUMPINGRIGHT) || (action == JUMPINGVERTICAL)
 			|| (action == DUCK) || (action == MOVINGRIGHT) || (action == MOVINGLEFT)
 			|| (action == WALKBACK) );
+}
+
+void Team::manageDisconection(int clientSocket)
+{
+	//si era el cliente activo
+	if(this->clientActive == clientSocket)
+	{
+		cout<<"Se desconecto el cliente activo: "<<clientSocket<<endl;
+		changeClient();
+		cout<<"El cliente activo pasa a ser el "<<clientActive<<endl;
+		//this->clientActive = secondCharacter->clientNumber;
+	}
 }

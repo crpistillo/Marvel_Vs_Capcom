@@ -207,9 +207,17 @@ void MCGame::action_update() {
         if(!threadRunning)
             break;
         if(isActive())
-            continue;
-        actions_t actionToSend = clientControls->getNewAction();
-        tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        {
+        	actions_t actionToSend = clientControls->getNewAction();
+        	tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        }
+        else //si no esta activo manda un alive bit
+		{
+			char aliveBit = 1;
+			tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
+			sleep(5); //lo manda cada 5 segundos
+		}
+
         fpsManager.stop();
 
     }

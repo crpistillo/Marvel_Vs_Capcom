@@ -19,7 +19,6 @@ private:
 	CharacterServer* secondCharacter; //personaje del clienteB
 	int sizeOfTeam;
 	bool isChanging;
-	int clientActive;
 	int teamNumber;
 
 	//numberOfClientsActive
@@ -45,6 +44,10 @@ public:
     CharacterServer* get_currentCharacter();
 
     bool invalidIntroAction();
+
+	int clientActive;
+
+	void manageDisconection(int clientSocket);
 
 };
 

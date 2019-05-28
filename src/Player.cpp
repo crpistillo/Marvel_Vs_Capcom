@@ -21,6 +21,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
 
 	if(updater->action == WINDOWCLOSED)
 	{
+		cout<<"se recibe cambio del lado client"<<endl;
 		m.lock();
 		if(becomeActive)
 	    *isSending = !(*isSending);

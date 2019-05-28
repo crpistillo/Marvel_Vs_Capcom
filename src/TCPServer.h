@@ -51,6 +51,8 @@ private:
     std::mutex menuClient;
     ServerCursor* serverCursors[MAXPLAYERS];
 
+    bool activeClients[MAXPLAYERS];
+
 
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
@@ -104,6 +106,12 @@ public:
     void updateModel();
 
     void disconnectionsManager(incoming_msg_t *incoming_msg);
+
+    void changeClient(int clientSocket);
+
+    bool clientIsActive(int clientSocket);
+
+    void manageDisconnection(int clientSocket);
 };
 
 #endif
