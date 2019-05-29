@@ -14,6 +14,10 @@ const int LAST_JUMPING_SPRITE = 21;
 const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
+const int LAST_PUNCH_SPRITE = 4;
+const int LAST_KICK_SPRITE = 2;
+const int LAST_PUNCH_DOWN_SPRITE = 3;
+const int LAST_KICK_DOWN_SPRITE = 2;
 
 
 
@@ -36,6 +40,10 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastJumpingRightSprite = LAST_JUMPING_RIGHT_SPRITE;
     lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
     lastIntroSprite = LAST_INTRO_SPRITE;
+    lastPunchSprite = LAST_PUNCH_SPRITE;
+    lastKickSprite = LAST_KICK_SPRITE;
+    lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
+    lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
 }
 
 
@@ -106,6 +114,18 @@ int SpidermanServer::getSpriteNumber(){
             break;
         case MAKINGINTRO:
             spriteNumber = currentIntroSprite;
+            break;
+        case PUNCH:
+            spriteNumber = currentPunchSprite;
+            break;
+        case KICK:
+            spriteNumber = currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            spriteNumber = currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            spriteNumber = currentKickDownSprite;
             break;
         default:
             spriteNumber = 0;

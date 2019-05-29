@@ -90,6 +90,10 @@ protected:
     int currentJumpingLeftSprite;
     int currentWalkbackSprite;
     int currentIntroSprite;
+    int currentPunchSprite;
+    int currentKickSprite;
+    int currentPunchDownSprite;
+    int currentKickDownSprite;
 
     int lastStandingSprite;
     int lastWalkingSprite;
@@ -98,6 +102,10 @@ protected:
     int lastJumpingRightSprite;
     int lastWalkbackSprite;
     int lastIntroSprite;
+    int lastPunchSprite;
+    int lastKickSprite;
+    int lastPunchDownSprite;
+    int lastKickDownSprite;
 
     unsigned int lastTime;
 
@@ -126,6 +134,14 @@ private:
     virtual void updateStand();
 
     virtual void makeIntro();
+
+    virtual void punch();
+
+    virtual void kick();
+
+    virtual void punchDown();
+
+    virtual void kickDown();
 
 
 };

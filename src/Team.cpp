@@ -82,5 +82,6 @@ bool Team::invalidIntroAction()
 
 	return ( (action == JUMPINGLEFT) || (action == JUMPINGRIGHT) || (action == JUMPINGVERTICAL)
 			|| (action == DUCK) || (action == MOVINGRIGHT) || (action == MOVINGLEFT)
-			|| (action == WALKBACK) );
+			|| (action == WALKBACK) || (action == PUNCH) || (action == KICK) || (action == PUNCHDOWN)
+			|| (action == KICKDOWN));
 }

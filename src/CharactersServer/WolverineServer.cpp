@@ -15,6 +15,10 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
+const int LAST_PUNCH_SPRITE = 2;
+const int LAST_KICK_SPRITE = 3;
+const int LAST_PUNCH_DOWN_SPRITE = 1;
+const int LAST_KICK_DOWN_SPRITE = 2;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
@@ -37,6 +41,10 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
     lastWalkbackSprite = LAST_WALKBACK_SPRITE;
     lastIntroSprite = LAST_INTRO_SPRITE;
+    lastPunchSprite = LAST_PUNCH_SPRITE;
+    lastKickSprite = LAST_KICK_SPRITE;
+    lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
+    lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
 }
 
 
@@ -127,6 +135,18 @@ int WolverineServer::getSpriteNumber(){
             break;
         case WALKBACK:
             spriteNumber = currentWalkbackSprite;
+            break;
+        case PUNCH:
+            spriteNumber = currentPunchSprite;
+            break;
+        case KICK:
+            spriteNumber = currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            spriteNumber = currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            spriteNumber = currentKickDownSprite;
             break;
         default:
             spriteNumber = 0;
