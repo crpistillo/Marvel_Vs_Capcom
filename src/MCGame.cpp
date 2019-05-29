@@ -550,7 +550,11 @@ void MCGame::setCursors() {
         }
         clientCursors[i] = new ClientCursor(posX, posY, this->m_Renderer);
     }
-    renderMenuBackImage(); //FALTA DIBUJAR LOS CURSORES EN SU LUGAR DEFAULT
+    renderMenuBackImage();
+
+    for(int i = 0; i < numberOfPlayers; i++)
+    		clientCursors[i]->render(this->m_Renderer);
+
     SDL_RenderPresent(m_Renderer);
 }
 
