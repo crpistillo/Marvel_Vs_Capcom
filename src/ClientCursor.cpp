@@ -14,7 +14,7 @@ ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer, bool isVi
 	this->posY = posY;
 	this->finalSelection = false;
 	this->clientRepresenting = -1;
-
+    this->visible = isVisible;
 	if(numberOfCursors == 0)
 		this->cursorTexture.loadFromFile(PATH_CURSOR_CLIENT_1, renderer);
 	else if(numberOfCursors == 1)

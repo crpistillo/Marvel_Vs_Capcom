@@ -545,8 +545,8 @@ void MCGame::setCursors() {
     }
     renderMenuBackImage();
 
-    for (int i = 0; i < numberOfPlayers; i++)
-        clientCursors[i]->render(this->m_Renderer);
+    for (auto & clientCursor : clientCursors)
+        clientCursor->render(this->m_Renderer);
 
     SDL_RenderPresent(m_Renderer);
 }
