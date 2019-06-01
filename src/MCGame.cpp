@@ -9,6 +9,7 @@
 #include <thread>
 #include "clienteMenu.h"
 #include<iostream>
+#include <sys/poll.h>
 
 
 using namespace std;
@@ -103,6 +104,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
+    isAlive = true;
 
     ///////////////////////JSON///////////////////
     this->config = config;
@@ -212,8 +214,7 @@ void MCGame::alive_bit()
 void MCGame::action_update() {
     FPSManager fpsManager(25);
 
-
-    while (true) {
+    while (true && isAlive) {
         fpsManager.start();
 
         handleEvents();
@@ -240,7 +241,8 @@ void MCGame::run() {
     std::thread alive(&MCGame::alive_bit, this);
 
     threadRunning = true;
-    while (m_Running) {
+    while (m_Running && isAlive)
+    {
         fpsManager.start();
 
         update();
@@ -344,20 +346,47 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
 
-    char buf1[sizeof(character_updater_t)];
-    tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
-    character_updater_t *updater = (character_updater_t *) buf1;
+	struct pollfd fds[1];
+	memset(fds, 0, sizeof(fds));
 
-    if (updater->team == 0) {
-        players[0]->update(updater, &isSending, 0 == team);
-        players[0]->load(m_Renderer, players[1]->getCentro());
-    } else {
-        players[1]->update(updater, &isSending, 1 == team);
-        players[1]->load(m_Renderer, players[0]->getCentro());
+	fds[0].fd = tcpClient->socketClient->get_fd();
+	fds[0].events = POLLIN;
+
+	int timeout = (7 * 1000);
+
+    int rc = poll(fds, 1, timeout);
+
+    if (rc < 0)
+    	cout << "Error en poll" << endl;
+
+
+    else if (rc == 0)
+    {
+    	isAlive = false;
+    	cout<<"El server se ha desconectado. Fin del juego. "<<endl;
+    	tcpClient->socketClient->closeFd();
+    	tcpClient->socketClient->closeConnection();
+    	exit(1);
     }
 
-    logger->log("Actualizacion parallax - MCGame.", DEBUG);
-    parallaxController->doParallax(&players[0], &players[1], logger);
+    else
+    {
+		char buf1[sizeof(character_updater_t)];
+		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+		character_updater_t *updater = (character_updater_t *) buf1;
+
+		if (updater->team == 0) {
+			players[0]->update(updater, &isSending, 0 == team);
+			players[0]->load(m_Renderer, players[1]->getCentro());
+		} else {
+			players[1]->update(updater, &isSending, 1 == team);
+			players[1]->load(m_Renderer, players[0]->getCentro());
+		}
+
+		logger->log("Actualizacion parallax - MCGame.", DEBUG);
+		parallaxController->doParallax(&players[0], &players[1], logger);
+	}
+
 }
 
 CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
@@ -421,7 +450,7 @@ void MCGame::sendMenuEvents() {
     FPSManager fpsManager(10);
     this->threadRunning = true;
 
-    while (true) {
+    while (isAlive) {
         fpsManager.start();
 
         handleEvents();
@@ -463,7 +492,7 @@ void MCGame::menu() {
     logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
 
 
-    while (m_Running) {
+    while (m_Running && isAlive) {
         fpsManager.start();
 
         updateMenu();

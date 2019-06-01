@@ -324,6 +324,7 @@ void TCPServer::runServer() {
 
     updateModel();
 
+
 }
 
 void TCPServer::sendSelectedCharacters() {

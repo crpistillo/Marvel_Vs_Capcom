@@ -55,6 +55,7 @@ private:
     json config;
     TCPClient *tcpClient;
     CharacterClient *characters[4];
+    bool isAlive;
 
     void loadGroundTextureByZIndex();
 
