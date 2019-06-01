@@ -9,7 +9,7 @@ string PATH_CURSOR_CLIENT_2 = "images/menu/cliente2.png";
 string PATH_CURSOR_CLIENT_3 = "images/menu/cliente3.png";
 string PATH_CURSOR_CLIENT_4 = "images/menu/cliente4.png";
 
-ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer){
+ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer, bool isVisible) {
 	this->posX = posX;
 	this->posY = posY;
 	this->finalSelection = false;
@@ -36,6 +36,8 @@ void ClientCursor::update(cursor_updater_t* updater){
 }
 
 void ClientCursor::render(SDL_Renderer* mRenderer){
+    if(!visible)
+        return;
 
 	if(this->finalSelection)
 		switch(this->clientRepresenting){

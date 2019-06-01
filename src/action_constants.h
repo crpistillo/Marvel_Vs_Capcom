@@ -28,6 +28,7 @@ typedef enum actions {
 } actions_t;
 
 typedef enum menuAction{
+    SELECT = 94,
 	MENU_WINDOWCLOSED = 95,
     RIGHT = 96,
     LEFT = 97,
