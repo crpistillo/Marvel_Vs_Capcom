@@ -43,16 +43,16 @@ void ClientCursor::render(SDL_Renderer* mRenderer){
 	if(this->finalSelection)
 		switch(this->clientRepresenting){
 		case 0:
-			this->cursorTexture.loadFromFile("images/menu/cliente1v.png", mRenderer);
+			this->cursorTexture.loadFromFile("images/menu/nuevos_cursores/jugador1v.png", mRenderer);
 			break;
 		case 1:
-			this->cursorTexture.loadFromFile("images/menu/cliente2v.png", mRenderer);
+			this->cursorTexture.loadFromFile("images/menu/nuevos_cursores/jugador2v.png", mRenderer);
 			break;
 		case 2:
-			this->cursorTexture.loadFromFile("images/menu/cliente3v.png", mRenderer);
+			this->cursorTexture.loadFromFile("images/menu/nuevos_cursores/jugador3v.png", mRenderer);
 			break;
 		case 3:
-			this->cursorTexture.loadFromFile("images/menu/cliente4v.png", mRenderer);
+			this->cursorTexture.loadFromFile("images/menu/nuevos_cursores/jugador4v.png", mRenderer);
 			break;
 		}
 
