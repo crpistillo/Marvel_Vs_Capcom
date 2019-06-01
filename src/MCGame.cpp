@@ -488,7 +488,7 @@ void MCGame::renderMenu() {
 
     renderMenuBackImage();
 
-    for (int i = 0; i < numberOfPlayers; i++)
+    for (int i = 0; i < 4; i++)
         clientCursors[i]->render(this->m_Renderer);
 
     logger->log("Fin render Menu.", DEBUG);
