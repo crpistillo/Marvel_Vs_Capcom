@@ -436,27 +436,59 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
 }
 
 void TCPServer::runMenuTwoPlayers(){
-	runMenuFourPlayers(); //Aca habria que diferenciar la logica de un menu de 2 jugadores
+
+	//Los dos cursores del primer cliente
+	serverCursors[0] = new ServerCursor(97, 61);
+	serverCursors[1] = new ServerCursor(449, 61);
+
+	//Los dos cursores del segundo cliente
+	serverCursors[2] = new ServerCursor(97, 353);
+	serverCursors[3] = new ServerCursor(449, 353);
+
+	ServerCursor* actualCursorFirstClient = serverCursors[0];
+	ServerCursor* actualCursorSecondClient = serverCursors[2];
+
+	//Procesar eventos que vengan de incoming_menu_actions_queue
+	while (this->clientsConnected != 0) {
+		cliente_menu_t *incoming_msg;
+		if (this->incoming_menu_actions_queue->empty_queue())
+			continue;
+		incoming_msg = this->incoming_menu_actions_queue->get_data();
+
+		/* Proceso el evento */
+
+		bool validMenuAction;
+
+		if(incoming_msg->cliente == 0)
+			validMenuAction = actualCursorFirstClient->update(incoming_msg);
+		if(incoming_msg->cliente == 1)
+			validMenuAction = actualCursorSecondClient->update(incoming_msg);
+
+
+		/* Solo envio información a los clientes si hubo algun cambio */
+		if (validMenuAction)
+			sendUpdaters(false);
+
+
+
+		incoming_menu_actions_queue->delete_data();
+		delete incoming_msg;
+
+		/* Verifico si ya seleccionaron todos */
+		int charactersSelected = getNumberOfCharactersSelected();
+		if (charactersSelected == MAXPLAYERS)
+			break;
+
+	}
 }
 
 void TCPServer::runMenuFourPlayers(){
-	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
 
-		std::thread receiveFromClientThreads[numberOfPlayers];
-		std::thread sendToClientThreads[numberOfPlayers];
+	serverCursors[0] = new ServerCursor(97, 61);
+	serverCursors[1] = new ServerCursor(449, 61);
+	serverCursors[2] = new ServerCursor(97, 353);
+	serverCursors[3] = new ServerCursor(449, 353);
 
-		for (int i = 0; i < numberOfPlayers; ++i) {
-			receiveFromClientThreads[i] = std::thread(
-					&TCPServer::receiveMenuActionsFromClient, this, i);
-			sendToClientThreads[i] = std::thread(
-					&TCPServer::sendCursorUpdaterToClient, this, i);
-			receiveFromClientThreads[i].detach();
-		}
-
-		serverCursors[0] = new ServerCursor(97, 61);
-		serverCursors[1] = new ServerCursor(449, 353);
-		serverCursors[2] = new ServerCursor(97, 353);
-		serverCursors[3] = new ServerCursor(449, 353);
 
 		//Procesar eventos que vengan de incoming_menu_actions_queue
 		while (this->clientsConnected != 0) {
@@ -482,27 +514,41 @@ void TCPServer::runMenuFourPlayers(){
 
 		}
 
-		for (int i = 0; i < numberOfPlayers; ++i) {
-			receiveFromClientThreads[i].~thread();
-		}
-		sendUpdaters(true);
-
-		for (int i = 0; i < numberOfPlayers; ++i) {
-			sendToClientThreads[i].join();
-			sendToClientThreads[i].~thread();
-			delete cursor_updater_queue[i];
-
-		}
-		delete incoming_menu_actions_queue;
-
 }
 
 void TCPServer::runMenuPhase() {
+
+	//Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
+
+	std::thread receiveFromClientThreads[numberOfPlayers];
+	std::thread sendToClientThreads[numberOfPlayers];
+
+	for (int i = 0; i < numberOfPlayers; ++i) {
+		receiveFromClientThreads[i] = std::thread(
+				&TCPServer::receiveMenuActionsFromClient, this, i);
+		sendToClientThreads[i] = std::thread(
+				&TCPServer::sendCursorUpdaterToClient, this, i);
+		receiveFromClientThreads[i].detach();
+	}
 
 	if(this->numberOfPlayers == 4)
 		runMenuFourPlayers();
 	else
 		runMenuTwoPlayers();
+
+
+	for (int i = 0; i < numberOfPlayers; ++i) {
+		receiveFromClientThreads[i].~thread();
+	}
+	sendUpdaters(true);
+
+	for (int i = 0; i < numberOfPlayers; ++i) {
+		sendToClientThreads[i].join();
+		sendToClientThreads[i].~thread();
+		delete cursor_updater_queue[i];
+
+	}
+	delete incoming_menu_actions_queue;
 
 }
 
