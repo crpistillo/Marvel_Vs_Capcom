@@ -415,7 +415,7 @@ void orderBackgroundsByZIndex(json* backgroundList){
 
 void MCGame::sendMenuEvents(){
 
-    FPSManager fpsManager(25);
+    FPSManager fpsManager(10);
     this->threadRunning = true;
 
     while (true){
