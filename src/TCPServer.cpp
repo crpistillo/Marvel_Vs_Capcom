@@ -573,7 +573,7 @@ void TCPServer::sendUpdaters(bool finalUpdater) {
 
 	menuClient.lock();
 	for (int i = 0; i < numberOfPlayers; ++i) {
-		for (int j = 0; j < numberOfPlayers; j++) {
+		for (int j = 0; j < MAXPLAYERS; j++) {
 			this->cursor_updater_queue[i]->insert(update[j]);
 		}
 	}
