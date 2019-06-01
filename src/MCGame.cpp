@@ -222,18 +222,6 @@ void MCGame::action_update() {
             tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
         }
 
-        std::thread alive(&MCGame::alive_bit, this);
-
-        /*else //si no esta activo manda un alive bit
-        {
-        	std::thread alive(&MCGame::alive_bit, this);
-
-            char aliveBit = 1;
-            tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
-            sleep(1); //lo manda cada 1 segundo //CAMBIA ALGO EN LA DESCONECCION ESTE TIEMPO??
-        }*/
-
-        alive.join();
         fpsManager.stop();
 
     }
@@ -247,6 +235,8 @@ void MCGame::run() {
     logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
     std::thread send(&MCGame::action_update, this);
+    std::thread alive(&MCGame::alive_bit, this);
+
     threadRunning = true;
     while (m_Running) {
         fpsManager.start();
@@ -256,7 +246,9 @@ void MCGame::run() {
 
         fpsManager.stop();
     }
+    alive.join();
     send.join();
+
 
     logger->log("Fin de Bucle MCGame-run.", DEBUG);
 }
