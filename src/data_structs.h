@@ -3,6 +3,7 @@
 
 
 #include "action_constants.h"
+#include <string>
 
 typedef enum connection_status{
 	NOT_READY = 0,
@@ -83,6 +84,15 @@ typedef struct {
 	bool menuTerminated;
 	bool visible;
 } cursor_updater_t;
+
+
+typedef struct {
+	std::string ip;
+	bool isActive;
+} ip_status_t;
+
+
+
 
 
 #endif /* MVC_DATA_STRUCTS */

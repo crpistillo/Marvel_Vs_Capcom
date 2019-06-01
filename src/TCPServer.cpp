@@ -108,7 +108,12 @@ void TCPServer::receive() {
             continue;
 
         }
+
         clientsSockets[numberOfConnections]->fd = newSockFd->fd;
+
+
+        iplist[numberOfConnections].ip = inet_ntoa(clientAddress.sin_addr);
+        iplist[numberOfConnections].isActive = true;
         numberOfConnections++;
 
         //Aceptar conexiones pero seguir esperando por mas
@@ -121,22 +126,75 @@ void TCPServer::receive() {
                 clientsSockets[i]->sendData(&to_send,
                                             sizeof(connection_information_t));
 
-                //send(clientsSockets[i], &to_send, sizeof(connection_information_t),0 );
             }
-        }
-
-            //Maximo de clientes alcanzado, se inicia el juego.
-        else {
+        }else {
             to_send.status = READY;
             to_send.nconnections = numberOfConnections;
             for (int i = 0; i < numberOfConnections; i++) {
                 clientsSockets[i]->sendData(&to_send,
                                             sizeof(connection_information_t));
+                //Mapiar de alguna forma el socket;
+                break;
             }
         }
-        str = inet_ntoa(clientAddress.sin_addr);
-        cout << str + "\n";
 
+    }
+
+    reconnections();
+
+}
+
+void TCPServer::reconnections() {
+
+    while(1){
+
+        //TODO Make as fun
+        struct sockaddr_in clientAddress;
+
+        newSockFd->acceptConnection(this->serverSocket, &clientAddress, logger);
+        logger->log("Nueva conexion aceptada", INFO);
+
+        connection_information_t to_send;
+
+        socklen_t clientAddress_len = sizeof(clientAddress);
+
+        if (numberOfConnections == numberOfPlayers) {
+
+            to_send.nconnections = numberOfConnections;
+            to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
+
+            send(newSockFd->get_fd(), &to_send,
+                 sizeof(connection_information_t), 0);
+            close(newSockFd->get_fd());
+            continue;
+
+        }
+
+
+
+        int socketToReconnect = -1;
+        string str = inet_ntoa(clientAddress.sin_addr);
+
+
+        for (int i = 0; i < numberOfPlayers; ++i) {
+            if(iplist[i].ip == str && !iplist[i].isActive){
+                socketToReconnect = i;
+            }
+        }
+
+        if(socketToReconnect == -1)
+            continue;
+
+
+        clientsSockets[socketToReconnect]->fd = newSockFd->fd;
+
+        //check server status
+
+
+
+        //mandar personajes o cursores
+
+        //crear los hilos nuevos
     }
 }
 
@@ -207,8 +265,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     char bufAlive[sizeof(char)];
 
     int receive = true;
-    while (true)
-    {
+    while (true) {
 
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
@@ -218,42 +275,39 @@ void TCPServer::receiveFromClient(int clientSocket) {
             cout << "Error en poll" << endl;
 
 
-        else if (rc == 0)
-        {
+        else if (rc == 0) {
             cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
             this->manageDisconnection(clientSocket);
             socket->closeConnection();
             socket->closeFd();
             activeClients[clientSocket] = false;
+            iplist[clientSocket].isActive = false;
             clientsConnected--;
+            m.lock();
+            numberOfConnections--;
+            m.unlock();
             break;
-        }
-
-        else if (rc > 0 && this->clientIsActive(clientSocket))
-        {
-			socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
-			actions_t *accion = (actions_t *) bufAction;
-			//Agrego elementos a la cola de mensajes entrantes
-			incoming_msg_t *msgQueue = new incoming_msg_t;
-			msgQueue->action = *accion;
-			msgQueue->client = clientSocket;
-			this->incoming_msges_queue->insert(msgQueue);
+        } else if (rc > 0 && this->clientIsActive(clientSocket)) {
+            socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
+            actions_t *accion = (actions_t *) bufAction;
+            //Agrego elementos a la cola de mensajes entrantes
+            incoming_msg_t *msgQueue = new incoming_msg_t;
+            msgQueue->action = *accion;
+            msgQueue->client = clientSocket;
+            this->incoming_msges_queue->insert(msgQueue);
 
 
-            if (msgQueue->action == DISCONNECTEDCLIENT)
-            {
+            if (msgQueue->action == DISCONNECTEDCLIENT) {
                 cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
                 socket->closeConnection();
                 socket->closeFd();
                 activeClients[clientSocket] = false;
+                iplist[clientSocket].isActive = false;
                 clientsConnected--;
                 break;
             }
 
-        }
-
-        else if (rc > 0)
-        {
+        } else if (rc > 0) {
             socket->reciveData(bufAlive, sizeof(char));
             cout << "El cliente -" << clientSocket << "- esta vivo!!!" << endl;
         }
@@ -324,7 +378,6 @@ void TCPServer::runServer() {
 
     updateModel();
 
-
 }
 
 void TCPServer::sendSelectedCharacters() {
@@ -354,10 +407,8 @@ void TCPServer::sendSelectedCharacters() {
         nclient++;
     }
 
-    int teamSize = numberOfPlayers/2;
-
-    team[0] = new Team(characters[0], characters[1], teamSize, 1);
-    team[1] = new Team(characters[2], characters[3], teamSize, 2);
+    team[0] = new Team(characters[0], characters[1], 1, 1);
+    team[1] = new Team(characters[2], characters[3], 1, 2);
 
     for (auto &builder : builders) {
         for (int i = 0; i < numberOfPlayers; ++i) {
@@ -688,16 +739,8 @@ void TCPServer::updateModel() {
 
 
         if (team[teamToUpdate]->get_currentCharacter()->isStanding()
-            && incoming_msg->action == CHANGEME)
-        {
-
-        	if(team[teamToUpdate]->sizeOfTeam == 1)
-        	{
-        		update_msg->action = CHANGEME_ONEPLAYER;
-        	}
-        	else
-        		update_msg->action = CHANGEME;
-
+            && incoming_msg->action == CHANGEME) {
+            update_msg->action = CHANGEME;
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[teamToUpdate]->get_currentCharacter()->getPosX(),
                                        incoming_msg->action, this->clientsSockets);
@@ -736,6 +779,9 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
+
+            if(!iplist[i].isActive) //TODO lock
+                continue;
             std::unique_lock<std::mutex> lock(m);
             this->client_updater_queue[i]->insert(update[i]);
         }
@@ -745,6 +791,14 @@ void TCPServer::updateModel() {
         incoming_msges_queue->delete_data();
 
     }
+}
+
+
+void TCPServer::changeClient(int clientSocket) {
+    if (clientSocket == 0 || clientSocket == 1) {
+        team[0]->changeClient();
+    } else
+        team[1]->changeClient();
 }
 
 bool TCPServer::clientIsActive(int clientSocket) {
@@ -783,3 +837,5 @@ void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
         *enemyTeam = 0;
     }
 }
+
+

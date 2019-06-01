@@ -57,6 +57,9 @@ private:
     void runMenuTwoPlayers();
 
 
+    ip_status_t iplist[4];
+
+
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
 
@@ -117,6 +120,8 @@ public:
     void manageDisconnection(int clientSocket);
 
     void getTeams(int *teamToUpdate, int *enemyTeam, int client);
+
+    void reconnections();
 };
 
 #endif
