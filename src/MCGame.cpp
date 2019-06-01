@@ -199,11 +199,13 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
 void MCGame::alive_bit()
 {
-	while(!isActive())
+	while(true)
 	{
-		char aliveBit = 1;
+	    if(!isActive())
+            continue;
+	    char aliveBit = 1;
 		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
-		sleep(5); //lo manda cada 5 segundos
+		sleep(1); //lo manda cada 5 segundos
 	}
 }
 
