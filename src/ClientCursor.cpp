@@ -31,6 +31,7 @@ ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer, bool isVi
 void ClientCursor::update(cursor_updater_t* updater){
 	this->posX = updater->posX;
 	this->clientRepresenting = updater->cliente;
+	this->visible = updater->visible;
 	//this->posY = updater->posY; Creo que esta posicion es fija, no necesita actualizarse
 	this->finalSelection = updater->finalSelection;
 }

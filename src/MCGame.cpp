@@ -408,7 +408,7 @@ void orderBackgroundsByZIndex(json *backgroundList) {
 
 void MCGame::sendMenuEvents() {
     int charactersSelected = 0;
-    FPSManager fpsManager(25);
+    FPSManager fpsManager(5);
     this->threadRunning = true;
 
     while (true) {
@@ -420,6 +420,7 @@ void MCGame::sendMenuEvents() {
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
         if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0){
             menuActionToSend = SELECT;
+            charactersSelected++;
         }
         if (menuActionToSend != INVALID_MENU_ACTION) {
             tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
