@@ -201,7 +201,7 @@ void MCGame::alive_bit()
 {
 	while(true)
 	{
-	    if(!isActive())
+	    if(isActive())
             continue;
 	    char aliveBit = 1;
 		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
