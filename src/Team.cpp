@@ -37,8 +37,6 @@ void Team::changeCharacter(Socket** sockets)
     currentCharacter->positionUpdate(&updateX);
 
     sockets[currentCharacter->clientNumber]->receivingFromClient = true;
-    this->clientActive = currentCharacter->clientNumber;
-    this->currentCharacter->currentAction = MAKINGINTRO;
 
 }
 
@@ -52,6 +50,11 @@ void Team::update(int distance, int posContrincante, actions_t action, Socket** 
     if(action == CHANGEME && currentCharacter->currentAction == STANDING)
     {
         changeCharacter(sockets);
+        if(sizeOfTeam == 2)
+        {
+        	this->clientActive = currentCharacter->clientNumber;
+        }
+        this->currentCharacter->currentAction = MAKINGINTRO;
         isChanging = true;
     }
 
