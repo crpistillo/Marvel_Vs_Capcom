@@ -553,7 +553,7 @@ void MCGame::setCursors() {
 
 bool MCGame::isActive() {
     std::unique_lock<std::mutex> lock(m);
-    return isSending;
+    return isSending || numberOfPlayers == 2;
 }
 
 

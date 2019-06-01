@@ -115,6 +115,8 @@ public:
     bool clientIsActive(int clientSocket);
 
     void manageDisconnection(int clientSocket);
+
+    void getTeams(int *teamToUpdate, int *enemyTeam, int client);
 };
 
 #endif
