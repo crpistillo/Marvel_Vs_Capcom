@@ -197,6 +197,15 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
                                       SCREEN_WIDTH);
 }
 
+void MCGame::alive_bit()
+{
+	while(!isActive())
+	{
+		char aliveBit = 1;
+		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
+		sleep(5); //lo manda cada 5 segundos
+	}
+}
 
 void MCGame::action_update() {
     FPSManager fpsManager(25);
@@ -211,13 +220,20 @@ void MCGame::action_update() {
         if (isActive()) {
             actions_t actionToSend = clientControls->getNewAction();
             tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-        } else //si no esta activo manda un alive bit
+        }
+
+        std::thread alive(&MCGame::alive_bit, this);
+
+        /*else //si no esta activo manda un alive bit
         {
+        	std::thread alive(&MCGame::alive_bit, this);
+
             char aliveBit = 1;
             tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
             sleep(1); //lo manda cada 1 segundo //CAMBIA ALGO EN LA DESCONECCION ESTE TIEMPO??
-        }
+        }*/
 
+        alive.join();
         fpsManager.stop();
 
     }
