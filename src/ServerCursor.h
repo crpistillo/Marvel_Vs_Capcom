@@ -7,7 +7,7 @@
 class ServerCursor{
 public:
 
-	ServerCursor(int posX, int posY);
+	ServerCursor(int posX, int posY, bool isVisible);
 
 	bool moveRight();
 	bool moveLeft();
@@ -20,10 +20,13 @@ public:
 	bool getFinalSelection();
 	character_number_t getCharacterSelected();
 
+	void setVisible(bool condition);
+
 
 private:
 
 	int posX, posY;
+	bool visible;
 	bool finalSelection;
 	character_number_t characterSelected;
 

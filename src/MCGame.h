@@ -62,6 +62,8 @@ private:
 
     void action_update();
 
+    void alive_bit();
+
     int myCharacter;
     std::mutex m;
 

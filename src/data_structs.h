@@ -81,6 +81,7 @@ typedef struct {
 	int posY;
 	bool finalSelection;
 	bool menuTerminated;
+	bool visible;
 } cursor_updater_t;
 
 
