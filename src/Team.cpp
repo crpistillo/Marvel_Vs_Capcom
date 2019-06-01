@@ -42,12 +42,11 @@ void Team::changeCharacter(Socket** sockets)
 
 }
 
-
 void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets) {
 
 	if(action == DISCONNECTEDCLIENT)
 	{
-		changeClient();
+		disconnectClient();
 	}
 
     if(action == CHANGEME && currentCharacter->currentAction == STANDING)
@@ -56,13 +55,14 @@ void Team::update(int distance, int posContrincante, actions_t action, Socket** 
         isChanging = true;
     }
 
+
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
 
     currentCharacter->update(distance, posContrincante, action);
 }
 
-void Team::changeClient(){
+void Team::disconnectClient(){
 
     if(currentCharacter == firstCharacter)
     {
@@ -74,6 +74,7 @@ void Team::changeClient(){
     	this->clientActive = firstCharacter->clientNumber;
     }
 
+    this->sizeOfTeam = 1;
 
 }
 

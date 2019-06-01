@@ -28,7 +28,15 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
 		//changeCharacter();  //send change character
 	}
 
-    if(updater->action == CHANGEME){
+	else if(updater->action == CHANGEME_ONEPLAYER)
+	{
+		cout<<"Se detecta changeme_onePlayer"<<endl;
+		changeCharacter();
+		setCharacterToChanging();
+	}
+
+	else if(updater->action == CHANGEME)
+    {
         m.lock();
         if(becomeActive)
             *isSending = !(*isSending);
@@ -36,6 +44,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         changeCharacter();  //send change character
         setCharacterToChanging();
     }
+
     currentCharacter->update(updater);
     Logger* logger = Logger::getInstance();
     InputManager* inputManager = InputManager::getInstance();

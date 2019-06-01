@@ -16,7 +16,8 @@
 #define MR 7
 #define WB 8
 #define CM 9
-#define DC 10
+#define CMO 10
+#define DC 11
 
 #define R 0
 #define L 1
@@ -24,7 +25,7 @@
 
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
-    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM, DISCONNECTEDCLIENT = DC
+    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM, CHANGEME_ONEPLAYER = CMO, DISCONNECTEDCLIENT = DC
 } actions_t;
 
 typedef enum menuAction{

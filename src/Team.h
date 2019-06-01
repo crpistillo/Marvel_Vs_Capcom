@@ -17,13 +17,14 @@ private:
 	CharacterServer* currentCharacter;//me falta ver esto y otras cosas
 	CharacterServer* firstCharacter; //personaje del clienteA (cada personaje tiene un cliente)
 	CharacterServer* secondCharacter; //personaje del clienteB
-	int sizeOfTeam;
 	bool isChanging;
 	int teamNumber;
 
 	//numberOfClientsActive
 
 public:
+	int sizeOfTeam;
+
 	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize, int teamNumber);
 
 	void changePlayer(); //cambia el character y el cliente del mismo
@@ -33,11 +34,12 @@ public:
 	CharacterServer* typeOfCharacter(string personaje);
 
 	void changeCharacter(Socket** sockets);
+
 	void setCharacterToChanging();
 
     void update(int distance, int posContrincante, actions_t action, Socket** sockets);
 
-    void changeClient();
+    void disconnectClient();
 
     void makeUpdater(character_updater_t* builder);
 
