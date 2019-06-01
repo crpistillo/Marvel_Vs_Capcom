@@ -4,10 +4,10 @@
 using namespace std;
 
 unsigned int numberOfCursors = 0;
-string PATH_CURSOR_CLIENT_1 = "images/menu/cliente1.png";
-string PATH_CURSOR_CLIENT_2 = "images/menu/cliente2.png";
-string PATH_CURSOR_CLIENT_3 = "images/menu/cliente3.png";
-string PATH_CURSOR_CLIENT_4 = "images/menu/cliente4.png";
+string PATH_CURSOR_CLIENT_1 = "images/menu/nuevos_cursores/jugador1.png";
+string PATH_CURSOR_CLIENT_2 = "images/menu/nuevos_cursores/jugador2.png";
+string PATH_CURSOR_CLIENT_3 = "images/menu/nuevos_cursores/jugador3.png";
+string PATH_CURSOR_CLIENT_4 = "images/menu/nuevos_cursores/jugador4.png";
 
 ClientCursor::ClientCursor(int posX, int posY, SDL_Renderer *renderer, bool isVisible) {
 	this->posX = posX;
