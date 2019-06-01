@@ -2,9 +2,10 @@
 
 using namespace std;
 
-ServerCursor::ServerCursor(int posX, int posY){
+ServerCursor::ServerCursor(int posX, int posY, bool isVisible){
 	this->posX = posX;
 	this->posY = posY;
+	this->visible = isVisible;
 	this->finalSelection = false;
 	this->characterSelected = NOT_VALID;
 }
@@ -68,6 +69,9 @@ bool ServerCursor::update(cliente_menu_t* action_msg){
 	case ENTER:
 		return this->selectCharacter();
 
+	case SELECT:
+		return this->selectCharacter();
+
 	default:
 		return false;
 	}
@@ -86,6 +90,10 @@ void ServerCursor::makeMenuUpdater(cursor_updater_t* updater){
 	updater->posX = this->posX;
 	updater->posY = this->posY;
 	updater->finalSelection = this->finalSelection;
+	updater->visible = this->visible;
 }
 
+void ServerCursor::setVisible(bool condition){
+	this->visible = condition;
+}
 

@@ -438,12 +438,12 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
 void TCPServer::runMenuTwoPlayers(){
 
 	//Los dos cursores del primer cliente
-	serverCursors[0] = new ServerCursor(97, 61);
-	serverCursors[1] = new ServerCursor(449, 61);
+	serverCursors[0] = new ServerCursor(97, 61, true);
+	serverCursors[1] = new ServerCursor(449, 61, false);
 
 	//Los dos cursores del segundo cliente
-	serverCursors[2] = new ServerCursor(97, 353);
-	serverCursors[3] = new ServerCursor(449, 353);
+	serverCursors[2] = new ServerCursor(97, 353, true);
+	serverCursors[3] = new ServerCursor(449, 353, false);
 
 	ServerCursor* actualCursorFirstClient = serverCursors[0];
 	ServerCursor* actualCursorSecondClient = serverCursors[2];
@@ -464,6 +464,14 @@ void TCPServer::runMenuTwoPlayers(){
 		if(incoming_msg->cliente == 1)
 			validMenuAction = actualCursorSecondClient->update(incoming_msg);
 
+		if(actualCursorFirstClient->getFinalSelection()){
+			actualCursorFirstClient = serverCursors[1];
+			actualCursorFirstClient->setVisible(true);
+		}
+		if(actualCursorSecondClient->getFinalSelection()){
+			actualCursorSecondClient = serverCursors[3];
+			actualCursorSecondClient->setVisible(true);
+		}
 
 		/* Solo envio información a los clientes si hubo algun cambio */
 		if (validMenuAction)
@@ -484,10 +492,10 @@ void TCPServer::runMenuTwoPlayers(){
 
 void TCPServer::runMenuFourPlayers(){
 
-	serverCursors[0] = new ServerCursor(97, 61);
-	serverCursors[1] = new ServerCursor(449, 61);
-	serverCursors[2] = new ServerCursor(97, 353);
-	serverCursors[3] = new ServerCursor(449, 353);
+	serverCursors[0] = new ServerCursor(97, 61, true);
+	serverCursors[1] = new ServerCursor(449, 61, true);
+	serverCursors[2] = new ServerCursor(97, 353, true);
+	serverCursors[3] = new ServerCursor(449, 353, true);
 
 
 		//Procesar eventos que vengan de incoming_menu_actions_queue
