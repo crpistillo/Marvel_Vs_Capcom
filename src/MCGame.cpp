@@ -408,7 +408,7 @@ void orderBackgroundsByZIndex(json *backgroundList) {
 
 void MCGame::sendMenuEvents() {
     int charactersSelected = 0;
-    FPSManager fpsManager(5);
+    FPSManager fpsManager(10);
     this->threadRunning = true;
 
     while (true) {
@@ -498,7 +498,7 @@ void MCGame::renderMenu() {
 
 void MCGame::renderMenuBackImage() {
     Texture menuBackImage;
-    menuBackImage.loadFromFile("images/menu/menu.png", this->m_Renderer);
+    menuBackImage.loadFromFile("images/menu/nuevos_cursores/nuevoMenu.png", this->m_Renderer);
     menuBackImage.render(0, 0, 800, 600, m_Renderer);
 }
 
