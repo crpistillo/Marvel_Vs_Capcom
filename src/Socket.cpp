@@ -96,7 +96,7 @@ bool Socket::connectTo(string address, int listenPort) {
 }
 
 bool Socket::sendData(void *to_send, size_t size) {
-    send(this->fd, to_send, size, NULL);
+    send(this->fd, to_send, size, 0);
 }
 
 bool Socket::reciveData(void* data, int size) {

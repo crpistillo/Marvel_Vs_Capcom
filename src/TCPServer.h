@@ -53,6 +53,9 @@ private:
 
     bool activeClients[MAXPLAYERS];
 
+    void runMenuFourPlayers();
+    void runMenuTwoPlayers();
+
 
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente

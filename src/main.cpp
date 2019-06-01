@@ -71,7 +71,7 @@ int run_server(int cantArg, char *dirJson, int port, int numOfPlayers) {
 	json config;
 
 	if(cantArg != 5){
-		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 4.", ERROR);
+		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 5.", ERROR);
 		logger->finishSession();
 		return -1;
 	}
