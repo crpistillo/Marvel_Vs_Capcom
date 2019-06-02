@@ -71,6 +71,8 @@ private:
 
     void renderMenuBackImage();
 
+    SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
 
 protected:
     int SCREEN_WIDTH;
@@ -123,6 +125,8 @@ public:
 
     bool isSending;
     int team;
+
+    void barra(int posX, int posY, int width, int height, float health, SDL_Color FGColor, SDL_Color BGColor);
 };
 
 
