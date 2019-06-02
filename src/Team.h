@@ -55,7 +55,7 @@ public:
 
     void setSize(int size);
 
-    void setClientNumberToCurrentClient();
+    void setClientNumberToCurrentClient(Socket** sockets);
 };
 
 

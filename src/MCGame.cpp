@@ -376,10 +376,10 @@ void MCGame::update() {
 
 		//cambiar false x updater->client
 		if (updater->team == 0) {
-            players[0]->update(updater, &isSending, 0 == team, false);
+            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-            players[1]->update(updater, &isSending, 1 == team, false);
+            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient);
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 

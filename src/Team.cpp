@@ -108,6 +108,8 @@ void Team::setSize(int size)
 	this->sizeOfTeam = size;
 }
 
-void Team::setClientNumberToCurrentClient(){
-	this->clientActive = currentCharacter->clientNumber;
+void Team::setClientNumberToCurrentClient(Socket** sockets){
+    sockets[currentCharacter->clientNumber]->receivingFromClient = false;
+    this->clientActive = currentCharacter->clientNumber;
+    sockets[currentCharacter->clientNumber]->receivingFromClient = true;
 }

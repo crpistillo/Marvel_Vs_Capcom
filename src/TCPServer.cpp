@@ -211,8 +211,11 @@ void TCPServer::reconnections() {
             team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
             numberOfConnections++;
 
-            team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient();
+            team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient(clientsSockets);
             m.unlock();
+
+            cout << socketToReconnect << this->clientIsActive(socketToReconnect)<< "LALALLALALALALALA"<< endl;
+
 
         }
 
@@ -330,6 +333,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
+            cout << clientSocket << this->clientIsActive(clientSocket)<< endl;
             m.lock();
             this->incoming_msges_queue->insert(msgQueue);
             m.unlock();
