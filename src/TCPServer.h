@@ -24,6 +24,7 @@
 #include "Queue/Queue.h"
 #include "ServerCursor.h"
 #include <mutex>
+#include <thread>
 
 
 using namespace std;
@@ -34,6 +35,9 @@ using namespace std;
 class TCPServer
 {
 private:
+
+    std::thread receiveFromClientThreads[MAXPLAYERS];
+    std::thread sendToClientThreads[MAXPLAYERS];
 	Team* team[2];
     int numberOfConnections;
     int port;

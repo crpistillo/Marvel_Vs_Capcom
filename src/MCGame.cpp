@@ -170,9 +170,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     //////////////////////////////////////////////////////////////////////
 
-
-    tcpClient->socketClient->reciveData(&numberOfPlayers, sizeof(int));
-    cout << numberOfPlayers << endl;
+    this->numberOfPlayers = 4;//tcpClient->numberOfPlayers;
 
     if (numberOfPlayers == 2) {
         if (tcpClient->nclient == 1)
@@ -186,7 +184,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
         else
             team = 1;
         isSending = tcpClient->nclient == 1 || tcpClient->nclient == 3;
-
     }
 
 

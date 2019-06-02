@@ -91,11 +91,20 @@ typedef struct {
 	bool isActive;
 } ip_status_t;
 
+
+
 typedef enum game_instance{
 	BEGINNING = 9,
 	MENU_PHASE = 10,
 	FIGHT_PHASE = 11,
 } game_instance_t;
+
+typedef struct {
+    game_instance_t instance;
+    int client;
+    int players;
+
+} initializer_t;
 
 
 

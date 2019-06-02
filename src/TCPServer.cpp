@@ -105,7 +105,13 @@ void TCPServer::receive() {
         numberOfConnections++;
 
 
-        clientsSockets[numberOfConnections]->sendData(&server_state, sizeof(server_state));
+        initializer_t* initializer = new initializer_t;
+        initializer->instance = server_state;
+        initializer->client = numberOfConnections;
+        initializer->players = numberOfPlayers;
+
+        clientsSockets[numberOfConnections - 1]->sendData(initializer, sizeof(initializer_t));
+
         //Aceptar conexiones pero seguir esperando por mas
         if (numberOfConnections != numberOfPlayers) {
 
@@ -135,7 +141,7 @@ void TCPServer::receive() {
 
 void TCPServer::reconnections() {
 
-    while(1){
+    while(1) {
 
         //TODO Make as fun
         struct sockaddr_in clientAddress;
@@ -160,18 +166,17 @@ void TCPServer::reconnections() {
         }
 
 
-
         int socketToReconnect = -1;
         string str = inet_ntoa(clientAddress.sin_addr);
 
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-            if(iplist[i].ip == str && !iplist[i].isActive){
+            if (iplist[i].ip == str && !iplist[i].isActive) {
                 socketToReconnect = i;
             }
         }
 
-        if(socketToReconnect == -1)
+        if (socketToReconnect == -1)
             continue;
 
 
@@ -182,18 +187,24 @@ void TCPServer::reconnections() {
         cout << str << endl;
         cout << socketToReconnect << endl;
 
-        int client_number = socketToReconnect + 1;
+
+        initializer_t initializer;
+        initializer.client = socketToReconnect + 1;
+        initializer.players = numberOfPlayers;
+        initializer.instance = server_state;
+
         if(this->server_state == FIGHT_PHASE){
-            clientsSockets[socketToReconnect]->sendData(&server_state,sizeof(game_instance_t));
-
-            clientsSockets[socketToReconnect]->sendData(&numberOfPlayers,sizeof(int));
-
-            clientsSockets[socketToReconnect]->sendData(&client_number,sizeof(int));
-
+            clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
+            m.lock();
+            iplist[socketToReconnect].isActive = true;
+            m.unlock();
+
+          //  receiveFromClientThreads[socketToReconnect] = std::thread(&TCPServer::receiveFromClient, this, socketToReconnect);
+            //receiveFromClientThreads[socketToReconnect].detach();
         }
 
-        //mandar personajes o cursores
+        //mandar cursores
 
         //crear los hilos nuevos
     }
@@ -281,7 +292,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
     int receive = true;
     while (true) {
-
+        if(!iplist[clientSocket].isActive) // lock
+            continue;
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
 
@@ -301,7 +313,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             m.lock();
             numberOfConnections--;
             m.unlock();
-            break;
         } else if (rc > 0 && this->clientIsActive(clientSocket)) {
             socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
             actions_t *accion = (actions_t *) bufAction;
@@ -321,7 +332,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 numberOfConnections--;
 
                 clientsConnected--;
-                break;
             }
 
         } else if (rc > 0) {
@@ -370,21 +380,18 @@ void TCPServer::sendToClient(int clientSocket) {
 void TCPServer::runServer() {
 
     std::thread receive(&TCPServer::receive, this);
+    receive.detach();
     while (getNumberOfConections() != numberOfPlayers) //Espera hasta que se conecten MAXPLAYERS
         continue;
 
-    cout << "Numero de jugadores alcanzado! \n";
 
-    for (int j = 0; j < numberOfPlayers; ++j) {
-        clientsSockets[j]->sendData(&numberOfPlayers, sizeof(int));
-    }
+    cout << "Numero de jugadores alcanzado! \n";
 
     this->server_state = MENU_PHASE;
     runMenuPhase();  //Pongo al servidor en modo "Menu"
     sendSelectedCharacters();
 
-    std::thread receiveFromClientThreads[numberOfPlayers];
-    std::thread sendToClientThreads[numberOfPlayers];
+
 
 
     this->server_state = FIGHT_PHASE;

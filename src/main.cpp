@@ -29,7 +29,6 @@ Logger *Logger::instance = 0;
 
 TCPServer* tcpServer;
 TCPClient* tcpClient;
-MCGame* mcGame;
 
 
 int run_server(int cantArg, char *dirJson, int port, int numOfPlayers);
@@ -132,6 +131,10 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 
     /////////////////
 
+    tcpClient->ancho = ancho;
+    tcpClient->alto = alto;
+    tcpClient->config = config;
+
     if(!tcpClient->setup(host, port)) {                  //MCGame tendria que tener el tcpClient
         cout << "Failed to setup Client" << endl;
         return -1;
@@ -139,57 +142,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 
     tcpClient->run();
 
-    game_instance_t instance;
-    tcpClient->socketClient->reciveData(&instance, sizeof(game_instance_t));
 
-    if(instance == BEGINNING){
-
-    	tcpClient->runFromBeginning();
-
-
-        void* msj;
-        int connection = -1;
-        while(1){
-
-            msj = tcpClient->receive(sizeof(connection_information_t));
-            connection_information_t* buf = (connection_information_t*) msj;
-            if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
-                cout << "Connection not allowed. No more players. \n";
-                return 0;
-            }
-
-            if(buf->status == READY){
-                if(connection == -1)
-                    tcpClient->nclient = buf->nconnections;
-
-                break;
-            }
-            else{
-                if(connection == -1)
-                    tcpClient->nclient = buf->nconnections;
-                connection = 0;
-                cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/4\n";
-            }
-        }
-        cout << tcpClient->nclient << endl;
-    }
-    else if(instance == MENU_PHASE)
-    	tcpClient->runFromMenu();
-    else if(instance == FIGHT_PHASE)
-    	tcpClient->runFromFight();
-
-
-
-    mcGame = new MCGame(config, ancho, alto, tcpClient);
-    mcGame->camera = { 0, 0, ancho, alto };
-    mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
-
-
-    mcGame->runMenu();
-    mcGame->loadSelectedCharacters();
-    mcGame->loadInitialTextures();
-    mcGame->render();
-    mcGame->run();
     return 0;
 }
 

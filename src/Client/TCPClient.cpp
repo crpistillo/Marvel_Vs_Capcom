@@ -4,6 +4,10 @@
 
 #include "TCPClient.h"
 #include "../tools/logger/Logger.h"
+#include "../data_structs.h"
+#include "../MCGame.h"
+
+MCGame* mcGame;
 
 
 TCPClient::TCPClient() {
@@ -53,5 +57,69 @@ void TCPClient::exit() {
     //delete socketClient;
 }
 
+void TCPClient::run() {
+
+    initializer_t initializer;
+    socketClient->reciveData(&initializer,sizeof(initializer_t));
+
+    nclient = initializer.client;
+    numberOfPlayers = initializer.players;
+
+
+    mcGame = new MCGame(config, ancho, alto, this);
+    mcGame->camera = { 0, 0, ancho, alto };
+    mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
+
+    if(initializer.instance == BEGINNING)
+        runFromBeginning();
+    else if(initializer.instance == MENU_PHASE)
+        runFromMenu();
+    else if(initializer.instance == FIGHT_PHASE)
+        runFromFight();
+
+}
+
+void TCPClient::runFromBeginning() {
+    int connection = -1;
+    while(1){
+
+        connection_information_t buf;
+        socketClient->reciveData(&buf, sizeof(connection_information_t));
+
+        if(buf.status == NO_MORE_CONNECTIONS_ALLOWED){
+            cout << "Connection not allowed. No more players. \n";
+            return;
+        }
+
+        if(buf.status == READY)
+            break;
+        else
+            cout << "Not ready to launch. Players: " << buf.nconnections << "/" << numberOfPlayers << endl;
+    }
+
+    mcGame->runMenu();
+
+    runAfterMenu();
+
+}
+
+
+//PARA CAGONES COMO JUAMPI QUE CORREN
+void TCPClient::runFromFight() {
+    runAfterMenu();
+}
+
+void TCPClient::runFromMenu() {
+    //recibo las cosas
+    mcGame->runMenu();
+    runAfterMenu();
+}
+
+void TCPClient::runAfterMenu() const {
+    mcGame->loadSelectedCharacters();
+    mcGame->loadInitialTextures();
+    mcGame->render();
+    mcGame->run();
+}
 
 

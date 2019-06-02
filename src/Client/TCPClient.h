@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <vector>
 #include "../Socket.h"
+#include "../tools/json/ConfigFileParser/ConfigFileParser.h"
 #include <pthread.h>
 
 using namespace std;
@@ -42,6 +43,20 @@ public:
 
     Socket* socketClient;
 
+    void run();
+
+    void runFromBeginning();
+
+    void runFromFight();
+
+    void runFromMenu();
+
+    int ancho;
+    int alto;
+    json config;
+    int numberOfPlayers;
+
+    void runAfterMenu() const;
 };
 
 #endif
