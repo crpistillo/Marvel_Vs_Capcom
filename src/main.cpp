@@ -137,10 +137,16 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
         return -1;
     }
 
+    tcpClient->run();
+
     game_instance_t instance;
     tcpClient->socketClient->reciveData(&instance, sizeof(game_instance_t));
 
     if(instance == BEGINNING){
+
+    	tcpClient->runFromBeginning();
+
+
         void* msj;
         int connection = -1;
         while(1){
@@ -167,19 +173,23 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
         }
         cout << tcpClient->nclient << endl;
     }
+    else if(instance == MENU_PHASE)
+    	tcpClient->runFromMenu();
+    else if(instance == FIGHT_PHASE)
+    	tcpClient->runFromFight();
 
 
 
     mcGame = new MCGame(config, ancho, alto, tcpClient);
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
+
+
     mcGame->runMenu();
     mcGame->loadSelectedCharacters();
     mcGame->loadInitialTextures();
     mcGame->render();
     mcGame->run();
-
-
     return 0;
 }
 
