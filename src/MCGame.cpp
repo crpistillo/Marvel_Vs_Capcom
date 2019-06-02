@@ -558,8 +558,15 @@ void MCGame::loadSelectedCharacters() {
     }
 
     players[0] = new Player(characters[0], characters[1]);
-
     players[1] = new Player(characters[2], characters[3]);
+
+    int currentCharacter0;
+    int currentCharacter1;
+    tcpClient->socketClient->reciveData(&currentCharacter0, sizeof(int));
+    tcpClient->socketClient->reciveData(&currentCharacter1, sizeof(int));
+
+    players[0]->setCurrentCharacter(currentCharacter0);
+    players[1]->setCurrentCharacter(currentCharacter1);
 
 }
 
