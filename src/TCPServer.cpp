@@ -207,11 +207,12 @@ void TCPServer::reconnections() {
             incoming_msges_queue->insert(recon);
             m.unlock();
 
-
+            m.lock();
             team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
             numberOfConnections++;
 
             team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient();
+            m.unlock();
 
         }
 
@@ -340,7 +341,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 socket->closeFd();
                 activeClients[clientSocket] = false;
                 iplist[clientSocket].isActive = false;
+                m.lock();
                 numberOfConnections--;
+                m.unlock();
 
                 clientsConnected--;
             }
@@ -767,6 +770,8 @@ void TCPServer::updateModel() {
         incoming_msg = this->incoming_msges_queue->get_data();
 
         int distancia[2];
+
+        m.lock();
         distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
         distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
 
@@ -814,6 +819,7 @@ void TCPServer::updateModel() {
         update_msg->team = teamToUpdate;
         update_msg->currentSprite =
                 team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
+        m.unlock();
 
         character_updater_t *update[numberOfPlayers];
         for (int j = 0; j < numberOfPlayers; ++j) {
@@ -843,6 +849,7 @@ void TCPServer::updateModel() {
 
 
 bool TCPServer::clientIsActive(int clientSocket) {
+    std::unique_lock<std::mutex> lock(m);
     return (team[0]->clientActive == clientSocket
             || team[1]->clientActive == clientSocket);
 }
