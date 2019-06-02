@@ -133,9 +133,8 @@ void TCPServer::receive() {
             for (int i = 0; i < numberOfConnections; i++) {
                 clientsSockets[i]->sendData(&to_send,
                                             sizeof(connection_information_t));
-                //Mapiar de alguna forma el socket;
-                break;
             }
+            break;
         }
 
     }
@@ -190,7 +189,8 @@ void TCPServer::reconnections() {
 
         //check server status
 
-
+        cout << str << endl;
+        cout << socketToReconnect << endl;
 
         //mandar personajes o cursores
 
@@ -303,6 +303,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 socket->closeFd();
                 activeClients[clientSocket] = false;
                 iplist[clientSocket].isActive = false;
+                numberOfConnections--;
+
                 clientsConnected--;
                 break;
             }
@@ -793,13 +795,6 @@ void TCPServer::updateModel() {
     }
 }
 
-
-void TCPServer::changeClient(int clientSocket) {
-    if (clientSocket == 0 || clientSocket == 1) {
-        team[0]->changeClient();
-    } else
-        team[1]->changeClient();
-}
 
 bool TCPServer::clientIsActive(int clientSocket) {
     return (team[0]->clientActive == clientSocket

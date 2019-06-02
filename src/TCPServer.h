@@ -113,8 +113,6 @@ public:
 
     void disconnectionsManager(incoming_msg_t *incoming_msg);
 
-    void changeClient(int clientSocket);
-
     bool clientIsActive(int clientSocket);
 
     void manageDisconnection(int clientSocket);
