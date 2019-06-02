@@ -211,6 +211,8 @@ void TCPServer::reconnections() {
             team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
             numberOfConnections++;
 
+            team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient();
+
         }
 
     }

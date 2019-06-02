@@ -54,6 +54,8 @@ public:
     CharacterServer * get_secondCharacter();
 
     void setSize(int size);
+
+    void setClientNumberToCurrentClient();
 };
 
 

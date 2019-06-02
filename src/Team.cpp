@@ -107,3 +107,7 @@ void Team::setSize(int size)
 {
 	this->sizeOfTeam = size;
 }
+
+void Team::setClientNumberToCurrentClient(){
+	this->clientActive = currentCharacter->clientNumber;
+}
