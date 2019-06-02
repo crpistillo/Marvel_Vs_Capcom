@@ -170,7 +170,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     //////////////////////////////////////////////////////////////////////
 
-    this->numberOfPlayers = 4;//tcpClient->numberOfPlayers;
+    this->numberOfPlayers = tcpClient->numberOfPlayers;//tcpClient->numberOfPlayers;
 
     if (numberOfPlayers == 2) {
         if (tcpClient->nclient == 1)
@@ -199,11 +199,11 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
 void MCGame::alive_bit()
 {
-	while(true)
+	while(m_Running)
 	{
 	    if(isActive())
             continue;
-	    char aliveBit = 1;
+        int aliveBit = 1;
 		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
 		sleep(1); //lo manda cada 1 segundo
 	}
@@ -212,7 +212,7 @@ void MCGame::alive_bit()
 void MCGame::action_update() {
     FPSManager fpsManager(25);
 
-    while (true && isAlive) {
+    while (true) {
         fpsManager.start();
 
         handleEvents();
@@ -239,7 +239,7 @@ void MCGame::run() {
     std::thread alive(&MCGame::alive_bit, this);
 
     threadRunning = true;
-    while (m_Running && isAlive)
+    while (m_Running)
     {
         fpsManager.start();
 
@@ -373,11 +373,13 @@ void MCGame::update() {
 		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
 
+
+		//cambiar false x updater->client
 		if (updater->team == 0) {
-			players[0]->update(updater, &isSending, 0 == team);
+            players[0]->update(updater, &isSending, 0 == team, false);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-			players[1]->update(updater, &isSending, 1 == team);
+            players[1]->update(updater, &isSending, 1 == team, false);
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
@@ -387,7 +389,7 @@ void MCGame::update() {
 
 }
 
-CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
+CharacterClient *MCGame::characterBuild(character_builder_t *builder, int clientNumber) {
     CharacterClient *characterClient = nullptr;
 
     int pos;
@@ -404,7 +406,7 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
                                                   constants->heightSpiderman,
                                                   constants->spidermanSobrante,
                                                   constants->spidermanAncho,
-                                                  constants->screenWidth);
+                                                  constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexSpiderman);
             break;
 
@@ -415,7 +417,7 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder) {
                                                   constants->heightWolverine,
                                                   constants->wolverineSobrante,
                                                   constants->wolverineAncho,
-                                                  constants->screenWidth);
+                                                  constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexWolverine);
     }
     return characterClient;
@@ -541,12 +543,14 @@ void MCGame::renderMenuBackImage() {
 
 void MCGame::loadSelectedCharacters() {
 
+    int i = 1;
     for (auto &character : characters) {
         char buf1[sizeof(character_builder_t)];
         character_builder_t *builder;
         tcpClient->socketClient->reciveData(buf1, sizeof(character_builder_t));
         builder = (character_builder_t *) buf1;
-        character = characterBuild(builder);
+        character = characterBuild(builder, i);
+        i++;
     }
 
     players[0] = new Player(characters[0], characters[1]);

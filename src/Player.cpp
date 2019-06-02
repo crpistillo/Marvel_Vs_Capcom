@@ -9,36 +9,41 @@ const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
 Player::Player(CharacterClient *first, CharacterClient *second) {
-	Logger* logger = Logger::getInstance();
-	logger->log("Inicializacion de personajes para jugador.", DEBUG);
-	currentCharacter = first;
+    Logger *logger = Logger::getInstance();
+    logger->log("Inicializacion de personajes para jugador.", DEBUG);
+    currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
 }
 
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
 
-void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive) {
+    if (updater->action == RECONNECT) {
+        //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
+        //SI EL CURRENTCHARACTER -> CLIENTE
+        if (becomeActive) {
+            m.lock();
+            *isSending = (clientNumber == currentCharacter->clientNumber);
+            m.unlock();
+        }
 
-	if(updater->action == DISCONNECTEDCLIENT)
-	{
-		m.lock();
-		if(becomeActive)
-	    *isSending = !(*isSending);
-		m.unlock();
-		//changeCharacter();  //send change character
-	}
+        return;
+    }
 
-	else if(updater->action == CHANGEME_ONEPLAYER)
-	{
-		cout<<"Se detecta changeme_onePlayer"<<endl;
-		changeCharacter();
-		setCharacterToChanging();
-	}
 
-	else if(updater->action == CHANGEME)
-    {
+    if (updater->action == DISCONNECTEDCLIENT) {
         m.lock();
-        if(becomeActive)
+        if (becomeActive)
+            *isSending = !(*isSending);
+        m.unlock();
+        //changeCharacter();  //send change character
+    } else if (updater->action == CHANGEME_ONEPLAYER) {
+        cout << "Se detecta changeme_onePlayer" << endl;
+        changeCharacter();
+        setCharacterToChanging();
+    } else if (updater->action == CHANGEME) {
+        m.lock();
+        if (becomeActive)
             *isSending = !(*isSending);
         m.unlock();
         changeCharacter();  //send change character
@@ -46,17 +51,17 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     }
 
     currentCharacter->update(updater);
-    Logger* logger = Logger::getInstance();
-    InputManager* inputManager = InputManager::getInstance();
+    Logger *logger = Logger::getInstance();
+    InputManager *inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
 
 }
 
 
 void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
-	Logger* logger = Logger::getInstance();
-	logger->log("Renderizado de personaje - Render.", DEBUG);
-	currentCharacter->render(mRenderer, camX, camY, posContrincante);
+    Logger *logger = Logger::getInstance();
+    logger->log("Renderizado de personaje - Render.", DEBUG);
+    currentCharacter->render(mRenderer, camX, camY, posContrincante);
 }
 
 void Player::free() {
@@ -67,12 +72,11 @@ void Player::free() {
 void Player::changeCharacter() {
     /*En lugar de madarle al otro personaje la posicion en x del sprite,
      * se le envia el centro (justo la posicion del personaje donde debe estar)*/
-	int updateX = currentCharacter->getCentro();
+    int updateX = currentCharacter->getCentro();
 
-    if(currentCharacter == firstCharacter) {
-    	currentCharacter = secondCharacter;
-    }
-    else {
+    if (currentCharacter == firstCharacter) {
+        currentCharacter = secondCharacter;
+    } else {
         currentCharacter = firstCharacter;
     }
     currentCharacter->positionUpdate(&updateX);
@@ -80,8 +84,8 @@ void Player::changeCharacter() {
 
 }
 
-void Player::setCharacterToChanging(){
-	currentCharacter->startIntro();
+void Player::setCharacterToChanging() {
+    currentCharacter->startIntro();
 }
 
 void Player::loads(SDL_Renderer *pRenderer, int posContrincante) {
@@ -106,9 +110,8 @@ int Player::getCentro() {
     return currentCharacter->getCentro();
 }
 
-CharacterClient* Player::getCurrentCharacter()
-{
-	return this->currentCharacter;
+CharacterClient *Player::getCurrentCharacter() {
+    return this->currentCharacter;
 }
 
 Player::~Player() {
@@ -118,8 +121,8 @@ Player::~Player() {
 
 }
 
-int Player::getZIndex(){
-	return this->currentCharacter->getZIndex();
+int Player::getZIndex() {
+    return this->currentCharacter->getZIndex();
 
 }
 

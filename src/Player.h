@@ -17,7 +17,7 @@ class Player: public Renderizable {
 public:
     Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(character_updater_t *updater, bool *isSending, bool becomeActive);
+    void update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 
@@ -36,6 +36,8 @@ public:
     int getZIndex();
 
     void load(SDL_Renderer *pRenderer, int posContrincante);
+
+
 
 private:
     CharacterClient* currentCharacter;

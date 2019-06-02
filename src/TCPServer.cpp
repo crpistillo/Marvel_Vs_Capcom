@@ -16,12 +16,9 @@ Constants constants;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
-const int maxConnections = 4;
 const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
-
-pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 
 TCPServer::TCPServer() {
     this->logger = Logger::getInstance();
@@ -172,7 +169,7 @@ void TCPServer::reconnections() {
 
         for (int i = 0; i < numberOfPlayers; ++i) {
             if (iplist[i].ip == str && !iplist[i].isActive) {
-                socketToReconnect = i;
+                socketToReconnect = i; //debug case
             }
         }
 
@@ -194,19 +191,28 @@ void TCPServer::reconnections() {
         initializer.instance = server_state;
 
         if(this->server_state == FIGHT_PHASE){
+
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
             m.lock();
             iplist[socketToReconnect].isActive = true;
             m.unlock();
 
-          //  receiveFromClientThreads[socketToReconnect] = std::thread(&TCPServer::receiveFromClient, this, socketToReconnect);
-            //receiveFromClientThreads[socketToReconnect].detach();
+            incoming_msg_t* recon = new incoming_msg_t;
+
+            recon->action = RECONNECT;
+            recon->client = socketToReconnect + 1;
+
+            m.lock();
+            incoming_msges_queue->insert(recon);
+            m.unlock();
+
+
+            team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
+            numberOfConnections++;
+
         }
 
-        //mandar cursores
-
-        //crear los hilos nuevos
     }
 }
 
@@ -282,7 +288,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     fds[0].fd = clientsSockets[clientSocket]->get_fd();
     fds[0].events = POLLIN;
 
-    int timeout = (7 * 1000);
+    int timeout = (2 * 1000);
 
     //Recibo los argumentos y los casteo en el orden que corresponde.
     Socket *socket = getClientSocket(clientSocket);
@@ -292,8 +298,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
     int receive = true;
     while (true) {
-        if(!iplist[clientSocket].isActive) // lock
+        if(!iplist[clientSocket].isActive)  // lock
             continue;
+
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
 
@@ -320,7 +327,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
+            m.lock();
             this->incoming_msges_queue->insert(msgQueue);
+            m.unlock();
 
 
             if (msgQueue->action == DISCONNECTEDCLIENT) {
@@ -360,17 +369,18 @@ void TCPServer::sendToClient(int clientSocket) {
 
     while (1) {
 
+        if(!iplist[clientSocket].isActive) {
+            if (!client_updater_queue[clientSocket]->empty_queue())
+                client_updater_queue[clientSocket]->delete_data();
+            continue;
+        }
+
+
         character_updater_t *updater;
         if (client_updater_queue[clientSocket]->empty_queue())
             continue;
         updater = client_updater_queue[clientSocket]->get_data();
 
-        /*
-        if(updater->action == WINDOWCLOSED)
-        {
-            cout<<"Server is not sending to socket "<<clientSocket<<endl;
-            break;
-        }*/
 
         socket->sendData(updater, sizeof(character_updater_t));
         client_updater_queue[clientSocket]->delete_data();
@@ -808,6 +818,7 @@ void TCPServer::updateModel() {
             update[j] = new character_updater_t;
             update[j]->action = update_msg->action;
             update[j]->team = update_msg->team;
+            update[j]->client = incoming_msg->client;
             update[j]->posX = update_msg->posX;
             update[j]->posY = update_msg->posY;
             update[j]->currentSprite = update_msg->currentSprite;

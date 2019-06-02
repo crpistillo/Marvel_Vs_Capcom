@@ -76,14 +76,7 @@ void Team::disconnectClient(){
     {
     	this->clientActive = firstCharacter->clientNumber;
     }
-
     this->sizeOfTeam = 1;
-
-}
-
-void Team::makeUpdater(character_updater_t* updater){
-	updater->team = this->teamNumber;
-	this->currentCharacter->makeUpdaterStruct(updater);
 }
 
 CharacterServer* Team::get_currentCharacter()

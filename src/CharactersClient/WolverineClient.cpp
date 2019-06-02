@@ -16,7 +16,7 @@ const string FILE_EXTENSION = ".png";
 
 
 WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
-                                 int anchoPantalla)
+                                 int anchoPantalla, int numOfClient)
         : CharacterClient(
         PosX,
         556 - (height * 297 / 480),
@@ -25,7 +25,7 @@ WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int h
         false,
         width,
         height,
-        anchoPantalla) {
+        anchoPantalla, numOfClient) {
     if(secondaryColor)
         this->loader = new ImageLoader((Uint8)SECONDARY_RED, (Uint8)SECONDARY_GREEN,(Uint8) SECONDARY_BLUE);
     else

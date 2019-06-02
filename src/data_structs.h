@@ -43,6 +43,7 @@ typedef struct{
 	int currentSprite;
 	actions_t action;
 	int team;
+	int client;
 } character_updater_t;
 
 

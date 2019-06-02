@@ -104,7 +104,7 @@ public:
 
     SDL_Rect camera;
 
-    CharacterClient *characterBuild(character_builder_t *builder);
+    CharacterClient *characterBuild(character_builder_t *builder, int clientNumber);
 
 
     void loadInitialTextures();
