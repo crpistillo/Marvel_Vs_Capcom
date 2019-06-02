@@ -205,23 +205,48 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
 void MCGame::alive_bit()
 {
-	while(m_Running)
+    m.lock();
+    bool close = m_Running;
+    m.unlock();
+
+	while(close)
 	{
-	    if(isActive())
+	    if(isActive()){
+		    m.lock();
+		    close = m_Running;
+		    m.unlock();
+
             continue;
+	    }
         int aliveBit = 1;
 		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
 		sleep(1); //lo manda cada 1 segundo
+
+	    m.lock();
+	    close = m_Running;
+	    m.unlock();
 	}
+	cout << "Chau alive_bit" << endl;
 }
 
 void MCGame::action_update() {
     FPSManager fpsManager(25);
 
-    while (true) {
+    m.lock();
+    bool close = m_Running;
+    m.unlock();
+
+    while (close) {
         fpsManager.start();
 
+
         handleEvents();
+        actions_t actionToSend = clientControls->getNewAction();
+        if(actionToSend == DISCONNECTEDCLIENT){
+        	m.lock();
+        	m_Running = false;
+        	m.unlock();
+        }
         if (!threadRunning)
             break;
         if (isActive()) {
@@ -229,11 +254,16 @@ void MCGame::action_update() {
             tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
         }
 
+        m.lock();
+        close = m_Running;
+        m.unlock();
+
         fpsManager.stop();
 
     }
+    cout << "Chau action_update" << endl;
     std::unique_lock<std::mutex> lock(m);
-    m_Running = false;
+    //m_Running = false;
 }
 
 void MCGame::run() {
@@ -245,14 +275,22 @@ void MCGame::run() {
     std::thread alive(&MCGame::alive_bit, this);
 
     threadRunning = true;
-    while (m_Running)
+    m.lock();
+    bool close = m_Running;
+    m.unlock();
+
+    while (close)
     {
         fpsManager.start();
 
         update();
         render();
 
+        m.lock();
+        close = m_Running;
+        m.unlock();
         fpsManager.stop();
+
     }
     alive.join();
     send.join();
