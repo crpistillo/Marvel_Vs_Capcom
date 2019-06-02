@@ -11,6 +11,7 @@
 #include <thread>
 #include "Constants.h"
 #include <sys/poll.h>
+#include <csignal>
 
 Constants constants;
 const int LEVEL_WIDTH = 3200;
@@ -20,7 +21,19 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
+
+void signalHandler( int signum ) {
+    cout << "Interrupt signal (" << signum << ") received.\n";
+
+    // cleanup and close up stuff here
+    // terminate program
+    if(signum != SIGPIPE)
+        exit(signum);
+
+}
+
 TCPServer::TCPServer() {
+    signal(SIGPIPE, signalHandler);
     this->logger = Logger::getInstance();
     this->numberOfConnections = 0;
     this->port = 0;
@@ -32,6 +45,8 @@ TCPServer::TCPServer() {
     }
     server_state = BEGINNING;
 }
+
+
 
 typedef struct {
     TCPServer *server;
@@ -213,9 +228,6 @@ void TCPServer::reconnections() {
             team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient(clientsSockets);
             m.unlock();
 
-            cout << socketToReconnect << this->clientIsActive(socketToReconnect)<< "LALALLALALALALALA"<< endl;
-
-
         }
 
     }
@@ -331,7 +343,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
-            cout << clientSocket << this->clientIsActive(clientSocket)<< endl;
             m.lock();
             this->incoming_msges_queue->insert(msgQueue);
             m.unlock();
@@ -350,7 +361,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
         } else if (rc > 0) {
             socket->reciveData(bufAlive, sizeof(char));
-            cout << "El cliente -" << clientSocket << "- esta vivo!!!" << endl;
         }
 
     }
