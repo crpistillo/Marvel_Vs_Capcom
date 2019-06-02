@@ -61,6 +61,13 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
         }
     }
 
+    Texture* waiting = new Texture();
+    SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
+
+    waiting->loadFromFile("images/waiting.png", m_Renderer);
+    waiting->render(0, 0, 800, 600, m_Renderer);
+    SDL_RenderPresent(m_Renderer); // draw to the screen
     // everything inited successfully,
     return true;
 }
