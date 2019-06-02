@@ -130,5 +130,12 @@ void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
     currentCharacter->load(pRenderer, posContrincante);
 }
 
+void Player::setCurrentCharacter(int i) {
+    if(i == 0)
+        currentCharacter = firstCharacter;
+    else
+        currentCharacter = secondCharacter;
+}
+
 
 

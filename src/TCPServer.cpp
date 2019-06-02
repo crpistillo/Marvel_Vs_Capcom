@@ -222,6 +222,10 @@ void TCPServer::reconnections() {
             m.unlock();
 
             m.lock();
+            int currentTeam0 = team[0]->get_currentCharacterNumber();
+            int currentTeam1 = team[1]->get_currentCharacterNumber();
+            clientsSockets[socketToReconnect]->sendData(&currentTeam0, sizeof(int));
+            clientsSockets[socketToReconnect]->sendData(&currentTeam1, sizeof(int));
             team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
             numberOfConnections++;
 
@@ -467,6 +471,16 @@ void TCPServer::sendSelectedCharacters() {
             clientsSockets[i]->sendData(&builder, sizeof(character_builder_t));
         }
     }
+
+
+    int currentTeam0 = team[0]->get_currentCharacterNumber();
+    int currentTeam1 = team[1]->get_currentCharacterNumber();
+    for (int k = 0; k < numberOfPlayers ; ++k) {
+
+        clientsSockets[k]->sendData(&currentTeam0, sizeof(int));
+        clientsSockets[k]->sendData(&currentTeam1, sizeof(int));
+    }
+
 }
 
 //nclient = numero del cliente

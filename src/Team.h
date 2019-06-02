@@ -56,6 +56,8 @@ public:
     void setSize(int size);
 
     void setClientNumberToCurrentClient(Socket** sockets);
+
+    int get_currentCharacterNumber();
 };
 
 

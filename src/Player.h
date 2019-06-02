@@ -38,6 +38,7 @@ public:
     void load(SDL_Renderer *pRenderer, int posContrincante);
 
 
+    void setCurrentCharacter(int i);
 
 private:
     CharacterClient* currentCharacter;

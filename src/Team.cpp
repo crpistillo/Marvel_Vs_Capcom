@@ -103,3 +103,11 @@ void Team::setClientNumberToCurrentClient(Socket** sockets) {
 	this->clientActive = currentCharacter->clientNumber;
 	sockets[currentCharacter->clientNumber]->receivingFromClient = true;
 }
+
+int Team::get_currentCharacterNumber() {
+    if(currentCharacter == firstCharacter)
+        return 0;
+    else
+        return 1;
+
+}
