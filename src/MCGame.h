@@ -63,7 +63,7 @@ private:
 
     void action_update();
 
-    void alive_bit();
+    void alive_action();
 
     int myCharacter;
     std::mutex m;

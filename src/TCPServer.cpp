@@ -329,7 +329,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
         if (rc < 0)
             cout << "Error en poll" << endl;
 
-
         else if (rc == 0) {
             cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
             this->manageDisconnection(clientSocket);
@@ -340,31 +339,32 @@ void TCPServer::receiveFromClient(int clientSocket) {
             m.lock();
             numberOfConnections--;
             m.unlock();
-        } else if (rc > 0 && this->clientIsActive(clientSocket)) {
+
+        } else if (rc > 0) {
             socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
             actions_t *accion = (actions_t *) bufAction;
             //Agrego elementos a la cola de mensajes entrantes
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
-            m.lock();
-            this->incoming_msges_queue->insert(msgQueue);
-            m.unlock();
-
-
-            if (msgQueue->action == DISCONNECTEDCLIENT) {
-                cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
-                socket->closeConnection();
-                socket->closeFd();
-                activeClients[clientSocket] = false;
-                iplist[clientSocket].isActive = false;
-                m.lock();
-                numberOfConnections--;
-                m.unlock();
+			if (msgQueue->action == DISCONNECTEDCLIENT) {
+				cout << "SE DESCONECTO EL CLIENTE " << clientSocket
+						<< " POR CIERRE DE VENTANA" << endl;
+				this->manageDisconnection(clientSocket);
+				socket->closeConnection();
+				socket->closeFd();
+				activeClients[clientSocket] = false;
+				iplist[clientSocket].isActive = false;
+				m.lock();
+				numberOfConnections--;
+				m.unlock();
+			}
+            if(this->clientIsActive(clientSocket))
+            {
+            	m.lock();
+            	this->incoming_msges_queue->insert(msgQueue);
+            	m.unlock();
             }
-
-        } else if (rc > 0) {
-            socket->reciveData(bufAlive, sizeof(char));
         }
 
     }

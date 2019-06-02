@@ -45,7 +45,6 @@ void InputManager::update() {
 			{
 				std::cout<<"Se cerro la ventana "<<std::endl;
 				this->windowIsClosing = true;
-				//this->windowClosed = true;
 			}
 			break;
 
