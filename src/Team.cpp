@@ -109,3 +109,8 @@ CharacterServer * Team::get_secondCharacter() {
     return this->secondCharacter;
 }
 
+
+void Team::setSize(int size)
+{
+	this->sizeOfTeam = size;
+}

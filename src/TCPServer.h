@@ -127,6 +127,9 @@ public:
     void reconnections();
 
     void sendCharacterBuildersToSocket(int socketNumber);
+
+    int getTeamNumber(int client);
+
 };
 
 #endif

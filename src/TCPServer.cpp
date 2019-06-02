@@ -834,36 +834,51 @@ bool TCPServer::clientIsActive(int clientSocket) {
             || team[1]->clientActive == clientSocket);
 }
 
-void TCPServer::manageDisconnection(int clientSocket) {
-    if (this->clientIsActive(clientSocket)) {
+void TCPServer::manageDisconnection(int clientSocket)
+{
+    if (this->clientIsActive(clientSocket))
+    {
         incoming_msg_t *msgQueue = new incoming_msg_t;
         msgQueue->action = DISCONNECTEDCLIENT;
         msgQueue->client = clientSocket;
         this->incoming_msges_queue->insert(msgQueue);
-        return;
-    } else return;
-
+    }
+    else
+    {
+    	if (this->getTeamNumber(clientSocket) == 0)
+    		team[0]->setSize(1);
+    	else team[1]->setSize(1);
+    }
+    return;
 }
 
-void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
-    if (numberOfPlayers == 4) {
-        if (client == 0 || client == 1) { //team1 es de los clientes 1 y 2
-            *teamToUpdate = 0;
-            *enemyTeam = 1;
-        } else {
-            *teamToUpdate = 1;
-            *enemyTeam = 0;
-        }
-        return;
-    }
 
-    if(client == 0){
-        *teamToUpdate = 0;
-        *enemyTeam = 1;
-    } else{
-        *teamToUpdate = 1;
-        *enemyTeam = 0;
-    }
+void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
+	if (this->getTeamNumber(client) == 0) {
+		*teamToUpdate = 0;
+		*enemyTeam = 1;
+	} else {
+		*teamToUpdate = 1;
+		*enemyTeam = 0;
+	}
+	return;
+}
+
+int TCPServer::getTeamNumber(int client)
+{
+	if(numberOfPlayers == 4)
+	{
+		if (client == 0 || client == 1)
+			return 0;
+		else return 1;
+	}
+
+	else if (numberOfPlayers == 2)
+	{
+		if (client == 0)
+			return 0;
+		else return 1;
+	}
 }
 
 
