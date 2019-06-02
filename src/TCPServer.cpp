@@ -409,8 +409,10 @@ void TCPServer::sendSelectedCharacters() {
         nclient++;
     }
 
-    team[0] = new Team(characters[0], characters[1], 1, 1);
-    team[1] = new Team(characters[2], characters[3], 1, 2);
+    int teamSize = numberOfPlayers/2;
+
+    team[0] = new Team(characters[0], characters[1], teamSize, 1);
+    team[1] = new Team(characters[2], characters[3], teamSize, 2);
 
     for (auto &builder : builders) {
         for (int i = 0; i < numberOfPlayers; ++i) {
@@ -741,8 +743,16 @@ void TCPServer::updateModel() {
 
 
         if (team[teamToUpdate]->get_currentCharacter()->isStanding()
-            && incoming_msg->action == CHANGEME) {
-            update_msg->action = CHANGEME;
+            && incoming_msg->action == CHANGEME)
+        {
+
+        	if(team[teamToUpdate]->sizeOfTeam == 1)
+        	{
+        		update_msg->action = CHANGEME_ONEPLAYER;
+        	}
+        	else
+        		update_msg->action = CHANGEME;
+
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[teamToUpdate]->get_currentCharacter()->getPosX(),
                                        incoming_msg->action, this->clientsSockets);
@@ -782,8 +792,8 @@ void TCPServer::updateModel() {
 
         for (int i = 0; i < numberOfPlayers; ++i) {
 
-            if(!iplist[i].isActive) //TODO lock
-                continue;
+           // if(!iplist[i].isActive) //TODO lock
+                //continue;
             std::unique_lock<std::mutex> lock(m);
             this->client_updater_queue[i]->insert(update[i]);
         }
