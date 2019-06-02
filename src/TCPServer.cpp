@@ -26,7 +26,6 @@ TCPServer::TCPServer() {
     this->port = 0;
     this->serverSocket = new Socket();
     this->newSockFd = new Socket();
-    this->clientsConnected = 4; //hardcodeo
     for (int i = 0; i < 4; i++) //hardcodeo
     {
         this->activeClients[i] = true;
@@ -322,7 +321,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             socket->closeFd();
             activeClients[clientSocket] = false;
             iplist[clientSocket].isActive = false;
-            clientsConnected--;
             m.lock();
             numberOfConnections--;
             m.unlock();
@@ -348,8 +346,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 m.lock();
                 numberOfConnections--;
                 m.unlock();
-
-                clientsConnected--;
             }
 
         } else if (rc > 0) {
@@ -515,7 +511,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
     Socket *socket = getClientSocket(clientSocket);
 
-    while (this->clientsConnected != 0) {
+    while (1) {
 
         cursor_updater_t *updater;
         if (cursor_updater_queue[clientSocket]->empty_queue())
@@ -550,7 +546,7 @@ void TCPServer::runMenuTwoPlayers() {
     ServerCursor *actualCursorSecondClient = serverCursors[2];
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
-    while (this->clientsConnected != 0) {
+    while (1) {
         cliente_menu_t *incoming_msg;
         if (this->incoming_menu_actions_queue->empty_queue())
             continue;
@@ -599,7 +595,7 @@ void TCPServer::runMenuFourPlayers() {
 
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
-    while (this->clientsConnected != 0) {
+    while (1) {
         cliente_menu_t *incoming_msg;
         if (this->incoming_menu_actions_queue->empty_queue())
             continue;
@@ -764,9 +760,18 @@ void TCPServer::configJson(json config) {
 
 void TCPServer::updateModel() {
 
-    while (this->clientsConnected != 0) {
+    while (1) {
 
-        //cout<<"clientsConnected: "<<clientsConnected<<endl;
+		if (numberOfConnections == 0) {
+			m.lock();
+			cout
+					<< "Se han desconectado todos los clientes. Server se desconecta"
+					<< endl;
+			this->serverSocket->closeFd();
+			this->serverSocket->closeConnection();
+			m.unlock();
+			exit(1);
+		}
 
         incoming_msg_t *incoming_msg;
         if (incoming_msges_queue->empty_queue())

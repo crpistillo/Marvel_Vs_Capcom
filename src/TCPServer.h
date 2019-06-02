@@ -43,7 +43,6 @@ private:
     int port;
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
-    int clientsConnected;
     game_instance_t server_state;
 
     pthread_t acceptThread;  //Identificador del thread que acepta conexiones

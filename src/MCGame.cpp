@@ -104,7 +104,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
-    isAlive = true;
 
     ///////////////////////JSON///////////////////
     this->config = config;
@@ -357,10 +356,8 @@ void MCGame::update() {
     if (rc < 0)
     	cout << "Error en poll" << endl;
 
-
     else if (rc == 0)
     {
-    	isAlive = false;
     	cout<<"El server se ha desconectado. Fin del juego. "<<endl;
     	tcpClient->socketClient->closeFd();
     	tcpClient->socketClient->closeConnection();
@@ -450,7 +447,7 @@ void MCGame::sendMenuEvents() {
     FPSManager fpsManager(10);
     this->threadRunning = true;
 
-    while (isAlive) {
+    while (1) {
         fpsManager.start();
 
         handleEvents();
@@ -492,7 +489,7 @@ void MCGame::menu() {
     logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
 
 
-    while (m_Running && isAlive) {
+    while (m_Running) {
         fpsManager.start();
 
         updateMenu();
