@@ -92,7 +92,7 @@ typedef struct {
 } ip_status_t;
 
 typedef enum game_instance{
-	BEGGINING = 9,
+	BEGINNING = 9,
 	MENU_PHASE = 10,
 	FIGHT_PHASE = 11,
 } game_instance_t;

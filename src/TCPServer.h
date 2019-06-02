@@ -40,6 +40,7 @@ private:
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
     int clientsConnected;
+    game_instance_t server_state;
 
     pthread_t acceptThread;  //Identificador del thread que acepta conexiones
 
@@ -120,6 +121,8 @@ public:
     void getTeams(int *teamToUpdate, int *enemyTeam, int client);
 
     void reconnections();
+
+    void sendCharacterBuildersToSocket(int socketNumber);
 };
 
 #endif

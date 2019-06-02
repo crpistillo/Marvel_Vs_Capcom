@@ -51,6 +51,9 @@ public:
 
 	void manageDisconection(int clientSocket);
 
+    CharacterServer * get_firstCharacter();
+
+    CharacterServer * get_secondCharacter();
 };
 
 

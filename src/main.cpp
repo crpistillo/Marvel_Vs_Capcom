@@ -137,32 +137,37 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
         return -1;
     }
 
-    void* msj;
-    bool connectionMade = false;
-    int connection = -1;
-    while(1){
+    game_instance_t instance;
+    tcpClient->socketClient->reciveData(&instance, sizeof(game_instance_t));
 
-        msj = tcpClient->receive(sizeof(connection_information_t));
-        connection_information_t* buf = (connection_information_t*) msj;
-        if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
-            cout << "Connection not allowed. No more players. \n";
-            return 0;
-        }
+    if(instance == BEGINNING){
+        void* msj;
+        int connection = -1;
+        while(1){
 
-        if(buf->status == READY){
-            if(connection == -1)
-                tcpClient->nclient = buf->nconnections;
+            msj = tcpClient->receive(sizeof(connection_information_t));
+            connection_information_t* buf = (connection_information_t*) msj;
+            if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
+                cout << "Connection not allowed. No more players. \n";
+                return 0;
+            }
 
-            break;
+            if(buf->status == READY){
+                if(connection == -1)
+                    tcpClient->nclient = buf->nconnections;
+
+                break;
+            }
+            else{
+                if(connection == -1)
+                    tcpClient->nclient = buf->nconnections;
+                connection = 0;
+                cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/4\n";
+            }
         }
-        else{
-            if(connection == -1)
-                tcpClient->nclient = buf->nconnections;
-            connection = 0;
-            cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/4\n";
-        }
+        cout << tcpClient->nclient << endl;
     }
-    cout << tcpClient->nclient << endl;
+
 
 
     mcGame = new MCGame(config, ancho, alto, tcpClient);

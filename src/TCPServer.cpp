@@ -34,7 +34,7 @@ TCPServer::TCPServer() {
     {
         this->activeClients[i] = true;
     }
-
+    server_state = BEGINNING;
 }
 
 typedef struct {
@@ -96,18 +96,6 @@ void TCPServer::receive() {
 
         this->reportClientConnected(&clientAddress, clientAddress_len, logger);
 
-        //Rechazar conexiones
-        if (numberOfConnections == numberOfPlayers) {
-
-            to_send.nconnections = numberOfConnections;
-            to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
-
-            send(newSockFd->get_fd(), &to_send,
-                 sizeof(connection_information_t), 0);
-            close(newSockFd->get_fd());
-            continue;
-
-        }
 
         clientsSockets[numberOfConnections]->fd = newSockFd->fd;
 
@@ -116,6 +104,8 @@ void TCPServer::receive() {
         iplist[numberOfConnections].isActive = true;
         numberOfConnections++;
 
+
+        clientsSockets[numberOfConnections]->sendData(&server_state, sizeof(server_state));
         //Aceptar conexiones pero seguir esperando por mas
         if (numberOfConnections != numberOfPlayers) {
 
@@ -192,9 +182,34 @@ void TCPServer::reconnections() {
         cout << str << endl;
         cout << socketToReconnect << endl;
 
+        int client_number = socketToReconnect + 1;
+        if(this->server_state == FIGHT_PHASE){
+            clientsSockets[socketToReconnect]->sendData(&server_state,sizeof(game_instance_t));
+
+            clientsSockets[socketToReconnect]->sendData(&numberOfPlayers,sizeof(int));
+
+            clientsSockets[socketToReconnect]->sendData(&client_number,sizeof(int));
+
+            sendCharacterBuildersToSocket(socketToReconnect);
+        }
+
         //mandar personajes o cursores
 
         //crear los hilos nuevos
+    }
+}
+
+
+void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
+    character_builder_t builders[MAXPLAYERS];
+
+    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0],true);
+    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1],true);
+    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2],false);
+    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3],false);
+
+    for (auto & builder : builders) {
+        clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));
     }
 }
 
@@ -354,8 +369,6 @@ void TCPServer::sendToClient(int clientSocket) {
 
 void TCPServer::runServer() {
 
-    bool borrable[4] = {false, false, false, false};
-
     std::thread receive(&TCPServer::receive, this);
     while (getNumberOfConections() != numberOfPlayers) //Espera hasta que se conecten MAXPLAYERS
         continue;
@@ -366,12 +379,15 @@ void TCPServer::runServer() {
         clientsSockets[j]->sendData(&numberOfPlayers, sizeof(int));
     }
 
+    this->server_state = MENU_PHASE;
     runMenuPhase();  //Pongo al servidor en modo "Menu"
     sendSelectedCharacters();
 
     std::thread receiveFromClientThreads[numberOfPlayers];
     std::thread sendToClientThreads[numberOfPlayers];
 
+
+    this->server_state = FIGHT_PHASE;
     for (int i = 0; i < numberOfPlayers; ++i) {
         receiveFromClientThreads[i] = std::thread(&TCPServer::receiveFromClient,
                                                   this, i);

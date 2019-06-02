@@ -100,3 +100,12 @@ bool Team::invalidIntroAction()
 			|| (action == WALKBACK) );
 }
 
+CharacterServer * Team::get_firstCharacter() {
+    return this->firstCharacter;
+
+}
+
+CharacterServer * Team::get_secondCharacter() {
+    return this->secondCharacter;
+}
+

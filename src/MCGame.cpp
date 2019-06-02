@@ -170,6 +170,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     //////////////////////////////////////////////////////////////////////
 
+
     tcpClient->socketClient->reciveData(&numberOfPlayers, sizeof(int));
     cout << numberOfPlayers << endl;
 
