@@ -70,6 +70,7 @@ void TCPClient::run() {
     mcGame->camera = { 0, 0, ancho, alto };
     mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
 
+
     if(initializer.instance == BEGINNING)
         runFromBeginning();
     else if(initializer.instance == MENU_PHASE)
