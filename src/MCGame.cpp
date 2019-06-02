@@ -203,14 +203,15 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
                                       SCREEN_WIDTH);
 }
 
-void MCGame::alive_bit()
+void MCGame::alive_action()
 {
 	while(m_Running)
 	{
 	    if(isActive())
-            continue;
-        int aliveBit = 1;
-		tcpClient->socketClient->sendData(&aliveBit, sizeof(aliveBit));
+        continue;
+
+        actions_t aliveAction = ALIVE;
+		tcpClient->socketClient->sendData(&aliveAction, sizeof(aliveAction));
 		sleep(1); //lo manda cada 1 segundo
 	}
 }
@@ -224,10 +225,10 @@ void MCGame::action_update() {
         handleEvents();
         if (!threadRunning)
             break;
-        if (isActive()) {
-            actions_t actionToSend = clientControls->getNewAction();
-            tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-        }
+
+		actions_t actionToSend = clientControls->getNewAction();
+		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+
 
         fpsManager.stop();
 
@@ -242,7 +243,7 @@ void MCGame::run() {
     logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
     std::thread send(&MCGame::action_update, this);
-    std::thread alive(&MCGame::alive_bit, this);
+    std::thread alive(&MCGame::alive_action, this);
 
     threadRunning = true;
     while (m_Running)
@@ -340,10 +341,7 @@ void MCGame::handleEvents() {
     inputManager->update();
 
     if (inputManager->closeWindowRequested()) {
-        windowsClosed++;
-        //inputManager->windowHasntClosed();
         SDL_HideWindow(m_Window);
-        //threadRunning = false;
     }
 
 }
