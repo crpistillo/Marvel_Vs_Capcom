@@ -242,6 +242,18 @@ void TCPServer::reconnections() {
             iplist[socketToReconnect].isActive = true;
             m.unlock();
 
+            cliente_menu_t* recon = new cliente_menu_t;
+            recon->cliente = socketToReconnect;
+            recon->accion = RECONNECTION_MENU;
+
+            m.lock();
+            incoming_menu_actions_queue->insert(recon);
+            numberOfConnections++;
+            m.unlock();
+
+
+
+
         }
 
     }
@@ -702,6 +714,19 @@ void TCPServer::runMenuFourPlayers() {
         	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
         	serverCursors[incoming_msg->cliente]->setVisible(false);
+        	sendUpdaters(false);
+        }
+        else if(incoming_msg->accion == RECONNECTION_MENU){
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha RECONECTADO." << endl;
+        	if( (int) (incoming_msg->cliente / 2) == 0)
+        		onlinePlayersTeamOne++;
+        	else
+        		onlinePlayersTeamTwo++;
+        	cout << "Team one: " << onlinePlayersTeamOne << endl;
+        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
+
+        	serverCursors[incoming_msg->cliente]->setVisible(true);
+        	sendUpdaters(false);
         }
         else{
 
