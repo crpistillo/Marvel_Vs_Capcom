@@ -227,14 +227,15 @@ void MCGame::action_update() {
         fpsManager.start();
 
         handleEvents();
-        if (!threadRunning)
-            break;
+
         actions_t actionToSend = clientControls->getNewAction();
         if(!isActive() && actionToSend != DISCONNECTEDCLIENT)
             continue;
 
 		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
 
+		if (!threadRunning)
+            break;
 
         fpsManager.stop();
 
@@ -350,6 +351,7 @@ void MCGame::handleEvents() {
 
     if (inputManager->closeWindowRequested()) {
         SDL_HideWindow(m_Window);
+        threadRunning = false;
     }
 
 }
