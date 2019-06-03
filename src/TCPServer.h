@@ -50,9 +50,6 @@ private:
     pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
     json config;
-    std::mutex m;
-
-    std::mutex menuClient;
     ServerCursor* serverCursors[MAXPLAYERS];
 
     bool activeClients[MAXPLAYERS];
@@ -62,6 +59,16 @@ private:
 
 
     ip_status_t iplist[4];
+
+    //MUTEXS
+    std::mutex m;
+    std::mutex menuClient;
+    std::mutex numberOfConnections_mtx;
+    std::mutex connection_mtx;
+    std::mutex incoming_msg_mtx;
+    std::mutex updaters_queue_mtx[MAXPLAYERS];
+    std::mutex server_state_mtx;
+
 
 
 public:
