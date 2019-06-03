@@ -11,7 +11,8 @@
 #include <thread>
 #include "Constants.h"
 #include <sys/poll.h>
-#include <csignal>
+#include "signal_handler.h"
+
 
 Constants constants;
 const int LEVEL_WIDTH = 3200;
@@ -22,15 +23,7 @@ const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
 
-void signalHandler( int signum ) {
-    cout << "Interrupt signal (" << signum << ") received.\n";
 
-    // cleanup and close up stuff here
-    // terminate program
-    if(signum != SIGPIPE)
-        exit(signum);
-
-}
 
 TCPServer::TCPServer() {
     signal(SIGPIPE, signalHandler);
@@ -153,6 +146,7 @@ void TCPServer::receive() {
 void TCPServer::reconnections() {
 
     while(1) {
+
 
         //TODO Make as fun
         struct sockaddr_in clientAddress;
@@ -301,7 +295,7 @@ void TCPServer::reportClientConnected(const struct sockaddr_in *clientAddress,
 }
 
 int TCPServer::getNumberOfConections() {
-    std::unique_lock<std::mutex> lock(m);
+    std::unique_lock<std::mutex> lock(numberOfConnections_mtx);
     return numberOfConnections;
 }
 
@@ -438,7 +432,10 @@ void TCPServer::runServer() {
 
     cout << "Numero de jugadores alcanzado! \n";
 
+    server_state_mtx.lock();
     this->server_state = MENU_PHASE;
+    server_state_mtx.unlock();
+
     runMenuPhase();  //Pongo al servidor en modo "Menu"
     sendSelectedCharacters();
 
@@ -543,7 +540,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
     struct pollfd fds[1];
     memset(fds, 0, sizeof(fds));
 
-    fds[0].fd = clientsSockets[clientSocket]->get_fd();
+    fds[0].fd = socket->get_fd();
     fds[0].events = POLLIN;
 
     int timeout = (3 * 1000);
@@ -613,8 +610,10 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
     while (1) {
 
         cursor_updater_t *updater;
-        if (cursor_updater_queue[clientSocket]->empty_queue())
+        if (cursor_updater_queue[clientSocket]->empty_queue()){
             continue;
+
+        }
 
         menuClient.lock();
         updater = cursor_updater_queue[clientSocket]->get_data();
@@ -700,9 +699,12 @@ void TCPServer::runMenuFourPlayers() {
     //Procesar eventos que vengan de incoming_menu_actions_queue
     while (1) {
         cliente_menu_t *incoming_msg;
+
+        incoming_msg_mtx.lock();
         if (this->incoming_menu_actions_queue->empty_queue())
             continue;
         incoming_msg = this->incoming_menu_actions_queue->get_data();
+        incoming_msg_mtx.unlock();
 
         if(incoming_msg->accion == DISCONNECTED_MENU){
         	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha desconectado." << endl;
@@ -738,7 +740,10 @@ void TCPServer::runMenuFourPlayers() {
 				sendUpdaters(false);
         }
 
+        incoming_msg_mtx.lock();
         incoming_menu_actions_queue->delete_data();
+        incoming_msg_mtx.lock();
+
         delete incoming_msg;
 
         /* Verifico si ya seleccionaron todos */
@@ -800,6 +805,7 @@ void TCPServer::sendUpdaters(bool finalUpdater) {
     menuClient.lock();
     for (int i = 0; i < numberOfPlayers; ++i) {
         for (int j = 0; j < MAXPLAYERS; j++) {
+            std::unique_lock<std::mutex> lock(updaters_queue_mtx[i]);
             this->cursor_updater_queue[i]->insert(update[j]);
         }
     }

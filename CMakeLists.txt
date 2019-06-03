@@ -60,7 +60,7 @@ set(SOURCE_FILES
         src/ClientCursor.h
         src/ServerCursor.cpp
         src/ServerCursor.h
-)
+        src/signal_handler.cpp src/signal_handler.h)
 
 
 add_executable(marvel_vs_capcom ${SOURCE_FILES})
