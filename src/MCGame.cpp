@@ -10,6 +10,9 @@
 #include "clienteMenu.h"
 #include<iostream>
 #include <sys/poll.h>
+#include "signal_handler.h"
+#include <csignal>
+
 
 
 using namespace std;
@@ -24,6 +27,7 @@ int centerBefore, centerLater = -1000;
 
 
 void orderBackgroundsByZIndex(json *backgroundList);
+
 
 
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
@@ -204,6 +208,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
 void MCGame::alive_action()
 {
+    signal(SIGPIPE, signalHandler);
 	while(m_Running)
 	{
 	    if(isActive())
@@ -216,6 +221,7 @@ void MCGame::alive_action()
 }
 
 void MCGame::action_update() {
+    signal(SIGPIPE, signalHandler);
     FPSManager fpsManager(25);
 
     while (true) {
@@ -239,6 +245,7 @@ void MCGame::action_update() {
 }
 
 void MCGame::run() {
+    signal(SIGPIPE, signalHandler);
     m_Running = true;
     FPSManager fpsManager(SCREEN_FPS);
     logger->log("Inicio de Bucle MCGame-run.", DEBUG);
@@ -600,7 +607,7 @@ void MCGame::loadSelectedCharacters() {
 
 void MCGame::setCursors() {
     int posX, posY;
-    bool visible = true;
+    bool visible;
 
     for (int i = 0; i < 4; i++) {
         if (i == 0) {
