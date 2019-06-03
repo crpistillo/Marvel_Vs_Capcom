@@ -183,13 +183,11 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
             team = 0;
         else
             team = 1;
-        isSending = true;
     } else {
         if (tcpClient->nclient < 3)
             team = 0;
         else
             team = 1;
-        isSending = tcpClient->nclient == 1 || tcpClient->nclient == 3;
     }
 
 
@@ -564,6 +562,8 @@ void MCGame::loadSelectedCharacters() {
     int currentCharacter1;
     tcpClient->socketClient->reciveData(&currentCharacter0, sizeof(int));
     tcpClient->socketClient->reciveData(&currentCharacter1, sizeof(int));
+
+    isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
 
     players[0]->setCurrentCharacter(currentCharacter0);
     players[1]->setCurrentCharacter(currentCharacter1);
