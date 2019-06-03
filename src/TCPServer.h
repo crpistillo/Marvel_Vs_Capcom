@@ -136,6 +136,7 @@ public:
 
     int getTeamNumber(int client);
 
+    bool isIpListActive(int clientSocket);
 };
 
 #endif

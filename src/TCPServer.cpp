@@ -555,31 +555,37 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
     char buf[sizeof(menu_action_t)];
 
 
-    struct pollfd fds[1];
-    memset(fds, 0, sizeof(fds));
 
-    fds[0].fd = socket->get_fd();
-    fds[0].events = POLLIN;
 
     int timeout = (3 * 1000);
 
 
     while (1) {
 
+        connection_mtx.lock();
+        struct pollfd fds[1];
+        memset(fds, 0, sizeof(fds));
+
+        fds[0].fd = socket->get_fd();
+        fds[0].events = POLLIN;
+
 		if(!iplist[clientSocket].isActive){
+		    connection_mtx.unlock();
 			continue;
 		}
 
 		//Me fijo si el socket esta apto para recibir
-		int rc = poll(fds, 1, timeout);
+        connection_mtx.unlock();
+
+        int rc = poll(fds, 1, timeout);
 
 
 		if (rc < 0)
 			cout << "Error en poll" << endl;
 
 		else if (rc > 0) {
-			socket->reciveData(buf, sizeof(menu_action_t));
-			menu_action_t *accion = (menu_action_t *) buf;
+			socket->reciveData(buf, sizeof(menu_action_t));   //Reveer mtx;
+            menu_action_t *accion = (menu_action_t *) buf;
 
 			if(*accion == ALIVE_MENU){
 				cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
@@ -1063,5 +1069,7 @@ int TCPServer::getTeamNumber(int client)
 		else return 1;
 	}
 }
+
+
 
 
