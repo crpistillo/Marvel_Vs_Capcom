@@ -584,12 +584,13 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 		if (rc < 0)
 			cout << "Error en poll" << endl;
 
-		else if (rc > 0) {
+		else if (rc > 0 && fds[0].revents == POLLIN) {
 			socket->reciveData(buf, sizeof(menu_action_t));   //Reveer mtx;
             menu_action_t *accion = (menu_action_t *) buf;
 
 			if(*accion == ALIVE_MENU){
 				cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
+				cout << "EL VALOR DE REVENTS ES: " << fds[0].revents << endl;
 				continue;
 			}
 			else{
@@ -604,14 +605,17 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 			}
 		}
 
-		else if(rc == 0){
+		else{
 			cout << "No se recibio nada mas del cliente: " << clientSocket << endl;
+			cout << "EL VALOR DE REVENTS ES: " << fds[0].revents << endl;
 
 			//Reporto en el servidor que el cliente se desconecto
 			cliente_menu_t *msgMenuQueue = new cliente_menu_t;
 			msgMenuQueue->cliente = clientSocket;
 			msgMenuQueue->accion = DISCONNECTED_MENU;
+			incoming_msg_mtx.lock();
 			this->incoming_menu_actions_queue->insert(msgMenuQueue);
+			incoming_msg_mtx.unlock();
 
 			//Cierro su socket, y reporto la desconexion
 
@@ -622,6 +626,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
             connection_mtx.lock();
             iplist[clientSocket].isActive = false;
+            cout << iplist[clientSocket].isActive << endl;
             connection_mtx.unlock();
 
             numberOfConnections_mtx.lock();
