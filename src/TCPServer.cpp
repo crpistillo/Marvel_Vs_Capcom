@@ -531,7 +531,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
     while (1) {
 
 		if(!clientActive){
-			cout << "Cliente: " << clientSocket << " no esta activo" << endl;
+			//cout << "Cliente: " << clientSocket << " no esta activo" << endl;
 			continue;
 		}
 
@@ -562,8 +562,23 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
 		else if(rc == 0){
 			cout << "No se recibio nada mas del cliente: " << clientSocket << endl;
-			//reportClientDisconected();
-			clientActive = false;
+
+			//Reporto en el servidor que el cliente se desconecto
+			cliente_menu_t *msgMenuQueue = new cliente_menu_t;
+			msgMenuQueue->cliente = clientSocket;
+			msgMenuQueue->accion = DISCONNECTED_MENU;
+			this->incoming_menu_actions_queue->insert(msgMenuQueue);
+
+			//Cierro su socket, y reporto la desconexion
+            socket->closeConnection();
+            socket->closeFd();
+            activeClients[clientSocket] = false;
+            iplist[clientSocket].isActive = false;
+            m.lock();
+            numberOfConnections--;
+            m.unlock();
+
+            clientActive = false;
 
 		}
 
@@ -667,12 +682,18 @@ void TCPServer::runMenuFourPlayers() {
             continue;
         incoming_msg = this->incoming_menu_actions_queue->get_data();
 
-        /* Proceso el evento */
-        bool validMenuAction = processMenuAction(incoming_msg);
+        if(incoming_msg->accion == DISCONNECTED_MENU){
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha desconectado." << endl;
+        }
+        else{
 
-        /* Solo envio información a los clientes si hubo algun cambio */
-        if (validMenuAction)
-            sendUpdaters(false);
+			/* Proceso el evento */
+			bool validMenuAction = processMenuAction(incoming_msg);
+
+			/* Solo envio información a los clientes si hubo algun cambio */
+			if (validMenuAction)
+				sendUpdaters(false);
+        }
 
         incoming_menu_actions_queue->delete_data();
         delete incoming_msg;

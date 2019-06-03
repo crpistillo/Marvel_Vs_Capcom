@@ -38,7 +38,8 @@ typedef enum menuAction{
     LEFT = 97,
     ENTER = 98,
     INVALID_MENU_ACTION = 99,
-	ALIVE_MENU = 100
+	ALIVE_MENU = 100,
+	DISCONNECTED_MENU = 101
 } menu_action_t;
 
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H
