@@ -237,6 +237,11 @@ void TCPServer::reconnections() {
         else if(this->server_state == MENU_PHASE){
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
         	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
+
+            m.lock();
+            iplist[socketToReconnect].isActive = true;
+            m.unlock();
+
         }
 
     }
@@ -522,7 +527,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     char buf[sizeof(menu_action_t)];
 
-    bool clientActive = true;
 
     struct pollfd fds[1];
     memset(fds, 0, sizeof(fds));
@@ -535,8 +539,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     while (1) {
 
-		if(!clientActive){
-			//cout << "Cliente: " << clientSocket << " no esta activo" << endl;
+		if(!iplist[clientSocket].isActive){
 			continue;
 		}
 
@@ -582,8 +585,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             m.lock();
             numberOfConnections--;
             m.unlock();
-
-            clientActive = false;
 
 		}
 

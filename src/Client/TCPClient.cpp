@@ -113,6 +113,10 @@ void TCPClient::runFromFight() {
 void TCPClient::runFromMenu() {
     //recibo las cosas
 	cout << "Recibo que debo empezar desde el menu" << endl;
+	/*cursor_updater_t* updater;
+	for(int i = 0; i < 4; i++){
+		mcGame->updateMenu();
+	}*/
 
     mcGame->runMenu();
     runAfterMenu();
