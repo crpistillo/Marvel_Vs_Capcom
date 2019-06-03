@@ -68,6 +68,7 @@ private:
     std::mutex incoming_msg_mtx;
     std::mutex updaters_queue_mtx[MAXPLAYERS];
     std::mutex server_state_mtx;
+    std::mutex teams_mtx;
 
 
 
