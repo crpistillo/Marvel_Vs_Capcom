@@ -693,6 +693,8 @@ void TCPServer::runMenuFourPlayers() {
         		onlinePlayersTeamTwo--;
         	cout << "Team one: " << onlinePlayersTeamOne << endl;
         	cout << "Team two: " << onlinePlayersTeamTwo << endl;
+
+        	serverCursors[incoming_msg->cliente]->setVisible(false);
         }
         else{
 
