@@ -257,6 +257,8 @@ void MCGame::run() {
     }
     alive.join();
     send.join();
+    alive.~thread();
+    send.~thread();
 
 
     logger->log("Fin de Bucle MCGame-run.", DEBUG);
