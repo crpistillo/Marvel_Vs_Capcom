@@ -234,6 +234,28 @@ void TCPServer::reconnections() {
 
         }
 
+        else if(this->server_state == MENU_PHASE){
+            clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
+        	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
+
+            m.lock();
+            iplist[socketToReconnect].isActive = true;
+            m.unlock();
+
+            cliente_menu_t* recon = new cliente_menu_t;
+            recon->cliente = socketToReconnect;
+            recon->accion = RECONNECTION_MENU;
+
+            m.lock();
+            incoming_menu_actions_queue->insert(recon);
+            numberOfConnections++;
+            m.unlock();
+
+
+
+
+        }
+
     }
 }
 
@@ -517,20 +539,73 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     char buf[sizeof(menu_action_t)];
 
+
+    struct pollfd fds[1];
+    memset(fds, 0, sizeof(fds));
+
+    fds[0].fd = clientsSockets[clientSocket]->get_fd();
+    fds[0].events = POLLIN;
+
+    int timeout = (3 * 1000);
+
+
     while (1) {
 
-        socket->reciveData(buf, sizeof(menu_action_t));
-        menu_action_t *accion = (menu_action_t *) buf;
+		if(!iplist[clientSocket].isActive){
+			continue;
+		}
 
-        cliente_menu_t *msgMenuQueue = new cliente_menu_t;
-        msgMenuQueue->cliente = clientSocket;
-        msgMenuQueue->accion = *accion;
-        this->incoming_menu_actions_queue->insert(msgMenuQueue);
-        if (*accion == ENTER)
-            return;
+		//Me fijo si el socket esta apto para recibir
+		int rc = poll(fds, 1, timeout);
+
+
+		if (rc < 0)
+			cout << "Error en poll" << endl;
+
+		else if (rc > 0) {
+			socket->reciveData(buf, sizeof(menu_action_t));
+			menu_action_t *accion = (menu_action_t *) buf;
+
+			if(*accion == ALIVE_MENU){
+				cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
+				continue;
+			}
+			else{
+				cliente_menu_t *msgMenuQueue = new cliente_menu_t;
+				msgMenuQueue->cliente = clientSocket;
+				msgMenuQueue->accion = *accion;
+				this->incoming_menu_actions_queue->insert(msgMenuQueue);
+				if (*accion == ENTER)
+					return;
+			}
+		}
+
+		else if(rc == 0){
+			cout << "No se recibio nada mas del cliente: " << clientSocket << endl;
+
+			//Reporto en el servidor que el cliente se desconecto
+			cliente_menu_t *msgMenuQueue = new cliente_menu_t;
+			msgMenuQueue->cliente = clientSocket;
+			msgMenuQueue->accion = DISCONNECTED_MENU;
+			this->incoming_menu_actions_queue->insert(msgMenuQueue);
+
+			//Cierro su socket, y reporto la desconexion
+            socket->closeConnection();
+            socket->closeFd();
+            activeClients[clientSocket] = false;
+            iplist[clientSocket].isActive = false;
+            m.lock();
+            numberOfConnections--;
+            m.unlock();
+
+		}
+
+
+
     }
-
 }
+
+
 
 void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
     Socket *socket = getClientSocket(clientSocket);
@@ -616,6 +691,10 @@ void TCPServer::runMenuFourPlayers() {
     serverCursors[1] = new ServerCursor(449, 61, true);
     serverCursors[2] = new ServerCursor(97, 353, true);
     serverCursors[3] = new ServerCursor(449, 353, true);
+    sendUpdaters(false);
+
+    int onlinePlayersTeamOne = 2;
+    int onlinePlayersTeamTwo = 2;
 
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
@@ -625,12 +704,39 @@ void TCPServer::runMenuFourPlayers() {
             continue;
         incoming_msg = this->incoming_menu_actions_queue->get_data();
 
-        /* Proceso el evento */
-        bool validMenuAction = processMenuAction(incoming_msg);
+        if(incoming_msg->accion == DISCONNECTED_MENU){
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha desconectado." << endl;
+        	if( (int) (incoming_msg->cliente / 2) == 0)
+        		onlinePlayersTeamOne--;
+        	else
+        		onlinePlayersTeamTwo--;
+        	cout << "Team one: " << onlinePlayersTeamOne << endl;
+        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
-        /* Solo envio información a los clientes si hubo algun cambio */
-        if (validMenuAction)
-            sendUpdaters(false);
+        	serverCursors[incoming_msg->cliente]->setVisible(false);
+        	sendUpdaters(false);
+        }
+        else if(incoming_msg->accion == RECONNECTION_MENU){
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha RECONECTADO." << endl;
+        	if( (int) (incoming_msg->cliente / 2) == 0)
+        		onlinePlayersTeamOne++;
+        	else
+        		onlinePlayersTeamTwo++;
+        	cout << "Team one: " << onlinePlayersTeamOne << endl;
+        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
+
+        	serverCursors[incoming_msg->cliente]->setVisible(true);
+        	sendUpdaters(false);
+        }
+        else{
+
+			/* Proceso el evento */
+			bool validMenuAction = processMenuAction(incoming_msg);
+
+			/* Solo envio información a los clientes si hubo algun cambio */
+			if (validMenuAction)
+				sendUpdaters(false);
+        }
 
         incoming_menu_actions_queue->delete_data();
         delete incoming_msg;

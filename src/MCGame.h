@@ -33,6 +33,7 @@ class MCGame {
 private:
     bool m_Running;
     bool threadRunning;
+    bool appCloseFromMenu;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     SDL_Joystick *gGameController = NULL;
@@ -73,6 +74,8 @@ private:
     ClientCursor *clientCursors[4];
 
     void renderMenuBackImage();
+
+    void sendMenuAlive(Uint32* timer);
 
 
 protected:
