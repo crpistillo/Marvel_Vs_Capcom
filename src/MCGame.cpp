@@ -506,8 +506,12 @@ void MCGame::runMenu() {
     //Continuar con la ejecucion de MCGame::menu
     menu();
     sendMenuEventsThread.join();
-    if(appCloseFromMenu)
+    sendMenuEventsThread.~thread();
+    if(appCloseFromMenu){
+    	cout << "Me voy" << endl;
     	exit(1);
+
+    }
 }
 
 void MCGame::menu() {
