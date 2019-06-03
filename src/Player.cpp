@@ -32,20 +32,23 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
 
 
     if (updater->action == DISCONNECTEDCLIENT) {
-        m.lock();
-        if (becomeActive)
+        if (becomeActive) {
+            m.lock();
             *isSending = true;
-        m.unlock();
+            m.unlock();
+        }
         //changeCharacter();  //send change character
     } else if (updater->action == CHANGEME_ONEPLAYER) {
         cout << "Se detecta changeme_onePlayer" << endl;
         changeCharacter();
         setCharacterToChanging();
     } else if (updater->action == CHANGEME) {
-        m.lock();
-        if (becomeActive)
+        if (becomeActive){
+            m.lock();
             *isSending = !(*isSending);
-        m.unlock();
+            m.unlock();
+
+        }
         changeCharacter();  //send change character
         setCharacterToChanging();
     }
