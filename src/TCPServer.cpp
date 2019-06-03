@@ -517,25 +517,62 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     char buf[sizeof(menu_action_t)];
 
+    bool clientActive = true;
+
+    struct pollfd fds[1];
+    memset(fds, 0, sizeof(fds));
+
+    fds[0].fd = clientsSockets[clientSocket]->get_fd();
+    fds[0].events = POLLIN;
+
+    int timeout = (3 * 1000);
+
+
     while (1) {
 
-        socket->reciveData(buf, sizeof(menu_action_t));
-        menu_action_t *accion = (menu_action_t *) buf;
+		if(!clientActive){
+			cout << "Cliente: " << clientSocket << " no esta activo" << endl;
+			continue;
+		}
 
-        if(*accion == ALIVE_MENU){
-        	cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
-        	continue;
-        }
+		//Me fijo si el socket esta apto para recibir
+		int rc = poll(fds, 1, timeout);
 
-        cliente_menu_t *msgMenuQueue = new cliente_menu_t;
-        msgMenuQueue->cliente = clientSocket;
-        msgMenuQueue->accion = *accion;
-        this->incoming_menu_actions_queue->insert(msgMenuQueue);
-        if (*accion == ENTER)
-            return;
+
+		if (rc < 0)
+			cout << "Error en poll" << endl;
+
+		else if (rc > 0) {
+			socket->reciveData(buf, sizeof(menu_action_t));
+			menu_action_t *accion = (menu_action_t *) buf;
+
+			if(*accion == ALIVE_MENU){
+				cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
+				continue;
+			}
+			else{
+				cliente_menu_t *msgMenuQueue = new cliente_menu_t;
+				msgMenuQueue->cliente = clientSocket;
+				msgMenuQueue->accion = *accion;
+				this->incoming_menu_actions_queue->insert(msgMenuQueue);
+				if (*accion == ENTER)
+					return;
+			}
+		}
+
+		else if(rc == 0){
+			cout << "No se recibio nada mas del cliente: " << clientSocket << endl;
+			//reportClientDisconected();
+			clientActive = false;
+
+		}
+
+
+
     }
-
 }
+
+
 
 void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
     Socket *socket = getClientSocket(clientSocket);

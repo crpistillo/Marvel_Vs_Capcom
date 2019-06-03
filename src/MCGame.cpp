@@ -460,6 +460,8 @@ void MCGame::sendMenuEvents() {
         if (!threadRunning)
             break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
+        if(menuActionToSend == MENU_WINDOWCLOSED)
+        	break;
         if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0){
             menuActionToSend = SELECT;
             charactersSelected++;
