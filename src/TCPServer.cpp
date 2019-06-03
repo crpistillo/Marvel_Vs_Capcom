@@ -522,6 +522,11 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
         socket->reciveData(buf, sizeof(menu_action_t));
         menu_action_t *accion = (menu_action_t *) buf;
 
+        if(*accion == ALIVE_MENU){
+        	cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
+        	continue;
+        }
+
         cliente_menu_t *msgMenuQueue = new cliente_menu_t;
         msgMenuQueue->cliente = clientSocket;
         msgMenuQueue->accion = *accion;

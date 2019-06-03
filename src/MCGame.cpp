@@ -451,6 +451,7 @@ void MCGame::sendMenuEvents() {
     int charactersSelected = 0;
     FPSManager fpsManager(10);
     this->threadRunning = true;
+    Uint32 timer = SDL_GetTicks();
 
     while (1) {
         fpsManager.start();
@@ -467,6 +468,8 @@ void MCGame::sendMenuEvents() {
             tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
 
+        sendMenuAlive(&timer);
+
         if (menuActionToSend == ENTER)
             return;
         fpsManager.stop();
@@ -474,6 +477,17 @@ void MCGame::sendMenuEvents() {
     }
     std::unique_lock<std::mutex> lock(m);
     m_Running = false;
+
+}
+
+void MCGame::sendMenuAlive(Uint32* timer){
+	menu_action_t alive = ALIVE_MENU;
+	Uint32 actual_time = SDL_GetTicks();
+
+	if((actual_time - *timer) > 1000 ){
+		tcpClient->socketClient->sendData(&alive, sizeof(menu_action_t));
+		*timer = actual_time;
+	}
 
 }
 

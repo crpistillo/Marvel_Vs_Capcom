@@ -74,6 +74,8 @@ private:
 
     void renderMenuBackImage();
 
+    void sendMenuAlive(Uint32* timer);
+
 
 protected:
     int SCREEN_WIDTH;
