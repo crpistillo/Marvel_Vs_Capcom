@@ -378,10 +378,10 @@ void MCGame::update() {
 
 		//cambiar false x updater->client
 		if (updater->team == 0) {
-            players[0]->update(updater, getIsSending(), 0 == team, tcpClient->nclient);
+            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-            players[1]->update(updater, getIsSending(), 1 == team, tcpClient->nclient);
+            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient);
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
@@ -563,12 +563,10 @@ void MCGame::loadSelectedCharacters() {
     tcpClient->socketClient->reciveData(&currentCharacter0, sizeof(int));
     tcpClient->socketClient->reciveData(&currentCharacter1, sizeof(int));
 
+    isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
+
     players[0]->setCurrentCharacter(currentCharacter0);
     players[1]->setCurrentCharacter(currentCharacter1);
-
-    m.lock();
-    isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
-    m.unlock();
 
 }
 
@@ -608,11 +606,6 @@ void MCGame::setCursors() {
 bool MCGame::isActive() {
     std::unique_lock<std::mutex> lock(m);
     return isSending || numberOfPlayers == 2;
-}
-
-bool *MCGame::getIsSending() {
-    std::unique_lock<std::mutex> lock(m);
-    return &isSending;
 }
 
 
