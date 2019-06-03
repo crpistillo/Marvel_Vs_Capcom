@@ -468,8 +468,6 @@ void MCGame::sendMenuEvents() {
         fpsManager.start();
 
         handleEvents();
-        if (!threadRunning)
-            break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
         if(menuActionToSend == MENU_WINDOWCLOSED){
         	appCloseFromMenu = true;
@@ -486,6 +484,8 @@ void MCGame::sendMenuEvents() {
 
         sendMenuAlive(&timer);
 
+        if (!threadRunning)
+            break;
         if (menuActionToSend == ENTER)
             return;
         fpsManager.stop();
