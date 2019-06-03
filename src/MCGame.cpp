@@ -563,10 +563,10 @@ void MCGame::loadSelectedCharacters() {
     tcpClient->socketClient->reciveData(&currentCharacter0, sizeof(int));
     tcpClient->socketClient->reciveData(&currentCharacter1, sizeof(int));
 
-    isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
-
     players[0]->setCurrentCharacter(currentCharacter0);
     players[1]->setCurrentCharacter(currentCharacter1);
+
+    isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
 
 }
 
