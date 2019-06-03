@@ -111,6 +111,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     m_Window = NULL;
     m_Renderer = NULL;
     m_Running = false;
+    appCloseFromMenu = false;
 
     ///////////////////////JSON///////////////////
     this->config = config;
@@ -460,8 +461,11 @@ void MCGame::sendMenuEvents() {
         if (!threadRunning)
             break;
         menu_action_t menuActionToSend = clientControls->getNewMenuAction();
-        if(menuActionToSend == MENU_WINDOWCLOSED)
+        if(menuActionToSend == MENU_WINDOWCLOSED){
+        	appCloseFromMenu = true;
         	break;
+        }
+
         if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0){
             menuActionToSend = SELECT;
             charactersSelected++;
@@ -502,6 +506,8 @@ void MCGame::runMenu() {
     //Continuar con la ejecucion de MCGame::menu
     menu();
     sendMenuEventsThread.join();
+    if(appCloseFromMenu)
+    	exit(1);
 }
 
 void MCGame::menu() {

@@ -673,6 +673,7 @@ void TCPServer::runMenuFourPlayers() {
     serverCursors[1] = new ServerCursor(449, 61, true);
     serverCursors[2] = new ServerCursor(97, 353, true);
     serverCursors[3] = new ServerCursor(449, 353, true);
+    sendUpdaters(false);
 
     int onlinePlayersTeamOne = 2;
     int onlinePlayersTeamTwo = 2;
