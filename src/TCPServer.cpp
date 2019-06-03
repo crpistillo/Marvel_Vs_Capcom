@@ -234,6 +234,10 @@ void TCPServer::reconnections() {
 
         }
 
+        else if(this->server_state == MENU_PHASE){
+        	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
+        }
+
     }
 }
 
