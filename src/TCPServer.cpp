@@ -393,7 +393,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
  * */
 
 Socket *TCPServer::getClientSocket(int i) {
-    std::unique_lock<std::mutex> lock(m);
+    std::unique_lock<std::mutex> lock(connection_mtx);
     return clientsSockets[i];
 }
 
@@ -610,19 +610,19 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
     while (1) {
 
         cursor_updater_t *updater;
+        updaters_queue_mtx[clientSocket].lock();
         if (cursor_updater_queue[clientSocket]->empty_queue()){
+            updaters_queue_mtx[clientSocket].unlock();
             continue;
-
         }
-
-        menuClient.lock();
         updater = cursor_updater_queue[clientSocket]->get_data();
-        menuClient.unlock();
+        updaters_queue_mtx[clientSocket].unlock();
 
         socket->sendData(updater, sizeof(cursor_updater_t));
-        menuClient.lock();
+
+        updaters_queue_mtx[clientSocket].lock();
         cursor_updater_queue[clientSocket]->delete_data();
-        menuClient.unlock();
+        updaters_queue_mtx[clientSocket].unlock();
 
         if (updater->menuTerminated)
             break;
