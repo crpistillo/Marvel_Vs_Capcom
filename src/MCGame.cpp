@@ -519,8 +519,8 @@ void MCGame::runMenu() {
     sendMenuEventsThread.~thread();
     if(appCloseFromMenu){
     	cout << "Me voy" << endl;
-        tcpClient->socketClient->closeFd();
         tcpClient->socketClient->closeConnection();
+        tcpClient->socketClient->closeFd();
     	exit(1);
 
     }
