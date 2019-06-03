@@ -164,12 +164,12 @@ void TCPServer::reconnections() {
 
             to_send.nconnections = numberOfConnections;
             to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
+            numberOfConnections_mtx.unlock();
 
             send(newSockFd->get_fd(), &to_send,
                  sizeof(connection_information_t), 0);
             close(newSockFd->get_fd());
 
-            numberOfConnections_mtx.unlock();
             continue;
 
         }
@@ -246,9 +246,12 @@ void TCPServer::reconnections() {
 
         else if(server_state_local == MENU_PHASE){
 
+        	Socket* socketToSend;
         	connection_mtx.lock();
-            clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
+        	socketToSend = clientsSockets[socketToReconnect];
             connection_mtx.unlock();
+
+            socketToSend->sendData(&initializer, sizeof(initializer_t));
         	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
 
             connection_mtx.lock();
@@ -573,9 +576,9 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 		    connection_mtx.unlock();
 			continue;
 		}
+        connection_mtx.unlock();
 
 		//Me fijo si el socket esta apto para recibir
-        connection_mtx.unlock();
 
         int rc = poll(fds, 1, timeout);
 
@@ -595,7 +598,9 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 				cliente_menu_t *msgMenuQueue = new cliente_menu_t;
 				msgMenuQueue->cliente = clientSocket;
 				msgMenuQueue->accion = *accion;
+				incoming_msg_mtx.lock();
 				this->incoming_menu_actions_queue->insert(msgMenuQueue);
+				incoming_msg_mtx.unlock();
 				if (*accion == ENTER)
 					return;
 			}
@@ -725,8 +730,10 @@ void TCPServer::runMenuFourPlayers() {
         cliente_menu_t *incoming_msg;
 
         incoming_msg_mtx.lock();
-        if (this->incoming_menu_actions_queue->empty_queue())
+        if (this->incoming_menu_actions_queue->empty_queue()){
+        	incoming_msg_mtx.unlock();
             continue;
+        }
         incoming_msg = this->incoming_menu_actions_queue->get_data();
         incoming_msg_mtx.unlock();
 

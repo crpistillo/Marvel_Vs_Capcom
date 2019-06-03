@@ -16,7 +16,8 @@ CPP_SRCS += \
 ../src/TCPServer.cpp \
 ../src/Team.cpp \
 ../src/clienteMenu.cpp \
-../src/main.cpp 
+../src/main.cpp \
+../src/signal_handler.cpp 
 
 OBJS += \
 ./src/ClientCursor.o \
@@ -31,7 +32,8 @@ OBJS += \
 ./src/TCPServer.o \
 ./src/Team.o \
 ./src/clienteMenu.o \
-./src/main.o 
+./src/main.o \
+./src/signal_handler.o 
 
 CPP_DEPS += \
 ./src/ClientCursor.d \
@@ -46,7 +48,8 @@ CPP_DEPS += \
 ./src/TCPServer.d \
 ./src/Team.d \
 ./src/clienteMenu.d \
-./src/main.d 
+./src/main.d \
+./src/signal_handler.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
