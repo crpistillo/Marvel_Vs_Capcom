@@ -145,6 +145,7 @@ void TCPServer::receive() {
 
 void TCPServer::reconnections() {
 
+	game_instance_t server_state_local;
     while(1) {
 
 
@@ -158,6 +159,7 @@ void TCPServer::reconnections() {
 
         socklen_t clientAddress_len = sizeof(clientAddress);
 
+        numberOfConnections_mtx.lock();
         if (numberOfConnections == numberOfPlayers) {
 
             to_send.nconnections = numberOfConnections;
@@ -166,9 +168,12 @@ void TCPServer::reconnections() {
             send(newSockFd->get_fd(), &to_send,
                  sizeof(connection_information_t), 0);
             close(newSockFd->get_fd());
+
+            numberOfConnections_mtx.unlock();
             continue;
 
         }
+        numberOfConnections_mtx.unlock();
 
 
         int socketToReconnect = -1;
@@ -176,16 +181,21 @@ void TCPServer::reconnections() {
 
 
         for (int i = 0; i < numberOfPlayers; ++i) {
+
+        	connection_mtx.lock();
             if (iplist[i].ip == str && !iplist[i].isActive) {
                 socketToReconnect = i; //debug case
             }
+            connection_mtx.unlock();
         }
 
         if (socketToReconnect == -1)
             continue;
 
 
+        connection_mtx.lock();
         clientsSockets[socketToReconnect]->fd = newSockFd->fd;
+        connection_mtx.unlock();
 
         //check server status
 
@@ -196,9 +206,15 @@ void TCPServer::reconnections() {
         initializer_t initializer;
         initializer.client = socketToReconnect + 1;
         initializer.players = numberOfPlayers;
-        initializer.instance = server_state;
 
-        if(this->server_state == FIGHT_PHASE){
+        server_state_mtx.lock();
+        server_state_local = server_state;
+        server_state_mtx.unlock();
+
+        initializer.instance = server_state_local;
+
+
+        if(server_state_local == FIGHT_PHASE){
 
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
@@ -228,26 +244,28 @@ void TCPServer::reconnections() {
 
         }
 
-        else if(this->server_state == MENU_PHASE){
+        else if(server_state_local == MENU_PHASE){
+
+        	connection_mtx.lock();
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
+            connection_mtx.unlock();
         	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
 
-            m.lock();
+            connection_mtx.lock();
             iplist[socketToReconnect].isActive = true;
-            m.unlock();
+            connection_mtx.unlock();
 
             cliente_menu_t* recon = new cliente_menu_t;
             recon->cliente = socketToReconnect;
             recon->accion = RECONNECTION_MENU;
 
-            m.lock();
+            incoming_msg_mtx.lock();
             incoming_menu_actions_queue->insert(recon);
+            incoming_msg_mtx.unlock();
+
+            numberOfConnections_mtx.lock();
             numberOfConnections++;
-            m.unlock();
-
-
-
-
+            numberOfConnections_mtx.unlock();
         }
 
     }
