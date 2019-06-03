@@ -618,11 +618,16 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 			//Cierro su socket, y reporto la desconexion
             socket->closeConnection();
             socket->closeFd();
+
             activeClients[clientSocket] = false;
+
+            connection_mtx.lock();
             iplist[clientSocket].isActive = false;
-            m.lock();
+            connection_mtx.unlock();
+
+            numberOfConnections_mtx.lock();
             numberOfConnections--;
-            m.unlock();
+            numberOfConnections_mtx.unlock();
 
 		}
 
