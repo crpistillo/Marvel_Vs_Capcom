@@ -34,7 +34,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     if (updater->action == DISCONNECTEDCLIENT) {
         m.lock();
         if (becomeActive)
-            *isSending = !(*isSending);
+            *isSending = true;
         m.unlock();
         //changeCharacter();  //send change character
     } else if (updater->action == CHANGEME_ONEPLAYER) {

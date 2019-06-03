@@ -225,8 +225,10 @@ void MCGame::action_update() {
         handleEvents();
         if (!threadRunning)
             break;
+        actions_t actionToSend = clientControls->getNewAction();
+        if(!isActive() && actionToSend != DISCONNECTEDCLIENT)
+            continue;
 
-		actions_t actionToSend = clientControls->getNewAction();
 		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
 
 
