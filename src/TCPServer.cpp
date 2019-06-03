@@ -773,7 +773,7 @@ void TCPServer::runMenuFourPlayers() {
 
         incoming_msg_mtx.lock();
         incoming_menu_actions_queue->delete_data();
-        incoming_msg_mtx.lock();
+        incoming_msg_mtx.unlock();
 
         delete incoming_msg;
 
