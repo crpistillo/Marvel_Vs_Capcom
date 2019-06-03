@@ -674,6 +674,9 @@ void TCPServer::runMenuFourPlayers() {
     serverCursors[2] = new ServerCursor(97, 353, true);
     serverCursors[3] = new ServerCursor(449, 353, true);
 
+    int onlinePlayersTeamOne = 2;
+    int onlinePlayersTeamTwo = 2;
+
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
     while (1) {
@@ -684,6 +687,12 @@ void TCPServer::runMenuFourPlayers() {
 
         if(incoming_msg->accion == DISCONNECTED_MENU){
         	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha desconectado." << endl;
+        	if( (int) (incoming_msg->cliente / 2) == 0)
+        		onlinePlayersTeamOne--;
+        	else
+        		onlinePlayersTeamTwo--;
+        	cout << "Team one: " << onlinePlayersTeamOne << endl;
+        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
         }
         else{
 
