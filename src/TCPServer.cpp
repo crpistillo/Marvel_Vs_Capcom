@@ -331,7 +331,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     fds[0].fd = clientsSockets[clientSocket]->get_fd();
     fds[0].events = POLLIN;
 
-    int timeout = (2 * 1000);
+    int timeout = (20 * 1000);
 
     //Recibo los argumentos y los casteo en el orden que corresponde.
     Socket *socket = getClientSocket(clientSocket);

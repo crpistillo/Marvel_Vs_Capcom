@@ -357,7 +357,7 @@ void MCGame::update() {
 	fds[0].fd = tcpClient->socketClient->get_fd();
 	fds[0].events = POLLIN;
 
-	int timeout = (7 * 1000);
+	int timeout = (20 * 1000);
 
     int rc = poll(fds, 1, timeout);
 
