@@ -235,6 +235,7 @@ void TCPServer::reconnections() {
         }
 
         else if(this->server_state == MENU_PHASE){
+            clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
         	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
         }
 

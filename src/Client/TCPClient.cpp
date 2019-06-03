@@ -112,6 +112,8 @@ void TCPClient::runFromFight() {
 
 void TCPClient::runFromMenu() {
     //recibo las cosas
+	cout << "Recibo que debo empezar desde el menu" << endl;
+
     mcGame->runMenu();
     runAfterMenu();
 }
