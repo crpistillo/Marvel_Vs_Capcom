@@ -376,6 +376,7 @@ void MCGame::update() {
     	cout<<"El server se ha desconectado. Fin del juego. "<<endl;
     	tcpClient->socketClient->closeFd();
     	tcpClient->socketClient->closeConnection();
+
     	exit(1);
     }
 
@@ -518,6 +519,8 @@ void MCGame::runMenu() {
     sendMenuEventsThread.~thread();
     if(appCloseFromMenu){
     	cout << "Me voy" << endl;
+        tcpClient->socketClient->closeFd();
+        tcpClient->socketClient->closeConnection();
     	exit(1);
 
     }
