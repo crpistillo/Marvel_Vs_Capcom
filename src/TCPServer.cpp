@@ -553,7 +553,6 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 
 void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
-    Socket *socket = getClientSocket(clientSocket);
 
     char buf[sizeof(menu_action_t)];
 
@@ -564,11 +563,10 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
 
     while (1) {
-
+        Socket *socket = getClientSocket(clientSocket);
         connection_mtx.lock();
         struct pollfd fds[1];
         memset(fds, 0, sizeof(fds));
-
         fds[0].fd = socket->get_fd();
         fds[0].events = POLLIN;
 
@@ -578,10 +576,10 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 		}
         connection_mtx.unlock();
 
-		//Me fijo si el socket esta apto para recibir
+
+        //Me fijo si el socket esta apto para recibir
 
         int rc = poll(fds, 1, timeout);
-
 
 		if (rc < 0)
 			cout << "Error en poll" << endl;
@@ -616,6 +614,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 			this->incoming_menu_actions_queue->insert(msgMenuQueue);
 
 			//Cierro su socket, y reporto la desconexion
+
             socket->closeConnection();
             socket->closeFd();
 
@@ -628,11 +627,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             numberOfConnections_mtx.lock();
             numberOfConnections--;
             numberOfConnections_mtx.unlock();
-
 		}
-
-
-
     }
 }
 

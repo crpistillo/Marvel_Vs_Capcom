@@ -129,6 +129,8 @@ public:
 
     bool isSending;
     int team;
+
+    bool isRunning();
 };
 
 

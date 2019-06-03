@@ -107,6 +107,7 @@ void MCGame::loadGroundTextureByZIndex() {
 
 
 MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
+    signal(SIGPIPE, signalHandler);
     constants = (Constants *) (malloc(sizeof(Constants *)));
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
@@ -208,7 +209,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
 void MCGame::alive_action()
 {
-    signal(SIGPIPE, signalHandler);
 	while(m_Running)
 	{
 	    if(isActive())
@@ -221,7 +221,6 @@ void MCGame::alive_action()
 }
 
 void MCGame::action_update() {
-    signal(SIGPIPE, signalHandler);
     FPSManager fpsManager(25);
 
     while (true) {
@@ -245,7 +244,6 @@ void MCGame::action_update() {
 }
 
 void MCGame::run() {
-    signal(SIGPIPE, signalHandler);
     m_Running = true;
     FPSManager fpsManager(SCREEN_FPS);
     logger->log("Inicio de Bucle MCGame-run.", DEBUG);
@@ -527,12 +525,14 @@ void MCGame::runMenu() {
 }
 
 void MCGame::menu() {
+    m.lock();
     m_Running = true;
+    m.unlock();
     FPSManager fpsManager(SCREEN_FPS);
     logger->log("Inicio de Bucle MCGame-Menu.", DEBUG);
 
 
-    while (m_Running) {
+    while (isRunning()) {
         fpsManager.start();
 
         updateMenu();
@@ -556,8 +556,10 @@ void MCGame::updateMenu() {
 
     clientCursors[updaterMenu->cliente]->update(updaterMenu);
 
-    if (updaterMenu->menuTerminated)
+    if (updaterMenu->menuTerminated){
+        std::unique_lock<std::mutex> lock(m);
         m_Running = false;
+    }
 }
 
 void MCGame::renderMenu() {
@@ -644,6 +646,11 @@ void MCGame::setCursors() {
 bool MCGame::isActive() {
     std::unique_lock<std::mutex> lock(m);
     return isSending || numberOfPlayers == 2;
+}
+
+bool MCGame::isRunning() {
+    std::unique_lock<std::mutex> lock(m);
+    return m_Running;
 }
 
 
