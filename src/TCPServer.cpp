@@ -218,30 +218,38 @@ void TCPServer::reconnections() {
 
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
-            m.lock();
+
+            connection_mtx.lock();
             iplist[socketToReconnect].isActive = true;
-            m.unlock();
+            connection_mtx.unlock();
 
             incoming_msg_t* recon = new incoming_msg_t;
 
             recon->action = RECONNECT;
             recon->client = socketToReconnect + 1;
 
-            m.lock();
+            incoming_msg_mtx.lock();
             incoming_msges_queue->insert(recon);
-            m.unlock();
+            incoming_msg_mtx.unlock();
 
-            m.lock();
+            teams_mtx.lock();
             int currentTeam0 = team[0]->get_currentCharacterNumber();
             int currentTeam1 = team[1]->get_currentCharacterNumber();
+            teams_mtx.unlock();
+
             clientsSockets[socketToReconnect]->sendData(&currentTeam0, sizeof(int));
             clientsSockets[socketToReconnect]->sendData(&currentTeam1, sizeof(int));
+
+            teams_mtx.lock();
             team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
+            teams_mtx.unlock();
+
+            numberOfConnections_mtx.lock();
             numberOfConnections++;
+            numberOfConnections_mtx.unlock();
 
+            std::unique_lock<std::mutex> lock(teams_mtx);
             team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient(clientsSockets);
-            m.unlock();
-
         }
 
         else if(server_state_local == MENU_PHASE){
@@ -266,9 +274,8 @@ void TCPServer::reconnections() {
             incoming_menu_actions_queue->insert(recon);
             incoming_msg_mtx.unlock();
 
-            numberOfConnections_mtx.lock();
+            std::unique_lock<std::mutex> lock(numberOfConnections_mtx);
             numberOfConnections++;
-            numberOfConnections_mtx.unlock();
         }
 
     }
@@ -340,24 +347,32 @@ int computeDistance(CharacterServer *character1, CharacterServer *character2) {
  * Son los denominados "thread lectura cliente x"*/
 void TCPServer::receiveFromClient(int clientSocket) {
 
-    struct pollfd fds[1];
-    memset(fds, 0, sizeof(fds));
 
-    fds[0].fd = clientsSockets[clientSocket]->get_fd();
-    fds[0].events = POLLIN;
-
-    int timeout = (20 * 1000);
 
     //Recibo los argumentos y los casteo en el orden que corresponde.
-    Socket *socket = getClientSocket(clientSocket);
 
     char bufAction[sizeof(actions_t)];
     char bufAlive[sizeof(char)];
 
     int receive = true;
+
+    int timeout = (20 * 1000);
+
     while (true) {
-        if(!iplist[clientSocket].isActive)  // lock
+
+        Socket *socket = getClientSocket(clientSocket);
+
+        connection_mtx.lock();
+        struct pollfd fds[1];
+        memset(fds, 0, sizeof(fds));
+        fds[0].fd = socket->get_fd();
+        fds[0].events = POLLIN;
+
+        if(!iplist[clientSocket].isActive){
+            connection_mtx.unlock();
             continue;
+        }
+        connection_mtx.unlock();
 
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
@@ -372,10 +387,14 @@ void TCPServer::receiveFromClient(int clientSocket) {
             socket->closeConnection();
             socket->closeFd();
             activeClients[clientSocket] = false;
+
+            connection_mtx.lock();
             iplist[clientSocket].isActive = false;
-            m.lock();
+            connection_mtx.unlock();
+
+            numberOfConnections_mtx.lock();
             numberOfConnections--;
-            m.unlock();
+            numberOfConnections_mtx.unlock();
 
         } else if (rc > 0) {
             socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
@@ -391,16 +410,20 @@ void TCPServer::receiveFromClient(int clientSocket) {
 				socket->closeConnection();
 				socket->closeFd();
 				activeClients[clientSocket] = false;
+
+				connection_mtx.lock();
 				iplist[clientSocket].isActive = false;
-				m.lock();
+				connection_mtx.unlock();
+
+				numberOfConnections_mtx.lock();
 				numberOfConnections--;
-				m.unlock();
+				numberOfConnections_mtx.unlock();
 			}
             if(this->clientIsActive(clientSocket))
             {
-            	m.lock();
+            	incoming_msg_mtx.lock();
             	this->incoming_msges_queue->insert(msgQueue);
-            	m.unlock();
+            	incoming_msg_mtx.unlock();
             }
         }
 
@@ -425,20 +448,31 @@ void TCPServer::sendToClient(int clientSocket) {
 
     while (1) {
 
+        connection_mtx.lock();
         if(!iplist[clientSocket].isActive) {
             if (!client_updater_queue[clientSocket]->empty_queue())
                 client_updater_queue[clientSocket]->delete_data();
+            connection_mtx.unlock();
             continue;
         }
+    connection_mtx.unlock();
+
 
 
         character_updater_t *updater;
-        if (client_updater_queue[clientSocket]->empty_queue())
+
+        updaters_queue_mtx[clientSocket].lock();
+        if (client_updater_queue[clientSocket]->empty_queue()){
+            updaters_queue_mtx[clientSocket].unlock();
             continue;
+        }
         updater = client_updater_queue[clientSocket]->get_data();
+        updaters_queue_mtx[clientSocket].unlock();
 
 
         socket->sendData(updater, sizeof(character_updater_t));
+
+        std::unique_lock<std::mutex> lock(updaters_queue_mtx[clientSocket]);
         client_updater_queue[clientSocket]->delete_data();
     }
 }
@@ -462,8 +496,10 @@ void TCPServer::runServer() {
 
 
 
-
+    server_state_mtx.lock();
     this->server_state = FIGHT_PHASE;
+    server_state_mtx.unlock();
+
     for (int i = 0; i < numberOfPlayers; ++i) {
         receiveFromClientThreads[i] = std::thread(&TCPServer::receiveFromClient,
                                                   this, i);
@@ -623,6 +659,7 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             socket->closeFd();
 
             activeClients[clientSocket] = false;
+
 
             connection_mtx.lock();
             iplist[clientSocket].isActive = false;
@@ -935,13 +972,11 @@ void TCPServer::updateModel() {
     while (1) {
 
 		if (numberOfConnections == 0) {
-			m.lock();
 			cout
 					<< "Se han desconectado todos los clientes. Server se desconecta"
 					<< endl;
 			this->serverSocket->closeFd();
 			this->serverSocket->closeConnection();
-			m.unlock();
 			exit(1);
 		}
 
@@ -952,9 +987,10 @@ void TCPServer::updateModel() {
 
         int distancia[2];
 
-        m.lock();
+        teams_mtx.lock();
         distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
         distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
+        teams_mtx.unlock();
 
         character_updater_t *update_msg = new character_updater_t;
 
@@ -963,6 +999,7 @@ void TCPServer::updateModel() {
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
 
+        teams_mtx.lock();
         if (team[teamToUpdate]->get_currentCharacter()->isStanding()
             && incoming_msg->action == CHANGEME)
         {
@@ -1000,7 +1037,7 @@ void TCPServer::updateModel() {
         update_msg->team = teamToUpdate;
         update_msg->currentSprite =
                 team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
-        m.unlock();
+        teams_mtx.unlock();
 
         character_updater_t *update[numberOfPlayers];
         for (int j = 0; j < numberOfPlayers; ++j) {
@@ -1014,15 +1051,12 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-
-           // if(!iplist[i].isActive) //TODO lock
-                //continue;
-            std::unique_lock<std::mutex> lock(m);
+            std::unique_lock<std::mutex> lock(updaters_queue_mtx[i]);
             this->client_updater_queue[i]->insert(update[i]);
         }
 
         //disconnectionsManager(incoming_msg);
-
+        std::unique_lock<std::mutex> lock(incoming_msg_mtx);
         incoming_msges_queue->delete_data();
 
     }
@@ -1065,8 +1099,8 @@ void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
 	return;
 }
 
-int TCPServer::getTeamNumber(int client)
-{
+int TCPServer::getTeamNumber(int client){
+
 	if(numberOfPlayers == 4)
 	{
 		if (client == 0 || client == 1)
