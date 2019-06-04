@@ -388,4 +388,14 @@ bool CharacterServer::isStanding()
 	return this->currentAction == STANDING;
 }
 
+void CharacterServer::moverColisionable()
+{
+	//Por ahora, una sola caja
+	objetoColisionable->setCenter(this->getCentro(),mPosY);
+}
+
+Box*  CharacterServer::getColisionable() {
+    return objetoColisionable;
+}
+
 

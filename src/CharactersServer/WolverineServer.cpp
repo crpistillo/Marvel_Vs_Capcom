@@ -20,6 +20,13 @@ const int LAST_KICK_SPRITE = 3;
 const int LAST_PUNCH_DOWN_SPRITE = 1;
 const int LAST_KICK_DOWN_SPRITE = 2;
 
+const int widthStanding = 87;
+const int heightStanding = 84;
+const int widthWalking = 88;
+const int heightWalking = 86;
+const int widthDuck = 92;
+const int heightDUck = 59;
+
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                                  int numberOfClient)
@@ -45,6 +52,9 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastKickSprite = LAST_KICK_SPRITE;
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
+
+    Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
+    //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
 
 

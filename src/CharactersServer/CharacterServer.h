@@ -13,6 +13,8 @@
 #include "../tools/logger/Logger.h"
 #include "../action_constants.h"
 #include "../data_structs.h"
+#include <vector>
+#include "../Box.h"
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -46,6 +48,8 @@ public:
     virtual int getSpriteNumber() = 0;
     actions_t getCurrentAction();
     bool isStanding();
+    //vector<Box*> getColisionable();
+    Box* getColisionable();
 
 
     int clientNumber;
@@ -81,6 +85,9 @@ protected:
     int ZIndex;
 
     int anchoPantalla;
+
+    Box* objetoColisionable; //por ahora una sola caja
+    //vector<Box*> objetoColisionable;
 
 
     int currentStandingSprite;
@@ -142,6 +149,8 @@ private:
     virtual void punchDown();
 
     virtual void kickDown();
+
+    virtual void moverColisionable();
 
 
 };
