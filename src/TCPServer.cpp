@@ -397,8 +397,12 @@ void TCPServer::receiveFromClient(int clientSocket) {
             numberOfConnections_mtx.unlock();
 
         } else if (rc > 0) {
-            socket->reciveData(bufAction, sizeof(actions_t)); //devuelve true si recibio algo
-            actions_t *accion = (actions_t *) bufAction;
+
+            actions_t *accion;
+            if(socket->reciveData(bufAction, sizeof(actions_t)))
+                accion = (actions_t *) bufAction;
+            else
+                *accion = DISCONNECTEDCLIENT;
             //Agrego elementos a la cola de mensajes entrantes
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
