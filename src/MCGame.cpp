@@ -105,9 +105,13 @@ void MCGame::loadGroundTextureByZIndex() {
     frontGround->setZIndex(backgroundsList[2]["zindex"]);
 }
 
+void MCGame::static_signalHandlerClient(int sigNum) {
+    TCPClient* tcp = TCPClient::getInstance();
+    tcp->signalHandlerClient(sigNum);
+}
 
 MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
-    signal(SIGPIPE, signalHandler);
+    signal(SIGPIPE, MCGame::static_signalHandlerClient);
     constants = (Constants *) (malloc(sizeof(Constants *)));
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
@@ -220,6 +224,8 @@ void MCGame::alive_action()
 	}
 }
 
+
+
 void MCGame::action_update() {
     FPSManager fpsManager(25);
 
@@ -232,7 +238,12 @@ void MCGame::action_update() {
         if(!isActive() && actionToSend != DISCONNECTEDCLIENT)
             continue;
 
+
+        if(tcpClient->isPipeBroken)
+            sleep(1);
+        tcpClient->isPipeBroken = false;
 		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+
 
 		if (!threadRunning)
             break;
@@ -647,12 +658,14 @@ void MCGame::setCursors() {
 
 bool MCGame::isActive() {
     std::unique_lock<std::mutex> lock(m);
-    return isSending || numberOfPlayers == 2;
+        return isSending || numberOfPlayers == 2;
 }
 
 bool MCGame::isRunning() {
     std::unique_lock<std::mutex> lock(m);
     return m_Running;
 }
+
+
 
 

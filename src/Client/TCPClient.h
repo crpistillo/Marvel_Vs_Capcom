@@ -19,20 +19,25 @@
 #include "../Socket.h"
 #include "../tools/json/ConfigFileParser/ConfigFileParser.h"
 #include <pthread.h>
+#include <csignal>
+
 
 using namespace std;
 
 class TCPClient
 {
 private:
+    static TCPClient* instance;
     int sock;
     std::string address;
     int port;
     struct sockaddr_in server;
+    TCPClient();
+
 
 
 public:
-    TCPClient();
+    static TCPClient* getInstance();
     bool setup(string address, int port);
     bool Send(void* data, size_t size_data);
     void* receive(int size = 4096);
@@ -57,6 +62,10 @@ public:
     int numberOfPlayers;
 
     void runAfterMenu() const;
+
+    bool isPipeBroken;
+
+    void signalHandlerClient(int signum);
 };
 
 #endif

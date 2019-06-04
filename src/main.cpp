@@ -28,7 +28,7 @@ json parseConfigFile(string logPath) {
 Logger *Logger::instance = 0;
 
 TCPServer* tcpServer;
-TCPClient* tcpClient;
+TCPClient* TCPClient::instance = 0;
 
 
 int run_server(int cantArg, char *dirJson, int port, int numOfPlayers);
@@ -110,7 +110,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 	Logger* logger = Logger::getInstance();
 	logger->startSession("CLIENT");
 
-	tcpClient = new TCPClient();
+	TCPClient* tcpClient = TCPClient::getInstance();
 
 	//LOGGER//////////
     logger->log("Logger iniciado.", DEBUG);

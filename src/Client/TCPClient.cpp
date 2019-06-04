@@ -13,6 +13,7 @@ MCGame* mcGame;
 TCPClient::TCPClient() {
     socketClient = new Socket();
     port = 0;
+    this->isPipeBroken = false;
     address = "";
 }
 
@@ -127,6 +128,20 @@ void TCPClient::runAfterMenu() const {
     mcGame->loadInitialTextures();
     mcGame->render();
     mcGame->run();
+}
+
+TCPClient *TCPClient::getInstance() {
+    if(instance == 0){
+        instance = new TCPClient();
+    }
+    return instance;
+}
+
+void TCPClient::signalHandlerClient(int signum) {
+    if(signum == SIGPIPE){
+        isPipeBroken = true;
+    }
+
 }
 
 
