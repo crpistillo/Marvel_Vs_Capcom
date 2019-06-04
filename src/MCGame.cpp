@@ -189,12 +189,12 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     this->numberOfPlayers = tcpClient->numberOfPlayers;//tcpClient->numberOfPlayers;
 
     if (numberOfPlayers == 2) {
-        if (tcpClient->nclient == 1)
+        if (tcpClient->nclient == 0)
             team = 0;
         else
             team = 1;
     } else {
-        if (tcpClient->nclient < 3)
+        if (tcpClient->nclient < 2)
             team = 0;
         else
             team = 1;
@@ -612,7 +612,7 @@ void MCGame::renderMenuBackImage() {
 
 void MCGame::loadSelectedCharacters() {
 
-    int i = 1;
+    int i = 0;
     for (auto &character : characters) {
         char buf1[sizeof(character_builder_t)];
         character_builder_t *builder;
@@ -634,6 +634,8 @@ void MCGame::loadSelectedCharacters() {
     players[1]->setCurrentCharacter(currentCharacter1);
 
     isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
+    cout<<"El isSending en MCGame es"<<isSending<<endl;
+    cout<<"El cliente activo es "<<players[team]->getCurrentCharacter()->clientNumber<<endl;
 
 }
 

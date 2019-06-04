@@ -23,7 +23,9 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         //SI EL CURRENTCHARACTER -> CLIENTE
         if (becomeActive) {
             m.lock();
+            cout<<"isSending del Player ANTES es:"<<*isSending<<endl;
             *isSending = (clientNumber == currentCharacter->clientNumber);
+            cout<<"isSending del Player DESPUES es: "<<*isSending<<endl;
             m.unlock();
         }
 
@@ -44,7 +46,11 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     } else if (updater->action == CHANGEME) {
         m.lock();
         if (becomeActive)
-            *isSending = !(*isSending);
+        {
+        	cout<<"is Sending es"<<*isSending<<endl;
+        	*isSending = !(*isSending);
+        	cout<<"is Sending es " << *isSending <<endl;
+        }
         m.unlock();
         changeCharacter();  //send change character
         setCharacterToChanging();
