@@ -39,5 +39,9 @@
 	"window": {
 		"width": 800,
 		"height": 600
+	},
+	"server": {
+		"players": 2,
+		"log": "INFO"
 	}
 }

@@ -27,6 +27,7 @@ private:
 	void validateBattlefield(json defaultConfig);
 	void validateCharacters(json defaultConfig);
 	void validateWindow(json defaultConfig);
+	void validatePlayers(json defaultConfig);
 	void logError(string key, string errorMsg);
 	void replaceByDefault(string key, json defaultConfig, string subKey = "", int posSubKey = -1);
 
