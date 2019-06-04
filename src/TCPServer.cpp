@@ -227,7 +227,7 @@ void TCPServer::reconnections() {
             incoming_msg_t* recon = new incoming_msg_t;
 
             recon->action = RECONNECT;
-            recon->client = socketToReconnect + 1;
+            recon->client = socketToReconnect;
 
             incoming_msg_mtx.lock();
             incoming_msges_queue->insert(recon);
@@ -461,7 +461,6 @@ void TCPServer::sendToClient(int clientSocket) {
             continue;
         }
     connection_mtx.unlock();
-
 
 
         character_updater_t *updater;

@@ -397,8 +397,13 @@ void MCGame::update() {
 		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
 
-
 		//cambiar false x updater->client
+		if(updater->action == RECONNECT || updater->action == DISCONNECTEDCLIENT || updater->action == CHANGEME)
+		{
+			cout<<"Updater team es "<<updater->team<<endl;
+			cout<<"Team del MCGame es "<<team<<endl;
+		}
+
 		if (updater->team == 0) {
             players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
 			players[0]->load(m_Renderer, players[1]->getCentro());
@@ -633,8 +638,9 @@ void MCGame::loadSelectedCharacters() {
     players[0]->setCurrentCharacter(currentCharacter0);
     players[1]->setCurrentCharacter(currentCharacter1);
 
+    cout<<"is Sending del MCGame en LOAD - ANTES es"<< isSending<<endl;
     isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
-    cout<<"El isSending en MCGame es"<<isSending<<endl;
+    cout<<"is Sending del MCGame en LOAD - DESPUES es"<< isSending<<endl;
     cout<<"El cliente activo es "<<players[team]->getCurrentCharacter()->clientNumber<<endl;
 
 }
