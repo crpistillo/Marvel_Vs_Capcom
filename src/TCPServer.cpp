@@ -1076,8 +1076,13 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-            std::unique_lock<std::mutex> lock(updaters_queue_mtx[i]);
-            this->client_updater_queue[i]->insert(update[i]);
+        	connection_mtx.lock();
+        	if(iplist[i].isActive){
+				updaters_queue_mtx[i].lock();
+				this->client_updater_queue[i]->insert(update[i]);
+				updaters_queue_mtx[i].unlock();
+        	}
+        	connection_mtx.unlock();
         }
 
         //disconnectionsManager(incoming_msg);
