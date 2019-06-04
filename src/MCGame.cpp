@@ -239,10 +239,10 @@ void MCGame::action_update() {
             continue;
 
 
-        if(tcpClient->isPipeBroken)
-            sleep(1);
         tcpClient->isPipeBroken = false;
 		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        if(tcpClient->isPipeBroken)
+            sleep(10);
 
 
 		if (!threadRunning)
