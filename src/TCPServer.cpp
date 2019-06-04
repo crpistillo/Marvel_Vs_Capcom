@@ -363,17 +363,10 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
         Socket *socket = getClientSocket(clientSocket);
 
-        connection_mtx.lock();
         struct pollfd fds[1];
         memset(fds, 0, sizeof(fds));
         fds[0].fd = socket->get_fd();
         fds[0].events = POLLIN;
-
-        if(!iplist[clientSocket].isActive){
-            connection_mtx.unlock();
-            continue;
-        }
-        connection_mtx.unlock();
 
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
@@ -382,32 +375,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
         if (rc < 0)
             cout << "Error en poll" << endl;
 
-        else if (rc == 0) {
-            cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
-            if(clientIsActive(clientSocket)){
-                connection_mtx.lock();
-                iplist[clientSocket].isActive = false;
-                connection_mtx.unlock();
-            }
-
-            if(maxTimeouts == 10){
-                this->manageDisconnection(clientSocket);
-                socket->closeConnection();
-                socket->closeFd();
-                activeClients[clientSocket] = false;
-
-                connection_mtx.lock();
-                iplist[clientSocket].isActive = false;
-                connection_mtx.unlock();
-
-                numberOfConnections_mtx.lock();
-                numberOfConnections--;
-                numberOfConnections_mtx.unlock();
-            }
-            maxTimeouts++;
-
-
-        } else if (rc > 0) {
+        else if (rc > 0 && fds[0].revents == POLLIN) {
             connection_mtx.lock();
             iplist[clientSocket].isActive = true;
             connection_mtx.unlock();
@@ -445,6 +413,39 @@ void TCPServer::receiveFromClient(int clientSocket) {
             	this->incoming_msges_queue->insert(msgQueue);
             	incoming_msg_mtx.unlock();
             }
+        }
+
+        else if(maxTimeouts != 10){
+
+
+
+            cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
+            if(clientIsActive(clientSocket)){
+                connection_mtx.lock();
+                iplist[clientSocket].isActive = false;
+                connection_mtx.unlock();
+            }
+
+            if(maxTimeouts == 10){
+            	cout << "Se procede a desconectar el cliente: " << clientSocket << endl;
+                this->manageDisconnection(clientSocket);
+                socket->closeConnection();
+                socket->closeFd();
+                activeClients[clientSocket] = false;
+
+                connection_mtx.lock();
+                iplist[clientSocket].isActive = false;
+                connection_mtx.unlock();
+
+                numberOfConnections_mtx.lock();
+                numberOfConnections--;
+                numberOfConnections_mtx.unlock();
+                maxTimeouts = 0;
+                continue;
+            }
+            maxTimeouts++;
+
+
         }
 
     }
