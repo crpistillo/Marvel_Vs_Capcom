@@ -36,6 +36,7 @@ class TCPServer
 {
 private:
 
+	double posPlayers[2];
     std::thread receiveFromClientThreads[MAXPLAYERS];
     std::thread sendToClientThreads[MAXPLAYERS];
 	Team* team[2];
