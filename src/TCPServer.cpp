@@ -356,7 +356,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
     int receive = true;
 
-    int timeout = (20 * 1000);
+    int timeout = (1 * 1000);
+    int maxTimeouts = 0;
 
     while (true) {
 
@@ -383,21 +384,36 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
         else if (rc == 0) {
             cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
-            this->manageDisconnection(clientSocket);
-            socket->closeConnection();
-            socket->closeFd();
-            activeClients[clientSocket] = false;
+            if(clientIsActive(clientSocket)){
+                connection_mtx.lock();
+                iplist[clientSocket].isActive = false;
+                connection_mtx.unlock();
+            }
 
-            connection_mtx.lock();
-            iplist[clientSocket].isActive = false;
-            connection_mtx.unlock();
+            if(maxTimeouts == 10){
+                this->manageDisconnection(clientSocket);
+                socket->closeConnection();
+                socket->closeFd();
+                activeClients[clientSocket] = false;
 
-            numberOfConnections_mtx.lock();
-            numberOfConnections--;
-            numberOfConnections_mtx.unlock();
+                connection_mtx.lock();
+                iplist[clientSocket].isActive = false;
+                connection_mtx.unlock();
+
+                numberOfConnections_mtx.lock();
+                numberOfConnections--;
+                numberOfConnections_mtx.unlock();
+            }
+            maxTimeouts++;
+
 
         } else if (rc > 0) {
+            connection_mtx.lock();
+            iplist[clientSocket].isActive = true;
+            connection_mtx.unlock();
 
+
+            maxTimeouts = 0;
             actions_t *accion;
             if(socket->reciveData(bufAction, sizeof(actions_t)))
                 accion = (actions_t *) bufAction;
@@ -1103,7 +1119,7 @@ void TCPServer::updateModel() {
 
 
 bool TCPServer::clientIsActive(int clientSocket) {
-    std::unique_lock<std::mutex> lock(m);
+    std::unique_lock<std::mutex> lock(teams_mtx);
     return (team[0]->clientActive == clientSocket
             || team[1]->clientActive == clientSocket);
 }
