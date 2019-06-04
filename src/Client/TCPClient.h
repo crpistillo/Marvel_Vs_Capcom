@@ -60,6 +60,8 @@ public:
     int alto;
     json config;
     int numberOfPlayers;
+    int posPlayer1;
+    int posPlayer2;
 
     void runAfterMenu() const;
 

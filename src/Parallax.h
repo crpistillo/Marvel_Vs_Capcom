@@ -17,6 +17,7 @@ const int BACK_GROUND_VEL = 3.3575; //antes: 6.66667
 class Parallax
 {
 private:
+	bool layersCentered;
 	Layer** middleGround;
 	Layer** backGround;
 	SDL_Rect* camera;
@@ -44,6 +45,7 @@ public:
 
 	void doParallax(Player** player1, Player** player2,Logger* logger);
 
+	void centerLayers(Player** player1, Player** player2);
 
     bool playersAreMakingIntro(Player *player1, Player *player2, Logger *logger);
 };

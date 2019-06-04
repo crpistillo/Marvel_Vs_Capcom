@@ -285,10 +285,10 @@ void TCPServer::reconnections() {
 void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
     character_builder_t builders[MAXPLAYERS];
 
-    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0],true);
-    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1],true);
-    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2],false);
-    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3],false);
+    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0],true,posPlayers[0]);
+    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1],true,posPlayers[0]);
+    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2],false,posPlayers[1]);
+    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3],false,posPlayers[1]);
 
     for (auto & builder : builders) {
         clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));
@@ -534,12 +534,19 @@ void TCPServer::sendSelectedCharacters() {
 
     int nclient = 0;
     int nCharacter = 0;
+    double pos;
+
     for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
+		if (getTeamNumber(nclient) == 0)
+			pos = constants.INITIAL_POS_X_PLAYER_ONE;
+		else
+			pos = constants.INITIAL_POS_X_PLAYER_TWO;
+
         for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
             characters[nCharacter] = createServerCharacterFromCursor(
                     serverCursors[nCharacter], nclient, nCharacter);
             characters[nCharacter]->makeBuilderStruct(&builders[nCharacter],
-                                                      nCharacter < 2);
+                                                      nCharacter < 2, pos);
             nCharacter++;
         }
         nclient++;
@@ -1013,6 +1020,8 @@ void TCPServer::updateModel() {
         int distancia[2];
 
         teams_mtx.lock();
+		posPlayers[0] = team[0]->get_currentCharacter()->getPosX();
+		posPlayers[1] = team[1]->get_currentCharacter()->getPosX();
         distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
         distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
         teams_mtx.unlock();
@@ -1076,8 +1085,13 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-            std::unique_lock<std::mutex> lock(updaters_queue_mtx[i]);
-            this->client_updater_queue[i]->insert(update[i]);
+        	connection_mtx.lock();
+        	if(iplist[i].isActive){
+				updaters_queue_mtx[i].lock();
+				this->client_updater_queue[i]->insert(update[i]);
+				updaters_queue_mtx[i].unlock();
+        	}
+        	connection_mtx.unlock();
         }
 
         //disconnectionsManager(incoming_msg);
