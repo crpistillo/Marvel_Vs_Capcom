@@ -25,6 +25,7 @@ using namespace std;
 class TCPClient
 {
 private:
+	int posPlayers[2];
     int sock;
     std::string address;
     int port;
@@ -55,6 +56,8 @@ public:
     int alto;
     json config;
     int numberOfPlayers;
+    int posPlayer1;
+    int posPlayer2;
 
     void runAfterMenu() const;
 };

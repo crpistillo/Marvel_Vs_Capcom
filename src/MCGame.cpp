@@ -24,7 +24,7 @@ const string DEBUG = "DEBUG";
 const int SCREEN_FPS = 60;
 
 int centerBefore, centerLater = -1000;
-
+bool firstTime = true;
 
 void orderBackgroundsByZIndex(json *backgroundList);
 
@@ -405,11 +405,7 @@ void MCGame::update() {
 CharacterClient *MCGame::characterBuild(character_builder_t *builder, int clientNumber) {
     CharacterClient *characterClient = nullptr;
 
-    int pos;
-    if (builder->isFirstTeam)
-        pos = constants->INITIAL_POS_X_PLAYER_ONE;
-    else
-        pos = constants->INITIAL_POS_X_PLAYER_TWO;
+    int pos = builder->pos;
 
     switch (builder->personaje) {
         case SPIDERMAN:
