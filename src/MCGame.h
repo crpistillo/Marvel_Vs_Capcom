@@ -66,8 +66,12 @@ private:
     void alive_action();
 
     std::mutex m;
+    std::mutex threadRunning_mtx;
 
     void sendMenuEvents();
+
+    void setThreadRunning(bool condition);
+    bool getRunningThread();
 
     ClientCursor *clientCursors[4];
 

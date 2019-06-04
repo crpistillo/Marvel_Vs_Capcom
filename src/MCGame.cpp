@@ -245,7 +245,7 @@ void MCGame::action_update() {
             sleep(10);
 
 
-		if (!threadRunning)
+		if (!getRunningThread())
             break;
 
         fpsManager.stop();
@@ -263,7 +263,7 @@ void MCGame::run() {
     std::thread send(&MCGame::action_update, this);
     std::thread alive(&MCGame::alive_action, this);
 
-    threadRunning = true;
+    setThreadRunning(true);
     while (m_Running)
     {
         fpsManager.start();
@@ -362,7 +362,7 @@ void MCGame::handleEvents() {
 
     if (inputManager->closeWindowRequested()) {
         SDL_HideWindow(m_Window);
-        threadRunning = false;
+        setThreadRunning(false);
     }
 
 }
@@ -472,8 +472,10 @@ void orderBackgroundsByZIndex(json *backgroundList) {
 void MCGame::sendMenuEvents() {
     int charactersSelected = 0;
     FPSManager fpsManager(10);
-    this->threadRunning = true;
+    setThreadRunning(true);
     Uint32 timer = SDL_GetTicks();
+
+    bool sendOnlyAlive = false;
 
     while (1) {
         fpsManager.start();
@@ -485,20 +487,21 @@ void MCGame::sendMenuEvents() {
         	break;
         }
 
-        if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0){
+        if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0 && !sendOnlyAlive){
             menuActionToSend = SELECT;
             charactersSelected++;
         }
-        if (menuActionToSend != INVALID_MENU_ACTION) {
+        if (menuActionToSend != INVALID_MENU_ACTION && !sendOnlyAlive) {
             tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
 
         sendMenuAlive(&timer);
 
-        if (!threadRunning)
+
+        if (!getRunningThread())
             break;
         if (menuActionToSend == ENTER)
-            return;
+            sendOnlyAlive = true;
         fpsManager.stop();
 
     }
@@ -526,8 +529,11 @@ void MCGame::runMenu() {
     setCursors();
     //Continuar con la ejecucion de MCGame::menu
     menu();
+    cout << "ASD" << endl;
     sendMenuEventsThread.join();
+    cout << "ASD" << endl;
     sendMenuEventsThread.~thread();
+    cout << "ASD" << endl;
     if(appCloseFromMenu){
     	cout << "Me voy" << endl;
         tcpClient->socketClient->closeConnection();
@@ -554,8 +560,20 @@ void MCGame::menu() {
         fpsManager.stop();
     }
 
+    setThreadRunning(false);
+
     logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
 
+}
+
+void MCGame::setThreadRunning(bool condition){
+	std::unique_lock<std::mutex> lock(threadRunning_mtx);
+	threadRunning = condition;
+}
+
+bool MCGame::getRunningThread(){
+	std::unique_lock<std::mutex> lock(threadRunning_mtx);
+	return threadRunning;
 }
 
 

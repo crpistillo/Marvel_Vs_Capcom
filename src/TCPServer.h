@@ -53,9 +53,13 @@ private:
     ServerCursor* serverCursors[MAXPLAYERS];
 
     bool activeClients[MAXPLAYERS];
+    bool runningMenuPhase;
 
     void runMenuFourPlayers();
     void runMenuTwoPlayers();
+
+    bool getRunningMenuPhase();
+    void setRunningMenuPhase(bool condition);
 
 
     ip_status_t iplist[4];
@@ -69,6 +73,7 @@ private:
     std::mutex updaters_queue_mtx[MAXPLAYERS];
     std::mutex server_state_mtx;
     std::mutex teams_mtx;
+    std::mutex runningMenuPhase_mtx;
 
 
 

@@ -496,6 +496,7 @@ void TCPServer::runServer() {
     server_state_mtx.unlock();
 
     runMenuPhase();  //Pongo al servidor en modo "Menu"
+    cout << "SERVIDOR SI TERMINA CON LA ETAPA DEL MENU" << endl;
     sendSelectedCharacters();
 
 
@@ -511,6 +512,9 @@ void TCPServer::runServer() {
     }
 
     updateModel();
+
+    this->serverSocket->closeFd();
+    this->serverSocket->closeConnection();
 
 }
 
@@ -596,13 +600,10 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     char buf[sizeof(menu_action_t)];
 
-
-
-
     int timeout = (3 * 1000);
 
 
-    while (1) {
+    while (getRunningMenuPhase()) {
         Socket *socket = getClientSocket(clientSocket);
         connection_mtx.lock();
         struct pollfd fds[1];
@@ -640,8 +641,8 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 				incoming_msg_mtx.lock();
 				this->incoming_menu_actions_queue->insert(msgMenuQueue);
 				incoming_msg_mtx.unlock();
-				if (*accion == ENTER)
-					return;
+				//if (*accion == ENTER)
+				//	return;
 			}
 		}
 
@@ -675,6 +676,19 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             numberOfConnections_mtx.unlock();
 		}
     }
+}
+
+bool TCPServer::getRunningMenuPhase(){
+	runningMenuPhase_mtx.lock();
+	bool var = runningMenuPhase;
+	runningMenuPhase_mtx.unlock();
+	return var;
+}
+
+void TCPServer::setRunningMenuPhase(bool condition){
+	runningMenuPhase_mtx.lock();
+	runningMenuPhase = condition;
+	runningMenuPhase_mtx.unlock();
 }
 
 
@@ -830,11 +844,15 @@ void TCPServer::runMenuFourPlayers() {
 
     }
 
+
+
 }
 
 void TCPServer::runMenuPhase() {
 
     //Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
+
+	setRunningMenuPhase(true);
 
     std::thread receiveFromClientThreads[numberOfPlayers];
     std::thread sendToClientThreads[numberOfPlayers];
@@ -844,13 +862,20 @@ void TCPServer::runMenuPhase() {
                 &TCPServer::receiveMenuActionsFromClient, this, i);
         sendToClientThreads[i] = std::thread(
                 &TCPServer::sendCursorUpdaterToClient, this, i);
-        receiveFromClientThreads[i].detach();
+        //receiveFromClientThreads[i].detach();
     }
 
     if (this->numberOfPlayers == 4)
         runMenuFourPlayers();
     else
         runMenuTwoPlayers();
+
+    setRunningMenuPhase(false);
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        receiveFromClientThreads[i].join();
+        receiveFromClientThreads[i].~thread();
+    }
 
 
     for (int i = 0; i < numberOfPlayers; ++i) {
@@ -976,12 +1001,8 @@ void TCPServer::updateModel() {
     while (1) {
 
 		if (numberOfConnections == 0) {
-			cout
-					<< "Se han desconectado todos los clientes. Server se desconecta"
-					<< endl;
-			this->serverSocket->closeFd();
-			this->serverSocket->closeConnection();
-			exit(1);
+			cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
+			break;
 		}
 
         incoming_msg_t *incoming_msg;

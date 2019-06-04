@@ -101,6 +101,7 @@ void TCPClient::runFromBeginning() {
 
     mcGame->runMenu();
 
+    cout << "RUNMENU TERMINADO" << endl;
     runAfterMenu();
 
 }
