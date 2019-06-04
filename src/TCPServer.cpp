@@ -526,7 +526,7 @@ void TCPServer::sendSelectedCharacters() {
 
     int nclient = 0;
     int nCharacter = 0;
-    int pos;
+    double pos;
 
     for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
 		if (getTeamNumber(nclient) == 0)

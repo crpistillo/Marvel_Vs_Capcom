@@ -30,7 +30,7 @@ typedef enum character_number{
 
 
 typedef struct{
-	int pos;
+	double pos;
     int cliente;
     character_number_t personaje;
     int sprite;

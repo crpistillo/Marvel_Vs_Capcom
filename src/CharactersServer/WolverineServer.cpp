@@ -94,7 +94,7 @@ void WolverineServer::resetSpriteVariables(){
 	return;
 }
 
-void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, int pos) {
+void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
     builder->personaje = WOLVERINE;
     builder->cliente = clientNumber;
     builder->sprite = 0;
