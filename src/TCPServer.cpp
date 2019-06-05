@@ -406,8 +406,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 connection_mtx.lock();
                 iplist[clientSocket].isActive = false;
                 connection_mtx.unlock();
-                maxTimeouts++;
+
             }
+            maxTimeouts++;
 
             if(maxTimeouts == 10){
                 this->manageDisconnection(clientSocket);
