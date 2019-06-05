@@ -200,8 +200,6 @@ void TCPServer::reconnections() {
 
         //check server status
 
-        cout << str << endl;
-        cout << socketToReconnect << endl;
 
 
         initializer.client = socketToReconnect;
@@ -260,7 +258,6 @@ void TCPServer::reconnections() {
             connection_mtx.unlock();
 
             socketToSend->sendData(&initializer, sizeof(initializer_t));
-        	cout << "Se registra que el usuario:"<< socketToReconnect <<" intenta reconectarse en la instancia del menu" << endl;
 
             connection_mtx.lock();
             iplist[socketToReconnect].isActive = true;
@@ -312,14 +309,8 @@ void TCPServer::reportClientConnected(const struct sockaddr_in *clientAddress,
     char portbuf[NI_MAXSERV];
     if (getnameinfo((struct sockaddr *) clientAddress, clientAddress_len,
                     hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, 0) == 0) {
-        string msg = "Client " + string(hostbuf) + ", " + string(portbuf)
-                     + " connected";
-        cout << msg << endl;
         logger->log(msg, INFO);
-    } else {
-        cout << "Client unknown connected " << endl;
     }
-    return;
 }
 
 int TCPServer::getNumberOfConections() {
@@ -389,8 +380,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
 			if (msgQueue->action == DISCONNECTEDCLIENT) {
-				cout << "SE DESCONECTO EL CLIENTE " << clientSocket
-						<< " POR CIERRE DE VENTANA" << endl;
 				this->manageDisconnection(clientSocket);
 				socket->closeConnection();
 				socket->closeFd();
@@ -413,7 +402,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
         }
 
         else if(maxTimeouts != 10 && rc == 0){
-            cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
             if(clientIsActive(clientSocket)){
                 connection_mtx.lock();
                 iplist[clientSocket].isActive = false;
@@ -422,7 +410,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             }
 
             if(maxTimeouts == 10){
-            	cout << "Se procede a desconectar el cliente: " << clientSocket << endl;
                 this->manageDisconnection(clientSocket);
                 socket->closeConnection();
                 socket->closeFd();
@@ -521,7 +508,6 @@ void TCPServer::runServer() {
     team[1] = new Team(teamSize);
 
     runMenuPhase();  //Pongo al servidor en modo "Menu"
-    cout << "SERVIDOR SI TERMINA CON LA ETAPA DEL MENU" << endl;
     sendSelectedCharacters();
 
     treatDisconnectionsAfterSelection();
@@ -673,8 +659,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             menu_action_t *accion = (menu_action_t *) buf;
 
 			if(*accion == ALIVE_MENU){
-				cout << "El cliente " << clientSocket << " me manda su alive bit!" << endl;
-				cout << "EL VALOR DE REVENTS ES: " << fds[0].revents << endl;
 				continue;
 			}
 			else{
@@ -690,8 +674,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 		}
 
 		else{
-			cout << "No se recibio nada mas del cliente: " << clientSocket << endl;
-			cout << "EL VALOR DE REVENTS ES: " << fds[0].revents << endl;
 
 			//Reporto en el servidor que el cliente se desconecto
 			client_menu_t *msgMenuQueue = new client_menu_t;
@@ -712,7 +694,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
             connection_mtx.lock();
             iplist[clientSocket].isActive = false;
-            cout << iplist[clientSocket].isActive << endl;
             connection_mtx.unlock();
 
             numberOfConnections_mtx.lock();
@@ -842,26 +823,20 @@ void TCPServer::runMenuFourPlayers() {
         incoming_msg_mtx.unlock();
 
         if(incoming_msg->accion == DISCONNECTED_MENU){
-        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->client << " se ha desconectado." << endl;
         	if( (int) (incoming_msg->client / 2) == 0)
         		onlinePlayersTeamOne--;
         	else
         		onlinePlayersTeamTwo--;
-        	cout << "Team one: " << onlinePlayersTeamOne << endl;
-        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
         	if(!serverCursors[incoming_msg->client]->getFinalSelection())
                 serverCursors[incoming_msg->client]->setVisible(false);
         	sendUpdaters(false);
         }
         else if(incoming_msg->accion == RECONNECTION_MENU){
-        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->client << " se ha RECONECTADO." << endl;
         	if( (int) (incoming_msg->client / 2) == 0)
         		onlinePlayersTeamOne++;
         	else
         		onlinePlayersTeamTwo++;
-        	cout << "Team one: " << onlinePlayersTeamOne << endl;
-        	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
         	serverCursors[incoming_msg->client]->setVisible(true);
         	sendUpdaters(false);
@@ -1114,7 +1089,6 @@ void TCPServer::updateModel() {
         teams_mtx.unlock();
 
         if(team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
-            cout << "No mas jugadores en team" << endl;
             endgameForDisconnections();
             break;
         }

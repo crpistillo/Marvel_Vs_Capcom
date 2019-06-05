@@ -394,7 +394,6 @@ void MCGame::update() {
 
     int rc = poll(fds, 1, timeout);
 
-    //cout << fds[0].revents << endl;
 
     if (rc < 0)
     	cout << "Error en poll" << endl;
@@ -424,17 +423,11 @@ void MCGame::update() {
 		character_updater_t *updater = (character_updater_t *) buf1;
 
 		if(updater->gameFinishedByDisconnections || !asd ){
-		    cout << "Me llega endgame" << endl;
 		    endgame = true;
 		    return;
 		}
 
-		//cambiar false x updater->client
-		if(updater->action == RECONNECT || updater->action == DISCONNECTEDCLIENT || updater->action == CHANGEME)
-		{
-			cout<<"Updater team es "<<updater->team<<endl;
-			cout<<"Team del MCGame es "<<team<<endl;
-		}
+
 
 		if (updater->team == 0) {
             players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
@@ -562,13 +555,9 @@ void MCGame::runMenu() {
     setCursors();
     //Continuar con la ejecucion de MCGame::menu
     menu();
-    cout << "ASD" << endl;
     sendMenuEventsThread.join();
-    cout << "ASD" << endl;
     sendMenuEventsThread.~thread();
-    cout << "ASD" << endl;
     if(appCloseFromMenu){
-    	cout << "Me voy" << endl;
         tcpClient->socketClient->closeConnection();
         tcpClient->socketClient->closeFd();
     	exit(1);
@@ -669,10 +658,8 @@ void MCGame::loadSelectedCharacters() {
     players[0]->setCurrentCharacter(currentCharacter0);
     players[1]->setCurrentCharacter(currentCharacter1);
 
-    cout<<"is Sending del MCGame en LOAD - ANTES es"<< isSending<<endl;
     isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
-    cout<<"is Sending del MCGame en LOAD - DESPUES es"<< isSending<<endl;
-    cout<<"El cliente activo es "<<players[team]->getCurrentCharacter()->clientNumber<<endl;
+
 
 }
 
