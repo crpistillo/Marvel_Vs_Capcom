@@ -125,7 +125,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     appCloseFromMenu = false;
     endgame = false;
 
-    this->endgame_image = new Texture();
+    endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
 
     ///////////////////////JSON///////////////////
     this->config = config;
@@ -299,8 +299,8 @@ void MCGame::render() {
     SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
     if(endgame){
-        endgame_image->loadFromFile("images/waiting.png",m_Renderer);
-        endgame_image->render(0,0,800,600,m_Renderer);
+        endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
+        endgame_image.render(0,0,800,600,m_Renderer);
 
     } else {
 
