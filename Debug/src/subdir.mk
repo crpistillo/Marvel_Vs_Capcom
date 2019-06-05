@@ -15,7 +15,6 @@ CPP_SRCS += \
 ../src/Socket.cpp \
 ../src/TCPServer.cpp \
 ../src/Team.cpp \
-../src/clienteMenu.cpp \
 ../src/main.cpp \
 ../src/signal_handler.cpp 
 
@@ -31,7 +30,6 @@ OBJS += \
 ./src/Socket.o \
 ./src/TCPServer.o \
 ./src/Team.o \
-./src/clienteMenu.o \
 ./src/main.o \
 ./src/signal_handler.o 
 
@@ -47,7 +45,6 @@ CPP_DEPS += \
 ./src/Socket.d \
 ./src/TCPServer.d \
 ./src/Team.d \
-./src/clienteMenu.d \
 ./src/main.d \
 ./src/signal_handler.d 
 
