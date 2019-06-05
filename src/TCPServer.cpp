@@ -539,17 +539,14 @@ void TCPServer::runServer() {
 
 
     updateModel();
-    sendToClientThreads[0].join();
-    sendToClientThreads[1].join();
-    sendToClientThreads[2].join();
-    sendToClientThreads[3].join();
 
+    for(int i = 0; i < numberOfPlayers; i++){
+    	sendToClientThreads[i].join();
+    }
 
-    receiveFromClientThreads[0].join();
-    receiveFromClientThreads[1].join();
-    receiveFromClientThreads[2].join();
-    receiveFromClientThreads[3].join();
-
+    for(int i = 0; i < numberOfPlayers; i++){
+    	receiveFromClientThreads[i].join();
+    }
 
     this->serverSocket->closeFd();
     this->serverSocket->closeConnection();
@@ -1219,7 +1216,7 @@ int TCPServer::getTeamNumber(int client){
 //Se me ocurrio usar cuando se me deconectaban en el receive pero tenia que manejarlo en las reconnections
 //y me dio paja
 void TCPServer::treatDisconnectionsAfterSelection() {
-    if(numberOfConnections < 4){
+    if(numberOfConnections < 4 && numberOfPlayers == 4){
         if(!iplist[0].isActive || !iplist[1].isActive){
             incoming_msg_t* discon = new incoming_msg_t;
             discon->action = DISCONNECTEDCLIENT;
