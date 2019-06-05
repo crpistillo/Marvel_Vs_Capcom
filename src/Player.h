@@ -39,6 +39,7 @@ public:
 
 
     void setCurrentCharacter(int i);
+    std::mutex m;
 
 private:
     CharacterClient* currentCharacter;
@@ -48,7 +49,7 @@ private:
 
     void changeCharacter();
     void setCharacterToChanging();
-    std::mutex m;
+
 
 };
 

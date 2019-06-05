@@ -49,6 +49,7 @@ void Team::update(int distance, int posContrincante, actions_t action,
 		changeCharacter(sockets);
 		if (sizeOfTeam == 2) {
 			this->clientActive = currentCharacter->clientNumber;
+			cout<<"El cliente activo es "<<clientActive<<endl;
 		}
 		this->currentCharacter->currentAction = MAKINGINTRO;
 		isChanging = true;

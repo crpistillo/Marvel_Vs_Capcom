@@ -106,7 +106,6 @@ void TCPServer::receive() {
 
         iplist[numberOfConnections].ip = inet_ntoa(clientAddress.sin_addr);
         iplist[numberOfConnections].isActive = true;
-        numberOfConnections++;
 
 
         initializer_t* initializer = new initializer_t;
@@ -114,7 +113,9 @@ void TCPServer::receive() {
         initializer->client = numberOfConnections;
         initializer->players = numberOfPlayers;
 
-        clientsSockets[numberOfConnections - 1]->sendData(initializer, sizeof(initializer_t));
+        clientsSockets[numberOfConnections]->sendData(initializer, sizeof(initializer_t));
+
+        numberOfConnections++;
 
         //Aceptar conexiones pero seguir esperando por mas
         if (numberOfConnections != numberOfPlayers) {
@@ -204,7 +205,7 @@ void TCPServer::reconnections() {
 
 
         initializer_t initializer;
-        initializer.client = socketToReconnect + 1;
+        initializer.client = socketToReconnect;
         initializer.players = numberOfPlayers;
 
         server_state_mtx.lock();
@@ -226,7 +227,7 @@ void TCPServer::reconnections() {
             incoming_msg_t* recon = new incoming_msg_t;
 
             recon->action = RECONNECT;
-            recon->client = socketToReconnect + 1;
+            recon->client = socketToReconnect;
 
             incoming_msg_mtx.lock();
             incoming_msges_queue->insert(recon);
@@ -477,7 +478,6 @@ void TCPServer::sendToClient(int clientSocket) {
             continue;
         }
     connection_mtx.unlock();
-
 
 
         character_updater_t *updater;

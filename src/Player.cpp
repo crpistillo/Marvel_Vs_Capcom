@@ -21,9 +21,13 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
         //SI EL CURRENTCHARACTER -> CLIENTE
+    	cout<<"recibe RECONNECT"<<endl;
+    	cout<<"becomeActive es "<<becomeActive<<endl;
         if (becomeActive) {
             m.lock();
+            cout<<"is Sending del Player en RECONNECT -ANTES es"<<*isSending<<endl;
             *isSending = (clientNumber == currentCharacter->clientNumber);
+            cout<<"isSending del Player en RECONNECT - DESPUES es: "<<*isSending<<endl;
             m.unlock();
         }
 
@@ -34,7 +38,12 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     if (updater->action == DISCONNECTEDCLIENT) {
         m.lock();
         if (becomeActive)
-            *isSending = true;
+        {
+        	 cout<<"is Sending del Player en DISCONNECT -ANTES es"<<*isSending<<endl;
+        	 *isSending = true;
+        	 cout<<"is Sending del Player en DISCONNECT -ANTES es"<<*isSending<<endl;
+        }
+
         m.unlock();
         //changeCharacter();  //send change character
     } else if (updater->action == CHANGEME_ONEPLAYER) {
@@ -44,7 +53,11 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     } else if (updater->action == CHANGEME) {
         m.lock();
         if (becomeActive)
-            *isSending = !(*isSending);
+        {
+        	cout<<"is Sending del Player en CHANGEME - ANTES es"<<*isSending<<endl;
+        	*isSending = !(*isSending);
+        	cout<<"is Sending del Player en CHANGEME - DESPUES es " << *isSending <<endl;
+        }
         m.unlock();
         changeCharacter();  //send change character
         setCharacterToChanging();

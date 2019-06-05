@@ -98,8 +98,6 @@ void Parallax::doParallax(Player** player1, Player** player2,Logger* logger)
 		this->layersCentered = true;
 	}
 
-	cout<<"La pos del background es "<<(*backGround)->getPosX()<<endl;
-
 	logger->log("Parallax - llama Ubica el centro anterior.", DEBUG);
 	this->setCenterBefore(logger);
 
