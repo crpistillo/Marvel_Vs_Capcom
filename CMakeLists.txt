@@ -63,15 +63,21 @@ set(SOURCE_FILES
         src/signal_handler.cpp src/signal_handler.h)
 
 
+
+
+
+# includes cmake/FindSDL2.cmake
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-build-debug/CMakeFiles/marvel_vs_capcom.dir)
+
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+
+include_directories(${SDL2_INCLUDE_DIR}
+        ${SDL2_IMAGE_INCLUDE_DIR})
+
+
+
 add_executable(marvel_vs_capcom ${SOURCE_FILES})
-
-
-INCLUDE(FindPkgConfig)
-
-PKG_SEARCH_MODULE(SDL2 REQUIRED SDL2/lSDL)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2/lSDL_image)
-
-INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
-
+target_link_libraries(marvel_vs_capcom ${SDL2_LIBRARY}
+        ${SDL2_IMAGE_LIBRARIES})
 

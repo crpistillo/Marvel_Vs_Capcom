@@ -421,7 +421,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
             }
         }
 
-        else if(maxTimeouts != 10){
+        else if(maxTimeouts != 10 && rc == 0){
             cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
             if(clientIsActive(clientSocket)){
                 connection_mtx.lock();
@@ -1045,6 +1045,7 @@ void TCPServer::updateModel() {
 			cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
 			break;
 		}
+		cout << numberOfConnections << endl;
 
         incoming_msg_t *incoming_msg;
         if (incoming_msges_queue->empty_queue())
