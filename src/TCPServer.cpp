@@ -139,9 +139,7 @@ void TCPServer::receive() {
         }
 
     }
-
     reconnections();
-
 }
 
 void TCPServer::reconnections() {
@@ -352,9 +350,6 @@ int computeDistance(CharacterServer *character1, CharacterServer *character2) {
  *
  * Son los denominados "thread lectura cliente x"*/
 void TCPServer::receiveFromClient(int clientSocket) {
-
-
-
     //Recibo los argumentos y los casteo en el orden que corresponde.
 
     char bufAction[sizeof(actions_t)];
@@ -1221,7 +1216,6 @@ void TCPServer::treatDisconnectionsAfterSelection() {
                 team[1]->setFirstClientAsActive();
                 discon->client = 3;
             }
-
             incoming_msges_queue->insert(discon);
         }
     }
