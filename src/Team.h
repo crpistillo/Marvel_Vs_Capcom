@@ -17,25 +17,19 @@ private:
 	CharacterServer* currentCharacter;//me falta ver esto y otras cosas
 	CharacterServer* firstCharacter; //personaje del clienteA (cada personaje tiene un cliente)
 	CharacterServer* secondCharacter; //personaje del clienteB
-	bool isChanging;
-	int teamNumber;
 
-	//numberOfClientsActive
+    //numberOfClientsActive
 
 public:
 	int sizeOfTeam;
 
-	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize, int teamNumber);
+	Team(int teamSize);
 
-	void changePlayer(); //cambia el character y el cliente del mismo
+    //cambia el character y el cliente del mismo
 
-	bool isFull(); //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
+    //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
 
-	CharacterServer* typeOfCharacter(string personaje);
-
-	void changeCharacter(Socket** sockets);
-
-	void setCharacterToChanging();
+    void changeCharacter(Socket** sockets);
 
     void update(int distance, int posContrincante, actions_t action, Socket** sockets);
 
@@ -58,6 +52,8 @@ public:
     void setClientNumberToCurrentClient(Socket** sockets);
 
     int get_currentCharacterNumber();
+
+    void setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact);
 };
 
 

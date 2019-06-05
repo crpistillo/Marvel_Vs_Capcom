@@ -11,16 +11,8 @@
 
 const int MAX_PLAYERS = 4;
 
-Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact,
-		int teamSize, int teamNumber) {
-	this->currentCharacter = firstCharact;  //es el que esta jugando ahora
-	this->firstCharacter = firstCharact;
-	this->secondCharacter = secondCharact;
+Team::Team(int teamSize) {
 	this->sizeOfTeam = teamSize;
-	this->teamNumber = teamNumber;
-	isChanging = false;
-	clientActive = currentCharacter->clientNumber;
-
 }
 
 void Team::changeCharacter(Socket** sockets) {
@@ -52,11 +44,9 @@ void Team::update(int distance, int posContrincante, actions_t action,
 			cout<<"El cliente activo es "<<clientActive<<endl;
 		}
 		this->currentCharacter->currentAction = MAKINGINTRO;
-		isChanging = true;
-	}
+    }
 
-	if (!(currentCharacter->currentAction == MAKINGINTRO))
-		isChanging = false;
+	if (!(currentCharacter->currentAction == MAKINGINTRO));
 
 	currentCharacter->update(distance, posContrincante, action);
 }
@@ -110,5 +100,13 @@ int Team::get_currentCharacterNumber() {
         return 0;
     else
         return 1;
+
+}
+
+void Team::setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact) {
+    this->currentCharacter = firstCharact;  //es el que esta jugando ahora
+    this->firstCharacter = firstCharact;
+    this->secondCharacter = secondCharact;
+    clientActive = currentCharacter->clientNumber;
 
 }

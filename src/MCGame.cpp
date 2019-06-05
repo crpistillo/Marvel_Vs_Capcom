@@ -15,6 +15,7 @@
 
 
 
+
 using namespace std;
 
 const string ERROR = "ERROR";
@@ -111,6 +112,7 @@ void MCGame::static_signalHandlerClient(int sigNum) {
 }
 
 MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
+    signal(SIGPIPE, signalHandler);
     signal(SIGPIPE, MCGame::static_signalHandlerClient);
     constants = (Constants *) (malloc(sizeof(Constants *)));
     this->logger = Logger::getInstance();

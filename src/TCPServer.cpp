@@ -275,6 +275,11 @@ void TCPServer::reconnections() {
             incoming_menu_actions_queue->insert(recon);
             incoming_msg_mtx.unlock();
 
+
+            teams_mtx.lock();
+            team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
+            teams_mtx.unlock();
+
             std::unique_lock<std::mutex> lock(numberOfConnections_mtx);
             numberOfConnections++;
         }
@@ -417,14 +422,12 @@ void TCPServer::receiveFromClient(int clientSocket) {
         }
 
         else if(maxTimeouts != 10){
-
-
-
             cout << "SE DESCONECTO EL CLIENTE " << clientSocket << endl;
             if(clientIsActive(clientSocket)){
                 connection_mtx.lock();
                 iplist[clientSocket].isActive = false;
                 connection_mtx.unlock();
+                maxTimeouts++;
             }
 
             if(maxTimeouts == 10){
@@ -444,7 +447,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 maxTimeouts = 0;
                 continue;
             }
-            maxTimeouts++;
 
 
         }
@@ -512,6 +514,12 @@ void TCPServer::runServer() {
     this->server_state = MENU_PHASE;
     server_state_mtx.unlock();
 
+    int teamSize = numberOfPlayers/2;
+
+
+    team[0] = new Team(teamSize);
+    team[1] = new Team(teamSize);
+
     runMenuPhase();  //Pongo al servidor en modo "Menu"
     cout << "SERVIDOR SI TERMINA CON LA ETAPA DEL MENU" << endl;
     sendSelectedCharacters();
@@ -569,10 +577,11 @@ void TCPServer::sendSelectedCharacters() {
         nclient++;
     }
 
-    int teamSize = numberOfPlayers/2;
 
-    team[0] = new Team(characters[0], characters[1], teamSize, 1);
-    team[1] = new Team(characters[2], characters[3], teamSize, 2);
+
+    team[0]->setCharacters(characters[0], characters[1]);
+    team[1]->setCharacters(characters[2], characters[3]);
+
 
     for (auto &builder : builders) {
         for (int i = 0; i < numberOfPlayers; ++i) {
@@ -688,6 +697,11 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             socket->closeFd();
 
             activeClients[clientSocket] = false;
+
+
+            teams_mtx.lock();
+            team[getTeamNumber(clientSocket)]->sizeOfTeam--;
+            teams_mtx.unlock();
 
 
             connection_mtx.lock();
