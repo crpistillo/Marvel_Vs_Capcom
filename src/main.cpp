@@ -31,7 +31,7 @@ TCPServer* tcpServer;
 TCPClient* TCPClient::instance = 0;
 
 
-int run_server(int cantArg, char *dirJson, int port, int numOfPlayers);
+int run_server(int cantArg, char *dirJson, int port);
 int run_client(int cantArg, char *dirJson, string host, int port);
 
 
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         return run_client(argc, argv[1], string(argv[3]),atoi(argv[4])); //le estoy mandando de a cuantos armo el server esto tiene que ir en el json
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
-           return run_server(argc, argv[1], atoi(argv[3]), atoi(argv[4]));
+           return run_server(argc, argv[1], atoi(argv[3]));
         } else {
             printf("Parametro ingresado Incorrecto\n");
             return 1;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
  */
 
 
-int run_server(int cantArg, char *dirJson, int port, int numOfPlayers) {
+int run_server(int cantArg, char *dirJson, int port) {
 
 	Logger* logger = Logger::getInstance();
 	logger->startSession("SERVER");
@@ -67,7 +67,7 @@ int run_server(int cantArg, char *dirJson, int port, int numOfPlayers) {
 	logger->log("Logger iniciado.", INFO);
 	json config;
 
-	if(cantArg != 5){
+	if(cantArg != 4){
 		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 5.", ERROR);
 		logger->finishSession();
 		return -1;
@@ -86,6 +86,8 @@ int run_server(int cantArg, char *dirJson, int port, int numOfPlayers) {
     }
 
     //ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
+
+    int numOfPlayers = config["server"]["players"];
 
     if(!tcpServer->setup(port, logger, numOfPlayers)){
         cout << "Error al crear el server" << endl;
