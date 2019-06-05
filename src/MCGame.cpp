@@ -394,6 +394,8 @@ void MCGame::update() {
 
     int rc = poll(fds, 1, timeout);
 
+    //cout << fds[0].revents << endl;
+
     if (rc < 0)
     	cout << "Error en poll" << endl;
 
@@ -417,10 +419,11 @@ void MCGame::update() {
         pipe_mtx.unlock();
         maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
-		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+
+		bool asd = tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
 
-		if(updater->gameFinishedByDisconnections){
+		if(updater->gameFinishedByDisconnections || !asd ){
 		    cout << "Me llega endgame" << endl;
 		    endgame = true;
 		    return;
