@@ -413,7 +413,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
 				numberOfConnections--;
 				numberOfConnections_mtx.unlock();
 			}
-            if(this->clientIsActive(clientSocket))
+            else if(this->clientIsActive(clientSocket))
             {
             	incoming_msg_mtx.lock();
             	this->incoming_msges_queue->insert(msgQueue);
@@ -1042,10 +1042,9 @@ void TCPServer::updateModel() {
     while (1) {
 
 		if (numberOfConnections == 0) {
-			cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
-			break;
-		}
-		cout << numberOfConnections << endl;
+            cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
+            break;
+        }
 
         incoming_msg_t *incoming_msg;
         if (incoming_msges_queue->empty_queue())
@@ -1099,6 +1098,8 @@ void TCPServer::updateModel() {
                     team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
         }
 
+
+
         update_msg->posX =
                 team[teamToUpdate]->get_currentCharacter()->getPosX();
         update_msg->posY =
@@ -1107,6 +1108,9 @@ void TCPServer::updateModel() {
         update_msg->currentSprite =
                 team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
         teams_mtx.unlock();
+
+        if(team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0)
+            cout << "team sin jugadores!" << endl;
 
         character_updater_t *update[numberOfPlayers];
         for (int j = 0; j < numberOfPlayers; ++j) {
@@ -1154,9 +1158,16 @@ void TCPServer::manageDisconnection(int clientSocket)
     }
     else
     {
-    	if (this->getTeamNumber(clientSocket) == 0)
-    		team[0]->setSize(1);
-    	else team[1]->setSize(1);
+    	if (this->getTeamNumber(clientSocket) == 0) {
+    	    teams_mtx.lock();
+            team[0]->sizeOfTeam--;
+            teams_mtx.unlock();
+        }
+    	else{
+            teams_mtx.lock();
+            team[1]->sizeOfTeam--;
+            teams_mtx.unlock();
+    	}
     }
     return;
 }

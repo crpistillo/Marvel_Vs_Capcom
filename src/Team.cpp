@@ -60,7 +60,7 @@ void Team::disconnectClient() {
 	else {
 		this->clientActive = firstCharacter->clientNumber;
 	}
-	this->sizeOfTeam = 1;
+	this->sizeOfTeam--;
 }
 
 CharacterServer* Team::get_currentCharacter() {
