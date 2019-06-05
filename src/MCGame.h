@@ -136,7 +136,9 @@ public:
 
     static void static_signalHandlerClient(int sigNum);
 
-    int maxTimeouts;
+    int maxTimeouts = 0;
+
+    std::mutex pipe_mtx;
 };
 
 

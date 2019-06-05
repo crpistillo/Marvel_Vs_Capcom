@@ -119,7 +119,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     this->tcpClient = client;
     m_Window = NULL;
     m_Renderer = NULL;
-    m_Running = false;
+    m_Running = true;
     appCloseFromMenu = false;
 
     ///////////////////////JSON///////////////////
@@ -238,11 +238,11 @@ void MCGame::action_update() {
         if(!isActive() && actionToSend != DISCONNECTEDCLIENT)
             continue;
 
-
+        pipe_mtx.lock();
         if(!tcpClient->isPipeBroken) {
             tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-            cout<<"El que pasa por aca se la come"<<endl;
         }
+        pipe_mtx.unlock();
 
 
 
@@ -392,12 +392,16 @@ void MCGame::update() {
 
             exit(1);
         }
+        pipe_mtx.lock();
         tcpClient->isPipeBroken = true;
+        pipe_mtx.unlock();
         maxTimeouts++;
     }
 
     else{
+        pipe_mtx.lock();
         tcpClient->isPipeBroken = false;
+        pipe_mtx.unlock();
         maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
 		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
@@ -566,7 +570,6 @@ void MCGame::menu() {
 
         fpsManager.stop();
     }
-
     setThreadRunning(false);
 
     logger->log("Fin de Bucle MCGame-Menu.", DEBUG);
@@ -654,7 +657,6 @@ void MCGame::loadSelectedCharacters() {
 void MCGame::setCursors() {
     int posX, posY;
     bool visible;
-
     for (int i = 0; i < 4; i++) {
         if (i == 0) {
             posX = 97;

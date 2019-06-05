@@ -38,7 +38,7 @@ int run_client(int cantArg, char *dirJson, string host, int port);
 int main(int argc, char *argv[]) {
 
     if (strncmp(argv[2], "client", 6) == 0) {
-        run_client(argc, argv[1], string(argv[3]),atoi(argv[4])); //le estoy mandando de a cuantos armo el server esto tiene que ir en el json
+        return run_client(argc, argv[1], string(argv[3]),atoi(argv[4])); //le estoy mandando de a cuantos armo el server esto tiene que ir en el json
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
            return run_server(argc, argv[1], atoi(argv[3]), atoi(argv[4]));
@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
             return 1;
         }
     }
-
-    return 0;
 }
 
 /* Parametros de inicio client:               |           *Parametros de inicio server:
@@ -143,7 +141,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
     tcpClient->run();
 
 
-    return 0;
+    return 10;
 }
 
 
