@@ -155,18 +155,19 @@ void TCPServer::reconnections() {
         newSockFd->acceptConnection(this->serverSocket, &clientAddress, logger);
         logger->log("Nueva conexion aceptada", INFO);
 
-        connection_information_t to_send;
+        initializer_t initializer;
 
         socklen_t clientAddress_len = sizeof(clientAddress);
 
         numberOfConnections_mtx.lock();
         if (numberOfConnections == numberOfPlayers) {
 
-            to_send.nconnections = numberOfConnections;
-            to_send.status = NO_MORE_CONNECTIONS_ALLOWED;
             numberOfConnections_mtx.unlock();
+            initializer.client = -1;
+            initializer.players = -1;
+            initializer.instance = NO_MORE_PLAYERS_ALLOWED;
 
-            send(newSockFd->get_fd(), &to_send,
+            send(newSockFd->get_fd(), &initializer,
                  sizeof(connection_information_t), 0);
             close(newSockFd->get_fd());
 
@@ -203,7 +204,6 @@ void TCPServer::reconnections() {
         cout << socketToReconnect << endl;
 
 
-        initializer_t initializer;
         initializer.client = socketToReconnect;
         initializer.players = numberOfPlayers;
 

@@ -100,6 +100,7 @@ typedef enum game_instance{
 	BEGINNING = 9,
 	MENU_PHASE = 10,
 	FIGHT_PHASE = 11,
+	NO_MORE_PLAYERS_ALLOWED = 12
 } game_instance_t;
 
 typedef struct {

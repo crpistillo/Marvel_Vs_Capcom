@@ -25,7 +25,7 @@ bool TCPClient::setup(string addressToConnect, int listenPort) {
         cout <<"Connection error" << endl;
         return false;
     }
-    cout << "Connection succesfull" << endl;
+    cout << "Connection with server stablished. Waiting for answer..." << endl;
     return true;
 }
 
@@ -78,6 +78,10 @@ void TCPClient::run() {
         runFromMenu();
     else if(initializer.instance == FIGHT_PHASE)
         runFromFight();
+    else if(initializer.instance == NO_MORE_PLAYERS_ALLOWED){
+        cout << "Connection not allowed. No more players. \n";
+        return;
+    }
 
 }
 
