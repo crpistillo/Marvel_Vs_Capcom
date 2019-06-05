@@ -55,6 +55,7 @@ private:
 
     bool activeClients[MAXPLAYERS];
     bool runningMenuPhase;
+    bool endgame;
 
     void runMenuFourPlayers();
     void runMenuTwoPlayers();
@@ -75,6 +76,7 @@ private:
     std::mutex server_state_mtx;
     std::mutex teams_mtx;
     std::mutex runningMenuPhase_mtx;
+    std::mutex endgame_mtx;
 
 
 
@@ -146,6 +148,13 @@ public:
     bool isIpListActive(int clientSocket);
 
     void treatDisconnectionsAfterSelection();
+
+    void endgameForDisconnections();
+
+    bool getEndgame();
+
+
+    void setEndgame(bool condition);
 };
 
 #endif

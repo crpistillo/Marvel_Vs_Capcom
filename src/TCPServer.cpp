@@ -37,6 +37,7 @@ TCPServer::TCPServer() {
         this->activeClients[i] = true;
     }
     server_state = BEGINNING;
+    endgame = false;
 }
 
 
@@ -365,7 +366,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     int timeout = (1 * 1000);
     int maxTimeouts = 0;
 
-    while (true) {
+    while (! getEndgame()) {
 
         Socket *socket = getClientSocket(clientSocket);
 
@@ -450,7 +451,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
 
         }
-
     }
 }
 
@@ -470,7 +470,7 @@ void TCPServer::sendToClient(int clientSocket) {
     //Recibo los argumentos y los casteo en el orden que corresponde.
     Socket *socket = getClientSocket(clientSocket);
 
-    while (1) {
+    while (!getEndgame()) {
 
         connection_mtx.lock();
         if(!iplist[clientSocket].isActive) {
@@ -479,7 +479,7 @@ void TCPServer::sendToClient(int clientSocket) {
             connection_mtx.unlock();
             continue;
         }
-    connection_mtx.unlock();
+        connection_mtx.unlock();
 
 
         character_updater_t *updater;
@@ -539,6 +539,16 @@ void TCPServer::runServer() {
 
 
     updateModel();
+    sendToClientThreads[0].join();
+    sendToClientThreads[1].join();
+    sendToClientThreads[2].join();
+    sendToClientThreads[3].join();
+
+    receiveFromClientThreads[0].join();
+    receiveFromClientThreads[1].join();
+    receiveFromClientThreads[2].join();
+    receiveFromClientThreads[3].join();
+
 
     this->serverSocket->closeFd();
     this->serverSocket->closeConnection();
@@ -1109,8 +1119,11 @@ void TCPServer::updateModel() {
                 team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
         teams_mtx.unlock();
 
-        if(team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0)
-            cout << "team sin jugadores!" << endl;
+        if(team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
+            cout << "No mas jugadores en team" << endl;
+            endgameForDisconnections();
+            break;
+        }
 
         character_updater_t *update[numberOfPlayers];
         for (int j = 0; j < numberOfPlayers; ++j) {
@@ -1121,6 +1134,7 @@ void TCPServer::updateModel() {
             update[j]->posX = update_msg->posX;
             update[j]->posY = update_msg->posY;
             update[j]->currentSprite = update_msg->currentSprite;
+            update[j]->gameFinishedByDisconnections = false;
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
@@ -1138,6 +1152,8 @@ void TCPServer::updateModel() {
         incoming_msges_queue->delete_data();
 
     }
+
+    setEndgame(true);
 }
 
 
@@ -1236,6 +1252,41 @@ void TCPServer::treatDisconnectionsAfterSelection() {
             incoming_msges_queue->insert(discon);
         }
     }
+
+}
+
+void TCPServer::endgameForDisconnections() {
+
+    character_updater_t *update[numberOfPlayers];
+    for (int j = 0; j < numberOfPlayers; ++j) {
+        update[j] = new character_updater_t;
+        memset(update[j], 0, sizeof(character_updater_t));
+        update[j]->gameFinishedByDisconnections = true;
+    }
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        connection_mtx.lock();
+        if(iplist[i].isActive){
+            updaters_queue_mtx[i].lock();
+            this->client_updater_queue[i]->insert(update[i]);
+            updaters_queue_mtx[i].unlock();
+        }
+        connection_mtx.unlock();
+    }
+}
+
+bool TCPServer::getEndgame() {
+    bool var;
+    endgame_mtx.lock();
+    var = endgame;
+    endgame_mtx.unlock();
+    return var;
+}
+
+void TCPServer::setEndgame(bool condition) {
+    endgame_mtx.lock();
+    endgame = condition;
+    endgame_mtx.unlock();
 
 }
 

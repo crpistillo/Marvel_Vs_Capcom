@@ -34,6 +34,7 @@ private:
     bool m_Running;
     bool threadRunning;
     bool appCloseFromMenu;
+    bool endgame;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     SDL_Joystick *gGameController = NULL;
@@ -139,6 +140,7 @@ public:
     int maxTimeouts = 0;
 
     std::mutex pipe_mtx;
+
 };
 
 
