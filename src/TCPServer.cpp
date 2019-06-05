@@ -470,12 +470,19 @@ void TCPServer::sendToClient(int clientSocket) {
     //Recibo los argumentos y los casteo en el orden que corresponde.
     Socket *socket = getClientSocket(clientSocket);
 
-    while (!getEndgame()) {
+    while (1) {
 
         connection_mtx.lock();
         if(!iplist[clientSocket].isActive) {
-            if (!client_updater_queue[clientSocket]->empty_queue())
+
+            if (!client_updater_queue[clientSocket]->empty_queue()){
+
+                if(client_updater_queue[clientSocket]->get_data()->gameFinishedByDisconnections){
+                    connection_mtx.unlock();
+                    break;
+                }
                 client_updater_queue[clientSocket]->delete_data();
+            }
             connection_mtx.unlock();
             continue;
         }
@@ -497,6 +504,9 @@ void TCPServer::sendToClient(int clientSocket) {
 
         std::unique_lock<std::mutex> lock(updaters_queue_mtx[clientSocket]);
         client_updater_queue[clientSocket]->delete_data();
+
+        if(updater->gameFinishedByDisconnections)
+            break;
     }
 }
 
@@ -543,6 +553,7 @@ void TCPServer::runServer() {
     sendToClientThreads[1].join();
     sendToClientThreads[2].join();
     sendToClientThreads[3].join();
+
 
     receiveFromClientThreads[0].join();
     receiveFromClientThreads[1].join();
@@ -1265,13 +1276,9 @@ void TCPServer::endgameForDisconnections() {
     }
 
     for (int i = 0; i < numberOfPlayers; ++i) {
-        connection_mtx.lock();
-        if(iplist[i].isActive){
-            updaters_queue_mtx[i].lock();
-            this->client_updater_queue[i]->insert(update[i]);
-            updaters_queue_mtx[i].unlock();
-        }
-        connection_mtx.unlock();
+        updaters_queue_mtx[i].lock();
+        this->client_updater_queue[i]->insert(update[i]);
+        updaters_queue_mtx[i].unlock();
     }
 }
 

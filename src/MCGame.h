@@ -48,6 +48,7 @@ private:
     Texture cliente2;
     Texture cliente3;
     Texture cliente4;
+    Texture* endgame_image;
     Layer *middleGround;
     Layer *backGround;
     Layer *frontGround;
