@@ -54,6 +54,10 @@ public:
     int get_currentCharacterNumber();
 
     void setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact);
+
+    void setSecondClientAsActive();
+
+    void setFirstClientAsActive();
 };
 
 

@@ -13,7 +13,7 @@ public:
 	bool moveLeft();
 	bool selectCharacter();
 
-	bool update(cliente_menu_t* action_msg);
+	bool update(client_menu_t* action_msg);
 
 	void makeMenuUpdater(cursor_updater_t* updater);
 

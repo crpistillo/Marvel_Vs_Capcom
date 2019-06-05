@@ -57,7 +57,7 @@ bool ServerCursor::selectCharacter(){
 
 }
 
-bool ServerCursor::update(cliente_menu_t* action_msg){
+bool ServerCursor::update(client_menu_t* action_msg){
 
 	switch(action_msg->accion){
 	case RIGHT:

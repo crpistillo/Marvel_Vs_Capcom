@@ -84,7 +84,7 @@ public:
     Queue<character_updater_t*>* client_updater_queue[MAXPLAYERS];
     				//colas de mensajes de escritura para cada cliente
 
-    Queue<cliente_menu_t*>* incoming_menu_actions_queue;
+    Queue<client_menu_t*>* incoming_menu_actions_queue;
     Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
     Socket* serverSocket;
@@ -119,7 +119,7 @@ public:
     void runMenuPhase();
     void receiveMenuActionsFromClient(int clientSocket);
     void sendCursorUpdaterToClient(int clientSocket);
-    bool processMenuAction(cliente_menu_t *action_msg);
+    bool processMenuAction(client_menu_t *action_msg);
     int getNumberOfCharactersSelected();
     void sendUpdaters(bool finalUpdater);
     void sendSelectedCharacters();
@@ -144,6 +144,8 @@ public:
     int getTeamNumber(int client);
 
     bool isIpListActive(int clientSocket);
+
+    void treatDisconnectionsAfterSelection();
 };
 
 #endif

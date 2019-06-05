@@ -110,3 +110,12 @@ void Team::setCharacters(CharacterServer *firstCharact, CharacterServer *secondC
     clientActive = currentCharacter->clientNumber;
 
 }
+
+void Team::setSecondClientAsActive() {
+    clientActive = secondCharacter->clientNumber;
+
+}
+
+void Team::setFirstClientAsActive() {
+    clientActive = firstCharacter->clientNumber;
+}

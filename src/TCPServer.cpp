@@ -75,7 +75,7 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
     }
 
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
-    this->incoming_menu_actions_queue = new Queue<cliente_menu_t *>;
+    this->incoming_menu_actions_queue = new Queue<client_menu_t *>;
 
     for (int i = 0; i < numberOfPlayers; ++i) {
         this->client_updater_queue[i] = new Queue<character_updater_t *>;
@@ -267,8 +267,8 @@ void TCPServer::reconnections() {
             iplist[socketToReconnect].isActive = true;
             connection_mtx.unlock();
 
-            cliente_menu_t* recon = new cliente_menu_t;
-            recon->cliente = socketToReconnect;
+            client_menu_t* recon = new client_menu_t;
+            recon->client = socketToReconnect;
             recon->accion = RECONNECTION_MENU;
 
             incoming_msg_mtx.lock();
@@ -524,7 +524,7 @@ void TCPServer::runServer() {
     cout << "SERVIDOR SI TERMINA CON LA ETAPA DEL MENU" << endl;
     sendSelectedCharacters();
 
-
+    treatDisconnectionsAfterSelection();
 
     server_state_mtx.lock();
     this->server_state = FIGHT_PHASE;
@@ -535,6 +535,8 @@ void TCPServer::runServer() {
                                                   this, i);
         sendToClientThreads[i] = std::thread(&TCPServer::sendToClient, this, i);
     }
+
+
 
     updateModel();
 
@@ -668,8 +670,8 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 				continue;
 			}
 			else{
-				cliente_menu_t *msgMenuQueue = new cliente_menu_t;
-				msgMenuQueue->cliente = clientSocket;
+				client_menu_t *msgMenuQueue = new client_menu_t;
+				msgMenuQueue->client = clientSocket;
 				msgMenuQueue->accion = *accion;
 				incoming_msg_mtx.lock();
 				this->incoming_menu_actions_queue->insert(msgMenuQueue);
@@ -684,8 +686,8 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 			cout << "EL VALOR DE REVENTS ES: " << fds[0].revents << endl;
 
 			//Reporto en el servidor que el cliente se desconecto
-			cliente_menu_t *msgMenuQueue = new cliente_menu_t;
-			msgMenuQueue->cliente = clientSocket;
+			client_menu_t *msgMenuQueue = new client_menu_t;
+			msgMenuQueue->client = clientSocket;
 			msgMenuQueue->accion = DISCONNECTED_MENU;
 			incoming_msg_mtx.lock();
 			this->incoming_menu_actions_queue->insert(msgMenuQueue);
@@ -772,7 +774,7 @@ void TCPServer::runMenuTwoPlayers() {
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
     while (1) {
-        cliente_menu_t *incoming_msg;
+        client_menu_t *incoming_msg;
         if (this->incoming_menu_actions_queue->empty_queue())
             continue;
         incoming_msg = this->incoming_menu_actions_queue->get_data();
@@ -781,9 +783,9 @@ void TCPServer::runMenuTwoPlayers() {
 
         bool validMenuAction;
 
-        if (incoming_msg->cliente == 0)
+        if (incoming_msg->client == 0)
             validMenuAction = actualCursorFirstClient->update(incoming_msg);
-        if (incoming_msg->cliente == 1)
+        if (incoming_msg->client == 1)
             validMenuAction = actualCursorSecondClient->update(incoming_msg);
 
         if (actualCursorFirstClient->getFinalSelection()) {
@@ -825,7 +827,7 @@ void TCPServer::runMenuFourPlayers() {
 
     //Procesar eventos que vengan de incoming_menu_actions_queue
     while (1) {
-        cliente_menu_t *incoming_msg;
+        client_menu_t *incoming_msg;
 
         incoming_msg_mtx.lock();
         if (this->incoming_menu_actions_queue->empty_queue()){
@@ -836,27 +838,28 @@ void TCPServer::runMenuFourPlayers() {
         incoming_msg_mtx.unlock();
 
         if(incoming_msg->accion == DISCONNECTED_MENU){
-        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha desconectado." << endl;
-        	if( (int) (incoming_msg->cliente / 2) == 0)
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->client << " se ha desconectado." << endl;
+        	if( (int) (incoming_msg->client / 2) == 0)
         		onlinePlayersTeamOne--;
         	else
         		onlinePlayersTeamTwo--;
         	cout << "Team one: " << onlinePlayersTeamOne << endl;
         	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
-        	serverCursors[incoming_msg->cliente]->setVisible(false);
+        	if(!serverCursors[incoming_msg->client]->getFinalSelection())
+                serverCursors[incoming_msg->client]->setVisible(false);
         	sendUpdaters(false);
         }
         else if(incoming_msg->accion == RECONNECTION_MENU){
-        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->cliente << " se ha RECONECTADO." << endl;
-        	if( (int) (incoming_msg->cliente / 2) == 0)
+        	cout << "Se reporta al servidor que el cliente: " << incoming_msg->client << " se ha RECONECTADO." << endl;
+        	if( (int) (incoming_msg->client / 2) == 0)
         		onlinePlayersTeamOne++;
         	else
         		onlinePlayersTeamTwo++;
         	cout << "Team one: " << onlinePlayersTeamOne << endl;
         	cout << "Team two: " << onlinePlayersTeamTwo << endl;
 
-        	serverCursors[incoming_msg->cliente]->setVisible(true);
+        	serverCursors[incoming_msg->client]->setVisible(true);
         	sendUpdaters(false);
         }
         else{
@@ -965,8 +968,8 @@ int TCPServer::getNumberOfCharactersSelected() {
 
 }
 
-bool TCPServer::processMenuAction(cliente_menu_t *action_msg) {
-    return this->serverCursors[action_msg->cliente]->update(action_msg);
+bool TCPServer::processMenuAction(client_menu_t *action_msg) {
+    return this->serverCursors[action_msg->client]->update(action_msg);
 }
 
 void TCPServer::configJson(json config) {
@@ -1184,6 +1187,44 @@ int TCPServer::getTeamNumber(int client){
 			return 0;
 		else return 1;
 	}
+}
+
+
+//Super hardcode no tuve muchas ganas de pensar algo lindo
+//Se me ocurrio usar cuando se me deconectaban en el receive pero tenia que manejarlo en las reconnections
+//y me dio paja
+void TCPServer::treatDisconnectionsAfterSelection() {
+    if(numberOfPlayers == 4){
+        if(!iplist[0].isActive || !iplist[1].isActive){
+            incoming_msg_t* discon = new incoming_msg_t;
+            discon->action = DISCONNECTEDCLIENT;
+            if(!iplist[0].isActive){
+                team[0]->setSecondClientAsActive();
+                discon->client = 0;
+            }
+            else{
+                team[0]->setFirstClientAsActive();
+                discon->client = 1;
+            }
+            incoming_msges_queue->insert(discon);
+        }
+        if(!iplist[2].isActive || !iplist[3].isActive){
+            incoming_msg_t* discon = new incoming_msg_t;
+            discon->action = DISCONNECTEDCLIENT;
+            if(!iplist[2].isActive){
+                team[1]->setSecondClientAsActive();
+                discon->client = 2;
+
+            }
+            else{
+                team[1]->setFirstClientAsActive();
+                discon->client = 3;
+            }
+
+            incoming_msges_queue->insert(discon);
+        }
+    }
+
 }
 
 

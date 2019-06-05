@@ -74,9 +74,9 @@ typedef struct
 }incoming_msg_t;
 
 typedef struct {
-	int cliente;
+	int client;
 	menu_action_t accion;
-} cliente_menu_t;
+} client_menu_t;
 
 typedef struct {
 	int cliente;
