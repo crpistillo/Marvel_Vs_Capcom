@@ -17,11 +17,9 @@ bool ServerCursor::moveRight(){
 
 	if (posX == 97){
 		posX = 449;
-		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
-	cout << "Cursor no puede moverse \n";
 	return false;		//Si el movimiento es invalido, devuelvo false
 }
 
@@ -33,11 +31,11 @@ bool ServerCursor::moveLeft(){
 
 	if (posX == 449){
 		posX = 97;
-		cout << "Nueva posicion del cursor: " + to_string(posX) + "\n";
+
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
-	cout << "Cursor no puede moverse \n";
+
 	return false;		//Si el movimiento es invalido, devuelvo false
 }
 
