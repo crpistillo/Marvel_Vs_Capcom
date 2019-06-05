@@ -274,11 +274,6 @@ void TCPServer::reconnections() {
             incoming_menu_actions_queue->insert(recon);
             incoming_msg_mtx.unlock();
 
-
-            teams_mtx.lock();
-            team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
-            teams_mtx.unlock();
-
             std::unique_lock<std::mutex> lock(numberOfConnections_mtx);
             numberOfConnections++;
         }
@@ -716,10 +711,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
             activeClients[clientSocket] = false;
 
-
-            teams_mtx.lock();
-            team[getTeamNumber(clientSocket)]->sizeOfTeam--;
-            teams_mtx.unlock();
 
 
             connection_mtx.lock();
@@ -1228,7 +1219,7 @@ int TCPServer::getTeamNumber(int client){
 //Se me ocurrio usar cuando se me deconectaban en el receive pero tenia que manejarlo en las reconnections
 //y me dio paja
 void TCPServer::treatDisconnectionsAfterSelection() {
-    if(numberOfPlayers == 4){
+    if(numberOfConnections < 4){
         if(!iplist[0].isActive || !iplist[1].isActive){
             incoming_msg_t* discon = new incoming_msg_t;
             discon->action = DISCONNECTEDCLIENT;
