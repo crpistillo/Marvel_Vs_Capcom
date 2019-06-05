@@ -239,10 +239,11 @@ void MCGame::action_update() {
             continue;
 
 
-        tcpClient->isPipeBroken = false;
-		tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
-        if(tcpClient->isPipeBroken)
-            sleep(10);
+        if(!tcpClient->isPipeBroken) {
+            tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+            cout<<"El que pasa por aca se la come"<<endl;
+        }
+
 
 
 		if (!getRunningThread())
@@ -262,6 +263,7 @@ void MCGame::run() {
 
     std::thread send(&MCGame::action_update, this);
     std::thread alive(&MCGame::alive_action, this);
+    maxTimeouts = 0;
 
     setThreadRunning(true);
     while (m_Running)
@@ -375,24 +377,28 @@ void MCGame::update() {
 	fds[0].fd = tcpClient->socketClient->get_fd();
 	fds[0].events = POLLIN;
 
-	int timeout = (20 * 1000);
+	int timeout = (1 * 500);
 
     int rc = poll(fds, 1, timeout);
 
     if (rc < 0)
     	cout << "Error en poll" << endl;
 
-    else if (rc == 0)
-    {
-    	cout<<"El server se ha desconectado. Fin del juego. "<<endl;
-    	tcpClient->socketClient->closeFd();
-    	tcpClient->socketClient->closeConnection();
+    else if (rc == 0){
+        if(maxTimeouts == 10){
+            cout<<"El server se ha desconectado. Fin del juego. "<<endl;
+            tcpClient->socketClient->closeFd();
+            tcpClient->socketClient->closeConnection();
 
-    	exit(1);
+            exit(1);
+        }
+        tcpClient->isPipeBroken = true;
+        maxTimeouts++;
     }
 
-    else
-    {
+    else{
+        tcpClient->isPipeBroken = false;
+        maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
 		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;

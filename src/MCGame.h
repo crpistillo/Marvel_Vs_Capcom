@@ -135,6 +135,8 @@ public:
     bool isRunning();
 
     static void static_signalHandlerClient(int sigNum);
+
+    int maxTimeouts;
 };
 
 
