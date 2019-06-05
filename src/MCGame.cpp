@@ -122,6 +122,9 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     m_Renderer = NULL;
     m_Running = true;
     appCloseFromMenu = false;
+    endgame = false;
+
+    endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
 
     ///////////////////////JSON///////////////////
     this->config = config;
@@ -262,6 +265,8 @@ void MCGame::run() {
     FPSManager fpsManager(SCREEN_FPS);
     logger->log("Inicio de Bucle MCGame-run.", DEBUG);
 
+    bool endgame = false;
+
     std::thread send(&MCGame::action_update, this);
     std::thread alive(&MCGame::alive_action, this);
     maxTimeouts = 0;
@@ -292,21 +297,28 @@ void MCGame::render() {
     SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(m_Renderer); // clear the renderer to the draw color
 
-    Renderizable *renderizables[5] = {&(*middleGround), &(*backGround), &(*frontGround), &(*players[0]),
-                                      &(*players[1])};
-    orderRenderizableListByZIndex(renderizables);
+    if(endgame){
+        endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
+        endgame_image.render(0,0,800,600,m_Renderer);
 
-    for (int i = 0; i < 5; i++) {
-        if (renderizables[i] == backGround) {
-            backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
-        } else if (renderizables[i] == middleGround) {
-            middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
-        } else if (renderizables[i] == frontGround) {
-            frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
-        } else if (renderizables[i] == players[1]) {
-            players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
-        } else if (renderizables[i] == players[0]) {
-            players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
+    } else {
+
+        Renderizable *renderizables[5] = {&(*middleGround), &(*backGround), &(*frontGround), &(*players[0]),
+                                          &(*players[1])};
+        orderRenderizableListByZIndex(renderizables);
+
+        for (int i = 0; i < 5; i++) {
+            if (renderizables[i] == backGround) {
+                backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
+            } else if (renderizables[i] == middleGround) {
+                middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
+            } else if (renderizables[i] == frontGround) {
+                frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
+            } else if (renderizables[i] == players[1]) {
+                players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
+            } else if (renderizables[i] == players[0]) {
+                players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
+            }
         }
     }
     logger->log("Fin render.", DEBUG);
@@ -407,6 +419,12 @@ void MCGame::update() {
 		char buf1[sizeof(character_updater_t)];
 		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
+
+		if(updater->gameFinishedByDisconnections){
+		    cout << "Me llega endgame" << endl;
+		    endgame = true;
+		    return;
+		}
 
 		//cambiar false x updater->client
 		if(updater->action == RECONNECT || updater->action == DISCONNECTEDCLIENT || updater->action == CHANGEME)

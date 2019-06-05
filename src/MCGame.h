@@ -34,6 +34,7 @@ private:
     bool m_Running;
     bool threadRunning;
     bool appCloseFromMenu;
+    bool endgame;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     SDL_Joystick *gGameController = NULL;
@@ -47,6 +48,7 @@ private:
     Texture cliente2;
     Texture cliente3;
     Texture cliente4;
+    Texture endgame_image;
     Layer *middleGround;
     Layer *backGround;
     Layer *frontGround;
@@ -139,6 +141,7 @@ public:
     int maxTimeouts = 0;
 
     std::mutex pipe_mtx;
+
 };
 
 

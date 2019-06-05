@@ -45,6 +45,7 @@ typedef struct{
 	actions_t action;
 	int team;
 	int client;
+	bool gameFinishedByDisconnections;
 } character_updater_t;
 
 
