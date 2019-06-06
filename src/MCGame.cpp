@@ -215,17 +215,22 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
                                       SCREEN_WIDTH);
 }
 
-void MCGame::alive_action()
-{
-	while(m_Running)
-	{
-	    if(isActive())
-        continue;
+void MCGame::alive_action(){
+    actions_t aliveAction = ALIVE;
+    Uint32 last_time = SDL_GetTicks();
+    Uint32 actual_time;
 
-        actions_t aliveAction = ALIVE;
-		tcpClient->socketClient->sendData(&aliveAction, sizeof(aliveAction));
-		sleep(1); //lo manda cada 1 segundo
-	}
+    while(m_Running){
+
+        if(isActive())
+            continue;
+
+        actual_time = SDL_GetTicks();
+        if((actual_time - last_time) > 30 ){
+            tcpClient->socketClient->sendData(&aliveAction, sizeof(actions_t));
+            last_time = actual_time;
+        }
+    }
 }
 
 
@@ -390,7 +395,7 @@ void MCGame::update() {
 	fds[0].fd = tcpClient->socketClient->get_fd();
 	fds[0].events = POLLIN;
 
-	int timeout = (1 * 500);
+	int timeout = (1 * 50);
 
     int rc = poll(fds, 1, timeout);
 
@@ -399,7 +404,7 @@ void MCGame::update() {
     	cout << "Error en poll" << endl;
 
     else if (rc == 0){
-        if(maxTimeouts == 10){
+        if(maxTimeouts > 200){
             cout<<"El server se ha desconectado. Fin del juego. "<<endl;
             tcpClient->socketClient->closeFd();
             tcpClient->socketClient->closeConnection();
@@ -410,19 +415,18 @@ void MCGame::update() {
         tcpClient->isPipeBroken = true;
         pipe_mtx.unlock();
         maxTimeouts++;
-    }
-
-    else{
+    }else{
         pipe_mtx.lock();
         tcpClient->isPipeBroken = false;
         pipe_mtx.unlock();
         maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
 
-		bool asd = tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
 
-		if(updater->gameFinishedByDisconnections || !asd ){
+		if(updater->gameFinishedByDisconnections  ){
+		    cout<< updater->gameFinishedByDisconnections << "     " <<endl;
 		    endgame = true;
 		    return;
 		}

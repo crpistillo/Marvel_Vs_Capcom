@@ -340,11 +340,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
     //Recibo los argumentos y los casteo en el orden que corresponde.
 
     char bufAction[sizeof(actions_t)];
-    char bufAlive[sizeof(char)];
 
-    int receive = true;
-
-    int timeout = (1 * 1000);
+    int timeout = (1 * 100);
     int maxTimeouts = 0;
 
     while (! getEndgame()) {
@@ -359,18 +356,13 @@ void TCPServer::receiveFromClient(int clientSocket) {
         //Me fijo si el socket esta apto para recibir
         int rc = poll(fds, 1, timeout);
 
-
-        if (rc < 0)
-            cout << "Error en poll" << endl;
-
-        else if (rc > 0 && fds[0].revents == POLLIN) {
+        if (rc > 0 && fds[0].revents == POLLIN) {
+            maxTimeouts = 0;
             connection_mtx.lock();
             iplist[clientSocket].isActive = true;
             connection_mtx.unlock();
 
-
-            maxTimeouts = 0;
-            actions_t *accion;
+            actions_t *accion = new actions_t;
             if(socket->reciveData(bufAction, sizeof(actions_t)))
                 accion = (actions_t *) bufAction;
             else
@@ -380,56 +372,45 @@ void TCPServer::receiveFromClient(int clientSocket) {
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
 			if (msgQueue->action == DISCONNECTEDCLIENT) {
-				this->manageDisconnection(clientSocket);
-				socket->closeConnection();
-				socket->closeFd();
-				activeClients[clientSocket] = false;
-
-				connection_mtx.lock();
-				iplist[clientSocket].isActive = false;
-				connection_mtx.unlock();
-
-				numberOfConnections_mtx.lock();
-				numberOfConnections--;
-				numberOfConnections_mtx.unlock();
+                this->manageDisconnection(clientSocket);
+                disconnectSocket(clientSocket, socket);
 			}
-            else if(this->clientIsActive(clientSocket))
-            {
+			if(this->clientIsActive(clientSocket)){
             	incoming_msg_mtx.lock();
             	this->incoming_msges_queue->insert(msgQueue);
             	incoming_msg_mtx.unlock();
             }
         }
-
-        else if(maxTimeouts != 10 && rc == 0){
-            if(clientIsActive(clientSocket)){
-                connection_mtx.lock();
-                iplist[clientSocket].isActive = false;
-                connection_mtx.unlock();
-
-            }
+        else if(rc == 0){
             maxTimeouts++;
-
-            if(maxTimeouts == 10){
-                this->manageDisconnection(clientSocket);
-                socket->closeConnection();
-                socket->closeFd();
-                activeClients[clientSocket] = false;
-
-                connection_mtx.lock();
-                iplist[clientSocket].isActive = false;
-                connection_mtx.unlock();
-
-                numberOfConnections_mtx.lock();
-                numberOfConnections--;
-                numberOfConnections_mtx.unlock();
-                maxTimeouts = 0;
-                continue;
+            if(maxTimeouts < 150){
+                if(clientIsActive(clientSocket)){
+                    connection_mtx.lock();
+                    iplist[clientSocket].isActive = false;
+                    connection_mtx.unlock();
+                }
+                if(maxTimeouts >= 150){
+                    this->manageDisconnection(clientSocket);
+                    disconnectSocket(clientSocket, socket);
+                    continue;
+                }
             }
-
-
         }
     }
+}
+
+void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
+    socket->closeConnection();
+    socket->closeFd();
+    activeClients[clientSocket] = false;
+
+    connection_mtx.lock();
+    iplist[clientSocket].isActive = false;
+    connection_mtx.unlock();
+
+    numberOfConnections_mtx.lock();
+    numberOfConnections--;
+    numberOfConnections_mtx.unlock();
 }
 
 /*Esta funcion se encarga de desencolar datos de las colas de los clientes
@@ -1251,7 +1232,6 @@ void TCPServer::setEndgame(bool condition) {
     endgame_mtx.lock();
     endgame = condition;
     endgame_mtx.unlock();
-
 }
 
 

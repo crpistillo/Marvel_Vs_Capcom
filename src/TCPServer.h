@@ -155,6 +155,8 @@ public:
 
 
     void setEndgame(bool condition);
+
+    void disconnectSocket(int clientSocket, Socket *socket);
 };
 
 #endif
