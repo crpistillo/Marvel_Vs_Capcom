@@ -422,10 +422,10 @@ void MCGame::update() {
         maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
 
-		tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
+		bool receiveCorrect = tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
 		character_updater_t *updater = (character_updater_t *) buf1;
 
-		if(updater->gameFinishedByDisconnections  ){
+		if(updater->gameFinishedByDisconnections || !receiveCorrect ){
 		    cout<< updater->gameFinishedByDisconnections << "     " <<endl;
 		    endgame = true;
 		    return;
