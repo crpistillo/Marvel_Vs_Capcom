@@ -384,11 +384,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
         else if(rc == 0){
             maxTimeouts++;
             if(maxTimeouts < 150){
-                if(clientIsActive(clientSocket)){
-                    connection_mtx.lock();
-                    iplist[clientSocket].isActive = false;
-                    connection_mtx.unlock();
-                }
+                connection_mtx.lock();
+                iplist[clientSocket].isActive = false;
+                connection_mtx.unlock();
                 if(maxTimeouts >= 150){
                     this->manageDisconnection(clientSocket);
                     disconnectSocket(clientSocket, socket);
