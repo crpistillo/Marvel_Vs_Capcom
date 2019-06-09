@@ -40,7 +40,7 @@ public:
     int getWidth();
     int getSobrante();
     int getCentro();
-    void update(int distance, int posContrincante, actions_t actionRecieved);
+    void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante);
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam) = 0;
@@ -126,9 +126,9 @@ private:
 
     virtual void renderDuckSprite();
 
-    virtual void moveRight( int distance, int posContrincante) = 0;
+    virtual void moveRight( int distance, int posContrincante, Box* boxContrincante) = 0;
 
-    virtual void moveLeft( int distance, int posContrincante) = 0;
+    virtual void moveLeft( int distance, int posContrincante, Box* boxContrincante) = 0;
 
     virtual void jumpVertical();
 

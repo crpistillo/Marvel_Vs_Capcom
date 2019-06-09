@@ -57,8 +57,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, int posContrincante) {
-
+void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
+	//if (objetoColisionable->isColliding(boxContrincante)){
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
@@ -69,11 +69,12 @@ void SpidermanServer::moveLeft(int distance, int posContrincante) {
     }
 
     walkingSpriteUpdate();
+	//}
 }
 
 
-void SpidermanServer::moveRight(int distance, int posContrincante) {
-
+void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
+	//if (objetoColisionable->isColliding(boxContrincante)){
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
@@ -85,6 +86,7 @@ void SpidermanServer::moveRight(int distance, int posContrincante) {
     }
 
     walkingSpriteUpdate();
+	//}
 }
 
 void SpidermanServer::resetSpriteVariables(){

@@ -43,7 +43,7 @@ void Team::changeCharacter(Socket** sockets)
 }
 
 
-void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets) {
+void Team::update(int distance, int posContrincante, actions_t action, Socket** sockets, Box* boxContrincante) {
 
     if(action == CHANGEME && currentCharacter->currentAction == STANDING)
     {
@@ -54,7 +54,7 @@ void Team::update(int distance, int posContrincante, actions_t action, Socket** 
     if(!(currentCharacter->currentAction == MAKINGINTRO))
         isChanging = false;
 
-    currentCharacter->update(distance, posContrincante, action);
+    currentCharacter->update(distance, posContrincante, action, boxContrincante);
 }
 
 void Team::changeClient(){
@@ -85,3 +85,5 @@ bool Team::invalidIntroAction()
 			|| (action == WALKBACK) || (action == PUNCH) || (action == KICK) || (action == PUNCHDOWN)
 			|| (action == KICKDOWN));
 }
+
+

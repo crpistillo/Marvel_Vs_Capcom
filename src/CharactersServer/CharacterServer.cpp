@@ -55,7 +55,7 @@ CharacterServer::CharacterServer(
 }
 
 // Public:
-void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved) {
+void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante) {
 
     bool actionStarted = false;
 
@@ -90,12 +90,12 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if (currentAction == JUMPINGRIGHT) {        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
 
-        moveRight(distance, posContrincante);
+        moveRight(distance, posContrincante, boxContrincante);
         jumpRight();
     }
 
     if (currentAction == JUMPINGLEFT) {
-        moveLeft(distance, posContrincante);
+        moveLeft(distance, posContrincante, boxContrincante);
         jumpLeft();
     }
 
@@ -117,9 +117,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
     else if (currentAction == MOVINGRIGHT)
-        moveRight(distance, posContrincante);   //send move right
+        moveRight(distance, posContrincante, boxContrincante);   //send move right
     else if (currentAction == MOVINGLEFT)
-        moveLeft(distance, posContrincante);    //send move left
+        moveLeft(distance, posContrincante, boxContrincante);    //send move left
     else if (currentAction == PUNCH)
         punch();
     else if (currentAction == KICK)
@@ -195,7 +195,7 @@ void CharacterServer::renderDuckSprite() {
     currentAction = DUCK;
 }
 
-void CharacterServer::moveLeft(int distance, int posContrincante) {
+void CharacterServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
 
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
@@ -210,8 +210,7 @@ void CharacterServer::moveLeft(int distance, int posContrincante) {
 }
 
 
-void CharacterServer::moveRight(int distance, int posContrincante) {
-
+void CharacterServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;

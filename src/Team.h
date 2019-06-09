@@ -36,7 +36,7 @@ public:
 	void changeCharacter(Socket** sockets);
 	void setCharacterToChanging();
 
-    void update(int distance, int posContrincante, actions_t action, Socket** sockets);
+    void update(int distance, int posContrincante, actions_t action, Socket** sockets, Box* boxContrincante);
 
     void changeClient();
 
@@ -45,6 +45,7 @@ public:
     CharacterServer* get_currentCharacter();
 
     bool invalidIntroAction();
+
 
 };
 
