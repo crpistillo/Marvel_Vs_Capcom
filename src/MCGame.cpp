@@ -417,11 +417,10 @@ void MCGame::update() {
         pipe_mtx.lock();
         tcpClient->isPipeBroken = false;
         pipe_mtx.unlock();
-        maxTimeouts = 0;
 		char buf1[sizeof(character_updater_t)];
 
 		bool receiveCorrect = tcpClient->socketClient->reciveData(buf1, sizeof(character_updater_t));
-		character_updater_t *updater = (character_updater_t *) buf1;
+        character_updater_t *updater = (character_updater_t *) buf1;
 
 		if(updater->gameFinishedByDisconnections || !receiveCorrect ){
 		    cout<< updater->gameFinishedByDisconnections << "     " <<endl;
@@ -429,9 +428,7 @@ void MCGame::update() {
 		    return;
 		}
 
-
-
-		if (updater->team == 0) {
+        if (updater->team == 0) {
             players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
@@ -439,9 +436,12 @@ void MCGame::update() {
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
-		logger->log("Actualizacion parallax - MCGame.", DEBUG);
+
+        parallaxController->centerLayers(&players[0], &players[1]);
+        maxTimeouts = 0 ;
+        logger->log("Actualizacion parallax - MCGame.", DEBUG);
 		parallaxController->doParallax(&players[0], &players[1], logger);
-	}
+    }
 
 }
 

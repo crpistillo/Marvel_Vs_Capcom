@@ -1152,31 +1152,20 @@ int TCPServer::getTeamNumber(int client){
 void TCPServer::treatDisconnectionsAfterSelection() {
     if(numberOfConnections < 4 && numberOfPlayers == 4){
         if(!iplist[0].isActive || !iplist[1].isActive){
-            incoming_msg_t* discon = new incoming_msg_t;
-            discon->action = DISCONNECTEDCLIENT;
-            if(!iplist[0].isActive){
-                team[0]->setSecondClientAsActive();
-                discon->client = 0;
+            if(!iplist[0].isActive) {
+                manageDisconnection(0);
             }
             else{
-                team[0]->setFirstClientAsActive();
-                discon->client = 1;
+                manageDisconnection(1);
             }
-            incoming_msges_queue->insert(discon);
         }
         if(!iplist[2].isActive || !iplist[3].isActive){
-            incoming_msg_t* discon = new incoming_msg_t;
-            discon->action = DISCONNECTEDCLIENT;
             if(!iplist[2].isActive){
-                team[1]->setSecondClientAsActive();
-                discon->client = 2;
-
+                manageDisconnection(2);
             }
             else{
-                team[1]->setFirstClientAsActive();
-                discon->client = 3;
+                manageDisconnection(3);
             }
-            incoming_msges_queue->insert(discon);
         }
     }
 
