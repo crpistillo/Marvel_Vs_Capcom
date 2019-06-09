@@ -46,9 +46,6 @@ private:
     Logger* logger;
     game_instance_t server_state;
 
-    pthread_t acceptThread;  //Identificador del thread que acepta conexiones
-
-    pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
     json config;
     ServerCursor* serverCursors[MAXPLAYERS];
@@ -70,7 +67,7 @@ private:
     std::mutex m;
     std::mutex menuClient;
     std::mutex numberOfConnections_mtx;
-    std::mutex connection_mtx;
+    std::mutex connection_mtx[MAXPLAYERS];
     std::mutex incoming_msg_mtx;
     std::mutex updaters_queue_mtx[MAXPLAYERS];
     std::mutex server_state_mtx;

@@ -116,7 +116,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     constants = (Constants *) (malloc(sizeof(Constants *)));
     this->logger = Logger::getInstance();
     this->SCREEN_WIDTH = ancho;
-    this->SCREEN_HEIGHT = alto;
     this->tcpClient = client;
     m_Window = NULL;
     m_Renderer = NULL;
@@ -244,17 +243,16 @@ void MCGame::action_update() {
         handleEvents();
 
         actions_t actionToSend = clientControls->getNewAction();
-        if(!isActive() && actionToSend != DISCONNECTEDCLIENT)
-            continue;
-
-        pipe_mtx.lock();
-        if(!tcpClient->isPipeBroken) {
+        if(!isActive() && actionToSend != DISCONNECTEDCLIENT){
+            actions_t actionToSend = STANDING;
             tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+        }else{
+            pipe_mtx.lock();
+            if(!tcpClient->isPipeBroken) {
+                tcpClient->socketClient->sendData(&actionToSend, sizeof(actionToSend));
+            }
+            pipe_mtx.unlock();
         }
-        pipe_mtx.unlock();
-
-
-
 		if (!getRunningThread())
             break;
 
@@ -273,7 +271,7 @@ void MCGame::run() {
     bool endgame = false;
 
     std::thread send(&MCGame::action_update, this);
-    std::thread alive(&MCGame::alive_action, this);
+  //  std::thread alive(&MCGame::alive_action, this);
     maxTimeouts = 0;
 
     setThreadRunning(true);
@@ -286,9 +284,9 @@ void MCGame::run() {
 
         fpsManager.stop();
     }
-    alive.join();
+   // alive.join();
     send.join();
-    alive.~thread();
+  //  alive.~thread();
     send.~thread();
 
 

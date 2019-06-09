@@ -37,7 +37,6 @@ private:
     bool endgame;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
-    SDL_Joystick *gGameController = NULL;
     Logger *logger;
     // Scene textures
     Texture frontGroundTexture;
@@ -84,7 +83,6 @@ private:
 
 protected:
     int SCREEN_WIDTH;
-    int SCREEN_HEIGHT;
 
 
 public:

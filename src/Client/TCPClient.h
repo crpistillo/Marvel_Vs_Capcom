@@ -39,7 +39,7 @@ private:
 public:
     static TCPClient* getInstance();
     bool setup(string address, int port);
-    bool Send(void* data, size_t size_data);
+
     void* receive(int size = 4096);
     string read();
     void exit();

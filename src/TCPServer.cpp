@@ -67,14 +67,6 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
         clientsSocket = sock;
     }
 
-    if (numberOfPlayers == 2) { //good hardcodeo
-        clientsSockets[0]->receivingFromClient = true;
-        clientsSockets[1]->receivingFromClient = true;
-    } else {
-        clientsSockets[0]->receivingFromClient = true;
-        clientsSockets[3]->receivingFromClient = true;
-    }
-
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
     this->incoming_menu_actions_queue = new Queue<client_menu_t *>;
 
@@ -157,8 +149,6 @@ void TCPServer::reconnections() {
 
         initializer_t initializer;
 
-        socklen_t clientAddress_len = sizeof(clientAddress);
-
         numberOfConnections_mtx.lock();
         if (numberOfConnections == numberOfPlayers) {
 
@@ -183,20 +173,20 @@ void TCPServer::reconnections() {
 
         for (int i = 0; i < numberOfPlayers; ++i) {
 
-        	connection_mtx.lock();
+        	connection_mtx[i].lock();
             if (iplist[i].ip == str && !iplist[i].isActive) {
                 socketToReconnect = i; //debug case
             }
-            connection_mtx.unlock();
+            connection_mtx[i].unlock();
         }
 
         if (socketToReconnect == -1)
             continue;
 
 
-        connection_mtx.lock();
+        connection_mtx[socketToReconnect].lock();
         clientsSockets[socketToReconnect]->fd = newSockFd->fd;
-        connection_mtx.unlock();
+        connection_mtx[socketToReconnect].unlock();
 
         //check server status
 
@@ -217,9 +207,9 @@ void TCPServer::reconnections() {
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
 
-            connection_mtx.lock();
+            connection_mtx[socketToReconnect].lock();
             iplist[socketToReconnect].isActive = true;
-            connection_mtx.unlock();
+            connection_mtx[socketToReconnect].unlock();
 
             incoming_msg_t* recon = new incoming_msg_t;
 
@@ -238,30 +228,23 @@ void TCPServer::reconnections() {
             clientsSockets[socketToReconnect]->sendData(&currentTeam0, sizeof(int));
             clientsSockets[socketToReconnect]->sendData(&currentTeam1, sizeof(int));
 
-            teams_mtx.lock();
-            team[getTeamNumber(socketToReconnect)]->sizeOfTeam++;
-            teams_mtx.unlock();
-
             numberOfConnections_mtx.lock();
             numberOfConnections++;
             numberOfConnections_mtx.unlock();
-
-            std::unique_lock<std::mutex> lock(teams_mtx);
-            team[getTeamNumber(socketToReconnect)]->setClientNumberToCurrentClient(clientsSockets);
         }
 
         else if(server_state_local == MENU_PHASE){
 
         	Socket* socketToSend;
-        	connection_mtx.lock();
+        	connection_mtx[socketToReconnect].lock();
         	socketToSend = clientsSockets[socketToReconnect];
-            connection_mtx.unlock();
+            connection_mtx[socketToReconnect].unlock();
 
             socketToSend->sendData(&initializer, sizeof(initializer_t));
 
-            connection_mtx.lock();
+            connection_mtx[socketToReconnect].lock();
             iplist[socketToReconnect].isActive = true;
-            connection_mtx.unlock();
+            connection_mtx[socketToReconnect].unlock();
 
             client_menu_t* recon = new client_menu_t;
             recon->client = socketToReconnect;
@@ -358,9 +341,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
         if (rc > 0 && fds[0].revents == POLLIN) {
             maxTimeouts = 0;
-            connection_mtx.lock();
+            connection_mtx[clientSocket].lock();
             iplist[clientSocket].isActive = true;
-            connection_mtx.unlock();
+            connection_mtx[clientSocket].unlock();
 
             actions_t *accion = new actions_t;
             if(socket->reciveData(bufAction, sizeof(actions_t)))
@@ -374,8 +357,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
 			if (msgQueue->action == DISCONNECTEDCLIENT) {
                 this->manageDisconnection(clientSocket);
                 disconnectSocket(clientSocket, socket);
-			}
-			if(this->clientIsActive(clientSocket)){
+			}else if(this->clientIsActive(clientSocket)){
             	incoming_msg_mtx.lock();
             	this->incoming_msges_queue->insert(msgQueue);
             	incoming_msg_mtx.unlock();
@@ -384,9 +366,9 @@ void TCPServer::receiveFromClient(int clientSocket) {
         else if(rc == 0){
             maxTimeouts++;
             if(maxTimeouts < 150){
-                connection_mtx.lock();
+                connection_mtx[clientSocket].lock();
                 iplist[clientSocket].isActive = false;
-                connection_mtx.unlock();
+                connection_mtx[clientSocket].unlock();
                 if(maxTimeouts >= 150){
                     this->manageDisconnection(clientSocket);
                     disconnectSocket(clientSocket, socket);
@@ -402,9 +384,9 @@ void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
     socket->closeFd();
     activeClients[clientSocket] = false;
 
-    connection_mtx.lock();
+    connection_mtx[clientSocket].lock();
     iplist[clientSocket].isActive = false;
-    connection_mtx.unlock();
+    connection_mtx[clientSocket].unlock();
 
     numberOfConnections_mtx.lock();
     numberOfConnections--;
@@ -418,7 +400,7 @@ void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
  * */
 
 Socket *TCPServer::getClientSocket(int i) {
-    std::unique_lock<std::mutex> lock(connection_mtx);
+    std::unique_lock<std::mutex> lock(connection_mtx[i]);
     return clientsSockets[i];
 }
 
@@ -429,21 +411,21 @@ void TCPServer::sendToClient(int clientSocket) {
 
     while (1) {
 
-        connection_mtx.lock();
+        connection_mtx[clientSocket].lock();
         if(!iplist[clientSocket].isActive) {
 
             if (!client_updater_queue[clientSocket]->empty_queue()){
 
                 if(client_updater_queue[clientSocket]->get_data()->gameFinishedByDisconnections){
-                    connection_mtx.unlock();
+                    connection_mtx[clientSocket].unlock();
                     break;
                 }
                 client_updater_queue[clientSocket]->delete_data();
             }
-            connection_mtx.unlock();
+            connection_mtx[clientSocket].unlock();
             continue;
         }
-        connection_mtx.unlock();
+        connection_mtx[clientSocket].unlock();
 
 
         character_updater_t *updater;
@@ -614,17 +596,17 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
     while (getRunningMenuPhase()) {
         Socket *socket = getClientSocket(clientSocket);
-        connection_mtx.lock();
+        connection_mtx[clientSocket].lock();
         struct pollfd fds[1];
         memset(fds, 0, sizeof(fds));
         fds[0].fd = socket->get_fd();
         fds[0].events = POLLIN;
 
 		if(!iplist[clientSocket].isActive){
-		    connection_mtx.unlock();
+		    connection_mtx[clientSocket].unlock();
 			continue;
 		}
-        connection_mtx.unlock();
+        connection_mtx[clientSocket].unlock();
 
 
         //Me fijo si el socket esta apto para recibir
@@ -672,9 +654,9 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
 
 
-            connection_mtx.lock();
+            connection_mtx[clientSocket].lock();
             iplist[clientSocket].isActive = false;
-            connection_mtx.unlock();
+            connection_mtx[clientSocket].unlock();
 
             numberOfConnections_mtx.lock();
             numberOfConnections--;
@@ -1040,19 +1022,18 @@ void TCPServer::updateModel() {
 
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[teamToUpdate]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, this->clientsSockets);
+                                       incoming_msg->action);
         } else if (team[teamToUpdate]->invalidIntroAction()
                    && incoming_msg->action == CHANGEME) {
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->currentAction;
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       team[teamToUpdate]->get_currentCharacter()->currentAction,
-                                       this->clientsSockets);
+                                       team[teamToUpdate]->get_currentCharacter()->currentAction);
         } else {
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, this->clientsSockets);
+                                       incoming_msg->action);
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
         }
@@ -1086,13 +1067,13 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-        	connection_mtx.lock();
+        	connection_mtx[i].lock();
         	if(iplist[i].isActive){
 				updaters_queue_mtx[i].lock();
 				this->client_updater_queue[i]->insert(update[i]);
 				updaters_queue_mtx[i].unlock();
         	}
-        	connection_mtx.unlock();
+        	connection_mtx[i].unlock();
         }
 
         //disconnectionsManager(incoming_msg);
@@ -1133,7 +1114,6 @@ void TCPServer::manageDisconnection(int clientSocket)
             teams_mtx.unlock();
     	}
     }
-    return;
 }
 
 

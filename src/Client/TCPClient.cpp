@@ -29,10 +29,6 @@ bool TCPClient::setup(string addressToConnect, int listenPort) {
     return true;
 }
 
-bool TCPClient::Send(void* data, size_t size_data) {
-    return socketClient->sendData(data, size_data);
-}
-
 void* TCPClient::receive(int size) {
     void *buffer =  malloc(size);
     memset(buffer, 0, size);

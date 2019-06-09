@@ -15,8 +15,7 @@ Team::Team(int teamSize) {
 	this->sizeOfTeam = teamSize;
 }
 
-void Team::changeCharacter(Socket** sockets) {
-	sockets[currentCharacter->clientNumber]->receivingFromClient = false;
+void Team::changeCharacter() {
 	int updateX = currentCharacter->getCentro();
 
 	if (currentCharacter == firstCharacter) {
@@ -25,20 +24,20 @@ void Team::changeCharacter(Socket** sockets) {
 		currentCharacter = firstCharacter;
 	}
 	currentCharacter->positionUpdate(&updateX);
-
-	sockets[currentCharacter->clientNumber]->receivingFromClient = true;
-
 }
 
-void Team::update(int distance, int posContrincante, actions_t action,
-		Socket** sockets) {
+void Team::update(int distance, int posContrincante, actions_t action) {
 
 	if (action == DISCONNECTEDCLIENT) {
 		disconnectClient();
 	}
 
+	if(action == RECONNECT){
+	    connectClient();
+	}
+
 	if (action == CHANGEME && currentCharacter->currentAction == STANDING) {
-		changeCharacter(sockets);
+        changeCharacter();
 		if (sizeOfTeam == 2) {
 			this->clientActive = currentCharacter->clientNumber;
 			cout<<"El cliente activo es "<<clientActive<<endl;
@@ -89,10 +88,8 @@ void Team::setSize(int size) {
 	this->sizeOfTeam = size;
 }
 
-void Team::setClientNumberToCurrentClient(Socket** sockets) {
-	sockets[currentCharacter->clientNumber]->receivingFromClient = false;
+void Team::setClientNumberToCurrentClient() {
 	this->clientActive = currentCharacter->clientNumber;
-	sockets[currentCharacter->clientNumber]->receivingFromClient = true;
 }
 
 int Team::get_currentCharacterNumber() {
@@ -118,4 +115,9 @@ void Team::setSecondClientAsActive() {
 
 void Team::setFirstClientAsActive() {
     clientActive = firstCharacter->clientNumber;
+}
+
+void Team::connectClient() {
+    this->sizeOfTeam++;
+    this->setClientNumberToCurrentClient();
 }

@@ -29,9 +29,9 @@ public:
 
     //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
 
-    void changeCharacter(Socket** sockets);
+    void changeCharacter();
 
-    void update(int distance, int posContrincante, actions_t action, Socket** sockets);
+    void update(int distance, int posContrincante, actions_t action);
 
     void disconnectClient();
 
@@ -49,7 +49,7 @@ public:
 
     void setSize(int size);
 
-    void setClientNumberToCurrentClient(Socket** sockets);
+    void setClientNumberToCurrentClient();
 
     int get_currentCharacterNumber();
 
@@ -58,6 +58,8 @@ public:
     void setSecondClientAsActive();
 
     void setFirstClientAsActive();
+
+    void connectClient();
 };
 
 
