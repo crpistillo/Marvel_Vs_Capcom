@@ -325,6 +325,9 @@ void MCGame::render() {
         }
     }
     logger->log("Fin render.", DEBUG);
+    SDL_Color color1 = color(255,255,0,1);
+    SDL_Color color2 = color(167,000,0,0.57);
+    barra(40,5,300,30,0.7,color1,color2);
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 

@@ -26,7 +26,7 @@ void Team::changeCharacter() {
 	currentCharacter->positionUpdate(&updateX);
 }
 
-void Team::update(int distance, int posContrincante, actions_t action) {
+void Team::update(int distance, int posContrincante, actions_t action, Box* boxContrincante) {
 
 	if (action == DISCONNECTEDCLIENT) {
 		disconnectClient();
@@ -47,7 +47,7 @@ void Team::update(int distance, int posContrincante, actions_t action) {
 
 	if (!(currentCharacter->currentAction == MAKINGINTRO));
 
-	currentCharacter->update(distance, posContrincante, action);
+	currentCharacter->update(distance, posContrincante, action, boxContrincante);
 }
 
 void Team::disconnectClient() {
@@ -72,7 +72,8 @@ bool Team::invalidIntroAction() {
 	return ((action == JUMPINGLEFT) || (action == JUMPINGRIGHT)
 			|| (action == JUMPINGVERTICAL) || (action == DUCK)
 			|| (action == MOVINGRIGHT) || (action == MOVINGLEFT)
-			|| (action == WALKBACK));
+			|| (action == WALKBACK) || (action == PUNCH) || (action == KICK) || (action == PUNCHDOWN)
+		      || (action == KICKDOWN));
 }
 
 CharacterServer * Team::get_firstCharacter() {

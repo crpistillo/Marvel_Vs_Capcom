@@ -1022,18 +1022,18 @@ void TCPServer::updateModel() {
 
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[teamToUpdate]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action);
+                                       incoming_msg->action, team[teamToUpdate]->get_currentCharacter()->getColisionable());
         } else if (team[teamToUpdate]->invalidIntroAction()
                    && incoming_msg->action == CHANGEME) {
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->currentAction;
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       team[teamToUpdate]->get_currentCharacter()->currentAction);
+                                       team[teamToUpdate]->get_currentCharacter()->currentAction, team[teamToUpdate]->get_currentCharacter()->getColisionable());
         } else {
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action);
+                                       incoming_msg->action, team[teamToUpdate]->get_currentCharacter()->getColisionable());
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
         }
