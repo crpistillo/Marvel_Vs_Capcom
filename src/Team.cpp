@@ -121,3 +121,5 @@ void Team::connectClient() {
     this->sizeOfTeam++;
     this->setClientNumberToCurrentClient();
 }
+
+

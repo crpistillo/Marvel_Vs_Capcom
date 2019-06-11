@@ -13,6 +13,8 @@
 #include "../tools/logger/Logger.h"
 #include "../action_constants.h"
 #include "../data_structs.h"
+#include <vector>
+#include "../Box.h"
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -38,7 +40,7 @@ public:
     int getWidth();
     int getSobrante();
     int getCentro();
-    void update(int distance, int posContrincante, actions_t actionRecieved);
+    void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante);
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam, double pos) = 0;
@@ -46,6 +48,8 @@ public:
     virtual int getSpriteNumber() = 0;
     actions_t getCurrentAction();
     bool isStanding();
+    //vector<Box*> getColisionable();
+    Box* getColisionable();
 
 
     int clientNumber;
@@ -82,6 +86,9 @@ protected:
 
     int anchoPantalla;
 
+    Box* objetoColisionable; //por ahora una sola caja
+    //vector<Box*> objetoColisionable;
+
 
     int currentStandingSprite;
     int currentWalkingSprite;
@@ -90,6 +97,10 @@ protected:
     int currentJumpingLeftSprite;
     int currentWalkbackSprite;
     int currentIntroSprite;
+    int currentPunchSprite;
+    int currentKickSprite;
+    int currentPunchDownSprite;
+    int currentKickDownSprite;
 
     int lastStandingSprite;
     int lastWalkingSprite;
@@ -98,6 +109,10 @@ protected:
     int lastJumpingRightSprite;
     int lastWalkbackSprite;
     int lastIntroSprite;
+    int lastPunchSprite;
+    int lastKickSprite;
+    int lastPunchDownSprite;
+    int lastKickDownSprite;
 
     unsigned int lastTime;
 
@@ -111,9 +126,9 @@ private:
 
     virtual void renderDuckSprite();
 
-    virtual void moveRight( int distance, int posContrincante) = 0;
+    virtual void moveRight( int distance, int posContrincante, Box* boxContrincante) = 0;
 
-    virtual void moveLeft( int distance, int posContrincante) = 0;
+    virtual void moveLeft( int distance, int posContrincante, Box* boxContrincante) = 0;
 
     virtual void jumpVertical();
 
@@ -126,6 +141,16 @@ private:
     virtual void updateStand();
 
     virtual void makeIntro();
+
+    virtual void punch();
+
+    virtual void kick();
+
+    virtual void punchDown();
+
+    virtual void kickDown();
+
+    virtual void moverColisionable();
 
 
 };

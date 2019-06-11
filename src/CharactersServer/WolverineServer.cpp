@@ -15,6 +15,17 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
+const int LAST_PUNCH_SPRITE = 2;
+const int LAST_KICK_SPRITE = 3;
+const int LAST_PUNCH_DOWN_SPRITE = 1;
+const int LAST_KICK_DOWN_SPRITE = 2;
+
+const int widthStanding = 87;
+const int heightStanding = 84;
+const int widthWalking = 88;
+const int heightWalking = 86;
+const int widthDuck = 92;
+const int heightDUck = 59;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
@@ -37,10 +48,18 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
     lastWalkbackSprite = LAST_WALKBACK_SPRITE;
     lastIntroSprite = LAST_INTRO_SPRITE;
+    lastPunchSprite = LAST_PUNCH_SPRITE;
+    lastKickSprite = LAST_KICK_SPRITE;
+    lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
+    lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
+
+    Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
+    //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
 
 
-void WolverineServer::moveLeft(int distance, int posContrincante) {
+void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
+	//if (objetoColisionable->isColliding(boxContrincante)){
     currentAction = MOVINGLEFT;
 
     //Mover
@@ -62,9 +81,11 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
         ++currentWalkbackSprite;
         isLookingLeft = false;
     }
+	//}
 }
 
-void WolverineServer::moveRight(int distance, int posContrincante) {
+void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
+	//if (objetoColisionable->isColliding(boxContrincante)){
     currentAction = MOVINGRIGHT;
 
     //Mover
@@ -87,6 +108,7 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
         ++currentWalkbackSprite;
         isLookingLeft = true;
     }
+	//}
 
 }
 
@@ -128,6 +150,18 @@ int WolverineServer::getSpriteNumber(){
             break;
         case WALKBACK:
             spriteNumber = currentWalkbackSprite;
+            break;
+        case PUNCH:
+            spriteNumber = currentPunchSprite;
+            break;
+        case KICK:
+            spriteNumber = currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            spriteNumber = currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            spriteNumber = currentKickDownSprite;
             break;
         default:
             spriteNumber = 0;

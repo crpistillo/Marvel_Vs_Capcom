@@ -16,12 +16,14 @@ public:
     int rightKey;
     int leftKey;
     int changeKey;
+    int punchKey;
+    int kickKey;
 
     actions_t getNewAction();
     menu_action_t getNewMenuAction();
 
 protected:
-    Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey);
+    Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey, int punchKey, int kickKey);
 };
 
 

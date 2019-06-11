@@ -95,7 +95,9 @@ Controls *CharacterClient::getControls() {
 bool CharacterClient::isMoving() {
 	return !((this->currentAction == STANDING) || (this->currentAction == DUCK)
 			|| (this->currentAction == JUMPINGVERTICAL) || (this->currentAction == MAKINGINTRO)
-			|| (this->currentAction == CHANGEME));
+			|| (this->currentAction == CHANGEME) || (this->currentAction == KICK)
+			|| (this->currentAction == PUNCH) || (this->currentAction == PUNCHDOWN)
+			|| (this->currentAction == KICKDOWN));
 }
 
 int CharacterClient::getZIndex() {

@@ -707,6 +707,31 @@ bool MCGame::isRunning() {
     return m_Running;
 }
 
+/*Nota: El juego, ademas de la barra amarilla tiene una barra roja que se vacia a una menor velocidad. No se que
+ * representa. Posiblemente no sea necesaria. Preguntar.*/
+//La salud (health) varia de 0 a 1
+void MCGame::barra(int posX, int posY, int width, int height, float health, SDL_Color FGColor, SDL_Color BGColor) {
+	health = health > 1.f ? 1.f : health < 0.f ? 0.f : health;
+	SDL_Color old;
+	SDL_GetRenderDrawColor(m_Renderer, &old.r, &old.g, &old.g, &old.a);
+	SDL_Rect bgrect = { posX, posY, width, height };
+	SDL_SetRenderDrawColor(m_Renderer, BGColor.r, BGColor.g, BGColor.b, BGColor.a);
+	SDL_RenderFillRect(m_Renderer, &bgrect);
+	SDL_SetRenderDrawColor(m_Renderer, FGColor.r, FGColor.g, FGColor.b, FGColor.a);
+	int hw = (int)((float)width * health);
 
+	//Para que se vacie de izquierda a derecha (para el team 1)
+	int hx = posX + (width - hw);
+	//hx es posX para que se vacie de derecha a izquieirda (team 2)
+
+	SDL_Rect fgrect = { hx, posY, hw, height };
+	SDL_RenderFillRect(m_Renderer, &fgrect);
+	SDL_SetRenderDrawColor(m_Renderer, old.r, old.g, old.b, old.a);
+}
+
+SDL_Color MCGame::color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+	SDL_Color col = {r,g,b,a};
+	return col;
+}
 
 

@@ -14,8 +14,8 @@ public:
     void makeBuilderStruct(character_builder_t* builder, bool isFirstTeam, double pos);
 
 private:
-    void moveRight(int distance, int posContrincante);
-    void moveLeft(int distance, int posContrincante);
+    void moveRight(int distance, int posContrincante, Box* boxContrincante);
+    void moveLeft(int distance, int posContrincante, Box* boxContrincante);
     void resetSpriteVariables();
 
     int getSpriteNumber();
