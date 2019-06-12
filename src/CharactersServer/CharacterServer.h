@@ -65,7 +65,8 @@ protected:
             int widthSprite,
             int heightSprite,
             int anchoPantalla,
-            int numberOfClient
+            int numberOfClient,
+			Box* caja
     );
 
     int currentClient; //indica el cliente al que pertence este personaje

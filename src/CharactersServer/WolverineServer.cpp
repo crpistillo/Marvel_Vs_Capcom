@@ -29,7 +29,7 @@ const int heightDUck = 59;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient)
+                                 int numberOfClient, Box* caja)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -39,7 +39,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient
+        numberOfClient,
+		caja
 ) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
@@ -53,13 +54,13 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
 
-    Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
+    //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
 
 
 void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	//if (objetoColisionable->isColliding(boxContrincante)){
+	//if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
 
     //Mover
@@ -85,7 +86,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	//if (objetoColisionable->isColliding(boxContrincante)){
+	//if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     //Mover
@@ -107,9 +108,8 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
 
         ++currentWalkbackSprite;
         isLookingLeft = true;
-    }
+	}
 	//}
-
 }
 
 void WolverineServer::resetSpriteVariables(){

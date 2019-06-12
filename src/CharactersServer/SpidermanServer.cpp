@@ -29,7 +29,7 @@ const int heightDUck = 52;
 
 
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient)
+                                 int numberOfClient, Box* caja)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -39,7 +39,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient
+        numberOfClient,
+		caja
 ) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
@@ -52,13 +53,13 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
 
-    Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
+    //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
 }
 
 
 
 void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	//if (objetoColisionable->isColliding(boxContrincante)){
+	//if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
@@ -74,7 +75,7 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
 
 
 void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	//if (objetoColisionable->isColliding(boxContrincante)){
+	//if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;

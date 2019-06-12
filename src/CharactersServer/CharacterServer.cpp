@@ -21,7 +21,8 @@ CharacterServer::CharacterServer(
         int widthSprite,
         int heightSprite,
         int anchoPantalla,
-        int numberOfClient
+        int numberOfClient,
+		Box* caja
 ) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
@@ -48,6 +49,7 @@ CharacterServer::CharacterServer(
     this->currentPunchSprite = 0;
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
+    this->objetoColisionable = caja;
 
 
     this->lastTime = SDL_GetTicks();
@@ -196,7 +198,6 @@ void CharacterServer::renderDuckSprite() {
 }
 
 void CharacterServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 

@@ -565,6 +565,7 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
         ServerCursor *cursor, int nclient, int characterNumber) {
 
     CharacterServer *characterServer;
+    Box *caja;
     int pos;
     if (characterNumber < 2)
         pos = constants.INITIAL_POS_X_PLAYER_ONE;
@@ -573,15 +574,18 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 
     switch (cursor->getCharacterSelected()) {
         case SPIDERMAN:
-            characterServer = new SpidermanServer(pos, constants.widthSpiderman,
+        	caja = new Box(50,0,100,100);
+        	characterServer = new SpidermanServer(pos, constants.widthSpiderman,
                                                   constants.heightSpiderman, constants.spidermanSobrante,
-                                                  constants.spidermanAncho, constants.screenWidth, nclient);
+                                                  constants.spidermanAncho, constants.screenWidth, nclient, caja);
+
             break;
 
         case WOLVERINE:
+        	caja = new Box(50,0,100,100);
             characterServer = new WolverineServer(pos, constants.widthWolverine,
                                                   constants.heightWolverine, constants.wolverineSobrante,
-                                                  constants.wolverineAncho, constants.screenWidth, nclient);
+                                                  constants.wolverineAncho, constants.screenWidth, nclient, caja);
     }
     return characterServer;
 }
