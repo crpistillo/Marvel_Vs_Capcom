@@ -50,7 +50,6 @@ typedef struct {
 bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
 
     this->numberOfPlayers = numberOfPlayers;
-
     this->logger = logger;
     logger->log("Comienza a iniciarse el servidor", INFO);
     logger->log("Se crea el socket de escucha del servidor", INFO);
@@ -363,17 +362,17 @@ void TCPServer::receiveFromClient(int clientSocket) {
             	incoming_msg_mtx.unlock();
             }
         }
-        else if(rc == 0){
+        else if(rc == 0 || fds[0].revents != POLLIN){
             maxTimeouts++;
-            if(maxTimeouts < 150){
+            if(maxTimeouts < 150) {
                 connection_mtx[clientSocket].lock();
                 iplist[clientSocket].isActive = false;
                 connection_mtx[clientSocket].unlock();
-                if(maxTimeouts >= 150){
+            }
+        if(maxTimeouts == 150){
                     this->manageDisconnection(clientSocket);
                     disconnectSocket(clientSocket, socket);
                     continue;
-                }
             }
         }
     }
