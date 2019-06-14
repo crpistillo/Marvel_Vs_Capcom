@@ -587,6 +587,7 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
                                                   constants.heightWolverine, constants.wolverineSobrante,
                                                   constants.wolverineAncho, constants.screenWidth, nclient, caja);
     }
+    characterServer->moverColisionable();
     return characterServer;
 }
 
