@@ -60,7 +60,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 
 
 void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	//if (!(objetoColisionable->isColliding(boxContrincante))){
+	if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
 
     //Mover
@@ -82,11 +82,12 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
         ++currentWalkbackSprite;
         isLookingLeft = false;
     }
-	//}
+    moverColisionable();
+	}
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	//if (!(objetoColisionable->isColliding(boxContrincante))){
+	if (!(objetoColisionable->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     //Mover
@@ -109,7 +110,8 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
         ++currentWalkbackSprite;
         isLookingLeft = true;
 	}
-	//}
+    moverColisionable();
+	}
 }
 
 void WolverineServer::resetSpriteVariables(){

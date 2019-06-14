@@ -574,7 +574,7 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 
     switch (cursor->getCharacterSelected()) {
         case SPIDERMAN:
-        	caja = new Box(50,0,100,100);
+        	caja = new Box(0,0,100,100);
         	characterServer = new SpidermanServer(pos, constants.widthSpiderman,
                                                   constants.heightSpiderman, constants.spidermanSobrante,
                                                   constants.spidermanAncho, constants.screenWidth, nclient, caja);
@@ -582,7 +582,7 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
             break;
 
         case WOLVERINE:
-        	caja = new Box(50,0,100,100);
+        	caja = new Box(600,0,100,100);
             characterServer = new WolverineServer(pos, constants.widthWolverine,
                                                   constants.heightWolverine, constants.wolverineSobrante,
                                                   constants.wolverineAncho, constants.screenWidth, nclient, caja);
@@ -1025,19 +1025,19 @@ void TCPServer::updateModel() {
         		update_msg->action = CHANGEME;
 
             team[teamToUpdate]->update(distancia[teamToUpdate],
-                                       team[teamToUpdate]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, team[teamToUpdate]->get_currentCharacter()->getColisionable());
+                                       team[enemyTeam]->get_currentCharacter()->getPosX(),
+                                       incoming_msg->action, team[enemyTeam]->get_currentCharacter()->getColisionable());
         } else if (team[teamToUpdate]->invalidIntroAction()
                    && incoming_msg->action == CHANGEME) {
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->currentAction;
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       team[teamToUpdate]->get_currentCharacter()->currentAction, team[teamToUpdate]->get_currentCharacter()->getColisionable());
+                                       team[teamToUpdate]->get_currentCharacter()->currentAction, team[enemyTeam]->get_currentCharacter()->getColisionable());
         } else {
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, team[teamToUpdate]->get_currentCharacter()->getColisionable());
+                                       incoming_msg->action, team[enemyTeam]->get_currentCharacter()->getColisionable());
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
         }

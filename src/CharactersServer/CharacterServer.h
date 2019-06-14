@@ -50,6 +50,7 @@ public:
     bool isStanding();
     //vector<Box*> getColisionable();
     Box* getColisionable();
+    virtual void moverColisionable();
 
 
     int clientNumber;
@@ -151,7 +152,6 @@ private:
 
     virtual void kickDown();
 
-    virtual void moverColisionable();
 
 
 };
