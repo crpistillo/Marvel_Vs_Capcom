@@ -16,6 +16,7 @@ public:
 private:
     void moveRight(int distance, int posContrincante, Box* boxContrincante);
     void moveLeft(int distance, int posContrincante, Box* boxContrincante);
+    void stand();
     void resetSpriteVariables();
 
     int getSpriteNumber();

@@ -43,12 +43,17 @@ float Box::getBottomY(){
 	return (this->centerY)-(this->height/2);
 }
 
+/*Sin dibujar las cajas se hace dificil ver si estan bien ubicadas. Si el centro está bien ubicado,
+ * creo qu deberia sumar y restar el ancho dividido dos, pero ahora me da la sensacion que queda
+ * mejor sin la division, no se por que*/
 float Box::getLeftX(){
-	return (this->centerX)-(this->width/2);
+	//return (this->centerX)-(this->width/2);
+	return (this->centerX)-(this->width);
 }
 
 float Box::getRightX(){
-	return (this->centerX)+(this->width/2);
+	//return (this->centerX)+(this->width/2);
+	return (this->centerX)+(this->width);
 }
 
 bool Box::isColliding(Box* anotherBox){

@@ -49,7 +49,7 @@ CharacterServer::CharacterServer(
     this->currentPunchSprite = 0;
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
-    this->objetoColisionable = caja;
+    this->caja = caja;
 
 
     this->lastTime = SDL_GetTicks();
@@ -391,11 +391,11 @@ bool CharacterServer::isStanding()
 void CharacterServer::moverColisionable()
 {
 	//Por ahora, una sola caja
-	objetoColisionable->setCenter(this->getCentro(),mPosY);
+	caja->setCenter(this->getCentro(),mPosY);
 }
 
 Box*  CharacterServer::getColisionable() {
-    return objetoColisionable;
+    return caja;
 }
 
 

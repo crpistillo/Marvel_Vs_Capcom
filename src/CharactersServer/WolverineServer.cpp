@@ -60,7 +60,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 
 
 void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(objetoColisionable->isColliding(boxContrincante))){
+	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
 
     //Mover
@@ -82,12 +82,14 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
         ++currentWalkbackSprite;
         isLookingLeft = false;
     }
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
     moverColisionable();
 	}
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(objetoColisionable->isColliding(boxContrincante))){
+	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     //Mover
@@ -110,6 +112,8 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
         ++currentWalkbackSprite;
         isLookingLeft = true;
 	}
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
     moverColisionable();
 	}
 }
@@ -170,6 +174,15 @@ int WolverineServer::getSpriteNumber(){
             break;
     }
     return spriteNumber;
+}
+
+void WolverineServer::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite >= lastStandingSprite)
+        currentStandingSprite = 0;
+    caja->setWidth(widthStanding);
+    caja->setHeight(heightStanding);
 }
 
 

@@ -59,7 +59,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(objetoColisionable->isColliding(boxContrincante))){
+	//Estos if son algo temporal para chequear si anda (si funca la colision se queda quieto)
+	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
@@ -68,6 +69,8 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
         //Move back
         mPosX += CHARACTER_VEL;
     }
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
     moverColisionable();
     walkingSpriteUpdate();
 	}
@@ -75,7 +78,7 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
 
 
 void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(objetoColisionable->isColliding(boxContrincante))){
+	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
@@ -85,6 +88,8 @@ void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContr
         //Move back
         mPosX -= CHARACTER_VEL;
     }
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
     moverColisionable();
     walkingSpriteUpdate();
 	}
@@ -145,4 +150,13 @@ int SpidermanServer::getSpriteNumber(){
             break;
     }
     return spriteNumber;
+}
+
+void SpidermanServer::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite >= lastStandingSprite)
+        currentStandingSprite = 0;
+    caja->setWidth(widthStanding);
+    caja->setHeight(heightStanding);
 }
