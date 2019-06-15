@@ -9,6 +9,7 @@
 #define TEAM_H_
 
 #include "CharactersServer/CharacterServer.h"
+#include "Socket.h"
 
 class Team
 {
@@ -16,32 +17,49 @@ private:
 	CharacterServer* currentCharacter;//me falta ver esto y otras cosas
 	CharacterServer* firstCharacter; //personaje del clienteA (cada personaje tiene un cliente)
 	CharacterServer* secondCharacter; //personaje del clienteB
-	int sizeOfTeam;
-	bool isChanging;
-	int clientActive;
-	int teamNumber;
 
-	//numberOfClientsActive
+    //numberOfClientsActive
 
 public:
-	Team(CharacterServer* firsCharact, CharacterServer* secondCharact, int teamSize, int teamNumber);
+	int sizeOfTeam;
 
-	void changePlayer(); //cambia el character y el cliente del mismo
+	Team(int teamSize);
 
-	bool isFull(); //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
+    //cambia el character y el cliente del mismo
 
-	CharacterServer* typeOfCharacter(string personaje);
+    //devuelve verdadero si ya tiene (MAX_PLAYERS/2) jugadores
 
-	void changeCharacter();
-	void setCharacterToChanging();
+    void changeCharacter();
 
     void update(int distance, int posContrincante, actions_t action);
 
-    void changeClient();
-
-    void makeUpdater(character_updater_t* builder);
+    void disconnectClient();
 
     CharacterServer* get_currentCharacter();
+
+    bool invalidIntroAction();
+
+	int clientActive;
+
+	void manageDisconection(int clientSocket);
+
+    CharacterServer * get_firstCharacter();
+
+    CharacterServer * get_secondCharacter();
+
+    void setSize(int size);
+
+    void setClientNumberToCurrentClient();
+
+    int get_currentCharacterNumber();
+
+    void setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact);
+
+    void setSecondClientAsActive();
+
+    void setFirstClientAsActive();
+
+    void connectClient();
 };
 
 

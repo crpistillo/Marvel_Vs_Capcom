@@ -9,8 +9,9 @@
 
 class SpidermanServer final : public CharacterServer {
 public:
-    SpidermanServer(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho, int anchoPantalla, int numberOfClient);
-    void makeBuilderStruct(character_builder_t *builder);
+    SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+                    int numberOfClient);
+    void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos);
 
 private:
     void moveRight(int distance, int posContrincante);

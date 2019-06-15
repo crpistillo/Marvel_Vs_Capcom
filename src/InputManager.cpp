@@ -7,11 +7,13 @@
 
 #include "InputManager.h"
 #include <iostream>
+#include <SDL2/SDL.h>
 
 InputManager* InputManager::instance = nullptr;
 
 InputManager::InputManager() {
 	this->quit = false;
+	this->windowIsClosing = false;
 	this->keyboard = SDL_GetKeyboardState(nullptr);
 
 	for(int i = 0; i < KEYBOARD_SIZE; i++){
@@ -34,8 +36,16 @@ void InputManager::update() {
 	while(SDL_PollEvent(&event)) {
 
 		switch (event.type) {
-		case SDL_QUIT:
+		/*case SDL_QUIT:
 			this->quit = true;
+			break;*/
+
+		case SDL_WINDOWEVENT:
+			if(event.window.event==SDL_WINDOWEVENT_CLOSE)
+			{
+				std::cout<<"Se cerro la ventana "<<std::endl;
+				this->windowIsClosing = true;
+			}
 			break;
 
 		case SDL_KEYDOWN:
@@ -88,6 +98,29 @@ bool InputManager::isKeyPressed(KeyboardKey key) {
 	return false;
 }
 
-bool InputManager::quitRequested() {
-	return this->quit;
+
+bool InputManager::closeWindowRequested()
+{
+	return this->windowIsClosing;
 }
+
+ void InputManager::windowNotClosing()
+{
+	this->windowIsClosing = false;
+}
+
+ bool InputManager::quitRequested()
+ {
+	 return this->quit;
+ }
+
+ /*
+ bool InputManager::windowHasClosed()
+ {
+	 return this->windowClosed;
+ }
+
+ void InputManager::windowHasntClosed()
+ {
+	 this->windowClosed = false;
+ }*/

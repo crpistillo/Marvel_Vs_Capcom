@@ -16,8 +16,7 @@ const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
 SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
-                                 int anchoPantalla,
-                                 int numberOfClient)
+                                 int anchoPantalla, int numOfClient)
         : CharacterClient(
         PosX,
         556 - (height * 297 / 480),
@@ -26,7 +25,7 @@ SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int h
         false,
         width,
         height,
-        anchoPantalla, numberOfClient)
+        anchoPantalla, numOfClient)
 {
     this->characterFilepath = spidermanPath;
     if (secondaryColor)

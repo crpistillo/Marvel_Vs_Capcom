@@ -4,6 +4,7 @@
 
 #include "Controls.h"
 #include "../InputManager.h"
+#include <iostream>
 
 Controls::Controls(int up, int down, int right, int left, int change) {
     upKey = up;
@@ -19,7 +20,14 @@ actions_t Controls::getNewAction() {
 
     //Acciones de dos teclas primero
 
-    if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
+    if (inputManager->closeWindowRequested())
+    {
+        inputManager->windowNotClosing();
+        std::cout<<"Detecta window closed"<<std::endl;
+        return DISCONNECTEDCLIENT;
+    }
+
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey))
@@ -51,4 +59,26 @@ actions_t Controls::getNewAction() {
                 inputManager->isKeyUp(leftKey))
             )
         return STANDING;
+}
+
+menu_action_t Controls::getNewMenuAction(){
+
+	InputManager *inputManager = InputManager::getInstance();
+
+	if (inputManager->closeWindowRequested())
+	{
+	    inputManager->windowNotClosing();
+	    return MENU_WINDOWCLOSED;
+	}
+
+	else if(inputManager->isKeyDown(leftKey) && !inputManager->isKeyDown(rightKey))
+		return LEFT;
+
+	else if(!inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(rightKey))
+		return RIGHT;
+
+	else if(inputManager->isKeyDown(KEY_RETURN))
+		return ENTER;
+
+	return INVALID_MENU_ACTION;
 }

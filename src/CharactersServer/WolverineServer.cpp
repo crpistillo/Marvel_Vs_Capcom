@@ -17,8 +17,8 @@ const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
 
 
-WolverineServer::WolverineServer(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
-                                 int anchoPantalla, int numberOfClient)
+WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -52,7 +52,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
         mPosX += CHARACTER_VEL;
     }
 
-    if (this->getCentro() > posContrincante) {
+    if (this->getPosX() > posContrincante) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
@@ -77,7 +77,7 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
         mPosX -= CHARACTER_VEL;
     }
 
-    if (this->getCentro() < posContrincante) {
+    if (this->getPosX() < posContrincante) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
@@ -94,11 +94,13 @@ void WolverineServer::resetSpriteVariables(){
 	return;
 }
 
-void WolverineServer::makeBuilderStruct(character_builder_t* builder){
-	builder->personaje = WOLVERINE;
-	builder->cliente = clientNumber;
-	builder->sprite = 0;
-	builder->action = STANDING;
+void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
+    builder->personaje = WOLVERINE;
+    builder->cliente = clientNumber;
+    builder->sprite = 0;
+    builder->action = STANDING;
+    builder->isFirstTeam = isFirstTeam;
+    builder->pos = pos;
 }
 
 

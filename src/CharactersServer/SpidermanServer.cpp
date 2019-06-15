@@ -17,8 +17,8 @@ const int LAST_INTRO_SPRITE = 16;
 
 
 
-SpidermanServer::SpidermanServer(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
-                                 int anchoPantalla, int numberOfClient)
+SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -74,12 +74,14 @@ void SpidermanServer::resetSpriteVariables(){
 	return;
 }
 
-void SpidermanServer::makeBuilderStruct(character_builder_t* builder){
-	//Completar
-	builder->personaje = SPIDERMAN;
-	builder->cliente = clientNumber;
-	builder->sprite = 0;
-	builder->action = STANDING;
+void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
+    //Completar
+    builder->personaje = SPIDERMAN;
+    builder->cliente = clientNumber;
+    builder->sprite = 0;
+    builder->action = STANDING;
+    builder->isFirstTeam = isFirstTeam;
+    builder->pos = pos;
 
 }
 

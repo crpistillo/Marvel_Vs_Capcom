@@ -22,49 +22,78 @@
 #include "Team.h"
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Queue/Queue.h"
+#include "ServerCursor.h"
 #include <mutex>
+#include <thread>
 
 
 using namespace std;
 
 #define MAXPACKETSIZE 4096
-#define MAXPLAYERS 2
+#define MAXPLAYERS 4
 
 class TCPServer
 {
 private:
-	Team* team1;
-	Team* team2;
+
+	double posPlayers[2];
+    std::thread receiveFromClientThreads[MAXPLAYERS];
+    std::thread sendToClientThreads[MAXPLAYERS];
+	Team* team[2];
     int numberOfConnections;
     int port;
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
+    game_instance_t server_state;
 
-    pthread_t acceptThread;  //Identificador del thread que acepta conexiones
-
-    pthread_t clientsThreads[MAXPLAYERS]; //Identificadores de los threads que reciven cosas de los clientes
 
     json config;
+    ServerCursor* serverCursors[MAXPLAYERS];
+
+    bool activeClients[MAXPLAYERS];
+    bool runningMenuPhase;
+    bool endgame;
+
+    void runMenuFourPlayers();
+    void runMenuTwoPlayers();
+
+    bool getRunningMenuPhase();
+    void setRunningMenuPhase(bool condition);
+
+
+    ip_status_t iplist[4];
+
+    //MUTEXS
     std::mutex m;
+    std::mutex menuClient;
+    std::mutex numberOfConnections_mtx;
+    std::mutex connection_mtx[MAXPLAYERS];
+    std::mutex incoming_msg_mtx;
+    std::mutex updaters_queue_mtx[MAXPLAYERS];
+    std::mutex server_state_mtx;
+    std::mutex teams_mtx;
+    std::mutex runningMenuPhase_mtx;
+    std::mutex endgame_mtx;
+
 
 
 public:
     Queue<incoming_msg_t*>* incoming_msges_queue; //cola de los mensajes entrantes del cliente
 
-    Queue<character_updater_t*>* character_updater_queue[MAXPLAYERS];
+    Queue<character_updater_t*>* client_updater_queue[MAXPLAYERS];
     				//colas de mensajes de escritura para cada cliente
+
+    Queue<client_menu_t*>* incoming_menu_actions_queue;
+    Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
     Socket* serverSocket;
     Socket* newSockFd;
-    int n, pid;
-    //struct sockaddr_in serverAddress;
-    //struct sockaddr_in clientAddress;//sockadrr_in es para protocolo IPv4
-    //pthread_t serverThread;
+    int n;
+
     char msg[ MAXPACKETSIZE ];
-    static string Message;
 
     TCPServer();
-    bool setup(int port, Logger* logger);
+    bool setup(int port, Logger* logger, int numberOfPlayers);
     void receive();
 
     void detach();
@@ -76,8 +105,6 @@ public:
 
     void runServer();
 
-    CharacterServer* createServerCharacter(char *character, int nclient);
-
     void configJson(json config);
 
     void receiveFromClient(int clientSocket);
@@ -85,6 +112,48 @@ public:
     void sendToClient(int clientSocket);
 
     Socket *getClientSocket(int i);
+
+    bool invalidIntroAction(actions_t action);
+
+    void runMenuPhase();
+    void receiveMenuActionsFromClient(int clientSocket);
+    void sendCursorUpdaterToClient(int clientSocket);
+    bool processMenuAction(client_menu_t *action_msg);
+    int getNumberOfCharactersSelected();
+    void sendUpdaters(bool finalUpdater);
+    void sendSelectedCharacters();
+    CharacterServer *createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber);
+
+    int numberOfPlayers;
+
+    void updateModel();
+
+    void disconnectionsManager(incoming_msg_t *incoming_msg);
+
+    bool clientIsActive(int clientSocket);
+
+    void manageDisconnection(int clientSocket);
+
+    void getTeams(int *teamToUpdate, int *enemyTeam, int client);
+
+    void reconnections();
+
+    void sendCharacterBuildersToSocket(int socketNumber);
+
+    int getTeamNumber(int client);
+
+    bool isIpListActive(int clientSocket);
+
+    void treatDisconnectionsAfterSelection();
+
+    void endgameForDisconnections();
+
+    bool getEndgame();
+
+
+    void setEndgame(bool condition);
+
+    void disconnectSocket(int clientSocket, Socket *socket);
 };
 
 #endif

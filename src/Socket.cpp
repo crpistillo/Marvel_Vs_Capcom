@@ -96,7 +96,7 @@ bool Socket::connectTo(string address, int listenPort) {
 }
 
 bool Socket::sendData(void *to_send, size_t size) {
-    send(this->fd, to_send, size, NULL);
+    send(this->fd, to_send, size, 0);
 }
 
 bool Socket::reciveData(void* data, int size) {
@@ -112,6 +112,13 @@ bool Socket::reciveData(void* data, int size) {
     return true;
 }
 
+void Socket::closeFd()
+{
+	close(this->fd);
+}
 
-
+void Socket::closeConnection()
+{
+	shutdown(this->fd, SHUT_RDWR);
+}
 

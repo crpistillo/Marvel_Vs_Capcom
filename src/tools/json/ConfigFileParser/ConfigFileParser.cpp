@@ -60,6 +60,7 @@ void ConfigFileParser::parse() {
 	this->validateBattlefield(defaultConfig);
 	this->validateCharacters(defaultConfig);
 	this->validateWindow(defaultConfig);
+	this->validatePlayers(defaultConfig);
 }
 
 void ConfigFileParser::validateLogLevel(json defaultConfig) {
@@ -269,4 +270,25 @@ void ConfigFileParser::replaceByDefault(string key, json defaultConfig, string s
 
 json ConfigFileParser::getConfig() {
 	return this->config;
+}
+
+void ConfigFileParser::validatePlayers(json defaultConfig) {
+	this->logger->log("Validando players...", INFO);
+	if(this->config.find("server") == this->config.end()) {
+		this->logError("players", "Players no especificado.");
+		this->replaceByDefault("server", defaultConfig);
+	} else {
+		json server = this->config["server"];
+		if(server.find("players") == server.end()) {
+			this->logError("players", "Players no especificado.");
+			this->replaceByDefault("server", defaultConfig);
+		} else {
+			if(!((server["players"] == 2) || (server["players"] == 4))){
+				this->logError("players", "Players incorrecto.");
+				this->replaceByDefault("server", defaultConfig);
+			}
+
+		}
+	}
+	this->logger->log("Players validado OK.", INFO);
 }

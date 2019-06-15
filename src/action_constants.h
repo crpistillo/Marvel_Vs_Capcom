@@ -16,6 +16,10 @@
 #define MR 7
 #define WB 8
 #define CM 9
+#define CMO 10
+#define DC 11
+#define REC 12
+#define AL 13
 
 #define R 0
 #define L 1
@@ -23,7 +27,20 @@
 
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
-    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM
+    MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM, CHANGEME_ONEPLAYER = CMO, DISCONNECTEDCLIENT = DC,
+    RECONNECT = REC, ALIVE = AL
 } actions_t;
+
+typedef enum menuAction{
+    SELECT = 94,
+	MENU_WINDOWCLOSED = 95,
+    RIGHT = 96,
+    LEFT = 97,
+    ENTER = 98,
+    INVALID_MENU_ACTION = 99,
+	ALIVE_MENU = 100,
+	DISCONNECTED_MENU = 101,
+	RECONNECTION_MENU = 102
+} menu_action_t;
 
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H

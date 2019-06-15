@@ -28,8 +28,7 @@ json parseConfigFile(string logPath) {
 Logger *Logger::instance = 0;
 
 TCPServer* tcpServer;
-TCPClient* tcpClient;
-MCGame* mcGame;
+TCPClient* TCPClient::instance = 0;
 
 
 int run_server(int cantArg, char *dirJson, int port);
@@ -39,7 +38,7 @@ int run_client(int cantArg, char *dirJson, string host, int port);
 int main(int argc, char *argv[]) {
 
     if (strncmp(argv[2], "client", 6) == 0) {
-        run_client(argc, argv[1], string(argv[3]),atoi(argv[4]));
+        return run_client(argc, argv[1], string(argv[3]),atoi(argv[4])); //le estoy mandando de a cuantos armo el server esto tiene que ir en el json
     } else {
         if (strncmp(argv[2], "server", 6) == 0) {
            return run_server(argc, argv[1], atoi(argv[3]));
@@ -48,8 +47,6 @@ int main(int argc, char *argv[]) {
             return 1;
         }
     }
-
-    return 0;
 }
 
 /* Parametros de inicio client:               |           *Parametros de inicio server:
@@ -71,7 +68,7 @@ int run_server(int cantArg, char *dirJson, int port) {
 	json config;
 
 	if(cantArg != 4){
-		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 4.", ERROR);
+		logger->log("Cantidad de parametros necesarios es incorrecto. Deben ser 5.", ERROR);
 		logger->finishSession();
 		return -1;
 	}
@@ -90,7 +87,9 @@ int run_server(int cantArg, char *dirJson, int port) {
 
     //ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
 
-    if(!tcpServer->setup(port, logger)){
+    int numOfPlayers = config["server"]["players"];
+
+    if(!tcpServer->setup(port, logger, numOfPlayers)){
         cout << "Error al crear el server" << endl;
         return -1;
     }
@@ -111,7 +110,7 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 	Logger* logger = Logger::getInstance();
 	logger->startSession("CLIENT");
 
-	tcpClient = new TCPClient();
+	TCPClient* tcpClient = TCPClient::getInstance();
 
 	//LOGGER//////////
     logger->log("Logger iniciado.", DEBUG);
@@ -132,39 +131,19 @@ int run_client(int cantArg, char *dirJson, string host, int port) {
 
     /////////////////
 
+    tcpClient->ancho = ancho;
+    tcpClient->alto = alto;
+    tcpClient->config = config;
+
     if(!tcpClient->setup(host, port)) {                  //MCGame tendria que tener el tcpClient
         cout << "Failed to setup Client" << endl;
         return -1;
     }
 
-    void* msj;
-    while(1){
-    	msj = tcpClient->receive(sizeof(connection_information_t));
-    	connection_information_t* buf = (connection_information_t*) msj;
-    	if(buf->status == NO_MORE_CONNECTIONS_ALLOWED){
-    		cout << "Connection not allowed. No more players. \n";
-    		return 0;
-    	}
-
-    	if(buf->status == READY){
-    	    cout<< "Sale" << endl;
-            break;
-        }
-    	else{
-    		tcpClient->nclient = buf->nconnections;
-    		cout << "Not ready to launch. Players: " + to_string(buf->nconnections) + "/2\n";
-    	}
-    }
-
-    CharacterClient* characterClient;//cambiar despues
-
-    mcGame = new MCGame(config, ancho, alto, tcpClient);
-    mcGame->camera = { 0, 0, ancho, alto };
-    mcGame->init("Marvel vs Capcom", 100, 100, ancho, alto, 0);
-    mcGame->run();
+    tcpClient->run();
 
 
-    return 0;
+    return 10;
 }
 
 

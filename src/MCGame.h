@@ -22,6 +22,7 @@
 #include "Client/TCPClient.h"
 #include "data_structs.h"
 #include "Constants.h"
+#include "ClientCursor.h"
 #include <mutex>
 
 
@@ -32,65 +33,112 @@ class MCGame {
 private:
     bool m_Running;
     bool threadRunning;
-    SDL_Window* m_Window;
-    SDL_Renderer* m_Renderer;
-    SDL_Joystick* gGameController = NULL;
-    Logger* logger;
+    bool appCloseFromMenu;
+    bool endgame;
+    SDL_Window *m_Window;
+    SDL_Renderer *m_Renderer;
+    Logger *logger;
     // Scene textures
     Texture frontGroundTexture;
     Texture middleGroundTexture;
     Texture backGroundTexture;
     Texture menuTexture;
-    Layer* middleGround;
-    Layer* backGround;
-    Layer* frontGround;
-    Player* players[2];
-    Parallax* parallaxController;
-    Controls* clientControls;
+    Texture cliente1;
+    Texture cliente2;
+    Texture cliente3;
+    Texture cliente4;
+    Texture endgame_image;
+    Layer *middleGround;
+    Layer *backGround;
+    Layer *frontGround;
+    Player *players[2];
+    Parallax *parallaxController;
+    Controls *clientControls;
     json config;
-    TCPClient* tcpClient;
-    CharacterClient* characters[4];
+    TCPClient *tcpClient;
+    CharacterClient *characters[4];
+
     void loadGroundTextureByZIndex();
-    Constants* constants;
+
+    Constants *constants;
+
     void action_update();
-    int myCharacter;
+
+    void alive_action();
+
     std::mutex m;
+    std::mutex threadRunning_mtx;
+
+    void sendMenuEvents();
+
+    void setThreadRunning(bool condition);
+    bool getRunningThread();
+
+    ClientCursor *clientCursors[4];
+
+    void renderMenuBackImage();
+
+    void sendMenuAlive(Uint32* timer);
 
 
 protected:
     int SCREEN_WIDTH;
-    int SCREEN_HEIGHT;
 
 
 public:
     MCGame(json config, int ancho, int alto, TCPClient *client);
-    ~MCGame(){}
+
+    ~MCGame() {}
+
     void init() { m_Running = true; }
-    bool init(const char* title, int xpos, int ypos, int width, int
+
+    bool init(const char *title, int xpos, int ypos, int width, int
     height, int flags);
+
     void run();
+
     void menu();
+
     void render();
+
     void update();
+
     void handleEvents();
+
     void clean();
+
     SDL_Rect camera;
 
-    CharacterClient *characterBuild(character_builder_t *builder);
+    CharacterClient *characterBuild(character_builder_t *builder, int clientNumber);
 
-    pthread_t readThread; //lee del socket la info de cada personaje (accion, posX, posY, etc)
-    					  //y luego renderiza en base a esos datos
 
-    pthread_t writeThread; //ejecuta handleEvents y manda en el socket (al server)
-    						//la informacion de lo que el cliente pretende que el personaje haga
-    						//(caminar,saltar,etc)
+    void loadInitialTextures();
 
-    void createReadThread();
-    void createWriteThread();
+    void runMenu();
 
-    //Ahora le dejo este tipo de dato, pero
-    												//despues lo cambiamos en base al tipo de
-    												//dato que recibamos
+    void updateMenu();
+
+    void renderMenu();
+
+    void loadSelectedCharacters();
+
+
+    void setCursors();
+
+    int numberOfPlayers;
+
+    bool isActive();
+
+    bool isSending;
+    int team;
+
+    bool isRunning();
+
+    static void static_signalHandlerClient(int sigNum);
+
+    int maxTimeouts = 0;
+
+    std::mutex pipe_mtx;
 
 };
 

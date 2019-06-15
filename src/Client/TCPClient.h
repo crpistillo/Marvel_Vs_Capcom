@@ -17,23 +17,29 @@
 #include <netdb.h>
 #include <vector>
 #include "../Socket.h"
+#include "../tools/json/ConfigFileParser/ConfigFileParser.h"
 #include <pthread.h>
+#include <csignal>
+
 
 using namespace std;
 
 class TCPClient
 {
 private:
+    static TCPClient* instance;
     int sock;
     std::string address;
     int port;
     struct sockaddr_in server;
+    TCPClient();
+
 
 
 public:
-    TCPClient();
+    static TCPClient* getInstance();
     bool setup(string address, int port);
-    bool Send(void* data, size_t size_data);
+
     void* receive(int size = 4096);
     string read();
     void exit();
@@ -42,6 +48,26 @@ public:
 
     Socket* socketClient;
 
+    void run();
+
+    void runFromBeginning();
+
+    void runFromFight();
+
+    void runFromMenu();
+
+    int ancho;
+    int alto;
+    json config;
+    int numberOfPlayers;
+    int posPlayer1;
+    int posPlayer2;
+
+    void runAfterMenu() const;
+
+    bool isPipeBroken;
+
+    void signalHandlerClient(int signum);
 };
 
 #endif

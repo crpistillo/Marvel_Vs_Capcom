@@ -11,66 +11,113 @@
 
 const int MAX_PLAYERS = 4;
 
-Team::Team(CharacterServer* firstCharact, CharacterServer* secondCharact, int teamSize, int teamNumber )
-{
-	this->currentCharacter = firstCharact;  //es el que esta jugando ahora
-	this->firstCharacter = firstCharact;
-	this->secondCharacter = secondCharact;
+Team::Team(int teamSize) {
 	this->sizeOfTeam = teamSize;
-	this->teamNumber = teamNumber;
-	isChanging = false;
-	clientActive = currentCharacter->clientNumber;
-
 }
 
-void Team::changeCharacter()
-{
+void Team::changeCharacter() {
+	int updateX = currentCharacter->getCentro();
 
-    int updateX = currentCharacter->getCentro();
-
-    if(currentCharacter == firstCharacter) {
-        currentCharacter = secondCharacter;
-    }
-    else {
-        currentCharacter = firstCharacter;
-    }
-    currentCharacter->positionUpdate(&updateX);
-
-
-	this->clientActive = currentCharacter->clientNumber;
-
+	if (currentCharacter == firstCharacter) {
+		currentCharacter = secondCharacter;
+	} else {
+		currentCharacter = firstCharacter;
+	}
+	currentCharacter->positionUpdate(&updateX);
 }
-
 
 void Team::update(int distance, int posContrincante, actions_t action) {
 
-	if(action == CHANGEME && !isChanging)
-	{
-		changeCharacter();
-		isChanging = true;
+	if (action == DISCONNECTEDCLIENT) {
+		disconnectClient();
 	}
 
-    if(!(currentCharacter->currentAction == MAKINGINTRO))
-        isChanging = false;
+	if(action == RECONNECT){
+	    connectClient();
+	}
 
-    currentCharacter->update(distance, posContrincante, action);
+	if (action == CHANGEME && currentCharacter->currentAction == STANDING) {
+        changeCharacter();
+		if (sizeOfTeam == 2) {
+			this->clientActive = currentCharacter->clientNumber;
+			cout<<"El cliente activo es "<<clientActive<<endl;
+		}
+		this->currentCharacter->currentAction = MAKINGINTRO;
+    }
+
+	if (!(currentCharacter->currentAction == MAKINGINTRO));
+
+	currentCharacter->update(distance, posContrincante, action);
 }
 
-void Team::changeClient(){
+void Team::disconnectClient() {
 
-    if(currentCharacter == firstCharacter)
-        this->clientActive = secondCharacter->clientNumber;
-    else
-        this->clientActive = firstCharacter->clientNumber;
+	if (currentCharacter == firstCharacter) {
+		this->clientActive = secondCharacter->clientNumber;
+	}
 
+	else {
+		this->clientActive = firstCharacter->clientNumber;
+	}
+	this->sizeOfTeam--;
 }
 
-void Team::makeUpdater(character_updater_t* updater){
-	updater->team = this->teamNumber;
-	this->currentCharacter->makeUpdaterStruct(updater);
-}
-
-CharacterServer* Team::get_currentCharacter()
-{
+CharacterServer* Team::get_currentCharacter() {
 	return this->currentCharacter;
+}
+
+bool Team::invalidIntroAction() {
+	actions_t action = currentCharacter->currentAction;
+
+	return ((action == JUMPINGLEFT) || (action == JUMPINGRIGHT)
+			|| (action == JUMPINGVERTICAL) || (action == DUCK)
+			|| (action == MOVINGRIGHT) || (action == MOVINGLEFT)
+			|| (action == WALKBACK));
+}
+
+CharacterServer * Team::get_firstCharacter() {
+	return this->firstCharacter;
+
+}
+
+CharacterServer * Team::get_secondCharacter() {
+	return this->secondCharacter;
+}
+
+void Team::setSize(int size) {
+	this->sizeOfTeam = size;
+}
+
+void Team::setClientNumberToCurrentClient() {
+	this->clientActive = currentCharacter->clientNumber;
+}
+
+int Team::get_currentCharacterNumber() {
+    if(currentCharacter == firstCharacter)
+        return 0;
+    else
+        return 1;
+
+}
+
+void Team::setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact) {
+    this->currentCharacter = firstCharact;  //es el que esta jugando ahora
+    this->firstCharacter = firstCharact;
+    this->secondCharacter = secondCharact;
+    clientActive = currentCharacter->clientNumber;
+
+}
+
+void Team::setSecondClientAsActive() {
+    clientActive = secondCharacter->clientNumber;
+
+}
+
+void Team::setFirstClientAsActive() {
+    clientActive = firstCharacter->clientNumber;
+}
+
+void Team::connectClient() {
+    this->sizeOfTeam++;
+    this->setClientNumberToCurrentClient();
 }

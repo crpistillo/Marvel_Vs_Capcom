@@ -11,7 +11,7 @@
 #include "../InputManager.h"
 #include "../Controls/Controls.h"
 #include "../tools/logger/Logger.h"
-#include "../orientation_constants.h"
+#include "../action_constants.h"
 #include "../data_structs.h"
 /*
 typedef enum actions {
@@ -41,11 +41,11 @@ public:
     void update(int distance, int posContrincante, actions_t actionRecieved);
     void positionUpdate(int *x);
     void startIntro();
-    virtual void makeBuilderStruct(character_builder_t *builder) = 0;
+    virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam, double pos) = 0;
     void makeUpdaterStruct(character_updater_t* updater);
     virtual int getSpriteNumber() = 0;
     actions_t getCurrentAction();
-
+    bool isStanding();
 
 
     int clientNumber;
@@ -126,7 +126,6 @@ private:
     virtual void updateStand();
 
     virtual void makeIntro();
-
 
 
 };
