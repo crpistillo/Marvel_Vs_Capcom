@@ -77,12 +77,6 @@ void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContr
 
     mPosX += CHARACTER_VEL;
 
-    if (characterBox->contactoPorLadoDerecho(boxContrincante)) {
-        cout<< "contact" << endl;
-    }
-    cout << "su caja: " << boxContrincante->getRightX() << " " <<  boxContrincante->getLeftX()<< endl;
-    cout << "mi caja: " << characterBox->getRightX() << " " << characterBox->getLeftX()<< endl;
-
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back

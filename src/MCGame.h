@@ -64,8 +64,6 @@ private:
 
     void action_update();
 
-    void alive_action();
-
     std::mutex m;
     std::mutex threadRunning_mtx;
 

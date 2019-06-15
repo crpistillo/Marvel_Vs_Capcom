@@ -214,25 +214,6 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
                                       SCREEN_WIDTH);
 }
 
-void MCGame::alive_action(){
-    actions_t aliveAction = ALIVE;
-    Uint32 last_time = SDL_GetTicks();
-    Uint32 actual_time;
-
-    while(m_Running){
-
-        if(isActive())
-            continue;
-
-        actual_time = SDL_GetTicks();
-        if((actual_time - last_time) > 30 ){
-            tcpClient->socketClient->sendData(&aliveAction, sizeof(actions_t));
-            last_time = actual_time;
-        }
-    }
-}
-
-
 
 void MCGame::action_update() {
     FPSManager fpsManager(25);
@@ -284,9 +265,7 @@ void MCGame::run() {
 
         fpsManager.stop();
     }
-   // alive.join();
     send.join();
-  //  alive.~thread();
     send.~thread();
 
 

@@ -28,10 +28,10 @@ public:
 	virtual ~Box();
 
     void setCenter(float x, float y);
-	float getTopY();
-	float getBottomY();
-	float getLeftX();
-	float getRightX();
+	float getTop();
+	float getBottom();
+	float getLeft();
+	float getRight();
 	bool isColliding(Box* oponnentBox);
 	bool contactoPorLadoDerecho(Box* box);
 	bool contactoPorLadoIzquierdo(Box* box);

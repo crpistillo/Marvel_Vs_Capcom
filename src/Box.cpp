@@ -27,23 +27,23 @@ void Box::setCenter(float x, float y){
 	this->centerY=y;
 }
 
-float Box::getTopY(){
+float Box::getTop(){
 	return (this->centerY)+(this->height/2);
 }
 
-float Box::getBottomY(){
+float Box::getBottom(){
 	return (this->centerY)-(this->height/2);
 }
 
 /*Sin dibujar las cajas se hace dificil ver si estan bien ubicadas. Si el centro está bien ubicado,
  * creo qu deberia sumar y restar el ancho dividido dos, pero ahora me da la sensacion que queda
  * mejor sin la division, no se por que*/
-float Box::getLeftX(){
+float Box::getLeft(){
 	//return (this->centerX)-(this->width/2);
 	return (this->centerX)-(this->width);
 }
 
-float Box::getRightX(){
+float Box::getRight(){
 	//return (this->centerX)+(this->width/2);
 	return (this->centerX)+(this->width);
 }
@@ -69,22 +69,25 @@ bool Box::isColliding(Box* oponnentBox){
 
 bool Box::contactInAxisY(Box *oponnentBox){
 
-    float bottomBorder = getLeftX();
-    float topBorder = getRightX();
+    float bottomBorder = getLeft();
+    float topBorder = getRight();
 
-    bool leftInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getLeftX());
-    bool rightInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getRightX());
+    float mediumValueOponnent = (oponnentBox->getBottom() + oponnentBox->getTop())/2; //if one sprite is bigger than other
 
-    return leftInsideBox || rightInsideBox;
+    bool topInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getTop());
+    bool bottomInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getBottom());
+    bool allInsideBox = isInsideParameters(bottomBorder, topBorder , mediumValueOponnent);
+
+    return topInsideBox || bottomInsideBox || mediumValueOponnent;
 }
 
 bool Box::contactOnAxisX(Box *oponnentBox) {
 
-    float leftBorder = getLeftX();
-    float rightBorder = getRightX();
+    float leftBorder = getLeft();
+    float rightBorder = getRight();
 
-    bool leftInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getLeftX());
-    bool rightInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getRightX());
+    bool leftInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getLeft());
+    bool rightInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getRight());
 
     return leftInsideBox || rightInsideBox;
 }
