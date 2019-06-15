@@ -405,7 +405,6 @@ void MCGame::update() {
         character_updater_t *updater = (character_updater_t *) buf1;
 
 		if(updater->gameFinishedByDisconnections || !receiveCorrect ){
-		    cout<< updater->gameFinishedByDisconnections << "     " <<endl;
 		    endgame = true;
 		    return;
 		}
