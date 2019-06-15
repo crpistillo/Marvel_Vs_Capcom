@@ -73,7 +73,7 @@ bool Team::invalidIntroAction() {
 			|| (action == JUMPINGVERTICAL) || (action == DUCK)
 			|| (action == MOVINGRIGHT) || (action == MOVINGLEFT)
 			|| (action == WALKBACK) || (action == PUNCH) || (action == KICK) || (action == PUNCHDOWN)
-		      || (action == KICKDOWN));
+		      || (action == KICKDOWN) || (action == BLOCK));
 }
 
 CharacterServer * Team::get_firstCharacter() {

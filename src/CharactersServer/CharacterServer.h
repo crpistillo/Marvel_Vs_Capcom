@@ -128,6 +128,8 @@ private:
 
     virtual void renderDuckSprite();
 
+    virtual void renderBlockSprite();
+
     virtual void moveRight( int distance, int posContrincante, Box* boxContrincante) = 0;
 
     virtual void moveLeft( int distance, int posContrincante, Box* boxContrincante) = 0;

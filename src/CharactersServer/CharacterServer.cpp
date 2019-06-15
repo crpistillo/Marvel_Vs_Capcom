@@ -118,6 +118,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         jumpVertical(); //send jump vertical
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
+    else if (currentAction == BLOCK)
+            renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
         moveRight(distance, posContrincante, boxContrincante);   //send move right
     else if (currentAction == MOVINGLEFT)
@@ -195,6 +197,10 @@ void CharacterServer::stand() {
 
 void CharacterServer::renderDuckSprite() {
     currentAction = DUCK;
+}
+
+void CharacterServer::renderBlockSprite() {
+    currentAction = BLOCK;
 }
 
 void CharacterServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
@@ -363,6 +369,9 @@ void CharacterServer::makeUpdaterStruct(character_updater_t* updater){
 		updater->currentSprite = this->currentIntroSprite;
 		break;
 	case DUCK:
+		updater->currentSprite = 0;
+		break;
+	case BLOCK:
 		updater->currentSprite = 0;
 		break;
 	case MOVINGRIGHT:

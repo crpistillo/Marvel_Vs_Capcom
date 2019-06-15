@@ -98,6 +98,15 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+        case BLOCK:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "block", MVC_FILEPATH, 228, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "block", MVC_FILEPATH, 227, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+
         case JUMPINGVERTICAL:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilepath + "jumping_inverted", MVC_FILEPATH,

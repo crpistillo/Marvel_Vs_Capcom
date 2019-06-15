@@ -24,6 +24,8 @@
 #define K 15
 #define PD 16
 #define KD 17
+#define BL 18
+
 
 #define R 0
 #define L 1
@@ -32,7 +34,7 @@
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
     MOVINGRIGHT = MR, MOVINGLEFT = ML, WALKBACK = WB, CHANGEME = CM, CHANGEME_ONEPLAYER = CMO, DISCONNECTEDCLIENT = DC,
-    RECONNECT = REC, ALIVE = AL, PUNCH = P, KICK = K, PUNCHDOWN = PD, KICKDOWN = KD
+    RECONNECT = REC, ALIVE = AL, PUNCH = P, KICK = K, PUNCHDOWN = PD, KICKDOWN = KD, BLOCK = BL
 } actions_t;
 
 typedef enum menuAction{
