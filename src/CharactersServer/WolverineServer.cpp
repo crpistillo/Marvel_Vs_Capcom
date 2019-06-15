@@ -60,11 +60,12 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 
 
 void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
 
     //Mover
     mPosX -= CHARACTER_VEL;
+
+    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
         isLookingLeft = false;
@@ -85,15 +86,15 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
     caja->setWidth(widthWalking);
     caja->setHeight(heightWalking);
     moverColisionable();
-	}
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     //Mover
     mPosX += CHARACTER_VEL;
+
+    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -115,7 +116,6 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
     caja->setWidth(widthWalking);
     caja->setHeight(heightWalking);
     moverColisionable();
-	}
 }
 
 void WolverineServer::resetSpriteVariables(){

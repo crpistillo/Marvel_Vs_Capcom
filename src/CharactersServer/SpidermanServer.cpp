@@ -59,10 +59,10 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
-	//Estos if son algo temporal para chequear si anda (si funca la colision se queda quieto)
-	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
+
+    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -SpidermanServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -73,15 +73,15 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
     caja->setHeight(heightWalking);
     moverColisionable();
     walkingSpriteUpdate();
-	}
 }
 
 
 void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
-	if (!(caja->isColliding(boxContrincante))){
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
+
+    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -92,7 +92,6 @@ void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContr
     caja->setHeight(heightWalking);
     moverColisionable();
     walkingSpriteUpdate();
-	}
 }
 
 void SpidermanServer::resetSpriteVariables(){

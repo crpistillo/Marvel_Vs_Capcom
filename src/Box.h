@@ -34,6 +34,9 @@ public:
 	float getLeftX();
 	float getRightX();
 	bool isColliding(Box* box);
+	bool contactoPorLadoDerecho(Box* box);
+	bool contactoPorLadoIzquierdo(Box* box);
+	bool contactoEnEjeY(Box* box);
 };
 
 
