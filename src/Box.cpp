@@ -85,11 +85,15 @@ bool Box::contactOnAxisX(Box *oponnentBox) {
 
     float leftBorder = getLeft();
     float rightBorder = getRight();
+    float mediumValueOponnent = (oponnentBox->getRight() + oponnentBox->getLeft())/2; //if one sprite is bigger than other
+
 
     bool leftInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getLeft());
     bool rightInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getRight());
+    bool allInsideBox = isInsideParameters(leftBorder, rightBorder , mediumValueOponnent);
 
-    return leftInsideBox || rightInsideBox;
+
+    return leftInsideBox || rightInsideBox || allInsideBox;
 }
 
 bool Box::isInsideParameters(float minBorder, float maxBorder, float value) {

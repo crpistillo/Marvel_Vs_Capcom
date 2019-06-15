@@ -49,8 +49,7 @@ void Team::update(int distance, int posContrincante, actions_t action, Box* boxC
 
 
 	/// Remove comment to see contact or test
-	/*if(currentCharacter->getColisionable()->isColliding(boxContrincante))
-	    cout<< "CONTACT BIATCH" <<endl; */
+    cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
 
 	currentCharacter->update(distance, posContrincante, action, boxContrincante);
 }
