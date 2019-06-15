@@ -24,7 +24,15 @@ const int heightStanding = 96;
 const int widthWalking = 87;
 const int heightWalking = 91;
 const int widthDuck = 100;
-const int heightDUck = 52;
+const int heightDuck = 52;
+const int widthPunch = 152;
+const int heightPunch = 77;
+const int widthPunchDown = 140;
+const int heightPunchDown = 51;
+const int widthKick = 146;
+const int heightKick = 93;
+const int widthKickDown = 136;
+const int heightKickDown = 65;
 
 
 

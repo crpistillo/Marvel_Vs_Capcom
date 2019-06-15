@@ -25,7 +25,15 @@ const int heightStanding = 84;
 const int widthWalking = 88;
 const int heightWalking = 86;
 const int widthDuck = 92;
-const int heightDUck = 59;
+const int heightDuck = 59;
+const int widthPunch = 131;
+const int heightPunch = 95;
+const int widthPunchDown = 156;
+const int heightPunchDown = 56;
+const int widthKick = 134;
+const int heightKick = 96;
+const int widthKickDown = 146;
+const int heightKickDown = 51;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
