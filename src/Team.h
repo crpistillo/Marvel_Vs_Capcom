@@ -31,7 +31,7 @@ public:
 
     void changeCharacter();
 
-    void update(int distance, int posContrincante, actions_t action);
+    void update(int distance, int posContrincante, actions_t action, Box* boxContrincante);
 
     void disconnectClient();
 

@@ -10,12 +10,13 @@
 class WolverineServer final : public CharacterServer {
 public:
     WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                    int numberOfClient);
+                    int numberOfClient, Box* caja);
     void makeBuilderStruct(character_builder_t* builder, bool isFirstTeam, double pos);
 
 private:
-    void moveRight(int distance, int posContrincante);
-    void moveLeft(int distance, int posContrincante);
+    void moveRight(int distance, int posContrincante, Box* boxContrincante);
+    void moveLeft(int distance, int posContrincante, Box* boxContrincante);
+    void stand();
     void resetSpriteVariables();
 
     int getSpriteNumber();

@@ -14,11 +14,22 @@ const int LAST_JUMPING_SPRITE = 21;
 const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
+const int LAST_PUNCH_SPRITE = 4;
+const int LAST_KICK_SPRITE = 2;
+const int LAST_PUNCH_DOWN_SPRITE = 3;
+const int LAST_KICK_DOWN_SPRITE = 2;
+
+const int widthStanding = 110;
+const int heightStanding = 96;
+const int widthWalking = 87;
+const int heightWalking = 91;
+const int widthDuck = 100;
+const int heightDUck = 52;
 
 
 
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient)
+                                 int numberOfClient, Box* caja)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -28,7 +39,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient
+        numberOfClient,
+		caja
 ) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
@@ -36,37 +48,49 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastJumpingRightSprite = LAST_JUMPING_RIGHT_SPRITE;
     lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
     lastIntroSprite = LAST_INTRO_SPRITE;
+    lastPunchSprite = LAST_PUNCH_SPRITE;
+    lastKickSprite = LAST_KICK_SPRITE;
+    lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
+    lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
+
+    //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
 }
 
 
 
-void SpidermanServer::moveLeft(int distance, int posContrincante) {
-
+void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
+
+    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -SpidermanServer::getSobrante()) || (distance < (-anchoPantalla))) {
         //Move back
         mPosX += CHARACTER_VEL;
     }
-
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
+    moverColisionable();
     walkingSpriteUpdate();
 }
 
 
-void SpidermanServer::moveRight(int distance, int posContrincante) {
-
+void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
+
+    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
     }
-
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
+    moverColisionable();
     walkingSpriteUpdate();
 }
 
@@ -108,9 +132,30 @@ int SpidermanServer::getSpriteNumber(){
         case MAKINGINTRO:
             spriteNumber = currentIntroSprite;
             break;
+        case PUNCH:
+            spriteNumber = currentPunchSprite;
+            break;
+        case KICK:
+            spriteNumber = currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            spriteNumber = currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            spriteNumber = currentKickDownSprite;
+            break;
         default:
             spriteNumber = 0;
             break;
     }
     return spriteNumber;
+}
+
+void SpidermanServer::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite >= lastStandingSprite)
+        currentStandingSprite = 0;
+    caja->setWidth(widthStanding);
+    caja->setHeight(heightStanding);
 }

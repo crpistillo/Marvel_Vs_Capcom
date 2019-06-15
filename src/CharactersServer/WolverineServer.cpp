@@ -15,10 +15,21 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
+const int LAST_PUNCH_SPRITE = 2;
+const int LAST_KICK_SPRITE = 3;
+const int LAST_PUNCH_DOWN_SPRITE = 1;
+const int LAST_KICK_DOWN_SPRITE = 2;
+
+const int widthStanding = 87;
+const int heightStanding = 84;
+const int widthWalking = 88;
+const int heightWalking = 86;
+const int widthDuck = 92;
+const int heightDUck = 59;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient)
+                                 int numberOfClient, Box* caja)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -28,7 +39,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient
+        numberOfClient,
+		caja
 ) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
@@ -37,14 +49,23 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastJumpingLeftSprite = LAST_JUMPING_LEFT_SPRITE;
     lastWalkbackSprite = LAST_WALKBACK_SPRITE;
     lastIntroSprite = LAST_INTRO_SPRITE;
+    lastPunchSprite = LAST_PUNCH_SPRITE;
+    lastKickSprite = LAST_KICK_SPRITE;
+    lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
+    lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
+
+    //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
+    //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
 
 
-void WolverineServer::moveLeft(int distance, int posContrincante) {
+void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
     currentAction = MOVINGLEFT;
 
     //Mover
     mPosX -= CHARACTER_VEL;
+
+    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
         isLookingLeft = false;
@@ -62,13 +83,18 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
         ++currentWalkbackSprite;
         isLookingLeft = false;
     }
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
+    moverColisionable();
 }
 
-void WolverineServer::moveRight(int distance, int posContrincante) {
+void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
     currentAction = MOVINGRIGHT;
 
     //Mover
     mPosX += CHARACTER_VEL;
+
+    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -86,8 +112,10 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
 
         ++currentWalkbackSprite;
         isLookingLeft = true;
-    }
-
+	}
+    caja->setWidth(widthWalking);
+    caja->setHeight(heightWalking);
+    moverColisionable();
 }
 
 void WolverineServer::resetSpriteVariables(){
@@ -129,11 +157,32 @@ int WolverineServer::getSpriteNumber(){
         case WALKBACK:
             spriteNumber = currentWalkbackSprite;
             break;
+        case PUNCH:
+            spriteNumber = currentPunchSprite;
+            break;
+        case KICK:
+            spriteNumber = currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            spriteNumber = currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            spriteNumber = currentKickDownSprite;
+            break;
         default:
             spriteNumber = 0;
             break;
     }
     return spriteNumber;
+}
+
+void WolverineServer::stand() {
+    currentAction = STANDING;
+    this->resetSpriteVariables();
+    if (currentStandingSprite >= lastStandingSprite)
+        currentStandingSprite = 0;
+    caja->setWidth(widthStanding);
+    caja->setHeight(heightStanding);
 }
 
 
