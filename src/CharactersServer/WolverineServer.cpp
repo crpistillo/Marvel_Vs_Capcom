@@ -15,10 +15,10 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_WALKBACK_SPRITE = 15;
 const int LAST_INTRO_SPRITE = 25;
-const int LAST_PUNCH_SPRITE = 2;
-const int LAST_KICK_SPRITE = 3;
-const int LAST_PUNCH_DOWN_SPRITE = 1;
-const int LAST_KICK_DOWN_SPRITE = 2;
+const int LAST_PUNCH_SPRITE = 5;
+const int LAST_KICK_SPRITE = 5;
+const int LAST_PUNCH_DOWN_SPRITE = 5;
+const int LAST_KICK_DOWN_SPRITE = 5;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
