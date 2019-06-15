@@ -26,9 +26,8 @@ public:
 	Box();
 	Box(float x, float y,float width,float height);
 	virtual ~Box();
-	void setHeight(float height);
-	void setWidth(float width);
-	void setCenter(float x, float y);
+
+    void setCenter(float x, float y);
 	float getTopY();
 	float getBottomY();
 	float getLeftX();
@@ -40,12 +39,15 @@ public:
 
     bool contactoEnEjeX(Box *oponnentBox);
 
-    float xLeftBorder;
+    /*float xLeftBorder;
     float xRightBorder;
     float yTopBorder;
     float yBottomBorder;
+     */
 
-    void updateBox(int widthWalking , int heightWalking);
+    void updateBox(int newWidth, int newHeight);
+
+    bool isInsideParameters(float border, float rightBorder, float x);
 };
 
 

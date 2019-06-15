@@ -18,31 +18,15 @@ Box::Box(float x, float y, float width,float height){
 	this->centerY=y;
 	this->width=width;
 	this->height=height;
-
-
-
-	xLeftBorder = this->getLeftX();
-	xRightBorder = this->getRightX();
-	yTopBorder = this->getTopY();
-	yBottomBorder = this->getBottomY();
-
-	updateBox();
 }
 
 Box::~Box(){};
-
-void Box::setHeight(float height){
-}
-
-void Box::setWidth(float width){
-	this->width=width;
-}
 
 void Box::setCenter(float x, float y){
 	this->centerX=x;
 	this->centerY=y;
 }
-new B
+
 float Box::getTopY(){
 	return (this->centerY)+(this->height/2);
 }
@@ -65,69 +49,53 @@ float Box::getRightX(){
 }
 
 bool Box::contactoPorLadoIzquierdo(Box* anotherBox){
-	return ((this->getRightX() > anotherBox->getRightX()) && (this->getLeftX() < anotherBox->getRightX()) && contactoEnEjeY(anotherBox));
+	return contactoEnEjeX(anotherBox);
 }
 
 bool Box::contactoPorLadoDerecho(Box* anotherBox){
-	return ((this->getRightX() > anotherBox->getLeftX()) && (this->getLeftX() < anotherBox->getLeftX()) && contactoEnEjeY(anotherBox));
+	return contactoEnEjeX(anotherBox);
 }
 
-bool Box::contactoEnEjeY(Box* anotherBox){
-	bool caso1Y = ((this->getBottomY() > anotherBox->getTopY()) && (this->getTopY() < anotherBox->getTopY()));
+bool Box::contactoEnEjeY(Box* oponnentBox){
 
-	//La proyeccion en y de la caja contacta a la otra caja por abajo
-	bool caso2Y = ((this->getBottomY() > anotherBox->getBottomY()) && (this->getTopY() < anotherBox->getBottomY()));
+    float bottomBorder = getLeftX();
+    float topBorder = getRightX();
 
-	//La proyeccion en x de la caja está dentro de la otra caja
-	bool caso3Y = ((this->getTopY() > anotherBox->getTopY()) && (this->getBottomY() < anotherBox->getBottomY()));
+    bool leftInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getLeftX());
+    bool rightInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getRightX());
 
-	//La proyeccion en y de la otra caja está dentro de esta
-	bool caso4Y = ((this->getTopY() < anotherBox->getTopY()) && (this->getBottomY() > anotherBox->getBottomY()));
-
-	//Perfectamnte en el mismo lugar
-	bool caso5Y = ((this->getTopY() == anotherBox->getTopY()) && (this->getBottomY() == anotherBox->getBottomY()));
-
-	return ((caso1Y || caso2Y || caso3Y || caso4Y || caso5Y));
+    return leftInsideBox || rightInsideBox;
 }
 
 
 
 bool Box::isColliding(Box* oponnentBox){
-	bool contacto = false;
 
-	/*Chequeo contacto sobre las proyecciones en el eje x*/
-	//La proyeccion en x de la caja contacta a la otra caja por el lado izquierdo
-	bool caso1X = ((this->getRightX() > oponnentBox->getLeftX()) && (this->getLeftX() < oponnentBox->getLeftX()));
-
-	//La proyeccion en x de la caja contacta a la otra caja por el lado derecho
-	bool caso2X = ((this->getRightX() > oponnentBox->getRightX()) && (this->getLeftX() < oponnentBox->getRightX()));
-
-	//La proyeccion en x de la caja está dentro de la otra caja
-	bool caso3X = ((this->getLeftX() > oponnentBox->getLeftX()) && (this->getRightX() < oponnentBox->getRightX()));
-
-	//La proyeccion en x de la otra caja está dentro de esta
-	bool caso4X = ((this->getLeftX() < oponnentBox->getLeftX()) && (this->getRightX() > oponnentBox->getRightX()));
-
-	//Perfectamnte en el mismo lugar
-	bool caso5X = ((this->getLeftX() == oponnentBox->getLeftX()) && (this->getRightX() == oponnentBox->getRightX()));
-
-	// bool contactoEnX = (caso1X || caso2X || caso3X || caso4X || caso5X);
-	bool contactoEnX = contactoEnEjeX(oponnentBox    );
+	bool contactoEnX = contactoEnEjeX(oponnentBox);
 	bool contactoEnY = contactoEnEjeY(oponnentBox);
 
-	if (contactoEnX && contactoEnY) contacto = true;
-
-	return contacto;
+    return contactoEnX && contactoEnY;
 }
 
 bool Box::contactoEnEjeX(Box *oponnentBox) {
-    bool leftInsideBox = this->getLeftX();
 
-    return false;
+    float leftBorder = getLeftX();
+    float rightBorder = getRightX();
+
+    bool leftInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getLeftX());
+    bool rightInsideBox = isInsideParameters(leftBorder,rightBorder, oponnentBox->getRightX());
+
+    return leftInsideBox || rightInsideBox;
 }
 
-void Box::updateBox(int newWidth , int newHeight) {
+void Box::updateBox(int newWidth, int newHeight) {
     height = newHeight;
     width = newWidth;
+}
+
+bool Box::isInsideParameters(float minBorder, float maxBorder, float value) {
+
+    return (minBorder <= value) && (maxBorder >= value);
+
 }
 

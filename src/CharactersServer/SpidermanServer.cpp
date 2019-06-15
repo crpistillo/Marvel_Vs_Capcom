@@ -29,7 +29,7 @@ const int heightDUck = 52;
 
 
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient, Box* caja)
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -39,9 +39,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient,
-		caja
-) {
+        numberOfClient) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;
@@ -62,7 +60,6 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
-    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -SpidermanServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -70,8 +67,7 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
         mPosX += CHARACTER_VEL;
     }
 
-    caja->updateBox(widthWalking , heightWalking);
-    moverColisionable();
+    caja->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
 
@@ -81,16 +77,18 @@ void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContr
 
     mPosX += CHARACTER_VEL;
 
-    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
+    if (caja->contactoPorLadoDerecho(boxContrincante)) {
+        cout<< "contact" << endl;
+    }
+    cout << "su caja: " << boxContrincante->getRightX() << " " <<  boxContrincante->getLeftX()<< endl;
+    cout << "mi caja: " << caja->getRightX() << " " << caja->getLeftX()<< endl;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
     }
-    caja->setWidth(widthWalking);
-    caja->setHeight(heightWalking);
-    moverColisionable();
+    caja->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
 
@@ -156,6 +154,5 @@ void SpidermanServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
-    caja->setWidth(widthStanding);
-    caja->setHeight(heightStanding);
+    caja->updateBox(widthStanding, heightStanding);
 }

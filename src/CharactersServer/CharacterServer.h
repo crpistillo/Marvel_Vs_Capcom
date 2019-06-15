@@ -50,25 +50,14 @@ public:
     bool isStanding();
     //vector<Box*> getColisionable();
     Box* getColisionable();
-    virtual void moverColisionable();
 
 
     int clientNumber;
     actions_t currentAction;
 
 protected:
-    CharacterServer(
-            int mPosX,
-            int mPosY,
-            int width,
-            int sobrante,
-            bool isLookingLeft,
-            int widthSprite,
-            int heightSprite,
-            int anchoPantalla,
-            int numberOfClient,
-			Box* caja
-    );
+    CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
+                    int heightSprite, int anchoPantalla, int numberOfClient);
 
     int currentClient; //indica el cliente al que pertence este personaje
 

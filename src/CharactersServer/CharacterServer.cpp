@@ -12,18 +12,8 @@ const string DEBUG = "DEBUG";
 
 
 // Protected
-CharacterServer::CharacterServer(
-        int mPosX,
-        int mPosY,
-        int width,
-        int sobrante,
-        bool isLookingLeft,
-        int widthSprite,
-        int heightSprite,
-        int anchoPantalla,
-        int numberOfClient,
-		Box* caja
-) {
+CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
+                                 int heightSprite, int anchoPantalla, int numberOfClient) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -49,7 +39,8 @@ CharacterServer::CharacterServer(
     this->currentPunchSprite = 0;
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
-    this->caja = caja;
+
+    this->caja = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
 
     this->lastTime = SDL_GetTicks();
@@ -57,13 +48,13 @@ CharacterServer::CharacterServer(
 }
 
 // Public:
-void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante) {
+void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
 
     bool actionStarted = false;
 
     if (this->currentAction == MI || this->currentAction == JV || this->currentAction == JR ||
         this->currentAction == JL || this->currentAction == P || this->currentAction == K ||
-		this->currentAction == PD || this->currentAction == KD)
+        this->currentAction == PD || this->currentAction == KD)
         actionStarted = true;
 
     if (currentAction == MAKINGINTRO) {
@@ -102,6 +93,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     }
 
     if (actionStarted) {
+        this->caja->setCenter(getCentro(), mPosY);
         return;
     }
 
@@ -119,7 +111,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == DUCK)
         renderDuckSprite();  // send duck
     else if (currentAction == BLOCK)
-            renderBlockSprite();
+        renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
         moveRight(distance, posContrincante, boxContrincante);   //send move right
     else if (currentAction == MOVINGLEFT)
@@ -136,6 +128,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if (currentAction == STANDING)
         this->stand(); //send stand
+
+    this->caja->setCenter(getCentro(), mPosY);
     updateStand();
 }
 
@@ -203,7 +197,7 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, int posContrincante, Box* boxContrincante) {
+void CharacterServer::moveLeft(int distance, int posContrincante, Box *boxContrincante) {
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
@@ -217,7 +211,7 @@ void CharacterServer::moveLeft(int distance, int posContrincante, Box* boxContri
 }
 
 
-void CharacterServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
+void CharacterServer::moveRight(int distance, int posContrincante, Box *boxContrincante) {
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
@@ -265,7 +259,7 @@ void CharacterServer::punch() {
     this->currentAction = PUNCH;
     currentPunchSprite++;
     if (currentPunchSprite > lastPunchSprite) {
-    	currentPunchSprite = 0;
+        currentPunchSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
     }
@@ -275,7 +269,7 @@ void CharacterServer::kick() {
     this->currentAction = KICK;
     currentKickSprite++;
     if (currentKickSprite > lastKickSprite) {
-    	currentKickSprite = 0;
+        currentKickSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
     }
@@ -285,7 +279,7 @@ void CharacterServer::punchDown() {
     this->currentAction = PUNCHDOWN;
     currentPunchDownSprite++;
     if (currentPunchDownSprite > lastPunchDownSprite) {
-    	currentPunchDownSprite = 0;
+        currentPunchDownSprite = 0;
         this->currentAction = DUCK;
     }
 }
@@ -294,7 +288,7 @@ void CharacterServer::kickDown() {
     this->currentAction = KICKDOWN;
     currentKickDownSprite++;
     if (currentKickDownSprite > lastKickDownSprite) {
-    	currentKickDownSprite = 0;
+        currentKickDownSprite = 0;
         this->currentAction = DUCK;
     }
 }
@@ -335,75 +329,67 @@ void CharacterServer::walkingSpriteUpdate() {
 
 }
 
-void CharacterServer::makeUpdaterStruct(character_updater_t* updater){
-	updater->posX = this->mPosX;
-	updater->posY = this->mPosY;
-	updater->action = this->currentAction;
+void CharacterServer::makeUpdaterStruct(character_updater_t *updater) {
+    updater->posX = this->mPosX;
+    updater->posY = this->mPosY;
+    updater->action = this->currentAction;
 
-	switch(this->currentAction){
-	case STANDING:
-		updater->currentSprite = this->currentStandingSprite;
-		break;
-	case PUNCH:
-		updater->currentSprite = this->currentPunchSprite;
-		break;
-	case KICK:
-		updater->currentSprite = this->currentKickSprite;
-		break;
-	case PUNCHDOWN:
-		updater->currentSprite = this->currentPunchDownSprite;
-		break;
-	case KICKDOWN:
-		updater->currentSprite = this->currentKickDownSprite;
-		break;
-	case JUMPINGLEFT:
-		updater->currentSprite = this->currentJumpingLeftSprite;
-		break;
-	case JUMPINGRIGHT:
-		updater->currentSprite = this->currentJumpingRightSprite;
-		break;
-	case JUMPINGVERTICAL:
-		updater->currentSprite = this->currentJumpingSprite;
-		break;
-	case MAKINGINTRO:
-		updater->currentSprite = this->currentIntroSprite;
-		break;
-	case DUCK:
-		updater->currentSprite = 0;
-		break;
-	case BLOCK:
-		updater->currentSprite = 0;
-		break;
-	case MOVINGRIGHT:
-		updater->currentSprite = this->currentWalkingSprite;
-		break;
-	case MOVINGLEFT:
-		updater->currentSprite = this->currentWalkingSprite;
-		break;
-	case WALKBACK:
-		updater->currentSprite = this->currentWalkbackSprite;
-		break;
-	}
+    switch (this->currentAction) {
+        case STANDING:
+            updater->currentSprite = this->currentStandingSprite;
+            break;
+        case PUNCH:
+            updater->currentSprite = this->currentPunchSprite;
+            break;
+        case KICK:
+            updater->currentSprite = this->currentKickSprite;
+            break;
+        case PUNCHDOWN:
+            updater->currentSprite = this->currentPunchDownSprite;
+            break;
+        case KICKDOWN:
+            updater->currentSprite = this->currentKickDownSprite;
+            break;
+        case JUMPINGLEFT:
+            updater->currentSprite = this->currentJumpingLeftSprite;
+            break;
+        case JUMPINGRIGHT:
+            updater->currentSprite = this->currentJumpingRightSprite;
+            break;
+        case JUMPINGVERTICAL:
+            updater->currentSprite = this->currentJumpingSprite;
+            break;
+        case MAKINGINTRO:
+            updater->currentSprite = this->currentIntroSprite;
+            break;
+        case DUCK:
+            updater->currentSprite = 0;
+            break;
+        case BLOCK:
+            updater->currentSprite = 0;
+            break;
+        case MOVINGRIGHT:
+            updater->currentSprite = this->currentWalkingSprite;
+            break;
+        case MOVINGLEFT:
+            updater->currentSprite = this->currentWalkingSprite;
+            break;
+        case WALKBACK:
+            updater->currentSprite = this->currentWalkbackSprite;
+            break;
+    }
 
 }
 
-actions_t CharacterServer::getCurrentAction()
-{
-	return this->currentAction;
+actions_t CharacterServer::getCurrentAction() {
+    return this->currentAction;
 }
 
-bool CharacterServer::isStanding()
-{
-	return this->currentAction == STANDING;
+bool CharacterServer::isStanding() {
+    return this->currentAction == STANDING;
 }
 
-void CharacterServer::moverColisionable()
-{
-	//Por ahora, una sola caja
-	caja->setCenter(this->getCentro(),mPosY);
-}
-
-Box*  CharacterServer::getColisionable() {
+Box *CharacterServer::getColisionable() {
     return caja;
 }
 

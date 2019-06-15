@@ -573,20 +573,20 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 
     switch (cursor->getCharacterSelected()) {
         case SPIDERMAN:
-        	caja = new Box(0,0,100,100);
+        	//caja = new Box(0,0,100,100);
         	characterServer = new SpidermanServer(pos, constants.widthSpiderman,
                                                   constants.heightSpiderman, constants.spidermanSobrante,
-                                                  constants.spidermanAncho, constants.screenWidth, nclient, caja);
+                                                  constants.spidermanAncho, constants.screenWidth, nclient);
 
             break;
 
         case WOLVERINE:
-        	caja = new Box(600,0,100,100);
+        //	caja = new Box(600,0,100,100);
             characterServer = new WolverineServer(pos, constants.widthWolverine,
                                                   constants.heightWolverine, constants.wolverineSobrante,
-                                                  constants.wolverineAncho, constants.screenWidth, nclient, caja);
+                                                  constants.wolverineAncho, constants.screenWidth, nclient);
     }
-    characterServer->moverColisionable();
+   // characterServer->moverColisionable(); ??
     return characterServer;
 }
 

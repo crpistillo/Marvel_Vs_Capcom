@@ -29,7 +29,7 @@ const int heightDUck = 59;
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient, Box* caja)
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -39,9 +39,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient,
-		caja
-) {
+        numberOfClient) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;
@@ -65,7 +63,6 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
     //Mover
     mPosX -= CHARACTER_VEL;
 
-    if (caja->contactoPorLadoIzquierdo(boxContrincante)) mPosX += CHARACTER_VEL;
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
         isLookingLeft = false;
@@ -84,8 +81,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
         isLookingLeft = false;
     }
 
-    caja->updateBox(widthWalking,heightWalking);
-    moverColisionable();
+    caja->updateBox(widthWalking, heightWalking);
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
@@ -93,8 +89,6 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
 
     //Mover
     mPosX += CHARACTER_VEL;
-
-    if (caja->contactoPorLadoDerecho(boxContrincante)) mPosX -= CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -114,8 +108,7 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
         isLookingLeft = true;
 	}
 
-    caja->updateBox(widthWalking,heightWalking);
-    moverColisionable();
+    caja->updateBox(widthWalking, heightWalking);
 }
 
 void WolverineServer::resetSpriteVariables(){
@@ -181,8 +174,7 @@ void WolverineServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
-    caja->setWidth(widthStanding);
-    caja->setHeight(heightStanding);
+    caja->updateBox(widthStanding, heightStanding);
 }
 
 
