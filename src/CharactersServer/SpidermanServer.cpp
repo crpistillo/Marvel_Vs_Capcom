@@ -69,8 +69,8 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
         //Move back
         mPosX += CHARACTER_VEL;
     }
-    caja->setWidth(widthWalking);
-    caja->setHeight(heightWalking);
+
+    caja->updateBox(widthWalking , heightWalking);
     moverColisionable();
     walkingSpriteUpdate();
 }

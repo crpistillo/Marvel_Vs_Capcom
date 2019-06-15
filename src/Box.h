@@ -33,10 +33,19 @@ public:
 	float getBottomY();
 	float getLeftX();
 	float getRightX();
-	bool isColliding(Box* box);
+	bool isColliding(Box* oponnentBox);
 	bool contactoPorLadoDerecho(Box* box);
 	bool contactoPorLadoIzquierdo(Box* box);
 	bool contactoEnEjeY(Box* box);
+
+    bool contactoEnEjeX(Box *oponnentBox);
+
+    float xLeftBorder;
+    float xRightBorder;
+    float yTopBorder;
+    float yBottomBorder;
+
+    void updateBox(int widthWalking , int heightWalking);
 };
 
 

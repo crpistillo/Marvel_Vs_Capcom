@@ -83,8 +83,8 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
         ++currentWalkbackSprite;
         isLookingLeft = false;
     }
-    caja->setWidth(widthWalking);
-    caja->setHeight(heightWalking);
+
+    caja->updateBox(widthWalking,heightWalking);
     moverColisionable();
 }
 
@@ -113,8 +113,8 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
         ++currentWalkbackSprite;
         isLookingLeft = true;
 	}
-    caja->setWidth(widthWalking);
-    caja->setHeight(heightWalking);
+
+    caja->updateBox(widthWalking,heightWalking);
     moverColisionable();
 }
 

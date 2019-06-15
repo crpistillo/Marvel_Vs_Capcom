@@ -60,7 +60,10 @@ set(SOURCE_FILES
         src/ClientCursor.h
         src/ServerCursor.cpp
         src/ServerCursor.h
-        src/signal_handler.cpp src/signal_handler.h)
+        src/signal_handler.cpp src/signal_handler.h
+        src/Box.cpp
+        src/Box.h
+        )
 
 
 

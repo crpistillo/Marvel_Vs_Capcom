@@ -369,7 +369,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 iplist[clientSocket].isActive = false;
                 connection_mtx[clientSocket].unlock();
             }
-        if(maxTimeouts == 150){
+            if(maxTimeouts == 150){
                     this->manageDisconnection(clientSocket);
                     disconnectSocket(clientSocket, socket);
                     continue;
