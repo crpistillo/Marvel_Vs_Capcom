@@ -15,8 +15,8 @@ const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
 const int LAST_PUNCH_SPRITE = 4;
-const int LAST_KICK_SPRITE = 2;
-const int LAST_PUNCH_DOWN_SPRITE = 3;
+const int LAST_KICK_SPRITE = 5;
+const int LAST_PUNCH_DOWN_SPRITE = 7;
 const int LAST_KICK_DOWN_SPRITE = 2;
 
 const int widthStanding = 110;
