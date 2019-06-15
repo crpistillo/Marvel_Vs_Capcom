@@ -77,7 +77,7 @@ protected:
 
     int anchoPantalla;
 
-    Box* caja; //por ahora una sola caja
+    Box* characterBox; //por ahora una sola caja
     //vector<Box*> objetoColisionable;
 
 

@@ -67,7 +67,7 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, Box* boxContri
         mPosX += CHARACTER_VEL;
     }
 
-    caja->updateBox(widthWalking, heightWalking);
+    characterBox->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
 
@@ -77,18 +77,18 @@ void SpidermanServer::moveRight(int distance, int posContrincante, Box* boxContr
 
     mPosX += CHARACTER_VEL;
 
-    if (caja->contactoPorLadoDerecho(boxContrincante)) {
+    if (characterBox->contactoPorLadoDerecho(boxContrincante)) {
         cout<< "contact" << endl;
     }
     cout << "su caja: " << boxContrincante->getRightX() << " " <<  boxContrincante->getLeftX()<< endl;
-    cout << "mi caja: " << caja->getRightX() << " " << caja->getLeftX()<< endl;
+    cout << "mi caja: " << characterBox->getRightX() << " " << characterBox->getLeftX()<< endl;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
     }
-    caja->updateBox(widthWalking, heightWalking);
+    characterBox->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
 
@@ -154,5 +154,5 @@ void SpidermanServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
-    caja->updateBox(widthStanding, heightStanding);
+    characterBox->updateBox(widthStanding, heightStanding);
 }

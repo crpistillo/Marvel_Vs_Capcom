@@ -40,7 +40,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
 
-    this->caja = new Box(mPosX, mPosY, widthSprite, heightSprite);
+    this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
 
     this->lastTime = SDL_GetTicks();
@@ -93,7 +93,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     }
 
     if (actionStarted) {
-        this->caja->setCenter(getCentro(), mPosY);
+        this->characterBox->setCenter(getCentro(), mPosY);
         return;
     }
 
@@ -129,7 +129,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     if (currentAction == STANDING)
         this->stand(); //send stand
 
-    this->caja->setCenter(getCentro(), mPosY);
+    this->characterBox->setCenter(getCentro(), mPosY);
     updateStand();
 }
 
@@ -390,7 +390,7 @@ bool CharacterServer::isStanding() {
 }
 
 Box *CharacterServer::getColisionable() {
-    return caja;
+    return characterBox;
 }
 
 

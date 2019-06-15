@@ -35,9 +35,9 @@ public:
 	bool isColliding(Box* oponnentBox);
 	bool contactoPorLadoDerecho(Box* box);
 	bool contactoPorLadoIzquierdo(Box* box);
-	bool contactoEnEjeY(Box* box);
+	bool contactInAxisY(Box *oponnentBox);
 
-    bool contactoEnEjeX(Box *oponnentBox);
+    bool contactOnAxisX(Box *oponnentBox);
 
     /*float xLeftBorder;
     float xRightBorder;

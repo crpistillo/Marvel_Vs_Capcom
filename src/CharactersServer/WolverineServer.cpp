@@ -81,7 +81,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante, Box* boxContri
         isLookingLeft = false;
     }
 
-    caja->updateBox(widthWalking, heightWalking);
+    characterBox->updateBox(widthWalking, heightWalking);
 }
 
 void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContrincante) {
@@ -108,7 +108,7 @@ void WolverineServer::moveRight(int distance, int posContrincante, Box* boxContr
         isLookingLeft = true;
 	}
 
-    caja->updateBox(widthWalking, heightWalking);
+    characterBox->updateBox(widthWalking, heightWalking);
 }
 
 void WolverineServer::resetSpriteVariables(){
@@ -174,7 +174,7 @@ void WolverineServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
-    caja->updateBox(widthStanding, heightStanding);
+    characterBox->updateBox(widthStanding, heightStanding);
 }
 
 

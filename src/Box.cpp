@@ -49,14 +49,25 @@ float Box::getRightX(){
 }
 
 bool Box::contactoPorLadoIzquierdo(Box* anotherBox){
-	return contactoEnEjeX(anotherBox);
+	return contactOnAxisX(anotherBox);
 }
 
 bool Box::contactoPorLadoDerecho(Box* anotherBox){
-	return contactoEnEjeX(anotherBox);
+	return contactOnAxisX(anotherBox);
 }
 
-bool Box::contactoEnEjeY(Box* oponnentBox){
+
+
+bool Box::isColliding(Box* oponnentBox){
+
+	bool collidingInAxisX = contactOnAxisX(oponnentBox);
+	bool collidingInAxisY = contactInAxisY(oponnentBox);
+
+    return collidingInAxisX && collidingInAxisY;
+}
+
+
+bool Box::contactInAxisY(Box *oponnentBox){
 
     float bottomBorder = getLeftX();
     float topBorder = getRightX();
@@ -67,17 +78,7 @@ bool Box::contactoEnEjeY(Box* oponnentBox){
     return leftInsideBox || rightInsideBox;
 }
 
-
-
-bool Box::isColliding(Box* oponnentBox){
-
-	bool contactoEnX = contactoEnEjeX(oponnentBox);
-	bool contactoEnY = contactoEnEjeY(oponnentBox);
-
-    return contactoEnX && contactoEnY;
-}
-
-bool Box::contactoEnEjeX(Box *oponnentBox) {
+bool Box::contactOnAxisX(Box *oponnentBox) {
 
     float leftBorder = getLeftX();
     float rightBorder = getRightX();
@@ -88,14 +89,11 @@ bool Box::contactoEnEjeX(Box *oponnentBox) {
     return leftInsideBox || rightInsideBox;
 }
 
+bool Box::isInsideParameters(float minBorder, float maxBorder, float value) {
+    return (minBorder <= value) && (maxBorder >= value);
+}
+
 void Box::updateBox(int newWidth, int newHeight) {
     height = newHeight;
     width = newWidth;
 }
-
-bool Box::isInsideParameters(float minBorder, float maxBorder, float value) {
-
-    return (minBorder <= value) && (maxBorder >= value);
-
-}
-
