@@ -471,6 +471,9 @@ void TCPServer::runServer() {
     server_state_mtx.unlock();
 
     //TODO MENU PHASE CON CLASE MENU
+    this->menu->setClientsSocket(this->clientsSockets);
+    this->menu->setIpList(this->iplist);
+    this->menu->setNumberOfConnections(&numberOfConnections);
     this->menu->runMenuPhase();
 
     int teamSize = numberOfPlayers / 2;

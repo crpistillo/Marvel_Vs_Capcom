@@ -8,10 +8,16 @@
 
 #include "../data_structs.h"
 #include "../Queue/Queue.h"
+#include "../Socket.h"
 #include <thread>
 #include <mutex>
+#include <iostream>
+#include <sys/poll.h>
+
 
 #define MAXPLAYERS 4
+
+using namespace std;
 
 class Menu {
 
@@ -20,7 +26,14 @@ protected:
     Queue<client_menu_t*>* incoming_menu_actions_queue;
     Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
+    Socket* clientsSockets[MAXPLAYERS];
+    ip_status_t iplist[4];
+    int* numberOfConnections;
+
     std::mutex runningMenuPhase_mtx;
+    std::mutex connection_mtx[MAXPLAYERS];
+    std::mutex incoming_msg_mtx;
+    std::mutex numberOfConnections_mtx;
     bool runningMenuPhase;
 
 public:
@@ -34,6 +47,16 @@ public:
     void runMenuPhase();
     virtual void runCorrespondingMenu() = 0;
 
+    bool getRunningMenuPhase();
+
+    Socket *getClientSocket(int socket);
+
+    void setClientsSocket(Socket *pSocket[4]);
+
+    void setIpList(ip_status_t *iplist);
+
+
+    void setNumberOfConnections(int *pNumberOfConnections);
 };
 
 
