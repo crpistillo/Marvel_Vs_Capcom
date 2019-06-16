@@ -20,6 +20,9 @@
 
 using namespace std;
 
+//No tocar esto. "declaration forward"
+class TCPServer;
+
 class Menu {
 
 protected:

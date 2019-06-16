@@ -33,6 +33,9 @@ using namespace std;
 #define MAXPACKETSIZE 4096
 #define MAXPLAYERS 4
 
+//No tocar esto. "declaration forward"
+class Menu;
+
 class TCPServer
 {
 private:
