@@ -63,7 +63,9 @@ set(SOURCE_FILES
         src/signal_handler.cpp src/signal_handler.h
         src/Box.cpp
         src/Box.h
-        )
+        src/Menu/Menu.h
+        src/Menu/Menu.cpp
+        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h)
 
 
 

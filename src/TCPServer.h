@@ -25,6 +25,7 @@
 #include "ServerCursor.h"
 #include <mutex>
 #include <thread>
+#include "Menu/Menu.h"
 
 
 using namespace std;
@@ -45,6 +46,7 @@ private:
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
     game_instance_t server_state;
+    Menu* menu;
 
 
     json config;

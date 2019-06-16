@@ -12,6 +12,8 @@
 #include "Constants.h"
 #include <sys/poll.h>
 #include "signal_handler.h"
+#include "Menu/MenuTwoPlayers.h"
+#include "Menu/MenuFourPlayers.h"
 
 
 Constants constants;
@@ -63,14 +65,23 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
         clientsSocket = sock;
     }
 
+
+    switch (numberOfPlayers){
+    case 2:
+        this->menu = new MenuTwoPlayers();
+    case 4:
+        this->menu = new MenuFourPlayers();
+
+    }
+
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
 
-    //TODO COLA MENU ACTIONS EN CLASE MENU
+    //TODO BORRAR ESTO CUANDO LA CLASE MENU ESTE IMPLEMENTADA
     this->incoming_menu_actions_queue = new Queue<client_menu_t *>;
 
     for (int i = 0; i < numberOfPlayers; ++i) {
         this->client_updater_queue[i] = new Queue<character_updater_t *>;
-        //TODO COLA CURSOR  UPDATER EN CLASE MENU
+        //TODO BORRAR ESTO CUANDO LA CLASE MENU ESTE IMPLEMENTADA
         this->cursor_updater_queue[i] = new Queue<cursor_updater_t *>;
     }
 
