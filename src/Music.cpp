@@ -29,9 +29,9 @@ bool Music::initialize()
 	return true;
 }
 
-void Music::loadMusic() //pasar path a string
+void Music::loadMusic(const char *file) //pasar path a string
 {
-	this->gMusic = Mix_LoadMUS("music/music.wav");
+	this->gMusic = Mix_LoadMUS(file);
 	if (gMusic == NULL)
 	{
 		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );

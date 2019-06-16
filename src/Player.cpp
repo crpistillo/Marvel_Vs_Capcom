@@ -18,7 +18,7 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
     secondCharacter = second;
 }
 
-void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music **music, int* soundKey) {
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music **music, int soundKey) {
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
@@ -62,7 +62,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         setCharacterToChanging();
 	}
 
-	(*music)->playBackGroundMusic(*soundKey);
+	(*music)->playBackGroundMusic(soundKey);
 
 
     currentCharacter->update(updater);

@@ -59,11 +59,13 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     return false;
                 }
 
-                //Inicializo SDL MIxer
-				if (!music->initialize())
-				{
-					return false;
-				}
+            	//Inicializo SDL MIxer
+            	if (!music->initialize())
+            	{
+            		logger->log("SDL_mixer no pudo inicializarse", ERROR);
+            		return false;
+            	}
+
             }
         }
     }
@@ -216,6 +218,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger,
                                       SCREEN_WIDTH);
+
+    music = new Music();
 }
 
 
@@ -335,7 +339,9 @@ void orderRenderizableListByZIndex(Renderizable **list) {
 
 void MCGame::clean() {
     //m_Texture.free();
-	music->free();
+	Mix_FreeMusic(music->gMusic);
+	music->gMusic = NULL;
+	//music->free();
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
@@ -417,10 +423,10 @@ void MCGame::update() {
 		}
 
         if (updater->team == 0) {
-            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient, &music, &(clientControls->soundKey));
+            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient, &music, clientControls->soundKey);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient, &music, &(clientControls->soundKey));
+            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient, &music, clientControls->soundKey);
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
@@ -724,6 +730,7 @@ SDL_Color MCGame::color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
 void MCGame::loadMusic()
 {
-	this->music->loadMusic();
+	string nombre = "music/music.wav";
+	this->music->loadMusic(nombre.c_str());
 }
 

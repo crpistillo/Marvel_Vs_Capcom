@@ -17,7 +17,7 @@ class Player: public Renderizable {
 public:
     Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music** music, int* soundKey);
+    void update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music **music , int soundKey);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 

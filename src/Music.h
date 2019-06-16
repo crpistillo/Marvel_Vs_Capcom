@@ -12,18 +12,20 @@
 #include "tools/logger/Logger.h"
 #include <mutex>
 
+
 class Music
 {
 
 private:
-    Mix_Music *gMusic;
+
     //Logger* logger;
     bool soundOn;
 
 public:
+    Mix_Music *gMusic;
     Music();
     bool initialize();
-    void loadMusic();
+    void loadMusic(const char* file);
     void free();
     void playBackGroundMusic(int soundKey);
     std::mutex m;
