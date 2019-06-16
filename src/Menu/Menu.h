@@ -55,6 +55,10 @@ public:
 
 
     bool processMenuAction(client_menu_t *action_msg);
+
+    ServerCursor *getServerCursor(int i);
+
+    int getNumberOfCharactersSelected();
 };
 
 

@@ -54,7 +54,7 @@ void MenuTwoPlayers::runMenuTwoPlayers() {
         delete incoming_msg;
 
         /* Verifico si ya seleccionaron todos */
-        int charactersSelected = this->server->getNumberOfCharactersSelected();
+        int charactersSelected = getNumberOfCharactersSelected();
         if (charactersSelected == MAXPLAYERS)
             break;
 

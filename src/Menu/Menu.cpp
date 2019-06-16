@@ -193,3 +193,19 @@ bool Menu::getRunningMenuPhase() {
 bool Menu::processMenuAction(client_menu_t *action_msg) {
     return this->serverCursors[action_msg->client]->update(action_msg);
 }
+
+ServerCursor *Menu::getServerCursor(int i) {
+    return this->serverCursors[i];
+}
+
+int Menu::getNumberOfCharactersSelected() {
+
+    int n = 0;
+    for (int i = 0; i < MAXPLAYERS; i++) {
+        if (serverCursors[i]->getFinalSelection())
+            n++;
+    }
+
+    return n;
+
+}

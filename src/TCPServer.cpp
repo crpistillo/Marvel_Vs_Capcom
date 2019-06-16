@@ -475,11 +475,14 @@ void TCPServer::runServer() {
 
     int teamSize = numberOfPlayers / 2;
 
-
     team[0] = new Team(teamSize);
     team[1] = new Team(teamSize);
 
-    runMenuPhase();  //Pongo al servidor en modo "Menu"
+    //runMenuPhase();  //Pongo al servidor en modo "Menu"
+    this->serverCursors[0] = this->menu->getServerCursor(0);
+    this->serverCursors[1] = this->menu->getServerCursor(1);
+    this->serverCursors[2] = this->menu->getServerCursor(2);
+    this->serverCursors[3] = this->menu->getServerCursor(3);
     sendSelectedCharacters();
 
     treatDisconnectionsAfterSelection();
