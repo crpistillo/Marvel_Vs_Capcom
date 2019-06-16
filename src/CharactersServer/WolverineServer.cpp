@@ -19,7 +19,7 @@ const int LAST_PUNCH_SPRITE = 5;
 const int LAST_KICK_SPRITE = 5;
 const int LAST_PUNCH_DOWN_SPRITE = 5;
 const int LAST_KICK_DOWN_SPRITE = 5;
-const int LAST_HURTING_SPRITE = 2;
+const int LAST_HURTING_SPRITE = 3;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
