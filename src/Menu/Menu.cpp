@@ -123,7 +123,24 @@ void Menu::sendCursorUpdaterToClient(int clientSocket) {
 }
 
 void Menu::sendUpdaters(bool finalUpdater) {
+    cursor_updater_t *update[4];
 
+    for (int i = 0; i < 4; i++) {
+        update[i] = new cursor_updater_t;
+        update[i]->cliente = i;
+        update[i]->menuTerminated = finalUpdater;
+        serverCursors[i]->makeMenuUpdater(update[i]);
+    }
+
+    menuClient.lock();
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        for (int j = 0; j < MAXPLAYERS; j++) {
+            std::unique_lock<std::mutex> lock(updaters_queue_mtx[i]);
+            this->cursor_updater_queue[i]->insert(update[j]);
+        }
+    }
+
+    menuClient.unlock();
 }
 
 void Menu::runMenuPhase() {
@@ -171,4 +188,8 @@ bool Menu::getRunningMenuPhase() {
     bool var = runningMenuPhase;
     runningMenuPhase_mtx.unlock();
     return var;
+}
+
+bool Menu::processMenuAction(client_menu_t *action_msg) {
+    return this->serverCursors[action_msg->client]->update(action_msg);
 }

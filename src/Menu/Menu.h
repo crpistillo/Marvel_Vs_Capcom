@@ -28,9 +28,11 @@ class Menu {
 protected:
     int numberOfPlayers;
     TCPServer *server;
-    Queue<client_menu_t*>* incoming_menu_actions_queue;
-    Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
+    Queue<client_menu_t *> *incoming_menu_actions_queue;
+    Queue<cursor_updater_t *> *cursor_updater_queue[MAXPLAYERS];
+    ServerCursor *serverCursors[MAXPLAYERS];
 
+    std::mutex menuClient;
     std::mutex runningMenuPhase_mtx;
     std::mutex connection_mtx[MAXPLAYERS];
     std::mutex incoming_msg_mtx;
@@ -52,7 +54,7 @@ public:
     bool getRunningMenuPhase();
 
 
-
+    bool processMenuAction(client_menu_t *action_msg);
 };
 
 
