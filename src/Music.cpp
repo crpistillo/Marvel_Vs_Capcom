@@ -29,6 +29,7 @@ bool Music::initialize()
 	return true;
 }
 
+
 void Music::loadMusic(const char *file) //pasar path a string
 {
 	this->gMusic = Mix_LoadMUS(file);
