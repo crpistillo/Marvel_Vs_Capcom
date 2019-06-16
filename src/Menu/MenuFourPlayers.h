@@ -12,6 +12,9 @@ class MenuFourPlayers : public Menu {
 
 public:
     MenuFourPlayers();
+    void runMenuPhase();
+
+    void runMenuFourPlayers();
 };
 
 

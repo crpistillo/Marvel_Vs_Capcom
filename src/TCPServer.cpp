@@ -471,6 +471,7 @@ void TCPServer::runServer() {
     server_state_mtx.unlock();
 
     //TODO MENU PHASE CON CLASE MENU
+    this->menu->runMenuPhase();
 
     int teamSize = numberOfPlayers / 2;
 

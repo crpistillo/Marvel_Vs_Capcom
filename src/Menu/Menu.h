@@ -8,19 +8,31 @@
 
 #include "../data_structs.h"
 #include "../Queue/Queue.h"
+#include <thread>
+#include <mutex>
 
 #define MAXPLAYERS 4
 
 class Menu {
 
-private:
+protected:
     int numberOfPlayers;
     Queue<client_menu_t*>* incoming_menu_actions_queue;
     Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
+    std::mutex runningMenuPhase_mtx;
+    bool runningMenuPhase;
 
 public:
     Menu(int numberOfPlayers);
+    void setRunningMenuPhase(bool condition);
+    void receiveMenuActionsFromClient(int clientSocket);
+    void sendCursorUpdaterToClient(int clientSocket);
+    void sendUpdaters(bool finalUpdater);
+
+
+    virtual void runMenuPhase() = 0;
+
 };
 
 

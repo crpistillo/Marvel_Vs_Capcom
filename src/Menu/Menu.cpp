@@ -15,3 +15,21 @@ Menu::Menu(int numberOfPlayers) {
         this->cursor_updater_queue[i] = new Queue<cursor_updater_t *>;
     }
 }
+
+void Menu::setRunningMenuPhase(bool condition) {
+    runningMenuPhase_mtx.lock();
+    runningMenuPhase = condition;
+    runningMenuPhase_mtx.unlock();
+}
+
+void Menu::receiveMenuActionsFromClient(int clientSocket) {
+
+}
+
+void Menu::sendCursorUpdaterToClient(int clientSocket) {
+
+}
+
+void Menu::sendUpdaters(bool finalUpdater) {
+
+}
