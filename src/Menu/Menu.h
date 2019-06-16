@@ -35,6 +35,7 @@ protected:
     std::mutex connection_mtx[MAXPLAYERS];
     std::mutex incoming_msg_mtx;
     std::mutex numberOfConnections_mtx;
+    std::mutex updaters_queue_mtx[MAXPLAYERS];
     bool runningMenuPhase;
 
 public:
@@ -49,6 +50,7 @@ public:
     virtual void runCorrespondingMenu() = 0;
 
     bool getRunningMenuPhase();
+
 
 
 };
