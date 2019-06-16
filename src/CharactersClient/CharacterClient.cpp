@@ -22,7 +22,7 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
     this->heightSprite = heightSprite;
     this->ZIndex = 0;
     this->anchoPantalla = anchoPantalla;
-    this->characterFilepath = "";
+    this->characterFilePath = "";
     this->currentSprite = 0;
     this->isLookingLeft = isLookingLeft;
     currentAction = STANDING;
@@ -109,7 +109,7 @@ void CharacterClient::setZIndex(int z) {
 }
 
 void CharacterClient::setFilepath(string fp) {
-    this->characterFilepath = fp;
+    this->characterFilePath = fp;
 }
 
 void CharacterClient::update(character_updater_t *updater) {

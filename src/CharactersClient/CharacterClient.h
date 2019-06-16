@@ -74,7 +74,7 @@ protected:
 
     int anchoPantalla;
 
-    string characterFilepath;
+    string characterFilePath;
 
     Texture m_Texture;
     ImageLoader *loader;
