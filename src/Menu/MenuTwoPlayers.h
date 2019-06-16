@@ -12,9 +12,9 @@ class MenuTwoPlayers : public Menu {
 
 public:
     MenuTwoPlayers();
-    void runMenuPhase();
 
     void runMenuTwoPlayers();
+    void runCorrespondingMenu();
 };
 
 

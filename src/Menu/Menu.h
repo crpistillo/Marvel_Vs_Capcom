@@ -31,7 +31,8 @@ public:
     void sendUpdaters(bool finalUpdater);
 
 
-    virtual void runMenuPhase() = 0;
+    void runMenuPhase();
+    virtual void runCorrespondingMenu() = 0;
 
 };
 
