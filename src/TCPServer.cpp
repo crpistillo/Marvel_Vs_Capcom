@@ -23,8 +23,6 @@ const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
 
-
-
 TCPServer::TCPServer() {
     signal(SIGPIPE, signalHandler);
     this->logger = Logger::getInstance();
@@ -39,7 +37,6 @@ TCPServer::TCPServer() {
     server_state = BEGINNING;
     endgame = false;
 }
-
 
 
 typedef struct {
@@ -100,7 +97,7 @@ void TCPServer::receive() {
         iplist[numberOfConnections].isActive = true;
 
 
-        initializer_t* initializer = new initializer_t;
+        initializer_t *initializer = new initializer_t;
         initializer->instance = server_state;
         initializer->client = numberOfConnections;
         initializer->players = numberOfPlayers;
@@ -120,7 +117,7 @@ void TCPServer::receive() {
                                             sizeof(connection_information_t));
 
             }
-        }else {
+        } else {
             to_send.status = READY;
             to_send.nconnections = numberOfConnections;
             for (int i = 0; i < numberOfConnections; i++) {
@@ -136,8 +133,8 @@ void TCPServer::receive() {
 
 void TCPServer::reconnections() {
 
-	game_instance_t server_state_local;
-    while(1) {
+    game_instance_t server_state_local;
+    while (1) {
 
 
         //TODO Make as fun
@@ -172,7 +169,7 @@ void TCPServer::reconnections() {
 
         for (int i = 0; i < numberOfPlayers; ++i) {
 
-        	connection_mtx[i].lock();
+            connection_mtx[i].lock();
             if (iplist[i].ip == str && !iplist[i].isActive) {
                 socketToReconnect = i; //debug case
             }
@@ -201,7 +198,7 @@ void TCPServer::reconnections() {
         initializer.instance = server_state_local;
 
 
-        if(server_state_local == FIGHT_PHASE){
+        if (server_state_local == FIGHT_PHASE) {
 
             clientsSockets[socketToReconnect]->sendData(&initializer, sizeof(initializer_t));
             sendCharacterBuildersToSocket(socketToReconnect);
@@ -210,7 +207,7 @@ void TCPServer::reconnections() {
             iplist[socketToReconnect].isActive = true;
             connection_mtx[socketToReconnect].unlock();
 
-            incoming_msg_t* recon = new incoming_msg_t;
+            incoming_msg_t *recon = new incoming_msg_t;
 
             recon->action = RECONNECT;
             recon->client = socketToReconnect;
@@ -230,13 +227,11 @@ void TCPServer::reconnections() {
             numberOfConnections_mtx.lock();
             numberOfConnections++;
             numberOfConnections_mtx.unlock();
-        }
+        } else if (server_state_local == MENU_PHASE) {
 
-        else if(server_state_local == MENU_PHASE){
-
-        	Socket* socketToSend;
-        	connection_mtx[socketToReconnect].lock();
-        	socketToSend = clientsSockets[socketToReconnect];
+            Socket *socketToSend;
+            connection_mtx[socketToReconnect].lock();
+            socketToSend = clientsSockets[socketToReconnect];
             connection_mtx[socketToReconnect].unlock();
 
             socketToSend->sendData(&initializer, sizeof(initializer_t));
@@ -245,7 +240,7 @@ void TCPServer::reconnections() {
             iplist[socketToReconnect].isActive = true;
             connection_mtx[socketToReconnect].unlock();
 
-            client_menu_t* recon = new client_menu_t;
+            client_menu_t *recon = new client_menu_t;
             recon->client = socketToReconnect;
             recon->accion = RECONNECTION_MENU;
 
@@ -264,12 +259,12 @@ void TCPServer::reconnections() {
 void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
     character_builder_t builders[MAXPLAYERS];
 
-    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0],true,posPlayers[0]);
-    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1],true,posPlayers[0]);
-    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2],false,posPlayers[1]);
-    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3],false,posPlayers[1]);
+    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0], true, posPlayers[0]);
+    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1], true, posPlayers[0]);
+    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2], false, posPlayers[1]);
+    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3], false, posPlayers[1]);
 
-    for (auto & builder : builders) {
+    for (auto &builder : builders) {
         clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));
     }
 }
@@ -326,7 +321,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     int timeout = (1 * 100);
     int maxTimeouts = 0;
 
-    while (! getEndgame()) {
+    while (!getEndgame()) {
 
         Socket *socket = getClientSocket(clientSocket);
 
@@ -345,7 +340,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
             connection_mtx[clientSocket].unlock();
 
             actions_t *accion = new actions_t;
-            if(socket->reciveData(bufAction, sizeof(actions_t)))
+            if (socket->reciveData(bufAction, sizeof(actions_t)))
                 accion = (actions_t *) bufAction;
             else
                 *accion = DISCONNECTEDCLIENT;
@@ -353,26 +348,25 @@ void TCPServer::receiveFromClient(int clientSocket) {
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
-			if (msgQueue->action == DISCONNECTEDCLIENT) {
+            if (msgQueue->action == DISCONNECTEDCLIENT) {
                 this->manageDisconnection(clientSocket);
                 disconnectSocket(clientSocket, socket);
-			}else if(this->clientIsActive(clientSocket)){
-            	incoming_msg_mtx.lock();
-            	this->incoming_msges_queue->insert(msgQueue);
-            	incoming_msg_mtx.unlock();
+            } else if (this->clientIsActive(clientSocket)) {
+                incoming_msg_mtx.lock();
+                this->incoming_msges_queue->insert(msgQueue);
+                incoming_msg_mtx.unlock();
             }
-        }
-        else if(rc == 0 || fds[0].revents != POLLIN){
+        } else if (rc == 0 || fds[0].revents != POLLIN) {
             maxTimeouts++;
-            if(maxTimeouts < 150) {
+            if (maxTimeouts < 150) {
                 connection_mtx[clientSocket].lock();
                 iplist[clientSocket].isActive = false;
                 connection_mtx[clientSocket].unlock();
             }
-            if(maxTimeouts == 150){
-                    this->manageDisconnection(clientSocket);
-                    disconnectSocket(clientSocket, socket);
-                    continue;
+            if (maxTimeouts == 150) {
+                this->manageDisconnection(clientSocket);
+                disconnectSocket(clientSocket, socket);
+                continue;
             }
         }
     }
@@ -411,11 +405,11 @@ void TCPServer::sendToClient(int clientSocket) {
     while (1) {
 
         connection_mtx[clientSocket].lock();
-        if(!iplist[clientSocket].isActive) {
+        if (!iplist[clientSocket].isActive) {
 
-            if (!client_updater_queue[clientSocket]->empty_queue()){
+            if (!client_updater_queue[clientSocket]->empty_queue()) {
 
-                if(client_updater_queue[clientSocket]->get_data()->gameFinishedByDisconnections){
+                if (client_updater_queue[clientSocket]->get_data()->gameFinishedByDisconnections) {
                     connection_mtx[clientSocket].unlock();
                     break;
                 }
@@ -430,7 +424,7 @@ void TCPServer::sendToClient(int clientSocket) {
         character_updater_t *updater;
 
         updaters_queue_mtx[clientSocket].lock();
-        if (client_updater_queue[clientSocket]->empty_queue()){
+        if (client_updater_queue[clientSocket]->empty_queue()) {
             updaters_queue_mtx[clientSocket].unlock();
             continue;
         }
@@ -443,7 +437,7 @@ void TCPServer::sendToClient(int clientSocket) {
         std::unique_lock<std::mutex> lock(updaters_queue_mtx[clientSocket]);
         client_updater_queue[clientSocket]->delete_data();
 
-        if(updater->gameFinishedByDisconnections)
+        if (updater->gameFinishedByDisconnections)
             break;
     }
 }
@@ -462,7 +456,7 @@ void TCPServer::runServer() {
     this->server_state = MENU_PHASE;
     server_state_mtx.unlock();
 
-    int teamSize = numberOfPlayers/2;
+    int teamSize = numberOfPlayers / 2;
 
 
     team[0] = new Team(teamSize);
@@ -484,15 +478,14 @@ void TCPServer::runServer() {
     }
 
 
-
     updateModel();
 
-    for(int i = 0; i < numberOfPlayers; i++){
-    	sendToClientThreads[i].join();
+    for (int i = 0; i < numberOfPlayers; i++) {
+        sendToClientThreads[i].join();
     }
 
-    for(int i = 0; i < numberOfPlayers; i++){
-    	receiveFromClientThreads[i].join();
+    for (int i = 0; i < numberOfPlayers; i++) {
+        receiveFromClientThreads[i].join();
     }
 
     this->serverSocket->closeFd();
@@ -519,10 +512,10 @@ void TCPServer::sendSelectedCharacters() {
     double pos;
 
     for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
-		if (getTeamNumber(nclient) == 0)
-			pos = constants.INITIAL_POS_X_PLAYER_ONE;
-		else
-			pos = constants.INITIAL_POS_X_PLAYER_TWO;
+        if (getTeamNumber(nclient) == 0)
+            pos = constants.INITIAL_POS_X_PLAYER_ONE;
+        else
+            pos = constants.INITIAL_POS_X_PLAYER_TWO;
 
         for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
             characters[nCharacter] = createServerCharacterFromCursor(
@@ -533,7 +526,6 @@ void TCPServer::sendSelectedCharacters() {
         }
         nclient++;
     }
-
 
 
     team[0]->setCharacters(characters[0], characters[1]);
@@ -549,7 +541,7 @@ void TCPServer::sendSelectedCharacters() {
 
     int currentTeam0 = team[0]->get_currentCharacterNumber();
     int currentTeam1 = team[1]->get_currentCharacterNumber();
-    for (int k = 0; k < numberOfPlayers ; ++k) {
+    for (int k = 0; k < numberOfPlayers; ++k) {
 
         clientsSockets[k]->sendData(&currentTeam0, sizeof(int));
         clientsSockets[k]->sendData(&currentTeam1, sizeof(int));
@@ -573,20 +565,20 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 
     switch (cursor->getCharacterSelected()) {
         case SPIDERMAN:
-        	//caja = new Box(0,0,100,100);
-        	characterServer = new SpidermanServer(pos, constants.widthSpiderman,
+            //caja = new Box(0,0,100,100);
+            characterServer = new SpidermanServer(pos, constants.widthSpiderman,
                                                   constants.heightSpiderman, constants.spidermanSobrante,
                                                   constants.spidermanAncho, constants.screenWidth, nclient);
 
             break;
 
         case WOLVERINE:
-        //	caja = new Box(600,0,100,100);
+            //	caja = new Box(600,0,100,100);
             characterServer = new WolverineServer(pos, constants.widthWolverine,
                                                   constants.heightWolverine, constants.wolverineSobrante,
                                                   constants.wolverineAncho, constants.screenWidth, nclient);
     }
-   // characterServer->moverColisionable(); ??
+    // characterServer->moverColisionable(); ??
     return characterServer;
 }
 
@@ -606,10 +598,10 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
         fds[0].fd = socket->get_fd();
         fds[0].events = POLLIN;
 
-		if(!iplist[clientSocket].isActive){
-		    connection_mtx[clientSocket].unlock();
-			continue;
-		}
+        if (!iplist[clientSocket].isActive) {
+            connection_mtx[clientSocket].unlock();
+            continue;
+        }
         connection_mtx[clientSocket].unlock();
 
 
@@ -617,45 +609,41 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
         int rc = poll(fds, 1, timeout);
 
-		if (rc < 0)
-			cout << "Error en poll" << endl;
+        if (rc < 0)
+            cout << "Error en poll" << endl;
 
-		else if (rc > 0 && fds[0].revents == POLLIN) {
-			socket->reciveData(buf, sizeof(menu_action_t));   //Reveer mtx;
+        else if (rc > 0 && fds[0].revents == POLLIN) {
+            socket->reciveData(buf, sizeof(menu_action_t));   //Reveer mtx;
             menu_action_t *accion = (menu_action_t *) buf;
 
-			if(*accion == ALIVE_MENU){
-				continue;
-			}
-			else{
-				client_menu_t *msgMenuQueue = new client_menu_t;
-				msgMenuQueue->client = clientSocket;
-				msgMenuQueue->accion = *accion;
-				incoming_msg_mtx.lock();
-				this->incoming_menu_actions_queue->insert(msgMenuQueue);
-				incoming_msg_mtx.unlock();
-				//if (*accion == ENTER)
-				//	return;
-			}
-		}
+            if (*accion == ALIVE_MENU) {
+                continue;
+            } else {
+                client_menu_t *msgMenuQueue = new client_menu_t;
+                msgMenuQueue->client = clientSocket;
+                msgMenuQueue->accion = *accion;
+                incoming_msg_mtx.lock();
+                this->incoming_menu_actions_queue->insert(msgMenuQueue);
+                incoming_msg_mtx.unlock();
+                //if (*accion == ENTER)
+                //	return;
+            }
+        } else {
 
-		else{
+            //Reporto en el servidor que el cliente se desconecto
+            client_menu_t *msgMenuQueue = new client_menu_t;
+            msgMenuQueue->client = clientSocket;
+            msgMenuQueue->accion = DISCONNECTED_MENU;
+            incoming_msg_mtx.lock();
+            this->incoming_menu_actions_queue->insert(msgMenuQueue);
+            incoming_msg_mtx.unlock();
 
-			//Reporto en el servidor que el cliente se desconecto
-			client_menu_t *msgMenuQueue = new client_menu_t;
-			msgMenuQueue->client = clientSocket;
-			msgMenuQueue->accion = DISCONNECTED_MENU;
-			incoming_msg_mtx.lock();
-			this->incoming_menu_actions_queue->insert(msgMenuQueue);
-			incoming_msg_mtx.unlock();
-
-			//Cierro su socket, y reporto la desconexion
+            //Cierro su socket, y reporto la desconexion
 
             socket->closeConnection();
             socket->closeFd();
 
             activeClients[clientSocket] = false;
-
 
 
             connection_mtx[clientSocket].lock();
@@ -665,23 +653,22 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
             numberOfConnections_mtx.lock();
             numberOfConnections--;
             numberOfConnections_mtx.unlock();
-		}
+        }
     }
 }
 
-bool TCPServer::getRunningMenuPhase(){
-	runningMenuPhase_mtx.lock();
-	bool var = runningMenuPhase;
-	runningMenuPhase_mtx.unlock();
-	return var;
+bool TCPServer::getRunningMenuPhase() {
+    runningMenuPhase_mtx.lock();
+    bool var = runningMenuPhase;
+    runningMenuPhase_mtx.unlock();
+    return var;
 }
 
-void TCPServer::setRunningMenuPhase(bool condition){
-	runningMenuPhase_mtx.lock();
-	runningMenuPhase = condition;
-	runningMenuPhase_mtx.unlock();
+void TCPServer::setRunningMenuPhase(bool condition) {
+    runningMenuPhase_mtx.lock();
+    runningMenuPhase = condition;
+    runningMenuPhase_mtx.unlock();
 }
-
 
 
 void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
@@ -691,7 +678,7 @@ void TCPServer::sendCursorUpdaterToClient(int clientSocket) {
 
         cursor_updater_t *updater;
         updaters_queue_mtx[clientSocket].lock();
-        if (cursor_updater_queue[clientSocket]->empty_queue()){
+        if (cursor_updater_queue[clientSocket]->empty_queue()) {
             updaters_queue_mtx[clientSocket].unlock();
             continue;
         }
@@ -781,40 +768,38 @@ void TCPServer::runMenuFourPlayers() {
         client_menu_t *incoming_msg;
 
         incoming_msg_mtx.lock();
-        if (this->incoming_menu_actions_queue->empty_queue()){
-        	incoming_msg_mtx.unlock();
+        if (this->incoming_menu_actions_queue->empty_queue()) {
+            incoming_msg_mtx.unlock();
             continue;
         }
         incoming_msg = this->incoming_menu_actions_queue->get_data();
         incoming_msg_mtx.unlock();
 
-        if(incoming_msg->accion == DISCONNECTED_MENU){
-        	if( (int) (incoming_msg->client / 2) == 0)
-        		onlinePlayersTeamOne--;
-        	else
-        		onlinePlayersTeamTwo--;
+        if (incoming_msg->accion == DISCONNECTED_MENU) {
+            if ((int) (incoming_msg->client / 2) == 0)
+                onlinePlayersTeamOne--;
+            else
+                onlinePlayersTeamTwo--;
 
-        	if(!serverCursors[incoming_msg->client]->getFinalSelection())
+            if (!serverCursors[incoming_msg->client]->getFinalSelection())
                 serverCursors[incoming_msg->client]->setVisible(false);
-        	sendUpdaters(false);
-        }
-        else if(incoming_msg->accion == RECONNECTION_MENU){
-        	if( (int) (incoming_msg->client / 2) == 0)
-        		onlinePlayersTeamOne++;
-        	else
-        		onlinePlayersTeamTwo++;
+            sendUpdaters(false);
+        } else if (incoming_msg->accion == RECONNECTION_MENU) {
+            if ((int) (incoming_msg->client / 2) == 0)
+                onlinePlayersTeamOne++;
+            else
+                onlinePlayersTeamTwo++;
 
-        	serverCursors[incoming_msg->client]->setVisible(true);
-        	sendUpdaters(false);
-        }
-        else{
+            serverCursors[incoming_msg->client]->setVisible(true);
+            sendUpdaters(false);
+        } else {
 
-			/* Proceso el evento */
-			bool validMenuAction = processMenuAction(incoming_msg);
+            /* Proceso el evento */
+            bool validMenuAction = processMenuAction(incoming_msg);
 
-			/* Solo envio información a los clientes si hubo algun cambio */
-			if (validMenuAction)
-				sendUpdaters(false);
+            /* Solo envio información a los clientes si hubo algun cambio */
+            if (validMenuAction)
+                sendUpdaters(false);
         }
 
         incoming_msg_mtx.lock();
@@ -831,14 +816,13 @@ void TCPServer::runMenuFourPlayers() {
     }
 
 
-
 }
 
 void TCPServer::runMenuPhase() {
 
     //Crear hilos de escucha a los 4 clientes, que encolen en la cola de arriba
 
-	setRunningMenuPhase(true);
+    setRunningMenuPhase(true);
 
     std::thread receiveFromClientThreads[numberOfPlayers];
     std::thread sendToClientThreads[numberOfPlayers];
@@ -986,7 +970,7 @@ void TCPServer::updateModel() {
 
     while (1) {
 
-		if (numberOfConnections == 0) {
+        if (numberOfConnections == 0) {
             cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
             break;
         }
@@ -999,8 +983,8 @@ void TCPServer::updateModel() {
         int distancia[2];
 
         teams_mtx.lock();
-		posPlayers[0] = team[0]->get_currentCharacter()->getPosX();
-		posPlayers[1] = team[1]->get_currentCharacter()->getPosX();
+        posPlayers[0] = team[0]->get_currentCharacter()->getPosX();
+        posPlayers[1] = team[1]->get_currentCharacter()->getPosX();
         distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
         distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
         teams_mtx.unlock();
@@ -1012,34 +996,34 @@ void TCPServer::updateModel() {
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
 
-
         teams_mtx.lock();
 
 
         if (team[teamToUpdate]->get_currentCharacter()->isStanding()
-            && incoming_msg->action == CHANGEME)
-        {
+            && incoming_msg->action == CHANGEME) {
 
-        	if(team[teamToUpdate]->sizeOfTeam == 1)
-        	{
-        		update_msg->action = CHANGEME_ONEPLAYER;
-        	}
-        	else
-        		update_msg->action = CHANGEME;
+            if (team[teamToUpdate]->sizeOfTeam == 1) {
+                update_msg->action = CHANGEME_ONEPLAYER;
+            } else
+                update_msg->action = CHANGEME;
 
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, team[enemyTeam]->get_currentCharacter()->getColisionable());
+                                       incoming_msg->action,
+                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
         } else if (team[teamToUpdate]->invalidIntroAction()
                    && incoming_msg->action == CHANGEME) {
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->currentAction;
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       team[teamToUpdate]->get_currentCharacter()->currentAction, team[enemyTeam]->get_currentCharacter()->getColisionable());
+                                       team[teamToUpdate]->get_currentCharacter()->currentAction,
+                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
         } else {
-            if(isActionInteractive(incoming_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam])){
-                incoming_msg_t* beingHurt = new incoming_msg_t;
+            if (isActionInteractive(incoming_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
+                !isActionInteractive(team[teamToUpdate]->get_currentCharacter()->currentAction)) {
+
+                incoming_msg_t *beingHurt = new incoming_msg_t;
                 beingHurt->client = team[enemyTeam]->get_currentCharacter()->clientNumber;
                 beingHurt->action = HURTING;
                 std::unique_lock<std::mutex> lock(incoming_msg_mtx);
@@ -1049,11 +1033,11 @@ void TCPServer::updateModel() {
 
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action, team[enemyTeam]->get_currentCharacter()->getColisionable());
+                                       incoming_msg->action,
+                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
             update_msg->action =
                     team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
         }
-
 
 
         update_msg->posX =
@@ -1065,7 +1049,7 @@ void TCPServer::updateModel() {
                 team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
         teams_mtx.unlock();
 
-        if(team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
+        if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
             endgameForDisconnections();
             break;
         }
@@ -1083,13 +1067,13 @@ void TCPServer::updateModel() {
         }
 
         for (int i = 0; i < numberOfPlayers; ++i) {
-        	connection_mtx[i].lock();
-        	if(iplist[i].isActive){
-				updaters_queue_mtx[i].lock();
-				this->client_updater_queue[i]->insert(update[i]);
-				updaters_queue_mtx[i].unlock();
-        	}
-        	connection_mtx[i].unlock();
+            connection_mtx[i].lock();
+            if (iplist[i].isActive) {
+                updaters_queue_mtx[i].lock();
+                this->client_updater_queue[i]->insert(update[i]);
+                updaters_queue_mtx[i].unlock();
+            }
+            connection_mtx[i].unlock();
         }
 
         //disconnectionsManager(incoming_msg);
@@ -1108,57 +1092,48 @@ bool TCPServer::clientIsActive(int clientSocket) {
             || team[1]->clientActive == clientSocket);
 }
 
-void TCPServer::manageDisconnection(int clientSocket)
-{
-    if (this->clientIsActive(clientSocket))
-    {
+void TCPServer::manageDisconnection(int clientSocket) {
+    if (this->clientIsActive(clientSocket)) {
         incoming_msg_t *msgQueue = new incoming_msg_t;
         msgQueue->action = DISCONNECTEDCLIENT;
         msgQueue->client = clientSocket;
         this->incoming_msges_queue->insert(msgQueue);
-    }
-    else
-    {
-    	if (this->getTeamNumber(clientSocket) == 0) {
-    	    teams_mtx.lock();
+    } else {
+        if (this->getTeamNumber(clientSocket) == 0) {
+            teams_mtx.lock();
             team[0]->sizeOfTeam--;
             teams_mtx.unlock();
-        }
-    	else{
+        } else {
             teams_mtx.lock();
             team[1]->sizeOfTeam--;
             teams_mtx.unlock();
-    	}
+        }
     }
 }
 
 
 void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
-	if (this->getTeamNumber(client) == 0) {
-		*teamToUpdate = 0;
-		*enemyTeam = 1;
-	} else {
-		*teamToUpdate = 1;
-		*enemyTeam = 0;
-	}
-	return;
+    if (this->getTeamNumber(client) == 0) {
+        *teamToUpdate = 0;
+        *enemyTeam = 1;
+    } else {
+        *teamToUpdate = 1;
+        *enemyTeam = 0;
+    }
+    return;
 }
 
-int TCPServer::getTeamNumber(int client){
+int TCPServer::getTeamNumber(int client) {
 
-	if(numberOfPlayers == 4)
-	{
-		if (client == 0 || client == 1)
-			return 0;
-		else return 1;
-	}
-
-	else if (numberOfPlayers == 2)
-	{
-		if (client == 0)
-			return 0;
-		else return 1;
-	}
+    if (numberOfPlayers == 4) {
+        if (client == 0 || client == 1)
+            return 0;
+        else return 1;
+    } else if (numberOfPlayers == 2) {
+        if (client == 0)
+            return 0;
+        else return 1;
+    }
 }
 
 
@@ -1166,20 +1141,18 @@ int TCPServer::getTeamNumber(int client){
 //Se me ocurrio usar cuando se me deconectaban en el receive pero tenia que manejarlo en las reconnections
 //y me dio paja
 void TCPServer::treatDisconnectionsAfterSelection() {
-    if(numberOfConnections < 4 && numberOfPlayers == 4){
-        if(!iplist[0].isActive || !iplist[1].isActive){
-            if(!iplist[0].isActive) {
+    if (numberOfConnections < 4 && numberOfPlayers == 4) {
+        if (!iplist[0].isActive || !iplist[1].isActive) {
+            if (!iplist[0].isActive) {
                 manageDisconnection(0);
-            }
-            else{
+            } else {
                 manageDisconnection(1);
             }
         }
-        if(!iplist[2].isActive || !iplist[3].isActive){
-            if(!iplist[2].isActive){
+        if (!iplist[2].isActive || !iplist[3].isActive) {
+            if (!iplist[2].isActive) {
                 manageDisconnection(2);
-            }
-            else{
+            } else {
                 manageDisconnection(3);
             }
         }
