@@ -14,10 +14,10 @@ const int LAST_JUMPING_SPRITE = 21;
 const int LAST_JUMPING_RIGHT_SPRITE = 19;
 const int LAST_JUMPING_LEFT_SPRITE = 19;
 const int LAST_INTRO_SPRITE = 16;
-const int LAST_PUNCH_SPRITE = 4;
-const int LAST_KICK_SPRITE = 2;
-const int LAST_PUNCH_DOWN_SPRITE = 3;
-const int LAST_KICK_DOWN_SPRITE = 2;
+const int LAST_PUNCH_SPRITE = 5;
+const int LAST_KICK_SPRITE = 5;
+const int LAST_PUNCH_DOWN_SPRITE = 7;
+const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 1;
 
 const int widthStanding = 110;
@@ -25,7 +25,15 @@ const int heightStanding = 96;
 const int widthWalking = 87;
 const int heightWalking = 91;
 const int widthDuck = 100;
-const int heightDUck = 52;
+const int heightDuck = 52;
+const int widthPunch = 152;
+const int heightPunch = 77;
+const int widthPunchDown = 140;
+const int heightPunchDown = 51;
+const int widthKick = 146;
+const int heightKick = 93;
+const int widthKickDown = 136;
+const int heightKickDown = 65;
 
 
 
