@@ -22,8 +22,8 @@ public:
 	bool quitRequested();
 	bool closeWindowRequested();
 	void windowNotClosing();
-	bool windowHasClosed();
-	void windowHasntClosed();
+	bool keyRepeating;
+
 
 	InputManager();
 

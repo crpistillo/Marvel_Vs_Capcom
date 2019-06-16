@@ -24,6 +24,7 @@
 #include "Constants.h"
 #include "ClientCursor.h"
 #include <mutex>
+#include "Music.h"
 
 
 using namespace std;
@@ -35,10 +36,10 @@ private:
     bool threadRunning;
     bool appCloseFromMenu;
     bool endgame;
-    Mix_Music *gMusic = NULL;
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     Logger *logger;
+    Music* music;
     // Scene textures
     Texture frontGroundTexture;
     Texture middleGroundTexture;

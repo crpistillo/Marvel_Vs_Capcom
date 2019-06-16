@@ -13,8 +13,6 @@
 #include <csignal>
 
 
-
-
 using namespace std;
 
 const string ERROR = "ERROR";
@@ -27,7 +25,6 @@ int centerBefore, centerLater = -1000;
 bool firstTime = true;
 
 void orderBackgroundsByZIndex(json *backgroundList);
-
 
 
 bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, int flags) {
@@ -63,9 +60,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                 }
 
                 //Inicializo SDL MIxer
-				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				if (!music->initialize())
 				{
-					logger->log("SDL_mixer no pudo inicializarse",ERROR);
 					return false;
 				}
             }
@@ -83,15 +79,6 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     return true;
 }
 
-void MCGame::loadMusic()
-{
-	this->gMusic = Mix_LoadMUS("music/music.wav");
-	if (gMusic == NULL)
-	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
-		logger->log("No se pudo cargar la musica de fondo", ERROR);
-	}
-}
 
 void MCGame::loadInitialTextures() {
     players[0]->loads(m_Renderer, 3200);
@@ -348,8 +335,7 @@ void orderRenderizableListByZIndex(Renderizable **list) {
 
 void MCGame::clean() {
     //m_Texture.free();
-	Mix_FreeMusic(gMusic);
-	gMusic = NULL;
+	music->free();
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
@@ -431,10 +417,10 @@ void MCGame::update() {
 		}
 
         if (updater->team == 0) {
-            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient, &gMusic);
+            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient, &music, &(clientControls->soundKey));
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient, &gMusic);
+            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient, &music, &(clientControls->soundKey));
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
@@ -736,4 +722,8 @@ SDL_Color MCGame::color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	return col;
 }
 
+void MCGame::loadMusic()
+{
+	this->music->loadMusic();
+}
 

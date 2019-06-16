@@ -51,7 +51,9 @@ void InputManager::update() {
 		case SDL_KEYDOWN:
 
 			if(event.key.repeat)
+			{
 				this->keyHold[SDL_GetScancodeFromKey(event.key.keysym.sym)] = 1;
+			}
 
 			this->keyStatus[SDL_GetScancodeFromKey(event.key.keysym.sym)] = 1;
 			break;
@@ -114,13 +116,3 @@ bool InputManager::closeWindowRequested()
 	 return this->quit;
  }
 
- /*
- bool InputManager::windowHasClosed()
- {
-	 return this->windowClosed;
- }
-
- void InputManager::windowHasntClosed()
- {
-	 this->windowClosed = false;
- }*/

@@ -16,7 +16,6 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     kickKey = kick;
     blockKey = block;
     soundKey = sound;
-
 }
 
 actions_t Controls::getNewAction() {
@@ -31,9 +30,6 @@ actions_t Controls::getNewAction() {
         std::cout<<"Detecta window closed"<<std::endl;
         return DISCONNECTEDCLIENT;
     }
-
-    else if (inputManager->isKeyDown(soundKey))
-    	return PLAYMUSIC;
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
@@ -84,6 +80,7 @@ actions_t Controls::getNewAction() {
         return STANDING;
 }
 
+
 menu_action_t Controls::getNewMenuAction(){
 
 	InputManager *inputManager = InputManager::getInstance();
@@ -105,3 +102,5 @@ menu_action_t Controls::getNewMenuAction(){
 
 	return INVALID_MENU_ACTION;
 }
+
+

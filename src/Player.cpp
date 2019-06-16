@@ -16,10 +16,9 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
-    soundOn = false;
 }
 
-void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Mix_Music **gMusic ) {
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music **music, int* soundKey) {
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
@@ -61,40 +60,13 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         m.unlock();
         changeCharacter();  //send change character
         setCharacterToChanging();
-	} else if (updater->action == PLAYMUSIC) {
-		m.lock();
-
-		if (!soundOn) {
-			if (Mix_PlayingMusic() == 0 && !soundOn) {
-				//Play the music
-				Mix_PlayMusic(*gMusic, -1);
-			}
-			//If music is being played
-			else {
-				//If the music is paused
-				if (Mix_PausedMusic() == 1 && soundOn) {
-					//Resume the music
-					Mix_ResumeMusic();
-				}
-				//If the music is playing
-				else {
-					//Pause the music
-					Mix_PauseMusic();
-				}
-			}
-			soundOn = true;
-		}
-		else
-		{
-			Mix_HaltMusic();
-			soundOn = false;
-		}
-    	m.unlock();
 	}
+
+	(*music)->playBackGroundMusic(*soundKey);
+
 
     currentCharacter->update(updater);
     Logger *logger = Logger::getInstance();
-    InputManager *inputManager = InputManager::getInstance();
     logger->log("Detecta boton para cambio de personaje en Player.", DEBUG);
 
 }

@@ -5,19 +5,19 @@
 #ifndef MARVEL_VS_CAPCOM_PLAYER_H
 #define MARVEL_VS_CAPCOM_PLAYER_H
 
-#include <SDL2/SDL_mixer.h>
 #include "CharactersClient/CharacterClient.h"
 #include "Controls/Controls.h"
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
 #include <mutex>
+#include "Music.h"
 
 
 class Player: public Renderizable {
 public:
     Player(CharacterClient *first, CharacterClient *second);
     ~Player();
-    void update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Mix_Music **gMusic);
+    void update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber, Music** music, int* soundKey);
     void render(SDL_Renderer* mRenderer, int camX, int camY, int posContrincante);
     void free();
 
@@ -51,7 +51,7 @@ private:
     void changeCharacter();
     void setCharacterToChanging();
 
-    bool soundOn;
+
 
 
 };
