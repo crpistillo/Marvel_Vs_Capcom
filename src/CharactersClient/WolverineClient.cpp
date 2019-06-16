@@ -76,7 +76,7 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
-        case HURTING:
+        case HURTINGGROUND:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilePath + "pain_left", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,

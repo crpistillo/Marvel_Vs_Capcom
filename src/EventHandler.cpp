@@ -74,9 +74,24 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     if (team[receiver]->getCurrentCharacter()->inTheGround()) {
         incoming_msg_t *beingHurtGround = new incoming_msg_t;
         beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
-        beingHurtGround->action = HURTING;
+        beingHurtGround->action = HURTINGGROUND;
         queue->insert(beingHurtGround);
     }
+    else if(!team[receiver]->getCurrentCharacter()->inTheGround()){
+        incoming_msg_t *beingHurtGround = new incoming_msg_t;
+        beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
+        beingHurtGround->action = HURTINGAIR;
+        queue->insert(beingHurtGround);
+
+    }
+
+    //in the air
+
+
+
+
+    //grabbing
+
 
 }
 

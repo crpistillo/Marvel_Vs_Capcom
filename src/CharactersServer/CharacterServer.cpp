@@ -93,7 +93,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         jumpLeft();
     }
 
-    if(currentAction == HURTING){
+    if(currentAction == HURTINGGROUND){
         hurting();
     }
 
@@ -129,7 +129,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         punchDown();
     else if (currentAction == KICKDOWN)
         kickDown();
-    else if (currentAction == HURTING)
+    else if (currentAction == HURTINGGROUND)
         hurting();
 
 
@@ -402,7 +402,7 @@ Box *CharacterServer::getColisionable() {
 }
 
 void CharacterServer::hurting() {
-    this->currentAction = HURTING;
+    this->currentAction = HURTINGGROUND;
     currentHurtingSprite++;
     if (currentHurtingSprite > lastHurtingSprite) {
         currentHurtingSprite = 0;
