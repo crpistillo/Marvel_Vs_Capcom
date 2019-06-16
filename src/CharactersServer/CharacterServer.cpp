@@ -52,10 +52,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     bool actionStarted = false;
 
-    if (this->currentAction == MI || this->currentAction == JV || this->currentAction == JR ||
-        this->currentAction == JL || this->currentAction == P || this->currentAction == K ||
-        this->currentAction == PD || this->currentAction == KD)
+    if (currentAction == MI || currentAction == JV || currentAction == JR ||
+        currentAction == JL || currentAction == P || currentAction == K ||
+        currentAction == PD || currentAction == KD || currentAction == H)
         actionStarted = true;
+
 
     if (currentAction == MAKINGINTRO) {
         makeIntro();
@@ -90,6 +91,10 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     if (currentAction == JUMPINGLEFT) {
         moveLeft(distance, posContrincante, boxContrincante);
         jumpLeft();
+    }
+
+    if(currentAction == HURTING){
+        hurting();
     }
 
     if (actionStarted) {
@@ -391,6 +396,16 @@ bool CharacterServer::isStanding() {
 
 Box *CharacterServer::getColisionable() {
     return characterBox;
+}
+
+void CharacterServer::hurting() {
+    this->currentAction = HURTING;
+    currentHurtingSprite++;
+    if (currentHurtingSprite > lastHurtingSprite) {
+        currentHurtingSprite = 0;
+        this->currentAction = STANDING;
+        currentStandingSprite = 0;
+    }
 }
 
 

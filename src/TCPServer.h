@@ -154,6 +154,8 @@ public:
     void setEndgame(bool condition);
 
     void disconnectSocket(int clientSocket, Socket *socket);
+
+    bool isActionInteractive(actions_t actions);
 };
 
 #endif

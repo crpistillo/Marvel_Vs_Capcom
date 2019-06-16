@@ -25,13 +25,12 @@ SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int h
         false,
         width,
         height,
-        anchoPantalla, numOfClient)
-{
+        anchoPantalla, numOfClient) {
     this->characterFilepath = spidermanPath;
     if (secondaryColor)
-        loader = new ImageLoader(SECONDARY_RED,  SECONDARY_GREEN,  SECONDARY_BLUE);
+        loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
     else
-        loader = new ImageLoader((Uint8)255, (Uint8)255, (Uint8)255);
+        loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     currentAction = STANDING;
 }
 
@@ -54,39 +53,57 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
             break;
 
         case PUNCH:
-        	if (isLookingLeft)
-        		this->loader->loadActionSprite(characterFilepath + "punch_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-        		                                               renderer, &m_Texture);
-        	else
-        		this->loader->loadActionSprite(characterFilepath + "punch_right", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-        		                                               renderer, &m_Texture);
-        	break;
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "punch_left", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "punch_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
 
         case KICK:
-        	if (isLookingLeft)
-        		this->loader->loadActionSprite(characterFilepath + "kick_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-        		                                               renderer, &m_Texture);
-        	else
-        		this->loader->loadActionSprite(characterFilepath + "kick_right", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-        		                                               renderer, &m_Texture);
-        	break;
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "kick_left", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "kick_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+        case HURTING:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilepath + "pain_left", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilepath + "pain_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
 
         case PUNCHDOWN:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "punch_down_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-                		                                               renderer, &m_Texture);
+                this->loader->loadActionSprite(characterFilepath + "punch_down_left", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "punch_down_right", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-                		                                               renderer, &m_Texture);
+                this->loader->loadActionSprite(characterFilepath + "punch_down_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
             break;
 
         case KICKDOWN:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilepath + "kick_down_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-                		                                               renderer, &m_Texture);
+                this->loader->loadActionSprite(characterFilepath + "kick_down_left", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilepath + "kick_down_right", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
-                		                                               renderer, &m_Texture);
+                this->loader->loadActionSprite(characterFilepath + "kick_down_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
             break;
 
         case DUCK:

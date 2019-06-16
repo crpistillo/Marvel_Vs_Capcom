@@ -1012,7 +1012,10 @@ void TCPServer::updateModel() {
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
 
+
         teams_mtx.lock();
+
+
         if (team[teamToUpdate]->get_currentCharacter()->isStanding()
             && incoming_msg->action == CHANGEME)
         {
@@ -1035,6 +1038,15 @@ void TCPServer::updateModel() {
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
                                        team[teamToUpdate]->get_currentCharacter()->currentAction, team[enemyTeam]->get_currentCharacter()->getColisionable());
         } else {
+            if(isActionInteractive(incoming_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam])){
+                incoming_msg_t* beingHurt = new incoming_msg_t;
+                beingHurt->client = team[enemyTeam]->get_currentCharacter()->clientNumber;
+                beingHurt->action = HURTING;
+                std::unique_lock<std::mutex> lock(incoming_msg_mtx);
+                incoming_msges_queue->insert(beingHurt);
+            }
+
+
             team[teamToUpdate]->update(distancia[teamToUpdate],
                                        team[enemyTeam]->get_currentCharacter()->getPosX(),
                                        incoming_msg->action, team[enemyTeam]->get_currentCharacter()->getColisionable());
@@ -1203,6 +1215,10 @@ void TCPServer::setEndgame(bool condition) {
     endgame_mtx.lock();
     endgame = condition;
     endgame_mtx.unlock();
+}
+
+bool TCPServer::isActionInteractive(actions_t actions) {
+    return actions == PUNCH || actions == PUNCHDOWN || actions == KICK || actions == KICKDOWN;
 }
 
 

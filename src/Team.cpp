@@ -49,7 +49,7 @@ void Team::update(int distance, int posContrincante, actions_t action, Box* boxC
 
 
 	/// Remove comment to see contact or test
-    cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
+  //  cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
 
 	currentCharacter->update(distance, posContrincante, action, boxContrincante);
 }
@@ -125,6 +125,10 @@ void Team::setFirstClientAsActive() {
 void Team::connectClient() {
     this->sizeOfTeam++;
     this->setClientNumberToCurrentClient();
+}
+
+bool Team::collidesWith(Team *enemyTeam) {
+    return this->currentCharacter->getColisionable()->isColliding(enemyTeam->currentCharacter->getColisionable());
 }
 
 

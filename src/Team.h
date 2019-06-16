@@ -60,6 +60,8 @@ public:
     void setFirstClientAsActive();
 
     void connectClient();
+
+    bool collidesWith(Team *enemyTeam);
 };
 
 
