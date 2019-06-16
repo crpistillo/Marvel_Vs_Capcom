@@ -41,7 +41,7 @@ private:
     std::thread receiveFromClientThreads[MAXPLAYERS];
     std::thread sendToClientThreads[MAXPLAYERS];
 	Team* team[2];
-    int numberOfConnections;
+
     int port;
     Socket* clientsSockets[MAXPLAYERS];
     Logger* logger;
@@ -63,7 +63,7 @@ private:
     void setRunningMenuPhase(bool condition);
 
 
-    ip_status_t iplist[4];
+
 
     //MUTEXS
     std::mutex m;
@@ -87,6 +87,9 @@ public:
 
     Queue<client_menu_t*>* incoming_menu_actions_queue;
     Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
+
+    ip_status_t iplist[4];
+    int numberOfConnections;
 
     Socket* serverSocket;
     Socket* newSockFd;

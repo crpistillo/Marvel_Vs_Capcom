@@ -4,7 +4,7 @@
 
 #include "MenuTwoPlayers.h"
 
-MenuTwoPlayers::MenuTwoPlayers() : Menu(2) {
+MenuTwoPlayers::MenuTwoPlayers(TCPServer *pServer) : Menu(2, pServer) {
 }
 
 

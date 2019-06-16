@@ -4,7 +4,7 @@
 
 #include "MenuFourPlayers.h"
 
-MenuFourPlayers::MenuFourPlayers() : Menu(4) {
+MenuFourPlayers::MenuFourPlayers(TCPServer *pServer) : Menu(4, pServer) {
 }
 
 void MenuFourPlayers::runMenuFourPlayers() {

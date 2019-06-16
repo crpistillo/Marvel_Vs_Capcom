@@ -68,9 +68,9 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
 
     switch (numberOfPlayers){
     case 2:
-        this->menu = new MenuTwoPlayers();
+        this->menu = new MenuTwoPlayers(this);
     case 4:
-        this->menu = new MenuFourPlayers();
+        this->menu = new MenuFourPlayers(this);
 
     }
 

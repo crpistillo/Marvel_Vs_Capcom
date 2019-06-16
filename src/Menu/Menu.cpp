@@ -7,8 +7,9 @@
 
 using namespace std;
 
-Menu::Menu(int numberOfPlayers) {
+Menu::Menu(int numberOfPlayers, TCPServer *pServer) {
     this->numberOfPlayers = numberOfPlayers;
+    this->server = pServer;
 
     this->incoming_menu_actions_queue = new Queue<client_menu_t *>;
 
@@ -30,14 +31,14 @@ void Menu::receiveMenuActionsFromClient(int clientSocket) {
 
 
     while (getRunningMenuPhase()) {
-        Socket *socket = getClientSocket(clientSocket);
+        Socket *socket = this->server->getClientSocket(clientSocket);
         connection_mtx[clientSocket].lock();
         struct pollfd fds[1];
         memset(fds, 0, sizeof(fds));
         fds[0].fd = socket->get_fd();
         fds[0].events = POLLIN;
 
-        if (!iplist[clientSocket].isActive) {
+        if (!this->server->iplist[clientSocket].isActive) {
             connection_mtx[clientSocket].unlock();
             continue;
         }
@@ -81,14 +82,14 @@ void Menu::receiveMenuActionsFromClient(int clientSocket) {
 
             socket->closeConnection();
             socket->closeFd();
-            
+
 
             connection_mtx[clientSocket].lock();
-            iplist[clientSocket].isActive = false;
+            this->server->iplist[clientSocket].isActive = false;
             connection_mtx[clientSocket].unlock();
 
             numberOfConnections_mtx.lock();
-            (*numberOfConnections)--;
+            this->server->numberOfConnections--;
             numberOfConnections_mtx.unlock();
         }
     }
@@ -148,26 +149,4 @@ bool Menu::getRunningMenuPhase() {
     bool var = runningMenuPhase;
     runningMenuPhase_mtx.unlock();
     return var;
-}
-
-Socket *Menu::getClientSocket(int socket) {
-    std::unique_lock<std::mutex> lock(connection_mtx[socket]);
-    return clientsSockets[socket];
-}
-
-void Menu::setClientsSocket(Socket **pSocket) {
-    for(int i = 0; i < numberOfPlayers; i++){
-        this->clientsSockets[i] = pSocket[i];
-    }
-}
-
-void Menu::setIpList(ip_status_t *iplist) {
-    for(int i = 0; i < numberOfPlayers; i++){
-        this->iplist[i] = iplist[i];
-    }
-
-}
-
-void Menu::setNumberOfConnections(int *pNumberOfConnections) {
-    this->numberOfConnections = pNumberOfConnections;
 }

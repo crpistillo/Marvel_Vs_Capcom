@@ -7,11 +7,12 @@
 
 
 #include "Menu.h"
+#include "../TCPServer.h"
 
 class MenuFourPlayers : public Menu {
 
 public:
-    MenuFourPlayers();
+    MenuFourPlayers(TCPServer *pServer);
 
     void runMenuFourPlayers();
     void runCorrespondingMenu();

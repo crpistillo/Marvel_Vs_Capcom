@@ -9,6 +9,7 @@
 #include "../data_structs.h"
 #include "../Queue/Queue.h"
 #include "../Socket.h"
+#include "../TCPServer.h"
 #include <thread>
 #include <mutex>
 #include <iostream>
@@ -23,12 +24,9 @@ class Menu {
 
 protected:
     int numberOfPlayers;
+    TCPServer *server;
     Queue<client_menu_t*>* incoming_menu_actions_queue;
     Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
-
-    Socket* clientsSockets[MAXPLAYERS];
-    ip_status_t iplist[4];
-    int* numberOfConnections;
 
     std::mutex runningMenuPhase_mtx;
     std::mutex connection_mtx[MAXPLAYERS];
@@ -37,7 +35,7 @@ protected:
     bool runningMenuPhase;
 
 public:
-    Menu(int numberOfPlayers);
+    Menu(int numberOfPlayers, TCPServer *pServer);
     void setRunningMenuPhase(bool condition);
     void receiveMenuActionsFromClient(int clientSocket);
     void sendCursorUpdaterToClient(int clientSocket);
@@ -49,14 +47,7 @@ public:
 
     bool getRunningMenuPhase();
 
-    Socket *getClientSocket(int socket);
 
-    void setClientsSocket(Socket *pSocket[4]);
-
-    void setIpList(ip_status_t *iplist);
-
-
-    void setNumberOfConnections(int *pNumberOfConnections);
 };
 
 
