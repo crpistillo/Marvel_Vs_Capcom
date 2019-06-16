@@ -246,6 +246,7 @@ void CharacterServer::jump(int *currentSprite, int lastSprite) {
 void CharacterServer::jumpVertical() {
     this->currentAction = JUMPINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
+    cout<<" mi caja "<<this->characterBox->getTop() <<" and " << this->characterBox->getBottom()<< endl;
 }
 
 void CharacterServer::jumpRight() {

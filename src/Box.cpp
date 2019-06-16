@@ -69,8 +69,8 @@ bool Box::isColliding(Box* oponnentBox){
 
 bool Box::contactInAxisY(Box *oponnentBox){
 
-    float bottomBorder = getLeft();
-    float topBorder = getRight();
+    float bottomBorder = getBottom();
+    float topBorder = getTop();
 
     float mediumValueOponnent = (oponnentBox->getBottom() + oponnentBox->getTop())/2; //if one sprite is bigger than other
 
@@ -78,7 +78,7 @@ bool Box::contactInAxisY(Box *oponnentBox){
     bool bottomInsideBox = isInsideParameters(bottomBorder,topBorder, oponnentBox->getBottom());
     bool allInsideBox = isInsideParameters(bottomBorder, topBorder , mediumValueOponnent);
 
-    return topInsideBox || bottomInsideBox || mediumValueOponnent;
+    return topInsideBox || bottomInsideBox || allInsideBox;
 }
 
 bool Box::contactOnAxisX(Box *oponnentBox) {
