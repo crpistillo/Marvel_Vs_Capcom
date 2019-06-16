@@ -656,8 +656,6 @@ void TCPServer::receiveMenuActionsFromClient(int clientSocket) {
 
             activeClients[clientSocket] = false;
 
-
-
             connection_mtx[clientSocket].lock();
             iplist[clientSocket].isActive = false;
             connection_mtx[clientSocket].unlock();

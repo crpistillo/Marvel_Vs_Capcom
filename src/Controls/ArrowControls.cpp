@@ -6,5 +6,5 @@
 #include "../InputTable.h"
 
 ArrowControls::ArrowControls() :
-        Controls(KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT, KEY_1, KEY_KEYPAD_1, KEY_KEYPAD_2, KEY_KEYPAD_3){
+        Controls(KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT, KEY_1, KEY_C, KEY_V, KEY_B, KEY_0){
 }

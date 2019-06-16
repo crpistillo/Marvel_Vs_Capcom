@@ -119,9 +119,6 @@ void Parallax::centerLayers(Player** player1, Player** player2)
  	double center = (posPlayer1+posPlayer2)/2 + 534;
 	double dif = center-1578;
 
- 	cout<<"La pos de player 1 es: "<<posPlayer1+534<<endl;
-	cout<<"La pos del player 2 es: "<<posPlayer2+534<<endl;
-	cout<<"El centro es "<<center<<endl;
 	(*(this->middleGround))->adjustPosX(399.06+dif*0.3218);//0,32359, //0,32156774 /0,322539
 	(*(this->backGround))->adjustPosX(799.09+dif*0.6667);//910
 

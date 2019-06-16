@@ -61,6 +61,13 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     logger->log("SDL_image no pudo inicializarse.", ERROR);
                     return false;
                 }
+
+                //Inicializo SDL MIxer
+				if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+				{
+					logger->log("SDL_mixer no pudo inicializarse",ERROR);
+					return false;
+				}
             }
         }
     }
@@ -74,6 +81,16 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     SDL_RenderPresent(m_Renderer); // draw to the screen
     // everything inited successfully,
     return true;
+}
+
+void MCGame::loadMusic()
+{
+	this->gMusic = Mix_LoadMUS("music/music.wav");
+	if (gMusic == NULL)
+	{
+		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+		logger->log("No se pudo cargar la musica de fondo", ERROR);
+	}
 }
 
 void MCGame::loadInitialTextures() {
@@ -331,6 +348,8 @@ void orderRenderizableListByZIndex(Renderizable **list) {
 
 void MCGame::clean() {
     //m_Texture.free();
+	Mix_FreeMusic(gMusic);
+	gMusic = NULL;
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
@@ -351,6 +370,7 @@ void MCGame::clean() {
     logger->log("Borrado de fondos finalizado.", DEBUG);
     SDL_DestroyWindow(m_Window);
     SDL_DestroyRenderer(m_Renderer);
+    Mix_Quit();
     SDL_Quit();
     logger->log("Fin clean MCGame", DEBUG);
 }
@@ -411,10 +431,10 @@ void MCGame::update() {
 		}
 
         if (updater->team == 0) {
-            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
+            players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient, &gMusic);
 			players[0]->load(m_Renderer, players[1]->getCentro());
 		} else {
-            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient);
+            players[1]->update(updater, &isSending, 1 == team, tcpClient->nclient, &gMusic);
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 

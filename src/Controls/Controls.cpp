@@ -6,7 +6,7 @@
 #include "../InputManager.h"
 #include <iostream>
 
-Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick, int block) {
+Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick, int block, int sound) {
     upKey = up;
     downKey = down;
     rightKey = right;
@@ -15,6 +15,8 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     punchKey = punch;
     kickKey = kick;
     blockKey = block;
+    soundKey = sound;
+
 }
 
 actions_t Controls::getNewAction() {
@@ -29,6 +31,9 @@ actions_t Controls::getNewAction() {
         std::cout<<"Detecta window closed"<<std::endl;
         return DISCONNECTEDCLIENT;
     }
+
+    else if (inputManager->isKeyDown(soundKey))
+    	return PLAYMUSIC;
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
