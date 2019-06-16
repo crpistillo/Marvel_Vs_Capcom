@@ -26,7 +26,7 @@ void Team::changeCharacter() {
 	currentCharacter->positionUpdate(&updateX);
 }
 
-void Team::update(int distance, int posContrincante, actions_t action, Box* boxContrincante) {
+void Team::update(int distance, actions_t action, Box *boxContrincante) {
 
 	if (action == DISCONNECTEDCLIENT) {
 		disconnectClient();
@@ -36,7 +36,7 @@ void Team::update(int distance, int posContrincante, actions_t action, Box* boxC
 	    connectClient();
 	}
 
-	if (action == CHANGEME && currentCharacter->currentAction == STANDING) {
+	if ((action == CHANGEME || action == CHANGEME_ONEPLAYER) && currentCharacter->currentAction == STANDING) {
         changeCharacter();
 		if (sizeOfTeam == 2) {
 			this->clientActive = currentCharacter->clientNumber;
@@ -45,13 +45,10 @@ void Team::update(int distance, int posContrincante, actions_t action, Box* boxC
 		this->currentCharacter->currentAction = MAKINGINTRO;
     }
 
-	if (!(currentCharacter->currentAction == MAKINGINTRO));
-
-
 	/// Remove comment to see contact or test
     //cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
 
-	currentCharacter->update(distance, posContrincante, action, boxContrincante);
+	currentCharacter->update(distance, boxContrincante->getCenter(), action, boxContrincante);
 }
 
 void Team::disconnectClient() {
@@ -66,26 +63,22 @@ void Team::disconnectClient() {
 	this->sizeOfTeam--;
 }
 
-CharacterServer* Team::get_currentCharacter() {
+CharacterServer* Team::getCurrentCharacter() {
 	return this->currentCharacter;
 }
 
 bool Team::invalidIntroAction() {
 	actions_t action = currentCharacter->currentAction;
 
-	return ((action == JUMPINGLEFT) || (action == JUMPINGRIGHT)
-			|| (action == JUMPINGVERTICAL) || (action == DUCK)
-			|| (action == MOVINGRIGHT) || (action == MOVINGLEFT)
-			|| (action == WALKBACK) || (action == PUNCH) || (action == KICK) || (action == PUNCHDOWN)
-		      || (action == KICKDOWN) || (action == BLOCK));
+	return !(action == STANDING || action == CHANGEME || action == MAKINGINTRO);
 }
 
-CharacterServer * Team::get_firstCharacter() {
+CharacterServer * Team::getFirstCharacter() {
 	return this->firstCharacter;
 
 }
 
-CharacterServer * Team::get_secondCharacter() {
+CharacterServer * Team::getSecondCharacter() {
 	return this->secondCharacter;
 }
 
@@ -129,6 +122,10 @@ void Team::connectClient() {
 
 bool Team::collidesWith(Team *enemyTeam) {
     return this->currentCharacter->getColisionable()->isColliding(enemyTeam->currentCharacter->getColisionable());
+}
+
+Box *Team::getCurrentBox() {
+    return  currentCharacter->getColisionable();
 }
 
 

@@ -156,6 +156,8 @@ public:
     void disconnectSocket(int clientSocket, Socket *socket);
 
     bool isActionInteractive(actions_t actions);
+
+    void putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber);
 };
 
 #endif

@@ -104,3 +104,7 @@ void Box::updateBox(int newWidth, int newHeight) {
     height = newHeight;
     width = newWidth;
 }
+
+int Box::getCenter() {
+    return centerX;
+}

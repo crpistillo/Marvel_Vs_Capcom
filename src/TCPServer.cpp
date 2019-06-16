@@ -12,6 +12,7 @@
 #include "Constants.h"
 #include <sys/poll.h>
 #include "signal_handler.h"
+#include "EventHandler.h"
 
 
 Constants constants;
@@ -259,10 +260,10 @@ void TCPServer::reconnections() {
 void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
     character_builder_t builders[MAXPLAYERS];
 
-    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0], true, posPlayers[0]);
-    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1], true, posPlayers[0]);
-    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2], false, posPlayers[1]);
-    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3], false, posPlayers[1]);
+    team[0]->getFirstCharacter()->makeBuilderStruct(&builders[0], true, posPlayers[0]);
+    team[0]->getSecondCharacter()->makeBuilderStruct(&builders[1], true, posPlayers[0]);
+    team[1]->getFirstCharacter()->makeBuilderStruct(&builders[2], false, posPlayers[1]);
+    team[1]->getSecondCharacter()->makeBuilderStruct(&builders[3], false, posPlayers[1]);
 
     for (auto &builder : builders) {
         clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));
@@ -295,19 +296,6 @@ int TCPServer::getNumberOfConections() {
     return numberOfConnections;
 }
 
-int computeDistance(CharacterServer *character1, CharacterServer *character2) {
-    int distancia;
-    if (character1->getCentro() > character2->getCentro()) {
-        distancia = character1->getPosX() + character1->getSobrante()
-                    + character1->getWidth()
-                    - (character2->getPosX() + character2->getSobrante());
-    } else {
-        distancia = character1->getPosX() + character1->getSobrante()
-                    - (character2->getPosX() + character2->getSobrante()
-                       + character2->getWidth());
-    }
-    return distancia;
-}
 
 /*Funcion que lee del socket la informacion que los clientes le envian.
  * Esta deberia leer, codificar y encolar eventos en la cola del servidor
@@ -968,6 +956,8 @@ void TCPServer::configJson(json config) {
 
 void TCPServer::updateModel() {
 
+    EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
+
     while (1) {
 
         if (numberOfConnections == 0) {
@@ -980,102 +970,33 @@ void TCPServer::updateModel() {
             continue;
         incoming_msg = this->incoming_msges_queue->get_data();
 
-        int distancia[2];
-
-        teams_mtx.lock();
-        posPlayers[0] = team[0]->get_currentCharacter()->getPosX();
-        posPlayers[1] = team[1]->get_currentCharacter()->getPosX();
-        distancia[0] = computeDistance(team[0]->get_currentCharacter(), team[1]->get_currentCharacter());
-        distancia[1] = computeDistance(team[1]->get_currentCharacter(), team[0]->get_currentCharacter());
-        teams_mtx.unlock();
-
-        character_updater_t *update_msg = new character_updater_t;
-
         int teamToUpdate;
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
 
-        teams_mtx.lock();
-
-
-        if (team[teamToUpdate]->get_currentCharacter()->isStanding()
-            && incoming_msg->action == CHANGEME) {
-
-            if (team[teamToUpdate]->sizeOfTeam == 1) {
-                update_msg->action = CHANGEME_ONEPLAYER;
-            } else
-                update_msg->action = CHANGEME;
-
-            team[teamToUpdate]->update(distancia[teamToUpdate],
-                                       team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action,
-                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
-        } else if (team[teamToUpdate]->invalidIntroAction()
-                   && incoming_msg->action == CHANGEME) {
-            update_msg->action =
-                    team[teamToUpdate]->get_currentCharacter()->currentAction;
-            team[teamToUpdate]->update(distancia[teamToUpdate],
-                                       team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       team[teamToUpdate]->get_currentCharacter()->currentAction,
-                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
-        } else {
-            if (isActionInteractive(incoming_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
-                !isActionInteractive(team[teamToUpdate]->get_currentCharacter()->currentAction)) {
-
-                incoming_msg_t *beingHurt = new incoming_msg_t;
-                beingHurt->client = team[enemyTeam]->get_currentCharacter()->clientNumber;
-                beingHurt->action = HURTING;
-                std::unique_lock<std::mutex> lock(incoming_msg_mtx);
-                incoming_msges_queue->insert(beingHurt);
-            }
-
-
-            team[teamToUpdate]->update(distancia[teamToUpdate],
-                                       team[enemyTeam]->get_currentCharacter()->getPosX(),
-                                       incoming_msg->action,
-                                       team[enemyTeam]->get_currentCharacter()->getColisionable());
-            update_msg->action =
-                    team[teamToUpdate]->get_currentCharacter()->getCurrentAction();
+        character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
+        if (isActionInteractive(incoming_msg->action)) {
+            cout << "la que vino" << incoming_msg->action << endl;
+            cout << "la que salio" << update_msg->action << endl;
         }
 
 
-        update_msg->posX =
-                team[teamToUpdate]->get_currentCharacter()->getPosX();
-        update_msg->posY =
-                team[teamToUpdate]->get_currentCharacter()->getPosY();
-        update_msg->team = teamToUpdate;
-        update_msg->currentSprite =
-                team[teamToUpdate]->get_currentCharacter()->getSpriteNumber();
-        teams_mtx.unlock();
+        //Despues lo pongo mas lindo al if, es pone en HURTING al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
+        if (isActionInteractive(incoming_msg->action)&& isActionInteractive(update_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
+            !(team[enemyTeam]->getCurrentCharacter()->currentAction== HURTING)) {
+            std::unique_lock<std::mutex> lock(incoming_msg_mtx);
+            teams_mtx.lock();
+            eventHandler->manageInteractiveActions(incoming_msges_queue, enemyTeam);
+            teams_mtx.unlock();
+        }
 
         if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
             endgameForDisconnections();
             break;
         }
 
-        character_updater_t *update[numberOfPlayers];
-        for (int j = 0; j < numberOfPlayers; ++j) {
-            update[j] = new character_updater_t;
-            update[j]->action = update_msg->action;
-            update[j]->team = update_msg->team;
-            update[j]->client = incoming_msg->client;
-            update[j]->posX = update_msg->posX;
-            update[j]->posY = update_msg->posY;
-            update[j]->currentSprite = update_msg->currentSprite;
-            update[j]->gameFinishedByDisconnections = false;
-        }
-
-        for (int i = 0; i < numberOfPlayers; ++i) {
-            connection_mtx[i].lock();
-            if (iplist[i].isActive) {
-                updaters_queue_mtx[i].lock();
-                this->client_updater_queue[i]->insert(update[i]);
-                updaters_queue_mtx[i].unlock();
-            }
-            connection_mtx[i].unlock();
-        }
-
+        putUpdatersInEachQueue(update_msg, incoming_msg->client);
         //disconnectionsManager(incoming_msg);
         std::unique_lock<std::mutex> lock(incoming_msg_mtx);
         incoming_msges_queue->delete_data();
@@ -1192,6 +1113,31 @@ void TCPServer::setEndgame(bool condition) {
 
 bool TCPServer::isActionInteractive(actions_t actions) {
     return actions == PUNCH || actions == PUNCHDOWN || actions == KICK || actions == KICKDOWN;
+}
+
+void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
+    character_updater_t *update[numberOfPlayers];
+    for (int j = 0; j < numberOfPlayers; ++j) {
+        update[j] = new character_updater_t;
+        update[j]->action = update_msg->action;
+        update[j]->team = update_msg->team;
+        update[j]->client = clientNumber;
+        update[j]->posX = update_msg->posX;
+        update[j]->posY = update_msg->posY;
+        update[j]->currentSprite = update_msg->currentSprite;
+        update[j]->gameFinishedByDisconnections = false;
+    }
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        connection_mtx[i].lock();
+        if (iplist[i].isActive) {
+            updaters_queue_mtx[i].lock();
+            this->client_updater_queue[i]->insert(update[i]);
+            updaters_queue_mtx[i].unlock();
+        }
+        connection_mtx[i].unlock();
+    }
+
 }
 
 

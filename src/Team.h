@@ -31,11 +31,11 @@ public:
 
     void changeCharacter();
 
-    void update(int distance, int posContrincante, actions_t action, Box* boxContrincante);
+    void update(int distance, actions_t action, Box *boxContrincante);
 
     void disconnectClient();
 
-    CharacterServer* get_currentCharacter();
+    CharacterServer* getCurrentCharacter();
 
     bool invalidIntroAction();
 
@@ -43,9 +43,9 @@ public:
 
 	void manageDisconection(int clientSocket);
 
-    CharacterServer * get_firstCharacter();
+    CharacterServer * getFirstCharacter();
 
-    CharacterServer * get_secondCharacter();
+    CharacterServer * getSecondCharacter();
 
     void setSize(int size);
 
@@ -62,6 +62,8 @@ public:
     void connectClient();
 
     bool collidesWith(Team *enemyTeam);
+
+    Box *getCurrentBox();
 };
 
 

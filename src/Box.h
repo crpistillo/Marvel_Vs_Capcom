@@ -48,6 +48,8 @@ public:
     void updateBox(int newWidth, int newHeight);
 
     bool isInsideParameters(float border, float rightBorder, float x);
+
+    int getCenter();
 };
 
 

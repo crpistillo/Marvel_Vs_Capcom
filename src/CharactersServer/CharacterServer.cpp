@@ -84,12 +84,12 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if (currentAction == JUMPINGRIGHT) {        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
 
-        moveRight(distance, posContrincante, boxContrincante);
+        moveRight(distance, posContrincante);
         jumpRight();
     }
 
     if (currentAction == JUMPINGLEFT) {
-        moveLeft(distance, posContrincante, boxContrincante);
+        moveLeft(distance, posContrincante);
         jumpLeft();
     }
 
@@ -118,9 +118,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == BLOCK)
         renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
-        moveRight(distance, posContrincante, boxContrincante);   //send move right
+        moveRight(distance, posContrincante);   //send move right
     else if (currentAction == MOVINGLEFT)
-        moveLeft(distance, posContrincante, boxContrincante);    //send move left
+        moveLeft(distance, posContrincante);    //send move left
     else if (currentAction == PUNCH)
         punch();
     else if (currentAction == KICK)
@@ -129,6 +129,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         punchDown();
     else if (currentAction == KICKDOWN)
         kickDown();
+    else if (currentAction == HURTING)
+        hurting();
 
 
     if (currentAction == STANDING)
@@ -202,7 +204,7 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, int posContrincante, Box *boxContrincante) {
+void CharacterServer::moveLeft(int distance, int posContrincante) {
     currentAction = MOVINGLEFT;
     mPosX -= CHARACTER_VEL;
 
@@ -216,7 +218,7 @@ void CharacterServer::moveLeft(int distance, int posContrincante, Box *boxContri
 }
 
 
-void CharacterServer::moveRight(int distance, int posContrincante, Box *boxContrincante) {
+void CharacterServer::moveRight(int distance, int posContrincante) {
     currentAction = MOVINGRIGHT;
 
     mPosX += CHARACTER_VEL;
@@ -407,6 +409,10 @@ void CharacterServer::hurting() {
         this->currentAction = STANDING;
         currentStandingSprite = 0;
     }
+}
+
+bool CharacterServer::inTheGround() {
+    return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGLEFT);
 }
 
 

@@ -55,6 +55,8 @@ public:
     int clientNumber;
     actions_t currentAction;
 
+    bool inTheGround();
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
@@ -124,9 +126,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight( int distance, int posContrincante, Box* boxContrincante) = 0;
+    virtual void moveRight(int distance, int posContrincante) = 0;
 
-    virtual void moveLeft( int distance, int posContrincante, Box* boxContrincante) = 0;
+    virtual void moveLeft(int distance, int posContrincante) = 0;
 
     virtual void jumpVertical();
 
