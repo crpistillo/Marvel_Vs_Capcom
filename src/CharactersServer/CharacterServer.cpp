@@ -54,7 +54,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
 
 // Public:
 void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
-    if(this->getCentro() < posContrincante)
+    if(this->getCentro() > posContrincante)
         isLookingLeft = true;
     else
         isLookingLeft = false;
@@ -78,8 +78,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     }
 
     else if (currentAction == HURTINGAIR || actionRecieved == HURTINGAIR) {
-        cout<<"hello is me"<< endl;
-        if (isLookingLeft)
+        if (!isLookingLeft)
             moveLeft(distance, posContrincante);
         else
             moveRight(distance, posContrincante);
@@ -436,11 +435,12 @@ void CharacterServer::normalAction(int *currentSprite, int *lastSprite, actions_
 void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t nextAction, int airSprite,
                                  int lastAirSprite) {
     (*currentSprite)++;
-    if (*currentSprite >= lastSprite) {
+    if (*currentSprite > lastSprite) {
         *currentSprite = 0;
         this->currentAction = nextAction; //falling
         if (airSprite > lastAirSprite || airSprite == 0) {
             resetSpriteVariables();
+            cout<<"ENDS"<<endl;
             currentAction = STANDING;
         }
     }
