@@ -976,11 +976,6 @@ void TCPServer::updateModel() {
 
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
-        if (isActionInteractive(incoming_msg->action)) {
-            cout << "la que vino" << incoming_msg->action << endl;
-            cout << "la que salio" << update_msg->action << endl;
-        }
-
 
         //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
         if (isActionInteractive(incoming_msg->action)&& isActionInteractive(update_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&

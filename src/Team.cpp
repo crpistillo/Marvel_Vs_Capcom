@@ -46,7 +46,13 @@ void Team::update(int distance, actions_t action, Box *boxContrincante) {
     }
 
 	/// Remove comment to see contact or test
-    //cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
+	/*if(currentCharacter->getColisionable()->isColliding(boxContrincante) && !currentCharacter->inTheGround()){
+        cout << " mi caja " << currentCharacter->getColisionable()->getTop() << " and " << currentCharacter->getColisionable()->getBottom() << endl;
+        cout << " su caja " << boxContrincante->getTop() << " and " << boxContrincante->getBottom() << endl;
+	}*/
+
+
+    cout << (currentCharacter->getColisionable()->isColliding(boxContrincante) ? "CONTACT BIATCH" : "NO") << endl;
 
 	currentCharacter->update(distance, boxContrincante->getCenter(), action, boxContrincante);
 }

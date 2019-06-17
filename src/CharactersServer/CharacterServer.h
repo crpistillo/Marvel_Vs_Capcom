@@ -44,9 +44,9 @@ public:
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam, double pos) = 0;
-    void makeUpdaterStruct(character_updater_t* updater);
+
     virtual int getSpriteNumber() = 0;
-    actions_t getCurrentAction();
+
     bool isStanding();
     //vector<Box*> getColisionable();
     Box* getColisionable();
@@ -95,6 +95,8 @@ protected:
     int currentPunchDownSprite;
     int currentKickDownSprite;
     int currentHurtingSprite;
+    int currentHurtingAirSprite;
+
 
 
     int lastStandingSprite;
@@ -109,6 +111,8 @@ protected:
     int lastPunchDownSprite;
     int lastKickDownSprite;
     int lastHurtingSprite;
+    int lastHurtingAirSprite;
+
 
 
 
@@ -151,8 +155,11 @@ private:
     virtual void kickDown();
 
 
-    void hurting();
+    void hurtingGround();
 
+    void hurtingAir();
+
+    void punchJumpVertical();
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H
