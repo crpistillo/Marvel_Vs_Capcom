@@ -41,6 +41,8 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentPunchDownSprite = 0;
     this->currentHurtingAirSprite = 0;
     this->currentHurtingSprite = 0;
+    this->currentKickAirSprite = 0;
+    this->currentPunchAirSprite = 0;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -217,6 +219,8 @@ void CharacterServer::resetSpriteVariables() {
     currentKickSprite = 0;
     currentPunchDownSprite = 0;
     currentKickDownSprite = 0;
+    currentPunchAirSprite = 0;
+    currentKickAirSprite = 0;
 }
 
 
