@@ -435,14 +435,14 @@ void CharacterServer::normalAction(int *currentSprite, int *lastSprite, actions_
 void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t nextAction, int airSprite,
                                  int lastAirSprite) {
     (*currentSprite)++;
-    if (*currentSprite > lastSprite) {
+    if (*currentSprite  > lastSprite || 2 + airSprite + *currentSprite > lastAirSprite) { //not sure
         *currentSprite = 0;
         this->currentAction = nextAction; //falling
-        if (airSprite > lastAirSprite || airSprite == 0) {
-            resetSpriteVariables();
-            cout<<"ENDS"<<endl;
-            currentAction = STANDING;
-        }
+    }
+    if (airSprite > lastAirSprite || airSprite == 0) {
+        resetSpriteVariables();
+        cout<<"ENDS"<<endl;
+        currentAction = STANDING;
     }
 
 }
