@@ -39,6 +39,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentPunchSprite = 0;
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
+    this->currentThrowSprite = 0;
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
@@ -54,7 +55,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if (currentAction == MI || currentAction == JV || currentAction == JR ||
         currentAction == JL || currentAction == P || currentAction == K ||
-        currentAction == PD || currentAction == KD || currentAction == H)
+        currentAction == PD || currentAction == KD || currentAction == HG ||
+		currentAction == TH)
         actionStarted = true;
 
 
@@ -76,6 +78,10 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if (currentAction == KICKDOWN) {
         kickDown();
+    }
+
+    if (currentAction == THROW) {
+        throwPower();
     }
 
     if (currentAction == JUMPINGVERTICAL) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
@@ -129,6 +135,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         punchDown();
     else if (currentAction == KICKDOWN)
         kickDown();
+    else if (currentAction == THROW)
+        throwPower();
     else if (currentAction == HURTINGGROUND)
         hurting();
 
@@ -185,6 +193,7 @@ void CharacterServer::resetSpriteVariables() {
     currentKickSprite = 0;
     currentPunchDownSprite = 0;
     currentKickDownSprite = 0;
+    currentThrowSprite = 0;
 }
 
 
@@ -283,6 +292,16 @@ void CharacterServer::kick() {
     }
 }
 
+void CharacterServer::throwPower() {
+    this->currentAction = THROW;
+    currentThrowSprite++;
+    if (currentThrowSprite > lastThrowSprite) {
+        currentThrowSprite = 0;
+        this->currentAction = STANDING;
+        currentStandingSprite = 0;
+    }
+}
+
 void CharacterServer::punchDown() {
     this->currentAction = PUNCHDOWN;
     currentPunchDownSprite++;
@@ -357,6 +376,9 @@ void CharacterServer::makeUpdaterStruct(character_updater_t *updater) {
             break;
         case KICKDOWN:
             updater->currentSprite = this->currentKickDownSprite;
+            break;
+        case THROW:
+            updater->currentSprite = this->currentThrowSprite;
             break;
         case JUMPINGLEFT:
             updater->currentSprite = this->currentJumpingLeftSprite;

@@ -65,6 +65,16 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+        case THROW:
+            if (isLookingLeft)
+                this->loader->loadActionSprite(characterFilePath + "throw_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            else
+                this->loader->loadActionSprite(characterFilePath + "throw_right", MVC_FILEPATH, currentSprite,
+                                               FILE_EXTENSION,
+                                               renderer, &m_Texture);
+            break;
+
         case PUNCHDOWN:
             if (isLookingLeft)
                 this->loader->loadActionSprite(characterFilePath + "punch_down_left", MVC_FILEPATH, currentSprite,

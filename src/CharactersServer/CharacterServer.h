@@ -95,6 +95,7 @@ protected:
     int currentPunchDownSprite;
     int currentKickDownSprite;
     int currentHurtingSprite;
+    int currentThrowSprite;
 
 
     int lastStandingSprite;
@@ -109,6 +110,7 @@ protected:
     int lastPunchDownSprite;
     int lastKickDownSprite;
     int lastHurtingSprite;
+    int lastThrowSprite;
 
 
 
@@ -150,6 +152,7 @@ private:
 
     virtual void kickDown();
 
+    virtual void throwPower();
 
     void hurting();
 

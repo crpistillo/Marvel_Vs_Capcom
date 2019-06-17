@@ -97,7 +97,8 @@ bool CharacterClient::isMoving() {
 			|| (this->currentAction == JUMPINGVERTICAL) || (this->currentAction == MAKINGINTRO)
 			|| (this->currentAction == CHANGEME) || (this->currentAction == KICK)
 			|| (this->currentAction == PUNCH) || (this->currentAction == PUNCHDOWN)
-			|| (this->currentAction == KICKDOWN) || (this->currentAction == BLOCK));
+			|| (this->currentAction == KICKDOWN) || (this->currentAction == BLOCK)
+			|| (this->currentAction == THROW));
 }
 
 int CharacterClient::getZIndex() {
