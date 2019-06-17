@@ -21,8 +21,8 @@ const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
 const int LAST_HURTING_AIR_SPRITE = 12;
 const int LAST_THROW_SPRITE = 9;
-const int LAST_PUNCH_AIR_SPRITE = 2;
-const int LAST_KICK_AIR_SPRITE = 2;
+const int LAST_PUNCH_AIR_SPRITE = 8;
+const int LAST_KICK_AIR_SPRITE = 8;
 
 const int widthStanding = 110;
 const int heightStanding = 96;
