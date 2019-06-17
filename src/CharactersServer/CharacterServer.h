@@ -121,9 +121,9 @@ protected:
 
     virtual void walkingSpriteUpdate();
 
-private:
+    void resetSpriteVariables();
 
-    virtual void resetSpriteVariables() = 0;
+private:
 
     virtual void stand();
 

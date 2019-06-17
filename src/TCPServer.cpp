@@ -974,13 +974,11 @@ void TCPServer::updateModel() {
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
-        if(incoming_msg->action == HURTINGAIR){
-            cout<<"si aparece" << endl;
-        }
+
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
 
         //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
-        if (isActionInteractive(incoming_msg->action) && isActionInteractive(update_msg->action) &&
+        if (isActionInteractive(update_msg->action)  &&
             team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
             !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGGROUND) &&
             !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGAIR)) {

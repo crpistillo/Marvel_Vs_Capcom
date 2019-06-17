@@ -82,7 +82,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
         mPosX += CHARACTER_VEL;
     }
 
-    if (isLookingLeft) {
+    if (!isLookingLeft) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
@@ -109,7 +109,7 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
         mPosX -= CHARACTER_VEL;
     }
 
-    if (!isLookingLeft) {
+    if (isLookingLeft) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
@@ -123,9 +123,6 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::resetSpriteVariables(){
-	return;
-}
 
 void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
     builder->personaje = WOLVERINE;
@@ -193,7 +190,7 @@ int WolverineServer::getSpriteNumber(){
 
 void WolverineServer::stand() {
     currentAction = STANDING;
-    this->resetSpriteVariables();
+    resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);

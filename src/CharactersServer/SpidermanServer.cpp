@@ -18,7 +18,7 @@ const int LAST_PUNCH_SPRITE = 5;
 const int LAST_KICK_SPRITE = 5;
 const int LAST_PUNCH_DOWN_SPRITE = 7;
 const int LAST_KICK_DOWN_SPRITE = 5;
-const int LAST_HURTING_SPRITE = 3;
+const int LAST_HURTING_SPRITE = 5;
 const int LAST_HURTING_AIR_SPRITE = 12;
 const int LAST_THROW_SPRITE = 9;
 
@@ -100,9 +100,6 @@ void SpidermanServer::moveRight(int distance, int posContrincante) {
     walkingSpriteUpdate();
 }
 
-void SpidermanServer::resetSpriteVariables(){
-	return;
-}
 
 void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
     //Completar
@@ -174,7 +171,7 @@ int SpidermanServer::getSpriteNumber(){
 
 void SpidermanServer::stand() {
     currentAction = STANDING;
-    this->resetSpriteVariables();
+    resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);

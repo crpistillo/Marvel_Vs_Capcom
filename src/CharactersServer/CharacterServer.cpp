@@ -54,6 +54,8 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
 void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
     if(this->getCentro() < posContrincante)
         isLookingLeft = true;
+    else
+        isLookingLeft = false;
 
 
     bool actionStarted = false;
@@ -368,6 +370,7 @@ Box *CharacterServer::getColisionable() {
 void CharacterServer::hurtingGround() {
     this->currentAction = HURTINGGROUND;
     normalAction(&currentHurtingSprite, &lastHurtingSprite, STANDING);
+    cout<<currentHurtingSprite<< endl;
 }
 
 bool CharacterServer::inTheGround() {
@@ -378,15 +381,16 @@ bool CharacterServer::inTheGround() {
 
 //Not working
 void CharacterServer::hurtingAir() {
-    cout<< "entra biatch" << endl;
     currentAction = HURTINGAIR;
     currentHurtingAirSprite < 6 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
     currentHurtingAirSprite++;
     if (currentHurtingAirSprite > lastHurtingAirSprite) {
+        cout << currentJumpingSprite << endl;
         currentHurtingAirSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
         resetSpriteVariables();
+
         mPosY = this->INITIAL_POS_Y;
     }
 }

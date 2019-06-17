@@ -32,6 +32,7 @@ WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int h
 }
 
 void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
+    isLookingLeft = this->getCentro() > posContrincante;
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)
