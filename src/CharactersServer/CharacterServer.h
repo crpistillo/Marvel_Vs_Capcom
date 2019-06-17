@@ -97,7 +97,8 @@ protected:
     int currentHurtingSprite;
     int currentThrowSprite;
     int currentHurtingAirSprite;
-
+    int currentPunchAirSprite;
+    int currentKickAirSprite;
 
 
     int lastStandingSprite;
@@ -114,7 +115,8 @@ protected:
     int lastHurtingSprite;
     int lastThrowSprite;
     int lastHurtingAirSprite;
-
+    int lastPunchAirSprite;
+    int lastKickAirSprite;
 
 
     unsigned int lastTime;

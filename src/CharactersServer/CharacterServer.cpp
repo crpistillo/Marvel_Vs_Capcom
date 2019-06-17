@@ -41,6 +41,8 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentPunchDownSprite = 0;
     this->currentHurtingAirSprite = 0;
     this->currentHurtingSprite = 0;
+    this->currentKickAirSprite = 0;
+    this->currentPunchAirSprite = 0;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -229,6 +231,8 @@ void CharacterServer::resetSpriteVariables() {
     currentKickSprite = 0;
     currentPunchDownSprite = 0;
     currentKickDownSprite = 0;
+    currentPunchAirSprite = 0;
+    currentKickAirSprite = 0;
 }
 
 
@@ -432,37 +436,37 @@ void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t n
 void CharacterServer::punchJumpVertical() {
     currentAction = PUNCHINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
-    airActions(&currentPunchSprite, lastPunchSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
+    airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::punchJumpLeft() {
     currentAction = PUNCHINGJUMPLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
-    airActions(&currentPunchSprite, lastPunchSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
+    airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
 
 void CharacterServer::punchJumpRight() {
     currentAction = PUNCHINGJUMPRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite);
-    airActions(&currentPunchSprite, lastPunchSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
+    airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
 }
 
 void CharacterServer::kickJumpVertical() {
     currentAction = KICKINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
-    airActions(&currentKickSprite, lastKickSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
+    airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::kickJumpRight() {
     currentAction = KICKINGJUMPRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite);
-    airActions(&currentKickSprite, lastKickSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
+    airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
 }
 
 void CharacterServer::kickJumpLeft() {
     currentAction = KICKINGJUMPLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
-    airActions(&currentKickSprite, lastKickSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
+    airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
 
 
