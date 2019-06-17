@@ -21,6 +21,7 @@ const int LAST_PUNCH_DOWN_SPRITE = 5;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
 const int LAST_THROW_SPRITE = 7;
+const int LAST_GRIP_SPRITE = 8;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
@@ -63,6 +64,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
     lastHurtingSprite = LAST_HURTING_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
+    lastGripSprite = LAST_GRIP_SPRITE;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro

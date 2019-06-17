@@ -7,6 +7,7 @@ CPP_SRCS += \
 ../src/Box.cpp \
 ../src/ClientCursor.cpp \
 ../src/ClientsThread.cpp \
+../src/EventHandler.cpp \
 ../src/InputManager.cpp \
 ../src/Layer.cpp \
 ../src/MCGame.cpp \
@@ -23,6 +24,7 @@ OBJS += \
 ./src/Box.o \
 ./src/ClientCursor.o \
 ./src/ClientsThread.o \
+./src/EventHandler.o \
 ./src/InputManager.o \
 ./src/Layer.o \
 ./src/MCGame.o \
@@ -39,6 +41,7 @@ CPP_DEPS += \
 ./src/Box.d \
 ./src/ClientCursor.d \
 ./src/ClientsThread.d \
+./src/EventHandler.d \
 ./src/InputManager.d \
 ./src/Layer.d \
 ./src/MCGame.d \
@@ -56,7 +59,7 @@ CPP_DEPS += \
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -O0 -g3 -Wall -c -fmessage-length=0 -pthread -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -O0 -g3 -Wall -c -fmessage-length=0 -pthread -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

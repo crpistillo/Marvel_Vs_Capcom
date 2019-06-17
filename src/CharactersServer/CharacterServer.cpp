@@ -40,6 +40,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
     this->currentThrowSprite = 0;
+    this->currentGripSprite = 0;
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
@@ -101,6 +102,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     if(currentAction == HURTINGGROUND){
         hurting();
+    }
+
+    if(currentAction == GRIP)
+    {
+    	grip();
     }
 
     if (actionStarted) {
@@ -272,6 +278,18 @@ void CharacterServer::jumpLeft() {
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
 
+void CharacterServer::grip()
+{
+	this->currentAction = GRIP;
+	currentGripSprite++;
+	if(currentGripSprite > lastGripSprite)
+	{
+		currentGripSprite = 0;
+		this->currentAction = STANDING;
+		currentStandingSprite = 0;
+	}
+}
+
 void CharacterServer::punch() {
     this->currentAction = PUNCH;
     currentPunchSprite++;
@@ -324,15 +342,12 @@ void CharacterServer::kickDown() {
 void CharacterServer::makeIntro() {
     currentAction = MAKINGINTRO;
 
-
     unsigned int currentTime = SDL_GetTicks();
-
 
     if (currentIntroSprite < lastIntroSprite) {
         ++currentIntroSprite;
         lastTime = currentTime;
     }
-
 
     if (currentIntroSprite >= lastIntroSprite && (currentTime - lastTime) > 500) {
         currentIntroSprite = 0;
@@ -341,7 +356,6 @@ void CharacterServer::makeIntro() {
     }
 
 }
-
 
 void CharacterServer::updateStand() {
     if (currentStandingSprite <= lastStandingSprite)
@@ -380,6 +394,9 @@ void CharacterServer::makeUpdaterStruct(character_updater_t *updater) {
         case THROW:
             updater->currentSprite = this->currentThrowSprite;
             break;
+        case GRIP:
+        	updater->currentSprite = this->currentGripSprite;
+        	break;
         case JUMPINGLEFT:
             updater->currentSprite = this->currentJumpingLeftSprite;
             break;

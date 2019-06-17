@@ -6,7 +6,7 @@
 #include "../InputManager.h"
 #include <iostream>
 
-Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick, int block, int throwK) {
+Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick, int block, int throwK, int grip) {
     upKey = up;
     downKey = down;
     rightKey = right;
@@ -16,6 +16,7 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     kickKey = kick;
     blockKey = block;
     throwKey = throwK;
+    gripKey = grip;
 }
 
 actions_t Controls::getNewAction() {
@@ -65,6 +66,9 @@ actions_t Controls::getNewAction() {
 
     else if (inputManager->isKeyDown(throwKey))
         return THROW;
+
+    else if (inputManager->isKeyDown(gripKey))
+    	return GRIP;
 
     else if (inputManager->isKeyDown(rightKey) && !inputManager->isKeyUp(leftKey))
         return MOVINGRIGHT;
