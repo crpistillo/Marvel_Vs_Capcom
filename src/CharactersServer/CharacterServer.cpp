@@ -39,7 +39,9 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentPunchSprite = 0;
     this->currentKickDownSprite = 0;
     this->currentPunchDownSprite = 0;
-    this->currentThrowSprite = 0;
+    this->currentHurtingAirSprite = 0;
+    this->currentHurtingSprite = 0;
+
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
@@ -56,51 +58,77 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     if (currentAction == MI || currentAction == JV || currentAction == JR ||
         currentAction == JL || currentAction == P || currentAction == K ||
         currentAction == PD || currentAction == KD || currentAction == HG ||
-		currentAction == TH)
+        currentAction == HA || currentAction == PV || currentAction == TH ||
+        currentAction == PJR || currentAction == PJL)
         actionStarted = true;
+
+
 
 
     if (currentAction == MAKINGINTRO) {
         makeIntro();
     }
 
-    if (currentAction == PUNCH) {
+    else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL) {
+        if (actionRecieved == PUNCH || currentAction == PUNCHINGVERTICAL || actionRecieved == PUNCHINGVERTICAL)
+            punchJumpVertical();
+        else
+            jumpVertical();
+    }
+
+    else if (currentAction == JUMPINGRIGHT || currentAction == PUNCHINGJUMPRIGHT) {
+        if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPRIGHT || actionRecieved == PUNCHINGJUMPRIGHT){
+            moveRight(distance, posContrincante);
+            punchJumpRight();
+        }
+
+        else {
+            moveRight(distance, posContrincante);
+            jumpRight();
+        }
+    }
+
+    else if (currentAction == JUMPINGLEFT || currentAction == PUNCHINGJUMPLEFT) {
+        if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPLEFT || actionRecieved == PUNCHINGJUMPLEFT){
+            moveLeft(distance, posContrincante);
+            punchJumpLeft();
+        }
+        else{
+            moveLeft(distance, posContrincante);
+            jumpLeft();
+        }
+    }
+    else if (currentAction == PUNCH) {
         punch();
     }
 
-    if (currentAction == KICK) {
+    else if (currentAction == KICK) {
         kick();
     }
 
-    if (currentAction == PUNCHDOWN) {
+    else if (currentAction == PUNCHDOWN) {
         punchDown();
     }
 
-    if (currentAction == KICKDOWN) {
+    else if (currentAction == KICKDOWN) {
         kickDown();
     }
 
-    if (currentAction == THROW) {
+    else if (currentAction == THROW) {
         throwPower();
     }
 
-    if (currentAction == JUMPINGVERTICAL) {    //Si saltaba verticalmente, lo fuerzo a que siga con esa accion
-        jumpVertical();
+
+    else if (currentAction == HURTINGGROUND) {
+        hurtingGround();
     }
 
-    if (currentAction == JUMPINGRIGHT) {        //Si saltaba hacia la derecha, lo fuerzo a que siga con esa accion
-
-        moveRight(distance, posContrincante);
-        jumpRight();
-    }
-
-    if (currentAction == JUMPINGLEFT) {
-        moveLeft(distance, posContrincante);
-        jumpLeft();
-    }
-
-    if(currentAction == HURTINGGROUND){
-        hurting();
+    else if (currentAction == HURTINGAIR) {
+        if (isLookingLeft)
+            moveRight(distance, posContrincante);
+        else
+            moveLeft(distance, posContrincante);
+        hurtingAir();
     }
 
     if (actionStarted) {
@@ -111,11 +139,10 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     this->currentAction = actionRecieved;
 
     //Acciones de dos teclas primero
-    if (currentAction == JUMPINGVERTICAL)
-        jumpVertical(); //send jump rigth
+    if (currentAction == JUMPINGRIGHT)
+        jumpRight(); //send jump rigth
     else if (currentAction == JUMPINGLEFT)
         jumpLeft(); //send jump left
-
         //Acciones de una sola tecla
     else if (currentAction == JUMPINGVERTICAL)
         jumpVertical(); //send jump vertical
@@ -138,7 +165,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == THROW)
         throwPower();
     else if (currentAction == HURTINGGROUND)
-        hurting();
+        hurtingGround();
 
 
     if (currentAction == STANDING)
@@ -193,7 +220,6 @@ void CharacterServer::resetSpriteVariables() {
     currentKickSprite = 0;
     currentPunchDownSprite = 0;
     currentKickDownSprite = 0;
-    currentThrowSprite = 0;
 }
 
 
@@ -251,13 +277,14 @@ void CharacterServer::jump(int *currentSprite, int lastSprite) {
         mPosY = this->INITIAL_POS_Y;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
+        resetSpriteVariables();
     }
 }
 
 void CharacterServer::jumpVertical() {
     this->currentAction = JUMPINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
-    cout<<" mi caja "<<this->characterBox->getTop() <<" and " << this->characterBox->getBottom()<< endl;
+    cout << " mi caja " << this->characterBox->getTop() << " and " << this->characterBox->getBottom() << endl;
 }
 
 void CharacterServer::jumpRight() {
@@ -356,65 +383,6 @@ void CharacterServer::walkingSpriteUpdate() {
 
 }
 
-void CharacterServer::makeUpdaterStruct(character_updater_t *updater) {
-    updater->posX = this->mPosX;
-    updater->posY = this->mPosY;
-    updater->action = this->currentAction;
-
-    switch (this->currentAction) {
-        case STANDING:
-            updater->currentSprite = this->currentStandingSprite;
-            break;
-        case PUNCH:
-            updater->currentSprite = this->currentPunchSprite;
-            break;
-        case KICK:
-            updater->currentSprite = this->currentKickSprite;
-            break;
-        case PUNCHDOWN:
-            updater->currentSprite = this->currentPunchDownSprite;
-            break;
-        case KICKDOWN:
-            updater->currentSprite = this->currentKickDownSprite;
-            break;
-        case THROW:
-            updater->currentSprite = this->currentThrowSprite;
-            break;
-        case JUMPINGLEFT:
-            updater->currentSprite = this->currentJumpingLeftSprite;
-            break;
-        case JUMPINGRIGHT:
-            updater->currentSprite = this->currentJumpingRightSprite;
-            break;
-        case JUMPINGVERTICAL:
-            updater->currentSprite = this->currentJumpingSprite;
-            break;
-        case MAKINGINTRO:
-            updater->currentSprite = this->currentIntroSprite;
-            break;
-        case DUCK:
-            updater->currentSprite = 0;
-            break;
-        case BLOCK:
-            updater->currentSprite = 0;
-            break;
-        case MOVINGRIGHT:
-            updater->currentSprite = this->currentWalkingSprite;
-            break;
-        case MOVINGLEFT:
-            updater->currentSprite = this->currentWalkingSprite;
-            break;
-        case WALKBACK:
-            updater->currentSprite = this->currentWalkbackSprite;
-            break;
-    }
-
-}
-
-actions_t CharacterServer::getCurrentAction() {
-    return this->currentAction;
-}
-
 bool CharacterServer::isStanding() {
     return this->currentAction == STANDING;
 }
@@ -423,7 +391,7 @@ Box *CharacterServer::getColisionable() {
     return characterBox;
 }
 
-void CharacterServer::hurting() {
+void CharacterServer::hurtingGround() {
     this->currentAction = HURTINGGROUND;
     currentHurtingSprite++;
     if (currentHurtingSprite > lastHurtingSprite) {
@@ -435,6 +403,62 @@ void CharacterServer::hurting() {
 
 bool CharacterServer::inTheGround() {
     return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGLEFT);
+}
+
+void CharacterServer::hurtingAir() {
+    currentAction = HURTINGAIR;
+    currentHurtingAirSprite < 6 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
+    currentHurtingAirSprite++;
+    if (currentHurtingAirSprite > lastHurtingAirSprite) {
+        currentHurtingAirSprite = 0;
+        mPosY = this->INITIAL_POS_Y;
+        this->currentAction = STANDING;
+        currentStandingSprite = 0;
+    }
+
+}
+
+void CharacterServer::punchJumpVertical() {
+    currentAction = PUNCHINGVERTICAL;
+    jump(&currentJumpingSprite, lastJumpingSprite);
+
+    currentPunchSprite++;
+    if (currentPunchSprite > lastPunchSprite) {
+        currentPunchSprite = 0;
+        this->currentAction = JUMPINGVERTICAL; //falling
+        if(currentJumpingSprite >= lastJumpingSprite || currentJumpingSprite == 0)
+            currentAction = STANDING;
+
+    }
+
+}
+
+void CharacterServer::punchJumpLeft() {
+    currentAction = PUNCHINGJUMPLEFT;
+    jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
+
+    currentPunchSprite++;
+    if (currentPunchSprite > lastPunchSprite) {
+        currentPunchSprite = 0;
+        this->currentAction = JUMPINGLEFT; //falling
+        if(currentJumpingLeftSprite >= lastJumpingLeftSprite || currentJumpingLeftSprite == 0)
+            currentAction = STANDING;
+
+    }
+
+}
+
+void CharacterServer::punchJumpRight() {
+    currentAction = PUNCHINGJUMPRIGHT;
+    jump(&currentJumpingRightSprite, lastJumpingRightSprite);
+
+    currentPunchSprite++;
+    if (currentPunchSprite > lastPunchSprite) {
+        currentPunchSprite = 0;
+        this->currentAction = JUMPINGRIGHT; //falling
+        if(currentJumpingRightSprite >= lastJumpingRightSprite || currentJumpingRightSprite == 0)
+            currentAction = STANDING;
+    }
 }
 
 

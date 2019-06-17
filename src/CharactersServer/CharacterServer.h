@@ -96,6 +96,8 @@ protected:
     int currentKickDownSprite;
     int currentHurtingSprite;
     int currentThrowSprite;
+    int currentHurtingAirSprite;
+
 
 
     int lastStandingSprite;
@@ -111,6 +113,7 @@ protected:
     int lastKickDownSprite;
     int lastHurtingSprite;
     int lastThrowSprite;
+    int lastHurtingAirSprite;
 
 
 
@@ -154,8 +157,15 @@ private:
 
     virtual void throwPower();
 
-    void hurting();
+    void hurtingGround();
 
+    void punchJumpVertical();
+
+    void hurtingAir();
+
+    void punchJumpLeft();
+
+    void punchJumpRight();
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H

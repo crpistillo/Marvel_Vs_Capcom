@@ -19,6 +19,7 @@ const int LAST_KICK_SPRITE = 5;
 const int LAST_PUNCH_DOWN_SPRITE = 7;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
+const int LAST_HURTING_AIR_SPRITE = 12;
 const int LAST_THROW_SPRITE = 9;
 
 const int widthStanding = 110;
@@ -61,6 +62,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
     lastHurtingSprite = LAST_HURTING_SPRITE;
+    lastHurtingAirSprite = LAST_HURTING_AIR_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
@@ -136,6 +138,9 @@ int SpidermanServer::getSpriteNumber(){
         case MAKINGINTRO:
             spriteNumber = currentIntroSprite;
             break;
+        case PUNCHINGJUMPLEFT:
+        case PUNCHINGJUMPRIGHT:
+        case PUNCHINGVERTICAL:
         case PUNCH:
             spriteNumber = currentPunchSprite;
             break;

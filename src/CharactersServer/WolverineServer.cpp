@@ -162,6 +162,10 @@ int WolverineServer::getSpriteNumber(){
         case WALKBACK:
             spriteNumber = currentWalkbackSprite;
             break;
+
+        case PUNCHINGJUMPLEFT:
+        case PUNCHINGJUMPRIGHT:
+        case PUNCHINGVERTICAL:
         case PUNCH:
             spriteNumber = currentPunchSprite;
             break;

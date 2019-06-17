@@ -31,6 +31,16 @@ actions_t Controls::getNewAction() {
         return DISCONNECTEDCLIENT;
     }
 
+    //Tres teclas
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey) && inputManager->isKeyDown(punchKey))
+        return PUNCHINGJUMPRIGHT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(punchKey))
+        return PUNCHINGJUMPLEFT;
+
+
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(punchKey))
+        return PUNCHINGVERTICAL;
+
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
 
