@@ -37,7 +37,7 @@ actions_t Controls::getNewAction() {
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(punchKey))
         return PUNCHINGJUMPLEFT;
 
-
+    //dos teclas
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(punchKey))
         return PUNCHINGVERTICAL;
 

@@ -144,6 +144,7 @@ int SpidermanServer::getSpriteNumber(){
         case PUNCH:
             spriteNumber = currentPunchSprite;
             break;
+        case KICKINGVERTICAL:
         case KICK:
             spriteNumber = currentKickSprite;
             break;

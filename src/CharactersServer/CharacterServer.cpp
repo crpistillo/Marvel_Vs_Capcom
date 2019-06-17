@@ -59,7 +59,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         currentAction == JL || currentAction == P || currentAction == K ||
         currentAction == PD || currentAction == KD || currentAction == HG ||
         currentAction == HA || currentAction == PV || currentAction == TH ||
-        currentAction == PJR || currentAction == PJL)
+        currentAction == PJR || currentAction == PJL || currentAction == KV
+        || currentAction == KJR || currentAction == KJL)
         actionStarted = true;
 
 
@@ -69,9 +70,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         makeIntro();
     }
 
-    else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL) {
+    else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL || currentAction == KICKINGVERTICAL){
         if (actionRecieved == PUNCH || currentAction == PUNCHINGVERTICAL || actionRecieved == PUNCHINGVERTICAL)
             punchJumpVertical();
+        else if(actionRecieved == KICK || currentAction == KICKINGVERTICAL || actionRecieved == KICKINGVERTICAL)
+            kickJumpVertical();
         else
             jumpVertical();
     }
@@ -457,6 +460,19 @@ void CharacterServer::punchJumpRight() {
         currentPunchSprite = 0;
         this->currentAction = JUMPINGRIGHT; //falling
         if(currentJumpingRightSprite >= lastJumpingRightSprite || currentJumpingRightSprite == 0)
+            currentAction = STANDING;
+    }
+}
+
+void CharacterServer::kickJumpVertical() {
+    currentAction = KICKINGVERTICAL;
+    jump(&currentJumpingSprite, lastJumpingSprite);
+
+    currentKickSprite++;
+    if (currentKickSprite > lastPunchSprite) {
+        currentKickSprite = 0;
+        this->currentAction = JUMPINGVERTICAL; //falling
+        if(currentJumpingSprite >= lastJumpingSprite || currentJumpingSprite == 0)
             currentAction = STANDING;
     }
 }

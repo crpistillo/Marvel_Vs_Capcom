@@ -166,6 +166,8 @@ private:
     void punchJumpLeft();
 
     void punchJumpRight();
+
+    void kickJumpVertical();
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H
