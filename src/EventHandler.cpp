@@ -71,6 +71,8 @@ character_updater_t * EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int
 
 void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int receiver) {
     //basic hit
+
+    cout<<"asdddddddd"<<endl;
     if (team[receiver]->getCurrentCharacter()->inTheGround()) {
         incoming_msg_t *beingHurtGround = new incoming_msg_t;
         beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
@@ -80,6 +82,7 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     else if(!team[receiver]->getCurrentCharacter()->inTheGround()){
         incoming_msg_t *beingHurtGround = new incoming_msg_t;
         beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
+        cout<< "asd" << endl;
         beingHurtGround->action = HURTINGAIR;
         queue->insert(beingHurtGround);
 

@@ -974,17 +974,16 @@ void TCPServer::updateModel() {
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
-
-        character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
-        if (isActionInteractive(incoming_msg->action)) {
-            cout << "la que vino" << incoming_msg->action << endl;
-            cout << "la que salio" << update_msg->action << endl;
+        if(incoming_msg->action == HURTINGAIR){
+            cout<<"si aparece" << endl;
         }
-
+        character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
 
         //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
-        if (isActionInteractive(incoming_msg->action)&& isActionInteractive(update_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
-            !(team[enemyTeam]->getCurrentCharacter()->currentAction== HURTINGGROUND)) {
+        if (isActionInteractive(incoming_msg->action) && isActionInteractive(update_msg->action) &&
+            team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
+            !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGGROUND) &&
+            !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGAIR)) {
             std::unique_lock<std::mutex> lock(incoming_msg_mtx);
             teams_mtx.lock();
             eventHandler->manageInteractiveActions(incoming_msges_queue, enemyTeam);
@@ -1112,7 +1111,7 @@ void TCPServer::setEndgame(bool condition) {
 }
 
 bool TCPServer::isActionInteractive(actions_t actions) {
-    return actions == PUNCH || actions == PUNCHDOWN || actions == KICK || actions == KICKDOWN;
+    return isActionPunch(actions) || isActionKick(actions);
 }
 
 void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
@@ -1140,6 +1139,12 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
 
 }
 
+bool TCPServer::isActionPunch(actions_t actions) {
+    return actions == PUNCH || actions == PUNCHDOWN || actions == PUNCHINGJUMPLEFT || actions == PUNCHINGJUMPRIGHT ||
+           actions == PUNCHINGVERTICAL;
+}
 
-
-
+bool TCPServer::isActionKick(actions_t action) {
+    return action == KICK || action == KICKDOWN || action == KICKINGJUMPLEFT || action == KICKINGJUMPRIGHT ||
+           action == KICKINGVERTICAL;
+}

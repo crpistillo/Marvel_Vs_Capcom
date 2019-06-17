@@ -159,6 +159,12 @@ int SpidermanServer::getSpriteNumber(){
         case THROW:
             spriteNumber = currentThrowSprite;
             break;
+        case HURTINGAIR:
+            spriteNumber = currentHurtingAirSprite;
+            break;
+        case HURTINGGROUND:
+            spriteNumber = currentHurtingSprite;
+            break;
         default:
             spriteNumber = 0;
             break;

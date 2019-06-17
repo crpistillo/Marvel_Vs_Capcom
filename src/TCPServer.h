@@ -158,6 +158,10 @@ public:
     bool isActionInteractive(actions_t actions);
 
     void putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber);
+
+    bool isActionPunch(actions_t actions);
+
+    bool isActionKick(actions_t action);
 };
 
 #endif

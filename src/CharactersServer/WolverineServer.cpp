@@ -82,7 +82,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
         mPosX += CHARACTER_VEL;
     }
 
-    if (this->getPosX() > posContrincante) {
+    if (isLookingLeft) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
@@ -109,7 +109,7 @@ void WolverineServer::moveRight(int distance, int posContrincante) {
         mPosX -= CHARACTER_VEL;
     }
 
-    if (this->getPosX() < posContrincante) {
+    if (!isLookingLeft) {
         walkingSpriteUpdate();
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
