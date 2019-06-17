@@ -168,6 +168,14 @@ private:
     void punchJumpRight();
 
     void kickJumpVertical();
+
+    void kickJumpRight();
+
+    void kickJumpLeft();
+
+    void normalAction(int *currentSprite, int *lastSprite, actions_t finalAction);
+
+    void airActions(int *currentSprite, int lastSprite, actions_t nextAction, int airSprite, int lastAirSprite);
 };
 
 #endif //MARVEL_VS_CAPCOM_CHARACTERSERVER_H

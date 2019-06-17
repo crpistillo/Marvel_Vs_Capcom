@@ -24,8 +24,7 @@ actions_t Controls::getNewAction() {
 
     //Acciones de dos teclas primero
 
-    if (inputManager->closeWindowRequested())
-    {
+    if (inputManager->closeWindowRequested()) {
         inputManager->windowNotClosing();
         std::cout<<"Detecta window closed"<<std::endl;
         return DISCONNECTEDCLIENT;
