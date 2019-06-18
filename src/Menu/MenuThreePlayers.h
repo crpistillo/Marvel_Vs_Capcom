@@ -17,6 +17,7 @@ public:
 
     void runMenuThreePlayers();
     void runCorrespondingMenu();
+    void sendSelectedCharacters(Constants* constants);
 };
 
 

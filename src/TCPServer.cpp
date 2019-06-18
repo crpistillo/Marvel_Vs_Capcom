@@ -267,10 +267,10 @@ void TCPServer::reconnections() {
 void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
     character_builder_t builders[MAXPLAYERS];
 
-    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0], true, posPlayers[0]);
-    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1], true, posPlayers[0]);
-    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2], false, posPlayers[1]);
-    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3], false, posPlayers[1]);
+    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0], true);
+    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1], true);
+    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2], false);
+    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3], false);
 
     for (auto &builder : builders) {
         clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));
@@ -476,7 +476,7 @@ void TCPServer::runServer() {
     this->menu->sendSelectedCharacters(&constants);
 
 
-    treatDisconnectionsAfterSelection();
+    //treatDisconnectionsAfterSelection();
 
     server_state_mtx.lock();
     this->server_state = FIGHT_PHASE;
@@ -532,7 +532,7 @@ void TCPServer::sendSelectedCharacters() {
             characters[nCharacter] = createServerCharacterFromCursor(
                     serverCursors[nCharacter], nclient, nCharacter);
             characters[nCharacter]->makeBuilderStruct(&builders[nCharacter],
-                                                      nCharacter < 2, pos);
+                                                      nCharacter < 2);
             nCharacter++;
         }
         nclient++;

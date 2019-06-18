@@ -16,6 +16,7 @@ public:
 
     void runMenuTwoPlayers();
     void runCorrespondingMenu();
+    void sendSelectedCharacters(Constants* constants);
 };
 
 

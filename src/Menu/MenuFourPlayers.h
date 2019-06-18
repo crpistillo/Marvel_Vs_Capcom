@@ -16,6 +16,7 @@ public:
 
     void runMenuFourPlayers();
     void runCorrespondingMenu();
+    void sendSelectedCharacters(Constants* constants);
 };
 
 

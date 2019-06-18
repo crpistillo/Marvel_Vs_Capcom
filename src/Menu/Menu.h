@@ -53,6 +53,7 @@ public:
 
     void runMenuPhase();
     virtual void runCorrespondingMenu() = 0;
+    virtual void sendSelectedCharacters(Constants* constants) = 0;
 
     bool getRunningMenuPhase();
 
@@ -63,7 +64,6 @@ public:
 
     int getNumberOfCharactersSelected();
 
-    void sendSelectedCharacters(Constants* constants);
 
     int getTeamNumber(int nclient);
 
