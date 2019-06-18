@@ -307,3 +307,9 @@ void Menu::buildTeams(Team **teams) {
     teams[0] = this->team[0];
     teams[1] = this->team[1];
 }
+
+void Menu::reportReconnection(client_menu_t *recon_info) {
+    incoming_msg_mtx.lock();
+    incoming_menu_actions_queue->insert(recon_info);
+    incoming_msg_mtx.unlock();
+}

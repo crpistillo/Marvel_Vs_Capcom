@@ -70,6 +70,8 @@ public:
     CharacterServer *createServerCharacterFromCursor(ServerCursor *pCursor, int nclient, int character, Constants* constants);
 
     void buildTeams(Team *teams[2]);
+
+    void reportReconnection(client_menu_t *recon_info);
 };
 
 

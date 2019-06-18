@@ -250,9 +250,7 @@ void TCPServer::reconnections() {
             recon->accion = RECONNECTION_MENU;
 
             //TODO clase menu se encarga de las desconexiones
-            incoming_msg_mtx.lock();
-            incoming_menu_actions_queue->insert(recon);
-            incoming_msg_mtx.unlock();
+            this->menu->reportReconnection(recon);
 
             std::unique_lock<std::mutex> lock(numberOfConnections_mtx);
             numberOfConnections++;
@@ -464,8 +462,8 @@ void TCPServer::runServer() {
 
     //TODO MENU PHASE CON CLASE MENU
     this->menu->runMenuPhase();
-    this->menu->sendSelectedCharacters(&constants);
     this->menu->buildTeams(team);
+    this->menu->sendSelectedCharacters(&constants);
 
 
     treatDisconnectionsAfterSelection();
