@@ -68,12 +68,8 @@ void MenuTwoPlayers::runCorrespondingMenu() {
 }
 
 void MenuTwoPlayers::sendSelectedCharacters(Constants *constants) {
-    int charactersPerClient;
 
-    if (2 == numberOfPlayers)   // si el maximo de players es 2 elijen 2
-        charactersPerClient = 2;
-    else
-        charactersPerClient = 1;
+    int charactersPerClient = 2;
 
     CharacterServer *characters[MAXPLAYERS];
     character_builder_t builders[MAXPLAYERS];
@@ -81,17 +77,8 @@ void MenuTwoPlayers::sendSelectedCharacters(Constants *constants) {
 
     int nclient = 0;
     int nCharacter = 0;
-    double pos;
 
     for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
-        /*if (getTeamNumber(nclient) == 0)
-            pos = constants->INITIAL_POS_X_PLAYER_ONE;
-        else
-            pos = constants->INITIAL_POS_X_PLAYER_TWO;
-
-        if(numberOfPlayers == 3 && i == 2){
-            charactersPerClient = 2;
-        }*/
 
         for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
             characters[nCharacter] = createServerCharacterFromCursor(
@@ -122,5 +109,4 @@ void MenuTwoPlayers::sendSelectedCharacters(Constants *constants) {
         this->server->getClientSocket(k)->sendData(&currentTeam0, sizeof(int));
         this->server->getClientSocket(k)->sendData(&currentTeam1, sizeof(int));
     }
-    return;
 }
