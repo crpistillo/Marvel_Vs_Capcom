@@ -464,17 +464,9 @@ void TCPServer::runServer() {
 
     //TODO MENU PHASE CON CLASE MENU
     this->menu->runMenuPhase();
+    this->menu->sendSelectedCharacters(&constants);
+    this->menu->buildTeams(team);
 
-    int teamSize = numberOfPlayers / 2;
-
-    team[0] = new Team(teamSize);
-    team[1] = new Team(teamSize);
-
-    this->serverCursors[0] = this->menu->getServerCursor(0);
-    this->serverCursors[1] = this->menu->getServerCursor(1);
-    this->serverCursors[2] = this->menu->getServerCursor(2);
-    this->serverCursors[3] = this->menu->getServerCursor(3);
-    sendSelectedCharacters();
 
     treatDisconnectionsAfterSelection();
 

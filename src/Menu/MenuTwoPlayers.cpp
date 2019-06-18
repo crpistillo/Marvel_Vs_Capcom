@@ -5,6 +5,8 @@
 #include "MenuTwoPlayers.h"
 
 MenuTwoPlayers::MenuTwoPlayers(TCPServer *pServer) : Menu(2, pServer) {
+    this->team[0] = new Team(1);
+    this->team[1] = new Team(1);
 }
 
 

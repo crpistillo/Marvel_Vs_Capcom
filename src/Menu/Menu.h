@@ -10,6 +10,7 @@
 #include "../Queue/Queue.h"
 #include "../Socket.h"
 #include "../TCPServer.h"
+#include "../Constants.h"
 #include <thread>
 #include <mutex>
 #include <iostream>
@@ -31,6 +32,8 @@ protected:
     Queue<client_menu_t *> *incoming_menu_actions_queue;
     Queue<cursor_updater_t *> *cursor_updater_queue[MAXPLAYERS];
     ServerCursor *serverCursors[MAXPLAYERS];
+
+    Team* team[2];
 
     std::mutex menuClient;
     std::mutex runningMenuPhase_mtx;
@@ -59,6 +62,14 @@ public:
     ServerCursor *getServerCursor(int i);
 
     int getNumberOfCharactersSelected();
+
+    void sendSelectedCharacters(Constants* constants);
+
+    int getTeamNumber(int nclient);
+
+    CharacterServer *createServerCharacterFromCursor(ServerCursor *pCursor, int nclient, int character, Constants* constants);
+
+    void buildTeams(Team *teams[2]);
 };
 
 

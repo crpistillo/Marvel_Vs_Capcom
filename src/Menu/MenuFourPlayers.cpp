@@ -5,6 +5,9 @@
 #include "MenuFourPlayers.h"
 
 MenuFourPlayers::MenuFourPlayers(TCPServer *pServer) : Menu(4, pServer) {
+
+    this->team[0] = new Team(2);
+    this->team[1] = new Team(2);
 }
 
 void MenuFourPlayers::runMenuFourPlayers() {

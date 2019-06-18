@@ -3,6 +3,9 @@
 //
 
 #include "Menu.h"
+#include "../Constants.h"
+#include "../CharactersServer/SpidermanServer.h"
+#include "../CharactersServer/WolverineServer.h"
 
 
 using namespace std;
@@ -208,4 +211,99 @@ int Menu::getNumberOfCharactersSelected() {
 
     return n;
 
+}
+
+void Menu::sendSelectedCharacters(Constants* constants) {
+    int charactersPerClient;
+
+    if (2 == numberOfPlayers)   // si el maximo de players es 2 elijen 2
+        charactersPerClient = 2;
+    else
+        charactersPerClient = 1;
+
+    CharacterServer *characters[MAXPLAYERS];
+    character_builder_t builders[MAXPLAYERS];
+
+
+    int nclient = 0;
+    int nCharacter = 0;
+    double pos;
+
+    for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
+        if (getTeamNumber(nclient) == 0)
+            pos = constants->INITIAL_POS_X_PLAYER_ONE;
+        else
+            pos = constants->INITIAL_POS_X_PLAYER_TWO;
+
+        for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
+            characters[nCharacter] = createServerCharacterFromCursor(
+                    serverCursors[nCharacter], nclient, nCharacter, constants);
+            characters[nCharacter]->makeBuilderStruct(&builders[nCharacter],
+                                                      nCharacter < 2, pos);
+            nCharacter++;
+        }
+        nclient++;
+    }
+
+
+    team[0]->setCharacters(characters[0], characters[1]);
+    team[1]->setCharacters(characters[2], characters[3]);
+
+
+    for (auto &builder : builders) {
+        for (int i = 0; i < numberOfPlayers; ++i) {
+            this->server->getClientSocket(i)->sendData(&builder, sizeof(character_builder_t));
+        }
+    }
+
+
+    int currentTeam0 = team[0]->get_currentCharacterNumber();
+    int currentTeam1 = team[1]->get_currentCharacterNumber();
+    for (int k = 0; k < numberOfPlayers; ++k) {
+
+        this->server->getClientSocket(k)->sendData(&currentTeam0, sizeof(int));
+        this->server->getClientSocket(k)->sendData(&currentTeam1, sizeof(int));
+    }
+}
+
+int Menu::getTeamNumber(int nclient) {
+    if (numberOfPlayers == 4) {
+        if (nclient == 0 || nclient == 1)
+            return 0;
+        else return 1;
+    } else if (numberOfPlayers == 2) {
+        if (nclient == 0)
+            return 0;
+        else return 1;
+    }
+}
+
+CharacterServer *Menu::createServerCharacterFromCursor(ServerCursor *pCursor, int nclient, int character, Constants* constants) {
+    CharacterServer *characterServer;
+    Box *caja;
+    int pos;
+    if (character < 2)
+        pos = constants->INITIAL_POS_X_PLAYER_ONE;
+    else
+        pos = constants->INITIAL_POS_X_PLAYER_TWO;
+
+    switch (pCursor->getCharacterSelected()) {
+        case SPIDERMAN:
+            characterServer = new SpidermanServer(pos, constants->widthSpiderman,
+                                                  constants->heightSpiderman, constants->spidermanSobrante,
+                                                  constants->spidermanAncho, constants->screenWidth, nclient);
+
+            break;
+
+        case WOLVERINE:
+            characterServer = new WolverineServer(pos, constants->widthWolverine,
+                                                  constants->heightWolverine, constants->wolverineSobrante,
+                                                  constants->wolverineAncho, constants->screenWidth, nclient);
+    }
+    return characterServer;
+}
+
+void Menu::buildTeams(Team **teams) {
+    teams[0] = this->team[0];
+    teams[1] = this->team[1];
 }
