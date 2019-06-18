@@ -336,6 +336,7 @@ void CharacterServer::falling(int distance, int posContrincante)
 		else initialLookingLeft = false;
 	}
 
+
 	else if(currentFallingSprite==8)
 	{
 		if (isLookingLeft) {
