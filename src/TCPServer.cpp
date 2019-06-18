@@ -936,6 +936,7 @@ void TCPServer::configJson(json config) {
                 ERROR);
 
     constants.spidermanSobrante = constants.widthSpiderman * 242 / 640;
+    cout << constants.spidermanSobrante<<endl;
     constants.spidermanAncho = constants.widthSpiderman * 110 / 640;
     constants.wolverineSobrante = constants.widthWolverine * 278 / 640;
     constants.wolverineAncho = constants.widthWolverine * 87 / 640;

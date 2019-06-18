@@ -19,7 +19,7 @@ ProjectileClient::ProjectileClient() {
 void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
     if(!active)
         return;
-    m_Texture.render(posX - camX, posY - camY, 500, 500,
+    m_Texture.render(posX - camX, posY - camY, 1000, 700,
                      mRenderer);
 
 }
@@ -27,7 +27,6 @@ void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
 void ProjectileClient::update(bool activate, character_updater_t* updater) {
     active = activate;
     if(active){
-        cout<<"isActive"<<endl;
         currentSprite = updater->currentProjectileSprite;
         posX = updater->pposX;
         posY = updater->pposY;

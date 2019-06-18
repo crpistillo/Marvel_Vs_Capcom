@@ -10,13 +10,13 @@ const int PROJECTILESPEED = 50;
 Projectile::Projectile() {
     active = false;
     itWasActiveAndDied = false;
-    posY = 29; // DEFAULTPOS Y
+    posY = 70; // DEFAULTPOS Y
 }
 
 void Projectile::launch(int positionInX, int shotDirection) {
     active = true;
     itWasActiveAndDied = false;
-    posX = positionInX;
+    posX = positionInX + 150;
     initialPosX = positionInX;
     direction = shotDirection;
     currentSprite = 0;
@@ -28,7 +28,7 @@ void Projectile::travel() {
     if(currentSprite > lastSprite)
         currentSprite = 0;
 
-    if(posX == initialPosX + 800 || posX == initialPosX - 800){
+    if(posX == initialPosX + 1000 || posX == initialPosX - 1000){
         itWasActiveAndDied = true;
         active = false;
         currentSprite = 0;

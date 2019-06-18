@@ -20,13 +20,7 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
 
-    if(updater->projectile == PROJECTILEDEAD || updater->projectile == PROJECTILEALIVE){
-        if(updater->projectile == PROJECTILEALIVE)
-            cout<<updater->projectile<< endl;
-        this->projectile->update(updater->projectile == PROJECTILEALIVE , updater);
-
-
-    }
+    this->projectile->update(updater->projectile == PROJECTILEALIVE , updater);
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
