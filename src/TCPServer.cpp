@@ -504,62 +504,6 @@ void TCPServer::runServer() {
 
 }
 
-void TCPServer::sendSelectedCharacters() {
-
-    int charactersPerClient;
-
-    if (2 == numberOfPlayers)   // si el maximo de players es 2 elijen 2
-        charactersPerClient = 2;
-    else
-        charactersPerClient = 1;
-
-    CharacterServer *characters[MAXPLAYERS];
-    character_builder_t builders[MAXPLAYERS];
-
-    char character[9];
-
-    int nclient = 0;
-    int nCharacter = 0;
-    double pos;
-
-    for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
-        if (getTeamNumber(nclient) == 0)
-            pos = constants.INITIAL_POS_X_PLAYER_ONE;
-        else
-            pos = constants.INITIAL_POS_X_PLAYER_TWO;
-
-        for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
-            characters[nCharacter] = createServerCharacterFromCursor(
-                    serverCursors[nCharacter], nclient, nCharacter);
-            characters[nCharacter]->makeBuilderStruct(&builders[nCharacter],
-                                                      nCharacter < 2);
-            nCharacter++;
-        }
-        nclient++;
-    }
-
-
-    team[0]->setCharacters(characters[0], characters[1]);
-    team[1]->setCharacters(characters[2], characters[3]);
-
-
-    for (auto &builder : builders) {
-        for (int i = 0; i < numberOfPlayers; ++i) {
-            clientsSockets[i]->sendData(&builder, sizeof(character_builder_t));
-        }
-    }
-
-
-    int currentTeam0 = team[0]->get_currentCharacterNumber();
-    int currentTeam1 = team[1]->get_currentCharacterNumber();
-    for (int k = 0; k < numberOfPlayers; ++k) {
-
-        clientsSockets[k]->sendData(&currentTeam0, sizeof(int));
-        clientsSockets[k]->sendData(&currentTeam1, sizeof(int));
-    }
-
-}
-
 //nclient = numero del cliente
 //characterNumber  = numero del personaje es decir el team 1 tiene 1 y 2 y el team 2 tiene 3 y 4 no importa el numero
 //de clientes
@@ -825,6 +769,10 @@ int TCPServer::getTeamNumber(int client) {
         if (client == 0)
             return 0;
         else return 1;
+    } else if (numberOfPlayers == 3){
+        if (client == 2)
+            return 1;
+        else return 0;
     }
 }
 

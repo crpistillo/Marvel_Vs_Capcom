@@ -115,7 +115,6 @@ public:
 
     bool invalidIntroAction(actions_t action);
 
-    void sendSelectedCharacters();
     CharacterServer *createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber);
 
     int numberOfPlayers;
