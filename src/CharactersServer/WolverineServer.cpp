@@ -20,6 +20,7 @@ const int LAST_KICK_SPRITE = 5;
 const int LAST_PUNCH_DOWN_SPRITE = 5;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
+const int LAST_HURTING_AIR_SPRITE = 12;
 const int LAST_THROW_SPRITE = 7;
 const int LAST_PUNCH_AIR_SPRITE = 5;
 const int LAST_KICK_AIR_SPRITE = 5;
@@ -64,6 +65,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
     lastHurtingSprite = LAST_HURTING_SPRITE;
+    lastHurtingAirSprite = LAST_HURTING_AIR_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
     lastPunchAirSprite = LAST_PUNCH_AIR_SPRITE;
     lastKickAirSprite = LAST_KICK_AIR_SPRITE;
@@ -188,6 +190,12 @@ int WolverineServer::getSpriteNumber(){
             break;
         case THROW:
             spriteNumber = currentThrowSprite;
+            break;
+        case HURTINGAIR:
+            spriteNumber = currentHurtingSprite;
+            break;
+        case HURTINGGROUND:
+            spriteNumber = currentHurtingAirSprite;
             break;
         default:
             spriteNumber = 0;
