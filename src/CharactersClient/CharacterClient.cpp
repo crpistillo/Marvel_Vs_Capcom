@@ -35,11 +35,6 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
 
 }
 
-// Public:
-actions_t CharacterClient::getNewAction() {
-
-}
-
 void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;
     m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite,
@@ -119,6 +114,10 @@ void CharacterClient::update(character_updater_t *updater) {
     mPosX = updater->posX;
     mPosY = updater->posY;
     currentSprite = updater->currentSprite;
+}
+
+ProjectileClient *CharacterClient::getProjectile() {
+    return nullptr;
 }
 
 

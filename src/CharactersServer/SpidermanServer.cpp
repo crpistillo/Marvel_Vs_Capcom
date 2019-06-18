@@ -201,7 +201,7 @@ void SpidermanServer::throwPower() {
     if(projectile->active)
         return;
     if(currentThrowSprite == lastThrowSprite)
-        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1);
+        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
     CharacterServer::throwPower();
 
 }

@@ -13,7 +13,7 @@
 
 class ProjectileClient {
 public:
-    ProjectileClient();
+    ProjectileClient(bool secondaryColor);
     void update(bool activate, character_updater_t* updater);
     void render(SDL_Renderer *mRenderer, int camX, int camY);
     void load(SDL_Renderer *renderer);

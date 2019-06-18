@@ -32,6 +32,8 @@ SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int h
     else
         loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     currentAction = STANDING;
+    projectile = new ProjectileClient(secondaryColor);
+
 }
 
 SpidermanClient::~SpidermanClient() {
@@ -226,6 +228,10 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
             break;
     }
 
+}
+
+ProjectileClient *SpidermanClient::getProjectile() {
+    return projectile;
 }
 
 

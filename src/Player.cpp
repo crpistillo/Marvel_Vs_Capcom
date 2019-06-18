@@ -12,7 +12,6 @@ const string DEBUG = "DEBUG";
 Player::Player(CharacterClient *first, CharacterClient *second) {
     Logger *logger = Logger::getInstance();
     logger->log("Inicializacion de personajes para jugador.", DEBUG);
-    projectile = new ProjectileClient();
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
@@ -20,7 +19,9 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
 
-    this->projectile->update(updater->projectile == PROJECTILEALIVE , updater);
+    ProjectileClient* projectile = currentCharacter->getProjectile();
+    if(projectile)
+        projectile->update(updater->projectile == PROJECTILEALIVE , updater);
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
@@ -70,7 +71,9 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
     Logger *logger = Logger::getInstance();
     logger->log("Renderizado de personaje - Render.", DEBUG);
     currentCharacter->render(mRenderer, camX, camY, posContrincante);
-    projectile->render(mRenderer, camX, camY);
+    ProjectileClient *projectile = currentCharacter->getProjectile();
+    if (projectile)
+        projectile->render(mRenderer, camX, camY);
 }
 
 void Player::free() {
@@ -136,7 +139,9 @@ int Player::getZIndex() {
 }
 
 void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
-    projectile->load(pRenderer);
+    ProjectileClient* projectile = currentCharacter->getProjectile();
+    if(projectile)
+        projectile->load(pRenderer);
     currentCharacter->load(pRenderer, posContrincante);
 }
 

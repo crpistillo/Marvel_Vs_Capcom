@@ -15,6 +15,9 @@ public:
                     int anchoPantalla, int numOfClient);
     ~SpidermanClient();
     void load(SDL_Renderer *renderer, int posContrincante);
+    ProjectileClient* projectile;
+    virtual ProjectileClient* getProjectile() override ;
+
 };
 
 

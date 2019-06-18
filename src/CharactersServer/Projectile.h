@@ -15,7 +15,7 @@ public:
 
     bool active;
 
-    void launch(int positionInX, int shotDirection);
+    void launch(int positionInX, int shotDirection, bool isLookingLeft);
 
     int posX;
     int direction;

@@ -36,7 +36,6 @@ public:
     int getCentro();
     int getZIndex();
 
-    ProjectileClient* projectile;
 
     void load(SDL_Renderer *pRenderer, int posContrincante);
 

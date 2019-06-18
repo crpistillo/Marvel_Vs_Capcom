@@ -4,16 +4,25 @@
 
 #include "ProjectileClient.h"
 #include "../data_structs.h"
+
+const Uint8 SECONDARY_RED = 255;
+const Uint8 SECONDARY_GREEN = 200;
+const Uint8 SECONDARY_BLUE = 000;
+
 const string projectileFilePath = "images/spiderman/spiderman_projectile_right";
 const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
-ProjectileClient::ProjectileClient() {
+ProjectileClient::ProjectileClient(bool secondaryColor) {
     active = false;
     posX = 0;
     posY = 0;
     currentSprite = 0;
-    loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
+    if(!secondaryColor)
+        loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
+    else
+        loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
+
 }
 
 void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {

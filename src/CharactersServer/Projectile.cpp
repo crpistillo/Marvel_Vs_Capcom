@@ -3,8 +3,7 @@
 //
 
 #include "Projectile.h"
-const int RIGHTSHOT = 1;
-const int LEFTSHOT = -1;
+
 const int PROJECTILESPEED = 50;
 
 Projectile::Projectile() {
@@ -13,10 +12,13 @@ Projectile::Projectile() {
     posY = 70; // DEFAULTPOS Y
 }
 
-void Projectile::launch(int positionInX, int shotDirection) {
+void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) {
     active = true;
     itWasActiveAndDied = false;
-    posX = positionInX + 150;
+    if(!isLookingLeft)
+        posX = positionInX + 150;
+    else
+        posX = positionInX - 150;
     initialPosX = positionInX;
     direction = shotDirection;
     currentSprite = 0;
