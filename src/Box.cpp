@@ -108,3 +108,16 @@ void Box::updateBox(int newWidth, int newHeight) {
 int Box::getCenter() {
     return centerX;
 }
+
+bool Box::isProjectileColliding(Projectile *projectile) {
+
+    int posX = projectile->getCollitionX();
+    float leftBorder = getLeft();
+    float rightBorder = getRight();
+
+    float bottomBorder = getBottom();
+    float topBorder = getTop();
+
+    return isInsideParameters(bottomBorder, topBorder, 21) &&
+            isInsideParameters(leftBorder, rightBorder, projectile->posX);
+}

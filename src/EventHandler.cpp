@@ -70,29 +70,23 @@ character_updater_t * EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int
     return updater;
 }
 
-void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int receiver) {
+void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver) {
+
+    //projectile
+    if(team[giver]->getCurrentCharacter()->isProjectileActive()){
+        if(team[receiver]->getCurrentCharacter()->inTheGround())
+            insertAction(queue, HURTINGGROUND, receiver);
+        else
+            insertAction(queue, HURTINGAIR, receiver);
+        return;
+    }
     //basic hit
-
-    cout<<"asdddddddd"<<endl;
-    if (team[receiver]->getCurrentCharacter()->inTheGround()) {
-        incoming_msg_t *beingHurtGround = new incoming_msg_t;
-        beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
-        beingHurtGround->action = HURTINGGROUND;
-        queue->insert(beingHurtGround);
-    }
-    else if(!team[receiver]->getCurrentCharacter()->inTheGround()){
-        incoming_msg_t *beingHurtGround = new incoming_msg_t;
-        beingHurtGround->client = team[receiver]->getCurrentCharacter()->clientNumber;
-        cout<< "asd" << endl;
-        beingHurtGround->action = HURTINGAIR;
-        queue->insert(beingHurtGround);
-
-    }
-
+    if (team[receiver]->getCurrentCharacter()->inTheGround())
+        insertAction(queue, HURTINGGROUND, receiver);
     //in the air
+    else if(!team[receiver]->getCurrentCharacter()->inTheGround())
+        insertAction(queue, HURTINGAIR, receiver);
     //grabbing
-
-
 }
 
 character_updater_t * EventHandler::makeUpdater(int teamToUpdate, actions_t action) {
@@ -126,4 +120,12 @@ void EventHandler::handleProjectiles(character_updater_t *updater, int teamToUpd
         if (projectile->itWasActiveAndDied)
             projectile->itWasActiveAndDied = false;
     }
+}
+
+void EventHandler::insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert) {
+    incoming_msg_t *beingHurtGround = new incoming_msg_t;
+    beingHurtGround->client = team[teamToInsert]->getCurrentCharacter()->clientNumber;
+    beingHurtGround->action = HURTINGGROUND;
+    queue->insert(beingHurtGround);
+
 }

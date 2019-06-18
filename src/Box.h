@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <map>
 #include <iostream>
+#include "CharactersServer/Projectile.h"
+
 using namespace std;
 
 class Box {
@@ -50,6 +52,8 @@ public:
     bool isInsideParameters(float border, float rightBorder, float x);
 
     int getCenter();
+
+    bool isProjectileColliding(Projectile *projectile);
 };
 
 

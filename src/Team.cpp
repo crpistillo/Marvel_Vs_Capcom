@@ -127,6 +127,10 @@ void Team::connectClient() {
 }
 
 bool Team::collidesWith(Team *enemyTeam) {
+    if (currentCharacter->isProjectileActive()) {
+        return enemyTeam->getCurrentCharacter()->getColisionable()->isProjectileColliding(
+                getCurrentCharacter()->getProjectile());
+    }
     return this->currentCharacter->getColisionable()->isColliding(enemyTeam->currentCharacter->getColisionable());
 }
 

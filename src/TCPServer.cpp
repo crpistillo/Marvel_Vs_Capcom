@@ -987,16 +987,10 @@ void TCPServer::updateModel() {
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
 
-
-
-        //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
-        if (isActionInteractive(update_msg->action)  &&
-            team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
-            !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGGROUND) &&
-            !(team[enemyTeam]->getCurrentCharacter()->currentAction == HURTINGAIR)) {
+        if (collition(teamToUpdate, enemyTeam, update_msg->action)) {
             std::unique_lock<std::mutex> lock(incoming_msg_mtx);
             teams_mtx.lock();
-            eventHandler->manageInteractiveActions(incoming_msges_queue, enemyTeam);
+            eventHandler->manageInteractiveActions(incoming_msges_queue, teamToUpdate, enemyTeam);
             teams_mtx.unlock();
         }
 
@@ -1125,9 +1119,7 @@ void TCPServer::setEndgame(bool condition) {
     endgame_mtx.unlock();
 }
 
-bool TCPServer::isActionInteractive(actions_t actions) {
-    return isActionPunch(actions) || isActionKick(actions);
-}
+
 
 void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
     character_updater_t *update[numberOfPlayers];
@@ -1156,6 +1148,32 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
         connection_mtx[i].unlock();
     }
 
+}
+
+
+// Accion interactiva ( KICK || PUNCH || PROJECTIL ACTIVO)
+// Esta colisionando...
+// Y no esta colisionando ya...
+bool TCPServer::collition(int teamToUpdate, int enemyTeam, actions_t action) {
+    return isActionInteractive(action, teamToUpdate) && isColliding() && !isAlreadyInteracting(enemyTeam);
+}
+
+bool TCPServer::isColliding() {
+    return team[0]->collidesWith(team[1]) ;
+}
+
+bool TCPServer::isAlreadyInteracting(int teamToCheck) {
+    return team[teamToCheck]->getCurrentCharacter()->currentAction == HURTINGGROUND &&
+           team[teamToCheck]->getCurrentCharacter()->currentAction == HURTINGAIR &&
+           team[teamToCheck]->getCurrentCharacter()->currentAction == MAKINGINTRO; //not sure
+}
+
+bool TCPServer::isActionInteractive(actions_t actions, int teamToUpdate) {
+    return isActionPunch(actions) || isActionKick(actions) || isProjectileActive(teamToUpdate);
+}
+
+bool TCPServer::isProjectileActive(int teamToCheck) {
+    return team[teamToCheck]->getCurrentCharacter()->isProjectileActive();
 }
 
 bool TCPServer::isActionPunch(actions_t actions) {

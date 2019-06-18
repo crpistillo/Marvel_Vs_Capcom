@@ -16,6 +16,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
                                  int heightSprite, int anchoPantalla, int numberOfClient) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
+    cout<<mPosY<<endl;
     this->width = width;
     this->sobrante = sobrante;
     this->widthSprite = widthSprite;

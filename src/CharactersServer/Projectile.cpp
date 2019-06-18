@@ -38,6 +38,10 @@ void Projectile::travel() {
     }
 }
 
+int Projectile::getCollitionX() {
+    return 0;
+}
+
 
 
 

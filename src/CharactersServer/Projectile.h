@@ -28,6 +28,8 @@ public:
     int lastSprite = 4;
     bool itWasActiveAndDied;
     bool isLookingLeft;
+
+    int getCollitionX();
 };
 
 

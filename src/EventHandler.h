@@ -24,11 +24,13 @@ public:
 
     character_updater_t * handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam);
 
-    void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int receiver);
+    void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver);
 
     character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
 
     void handleProjectiles(character_updater_t *updater, int teamToUpdate);
+
+    void insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert);
 };
 
 
