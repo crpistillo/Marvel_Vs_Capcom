@@ -19,6 +19,36 @@ Constants constants;
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
+const int widthStandingS = 110;
+const int heightStandingS = 96;
+const int widthWalkingS = 87;
+const int heightWalkingS = 91;
+const int widthDuckS = 100;
+const int heightDuckS = 52;
+const int widthPunchS = 152;
+const int heightPunchS = 77;
+const int widthPunchDownS = 140;
+const int heightPunchDownS = 51;
+const int widthKickS = 146;
+const int heightKickS = 93;
+const int widthKickDownS = 136;
+const int heightKickDownS = 65;
+
+const int widthStandingW = 87;
+const int heightStandingW = 84;
+const int widthWalkingW = 88;
+const int heightWalkingW = 86;
+const int widthDuckW = 92;
+const int heightDuckW = 59;
+const int widthPunchW = 131;
+const int heightPunchW = 95;
+const int widthPunchDownW = 156;
+const int heightPunchDownW = 56;
+const int widthKickW = 134;
+const int heightKickW = 96;
+const int widthKickDownW = 146;
+const int heightKickDownW = 51;
+
 const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
@@ -556,7 +586,21 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
             //caja = new Box(0,0,100,100);
             characterServer = new SpidermanServer(pos, constants.widthSpiderman,
                                                   constants.heightSpiderman, constants.spidermanSobrante,
-                                                  constants.spidermanAncho, constants.screenWidth, nclient);
+                                                  constants.spidermanAncho, constants.screenWidth, nclient,
+												  widthStandingS,
+												  heightStandingS,
+												  widthWalkingS,
+												  heightWalkingS,
+												  widthDuckS,
+												  heightDuckS,
+												  widthPunchS,
+												  heightPunchS,
+												  widthPunchDownS,
+												  heightPunchDownS,
+												  widthKickS,
+												  heightKickS,
+												  widthKickDownS,
+												  heightKickDownS);
 
             break;
 
@@ -564,7 +608,21 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
             //	caja = new Box(600,0,100,100);
             characterServer = new WolverineServer(pos, constants.widthWolverine,
                                                   constants.heightWolverine, constants.wolverineSobrante,
-                                                  constants.wolverineAncho, constants.screenWidth, nclient);
+                                                  constants.wolverineAncho, constants.screenWidth, nclient,
+												  widthStandingW,
+												  heightStandingW,
+												  widthWalkingW,
+												  heightWalkingW,
+												  widthDuckW,
+												  heightDuckW,
+												  widthPunchW,
+												  heightPunchW,
+												  widthPunchDownW,
+												  heightPunchDownW,
+												  widthKickW,
+												  heightKickW,
+												  widthKickDownW,
+												  heightKickDownW);
     }
     // characterServer->moverColisionable(); ??
     return characterServer;

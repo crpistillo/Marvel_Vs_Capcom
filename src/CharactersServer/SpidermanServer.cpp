@@ -24,25 +24,26 @@ const int LAST_THROW_SPRITE = 9;
 const int LAST_PUNCH_AIR_SPRITE = 8;
 const int LAST_KICK_AIR_SPRITE = 8;
 
-const int widthStanding = 110;
-const int heightStanding = 96;
-const int widthWalking = 87;
-const int heightWalking = 91;
-const int widthDuck = 100;
-const int heightDuck = 52;
-const int widthPunch = 152;
-const int heightPunch = 77;
-const int widthPunchDown = 140;
-const int heightPunchDown = 51;
-const int widthKick = 146;
-const int heightKick = 93;
-const int widthKickDown = 136;
-const int heightKickDown = 65;
+
 
 
 
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient)
+                                 int numberOfClient,
+								 int widthStanding,
+								 int heightStanding,
+								 int widthWalking,
+								 int heightWalking,
+								 int widthDuck,
+								 int heightDuck,
+								 int widthPunch,
+								 int heightPunch,
+								 int widthPunchDown,
+								 int heightPunchDown,
+								 int widthKick,
+								 int heightKick,
+								 int widthKickDown,
+								 int heightKickDown)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -52,7 +53,21 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient) {
+        numberOfClient,
+		widthStanding,
+		heightStanding,
+		widthWalking,
+		heightWalking,
+		widthDuck,
+		heightDuck,
+		widthPunch,
+		heightPunch,
+		widthPunchDown,
+		heightPunchDown,
+		widthKick,
+		heightKick,
+		widthKickDown,
+		heightKickDown) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;

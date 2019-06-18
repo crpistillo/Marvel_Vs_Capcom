@@ -13,7 +13,21 @@ const string DEBUG = "DEBUG";
 
 // Protected
 CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
-                                 int heightSprite, int anchoPantalla, int numberOfClient) {
+                                 int heightSprite, int anchoPantalla, int numberOfClient,
+								 int widthStanding,
+								 int heightStanding,
+								 int widthWalking,
+								 int heightWalking,
+								 int widthDuck,
+								 int heightDuck,
+								 int widthPunch,
+								 int heightPunch,
+								 int widthPunchDown,
+								 int heightPunchDown,
+								 int widthKick,
+								 int heightKick,
+								 int widthKickDown,
+								 int heightKickDown) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -43,6 +57,21 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentHurtingSprite = 0;
     this->currentKickAirSprite = 0;
     this->currentPunchAirSprite = 0;
+
+    this->widthStanding = widthStanding;
+    this->heightStanding = heightStanding;
+    this->widthWalking = widthWalking;
+    this->heightWalking = heightWalking;
+    this->widthDuck = widthDuck;
+    this->heightDuck = heightDuck;
+    this->widthPunch = widthPunch;
+    this->heightPunch = heightPunch;
+    this->widthPunchDown = widthPunchDown;
+    this->heightPunchDown = heightPunchDown;
+    this->widthKick = widthKick;
+    this->heightKick = heightKick;
+    this->widthKickDown = widthKickDown;
+    this->heightKickDown = heightKickDown;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -251,6 +280,7 @@ void CharacterServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
+    characterBox->updateBox(widthStanding, heightStanding);
 }
 
 
@@ -322,21 +352,25 @@ void CharacterServer::jumpLeft() {
 }
 
 void CharacterServer::punch() {
+	characterBox->updateBox(widthPunch, heightPunch);
     this->currentAction = PUNCH;
     normalAction(&currentPunchSprite, &lastPunchSprite, STANDING);
 }
 
 void CharacterServer::kick() {
+	characterBox->updateBox(widthKick, heightKick);
     this->currentAction = KICK;
     normalAction(&currentKickSprite, &lastKickSprite, STANDING);
 }
 
 void CharacterServer::punchDown() {
+	characterBox->updateBox(widthPunchDown, heightPunchDown);
     this->currentAction = PUNCHDOWN;
     normalAction(&currentPunchDownSprite, &lastPunchDownSprite, DUCK);
 }
 
 void CharacterServer::kickDown() {
+	characterBox->updateBox(widthKickDown, heightKickDown);
     this->currentAction = KICKDOWN;
     normalAction(&currentKickDownSprite, &lastKickDownSprite, DUCK);
 }
