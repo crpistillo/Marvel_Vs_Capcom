@@ -56,28 +56,17 @@ private:
     ServerCursor* serverCursors[MAXPLAYERS];
 
     bool activeClients[MAXPLAYERS];
-    bool runningMenuPhase;
     bool endgame;
-
-    void runMenuFourPlayers();
-    void runMenuTwoPlayers();
-
-    bool getRunningMenuPhase();
-    void setRunningMenuPhase(bool condition);
-
-
 
 
     //MUTEXS
     std::mutex m;
-    std::mutex menuClient;
     std::mutex numberOfConnections_mtx;
     std::mutex connection_mtx[MAXPLAYERS];
     std::mutex incoming_msg_mtx;
     std::mutex updaters_queue_mtx[MAXPLAYERS];
     std::mutex server_state_mtx;
     std::mutex teams_mtx;
-    std::mutex runningMenuPhase_mtx;
     std::mutex endgame_mtx;
 
 
@@ -89,7 +78,6 @@ public:
     				//colas de mensajes de escritura para cada cliente
 
     Queue<client_menu_t*>* incoming_menu_actions_queue;
-    Queue<cursor_updater_t*>* cursor_updater_queue[MAXPLAYERS];
 
     ip_status_t iplist[4];
     int numberOfConnections;
@@ -123,12 +111,6 @@ public:
 
     bool invalidIntroAction(actions_t action);
 
-    void runMenuPhase();
-    void receiveMenuActionsFromClient(int clientSocket);
-    void sendCursorUpdaterToClient(int clientSocket);
-    bool processMenuAction(client_menu_t *action_msg);
-    int getNumberOfCharactersSelected();
-    void sendUpdaters(bool finalUpdater);
     void sendSelectedCharacters();
     CharacterServer *createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber);
 
