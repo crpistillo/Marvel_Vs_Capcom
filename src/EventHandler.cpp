@@ -117,7 +117,7 @@ character_updater_t * EventHandler::handleProjectiles(int teamNumber) {
     character_updater_t * projMsg = new character_updater_t;
 
     projMsg->team = teamNumber; // projectile number nu se toy probando cosas
-    projMsg->action = PROJECTILE;
+    projMsg->action = projectile->itWasActiveAndDied ? PROJECTILEDEAD : PROJECTILEALIVE ;
     projMsg->posX = projectile->posX;
     projMsg->posY = projectile->posY;
     projMsg->currentSprite = projectile->currentSprite;

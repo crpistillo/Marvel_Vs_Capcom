@@ -977,12 +977,7 @@ void TCPServer::updateModel() {
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
 
-        incoming_msg_mtx.lock();
-        character_updater_t* projUpdater = eventHandler->handleProjectiles(teamToUpdate, incoming_msges_queue);
-        if(projUpdater){
-            putUpdatersInEachQueue(projUpdater, incoming_msg->client);
-        }
-        incoming_msg_mtx.unlock();
+
 
         //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
         if (isActionInteractive(update_msg->action)  &&
@@ -1001,6 +996,11 @@ void TCPServer::updateModel() {
         }
 
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
+
+        character_updater_t* projUpdater = eventHandler->handleProjectiles(teamToUpdate);
+        if(projUpdater){
+            putUpdatersInEachQueue(projUpdater, incoming_msg->client);
+        }
         //disconnectionsManager(incoming_msg);
         std::unique_lock<std::mutex> lock(incoming_msg_mtx);
         incoming_msges_queue->delete_data();
