@@ -188,7 +188,7 @@ int WolverineServer::getSpriteNumber(){
         case KICKDOWN:
             spriteNumber = currentKickDownSprite;
             break;
-        case THROW:
+        case THROWPOWER:
             spriteNumber = currentThrowSprite;
             break;
         case HURTINGAIR:

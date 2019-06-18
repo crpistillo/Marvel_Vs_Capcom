@@ -73,7 +73,7 @@ actions_t Controls::getNewAction() {
         return BLOCK;
 
     else if (inputManager->isKeyDown(throwKey))
-        return THROW;
+        return THROWPOWER;
 
     else if (inputManager->isKeyDown(rightKey) && !inputManager->isKeyUp(leftKey))
         return MOVINGRIGHT;

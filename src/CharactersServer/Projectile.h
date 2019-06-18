@@ -6,9 +6,9 @@
 #define MARVEL_VS_CAPCOM_PROJECTILE_H
 
 
-#include "SpidermanServer.h"
+class SpidermanServer;
 
-class Projectile final{
+class Projectile {
 
 public:
     Projectile();

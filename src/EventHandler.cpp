@@ -122,5 +122,8 @@ character_updater_t * EventHandler::handleProjectiles(int teamNumber) {
     projMsg->posY = projectile->posY;
     projMsg->currentSprite = projectile->currentSprite;
 
+    if(projectile->itWasActiveAndDied)
+        projectile->itWasActiveAndDied = false;
+
     return projMsg;
 }

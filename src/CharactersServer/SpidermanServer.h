@@ -6,7 +6,6 @@
 #define MARVEL_VS_CAPCOM_SPIDERMANSERVER_H
 
 #include "./CharacterServer.h"
-#include "Projectile.h"
 
 class SpidermanServer final : public CharacterServer {
 public:

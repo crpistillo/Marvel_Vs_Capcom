@@ -65,7 +65,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     if (currentAction == MI || currentAction == JV || currentAction == JR ||
         currentAction == JL || currentAction == P || currentAction == K ||
         currentAction == PD || currentAction == KD || currentAction == HG ||
-        currentAction == HA || currentAction == PV || currentAction == TH ||
+        currentAction == HA || currentAction == PV || currentAction == THP ||
         currentAction == PJR || currentAction == PJL || currentAction == KV
         || currentAction == KJR || currentAction == KJL)
         actionStarted = true;
@@ -146,7 +146,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         punchDown();
     } else if (currentAction == KICKDOWN) {
         kickDown();
-    } else if (currentAction == THROW) {
+    } else if (currentAction == THROWPOWER) {
         throwPower();
     }
 
@@ -181,7 +181,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         punchDown();
     else if (currentAction == KICKDOWN)
         kickDown();
-    else if (currentAction == THROW)
+    else if (currentAction == THROWPOWER)
         throwPower();
     else if (currentAction == HURTINGGROUND)
         hurtingGround();
@@ -344,7 +344,7 @@ void CharacterServer::kickDown() {
 
 //Tengo que ver si es normal
 void CharacterServer::throwPower() {
-    this->currentAction = THROW;
+    this->currentAction = THROWPOWER;
     currentThrowSprite++;
     if (currentThrowSprite > lastThrowSprite) {
         currentThrowSprite = 0;

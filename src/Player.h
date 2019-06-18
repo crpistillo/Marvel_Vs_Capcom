@@ -10,6 +10,7 @@
 #include "Controls/Controls.h"
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
+#include "CharactersClient/ProjectileClient.h"
 #include <mutex>
 
 
@@ -34,6 +35,8 @@ public:
 
     int getCentro();
     int getZIndex();
+
+    ProjectileClient* projectile;
 
     void load(SDL_Renderer *pRenderer, int posContrincante);
 
