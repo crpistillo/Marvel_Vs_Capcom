@@ -52,12 +52,32 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+        case THROW:
+			if (isLookingLeft)
+				this->loader->loadActionSprite(characterFilePath + "throw_right",
+						MVC_FILEPATH, currentSprite, FILE_EXTENSION, renderer,
+						&m_Texture);
+			else
+				this->loader->loadActionSprite(characterFilePath + "throw_right",
+						MVC_FILEPATH, currentSprite, FILE_EXTENSION, renderer,
+						&m_Texture);
+			break;
+
         case GRIP:
         	if(isLookingLeft)
-        		this->loader->loadActionSprite(characterFilePath + "grip", MVC_FILEPATH, currentSprite,
+        		this->loader->loadActionSprite(characterFilePath + "grip_left", MVC_FILEPATH, currentSprite,
         										FILE_EXTENSION, renderer, &m_Texture);
         	else
-        		this->loader->loadActionSprite(characterFilePath + "grip", MVC_FILEPATH, currentSprite,
+        		this->loader->loadActionSprite(characterFilePath + "grip_right", MVC_FILEPATH, currentSprite,
+        		        										FILE_EXTENSION, renderer, &m_Texture);
+        	break;
+
+        case FALLING:
+        	if(isLookingLeft)
+        		this->loader->loadActionSprite(characterFilePath + "falling_left", MVC_FILEPATH, currentSprite,
+        										FILE_EXTENSION, renderer, &m_Texture);
+        	else
+        		this->loader->loadActionSprite(characterFilePath + "falling_right", MVC_FILEPATH, currentSprite,
         		        										FILE_EXTENSION, renderer, &m_Texture);
         	break;
 
@@ -83,13 +103,13 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
-        case THROW:
+        case THROWPOWER:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "throw_left", MVC_FILEPATH, currentSprite,
+                this->loader->loadActionSprite(characterFilePath + "throw_power_left", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "throw_right", MVC_FILEPATH, currentSprite,
+                this->loader->loadActionSprite(characterFilePath + "throw_power_right", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;

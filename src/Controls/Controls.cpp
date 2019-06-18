@@ -65,10 +65,18 @@ actions_t Controls::getNewAction() {
         return BLOCK;
 
     else if (inputManager->isKeyDown(throwKey))
-        return THROW;
+        return THROWPOWER;
 
     else if (inputManager->isKeyDown(gripKey))
     	return GRIP;
+
+    //prueba de falling
+    else if (inputManager->isKeyDown(KEY_0))
+    	return FALLING;
+
+    //prueba de throw
+    else if (inputManager->isKeyDown(KEY_9))
+    	return THROW;
 
     else if (inputManager->isKeyDown(rightKey) && !inputManager->isKeyUp(leftKey))
         return MOVINGRIGHT;

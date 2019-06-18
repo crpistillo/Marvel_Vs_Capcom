@@ -26,6 +26,8 @@ public:
 
     void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int receiver);
 
+    void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int emisor);
+
     character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
 };
 

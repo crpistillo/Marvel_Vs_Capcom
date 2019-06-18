@@ -95,8 +95,10 @@ protected:
     int currentPunchDownSprite;
     int currentKickDownSprite;
     int currentHurtingSprite;
-    int currentThrowSprite;
+    int currentThrowPowerSprite;
     int currentGripSprite;
+    int currentFallingSprite;
+    int currentThrowSprite;
 
 
     int lastStandingSprite;
@@ -111,10 +113,10 @@ protected:
     int lastPunchDownSprite;
     int lastKickDownSprite;
     int lastHurtingSprite;
-    int lastThrowSprite;
+    int lastThrowPowerSprite;
     int lastGripSprite;
-
-
+    int lastThrowSprite;
+    int lastFallingSprite;
 
     unsigned int lastTime;
 
@@ -130,9 +132,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int posContrincante) = 0;
+    virtual void moveRight(int distance, int posContrincante, int vel) = 0;
 
-    virtual void moveLeft(int distance, int posContrincante) = 0;
+    virtual void moveLeft(int distance, int posContrincante, int vel) = 0;
 
     virtual void jumpVertical();
 
@@ -157,6 +159,10 @@ private:
     virtual void throwPower();
 
     virtual void grip();
+
+    virtual void falling(int distance, int posContrincante);
+
+    virtual void throwCharacter();
 
     void hurting();
 

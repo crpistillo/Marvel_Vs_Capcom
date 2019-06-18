@@ -20,8 +20,8 @@ const int LAST_KICK_SPRITE = 5;
 const int LAST_PUNCH_DOWN_SPRITE = 5;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
-const int LAST_THROW_SPRITE = 7;
-const int LAST_GRIP_SPRITE = 8;
+const int LAST_THROW_POWER_SPRITE = 7;
+const int LAST_GRIP_SPRITE = 15;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
@@ -63,7 +63,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastPunchDownSprite = LAST_PUNCH_DOWN_SPRITE;
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
     lastHurtingSprite = LAST_HURTING_SPRITE;
-    lastThrowSprite = LAST_THROW_SPRITE;
+    lastThrowPowerSprite = LAST_THROW_POWER_SPRITE;
     lastGripSprite = LAST_GRIP_SPRITE;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
@@ -71,11 +71,11 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 }
 
 
-void WolverineServer::moveLeft(int distance, int posContrincante) {
+void WolverineServer::moveLeft(int distance, int posContrincante, int vel) {
     currentAction = MOVINGLEFT;
 
     //Mover
-    mPosX -= CHARACTER_VEL;
+    mPosX -= vel * CHARACTER_VEL;
 
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -98,11 +98,11 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::moveRight(int distance, int posContrincante) {
+void WolverineServer::moveRight(int distance, int posContrincante, int vel) {
     currentAction = MOVINGRIGHT;
 
     //Mover
-    mPosX += CHARACTER_VEL;
+    mPosX += vel * CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -176,9 +176,12 @@ int WolverineServer::getSpriteNumber(){
         case KICKDOWN:
             spriteNumber = currentKickDownSprite;
             break;
-        case THROW:
-            spriteNumber = currentThrowSprite;
+        case THROWPOWER:
+            spriteNumber = currentThrowPowerSprite;
             break;
+        case GRIP:
+        	spriteNumber = currentGripSprite;
+        	break;
         default:
             spriteNumber = 0;
             break;

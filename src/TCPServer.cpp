@@ -976,11 +976,20 @@ void TCPServer::updateModel() {
 
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
-        if (isActionInteractive(incoming_msg->action)) {
+        /*if (isActionInteractive(incoming_msg->action)) {
             cout << "la que vino" << incoming_msg->action << endl;
             cout << "la que salio" << update_msg->action << endl;
-        }
+        }*/
 
+        if( (incoming_msg->action == GRIP) && (update_msg->action==GRIP) &&
+        		team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
+				!(team[enemyTeam]->getCurrentCharacter()->currentAction == FALLING) )
+        {
+        	std::unique_lock<std::mutex> lock(incoming_msg_mtx);
+        	teams_mtx.lock();
+        	eventHandler->manageGrip(incoming_msges_queue,enemyTeam,teamToUpdate);
+        	teams_mtx.unlock();
+        }
 
         //Despues lo pongo mas lindo al if, es pone en HURTINGGROUND al enemigo si no esta en ese estado, colisionan y la accion de llegada como la de salida es de el tipo que lastiman o "interactuan"
         if (isActionInteractive(incoming_msg->action)&& isActionInteractive(update_msg->action) && team[teamToUpdate]->collidesWith(team[enemyTeam]) &&
@@ -1112,7 +1121,7 @@ void TCPServer::setEndgame(bool condition) {
 }
 
 bool TCPServer::isActionInteractive(actions_t actions) {
-    return actions == PUNCH || actions == PUNCHDOWN || actions == KICK || actions == KICKDOWN;
+    return actions == PUNCH || actions == PUNCHDOWN || actions == KICK || actions == KICKDOWN ;
 }
 
 void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
