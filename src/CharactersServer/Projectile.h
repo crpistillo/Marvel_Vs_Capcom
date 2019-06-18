@@ -27,6 +27,7 @@ public:
     int currentSprite;
     int lastSprite = 4;
     bool itWasActiveAndDied;
+    bool isLookingLeft;
 };
 
 

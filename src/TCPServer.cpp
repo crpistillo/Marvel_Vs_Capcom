@@ -305,6 +305,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
     //Recibo los argumentos y los casteo en el orden que corresponde.
 
     char bufAction[sizeof(actions_t)];
+    bool clientConnected = true;
 
     int timeout = (1 * 100);
     int maxTimeouts = 0;
@@ -328,32 +329,37 @@ void TCPServer::receiveFromClient(int clientSocket) {
             connection_mtx[clientSocket].unlock();
 
             actions_t *accion = new actions_t;
+
             if (socket->reciveData(bufAction, sizeof(actions_t)))
                 accion = (actions_t *) bufAction;
             else
                 *accion = DISCONNECTEDCLIENT;
+
             //Agrego elementos a la cola de mensajes entrantes
             incoming_msg_t *msgQueue = new incoming_msg_t;
             msgQueue->action = *accion;
             msgQueue->client = clientSocket;
-            if (msgQueue->action == DISCONNECTEDCLIENT) {
+            if (msgQueue->action == DISCONNECTEDCLIENT && clientConnected) {
                 this->manageDisconnection(clientSocket);
                 disconnectSocket(clientSocket, socket);
+                clientConnected = false;
             } else if (this->clientIsActive(clientSocket)) {
                 incoming_msg_mtx.lock();
                 this->incoming_msges_queue->insert(msgQueue);
                 incoming_msg_mtx.unlock();
+                clientConnected = true;
             }
-        } else if (rc == 0 || fds[0].revents != POLLIN) {
+        } else if ((rc == 0 || fds[0].revents != POLLIN)) {
             maxTimeouts++;
             if (maxTimeouts < 150) {
                 connection_mtx[clientSocket].lock();
                 iplist[clientSocket].isActive = false;
                 connection_mtx[clientSocket].unlock();
             }
-            if (maxTimeouts == 150) {
+            if (maxTimeouts == 150 && clientConnected) {
                 this->manageDisconnection(clientSocket);
                 disconnectSocket(clientSocket, socket);
+                clientConnected = false;
                 continue;
             }
         }
@@ -372,6 +378,8 @@ void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
     numberOfConnections_mtx.lock();
     numberOfConnections--;
     numberOfConnections_mtx.unlock();
+    cout<<"The numberOfConnections after disconnect: "<< numberOfConnections<<endl;
+
 }
 
 /*Esta funcion se encarga de desencolar datos de las colas de los clientes
@@ -445,6 +453,7 @@ void TCPServer::runServer() {
     server_state_mtx.unlock();
 
     int teamSize = numberOfPlayers / 2;
+    cout<<teamSize<<endl;
 
 
     team[0] = new Team(teamSize);
@@ -1025,10 +1034,14 @@ void TCPServer::manageDisconnection(int clientSocket) {
             teams_mtx.lock();
             team[0]->sizeOfTeam--;
             teams_mtx.unlock();
+            cout<<"The team size of 0 after disconnect: "<< team[0]->sizeOfTeam <<endl;
+
         } else {
             teams_mtx.lock();
             team[1]->sizeOfTeam--;
             teams_mtx.unlock();
+            cout<<"The the team size of 1 after disconnect: "<< team[1]->sizeOfTeam<<endl;
+
         }
     }
 }

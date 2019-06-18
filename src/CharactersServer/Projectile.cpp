@@ -13,6 +13,7 @@ Projectile::Projectile() {
 }
 
 void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) {
+    this->isLookingLeft = isLookingLeft;
     active = true;
     itWasActiveAndDied = false;
     if(!isLookingLeft)
