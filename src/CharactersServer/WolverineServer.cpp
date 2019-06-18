@@ -192,7 +192,7 @@ int WolverineServer::getSpriteNumber(){
             spriteNumber = currentThrowSprite;
             break;
         case HURTINGAIR:
-            spriteNumber = currentHurtingSprite;
+            spriteNumber = currentHurtingAirSprite;
             break;
         case HURTINGGROUND:
             spriteNumber = currentHurtingAirSprite;

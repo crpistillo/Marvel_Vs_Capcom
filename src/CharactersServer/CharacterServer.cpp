@@ -410,8 +410,9 @@ void CharacterServer::hurtingAir() {
     currentAction = HURTINGAIR;
     currentHurtingAirSprite < 6 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
     currentHurtingAirSprite++;
+    cout << currentHurtingAirSprite << endl;
     if (currentHurtingAirSprite > lastHurtingAirSprite) {
-        cout << currentJumpingSprite << endl;
+        cout << currentHurtingAirSprite << endl;
         currentHurtingAirSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
