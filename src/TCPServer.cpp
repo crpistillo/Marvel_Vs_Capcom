@@ -1155,11 +1155,11 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
 // Esta colisionando...
 // Y no esta colisionando ya...
 bool TCPServer::collition(int teamToUpdate, int enemyTeam, actions_t action) {
-    return isActionInteractive(action, teamToUpdate) && isColliding() && !isAlreadyInteracting(enemyTeam);
+    return isActionInteractive(action, teamToUpdate) && isColliding(teamToUpdate, enemyTeam) && !isAlreadyInteracting(enemyTeam);
 }
 
-bool TCPServer::isColliding() {
-    return team[0]->collidesWith(team[1]) ;
+bool TCPServer::isColliding(int giver, int receiver) {
+    return team[giver]->collidesWith(team[receiver]);
 }
 
 bool TCPServer::isAlreadyInteracting(int teamToCheck) {
