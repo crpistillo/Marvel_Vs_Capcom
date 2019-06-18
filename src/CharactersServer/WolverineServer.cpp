@@ -43,7 +43,15 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 								 int widthKick,
 								 int heightKick,
 								 int widthKickDown,
-								 int heightKickDown)
+								 int heightKickDown,
+								 int widthKickAir,
+								 int heightKickAir,
+								 int widthPunchAir,
+								 int heightPunchAir,
+								 int widthJumping,
+								 int heightJumping,
+								 int widthJumpingLeft ,
+								 int heightJumpingLeft)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -67,7 +75,15 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 		widthKick,
 		heightKick,
 		widthKickDown,
-		heightKickDown) {
+		heightKickDown,
+		widthKickAir,
+		heightKickAir,
+		widthPunchAir,
+		heightPunchAir,
+		widthJumping,
+		heightJumping,
+		widthJumpingLeft ,
+		heightJumpingLeft) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;

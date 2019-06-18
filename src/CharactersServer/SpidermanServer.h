@@ -24,7 +24,15 @@ public:
 					int widthKick,
 					int heightKick,
 					int widthKickDown,
-					int heightKickDown);
+					int heightKickDown,
+					int widthKickAir,
+					int heightKickAir,
+					int widthPunchAir,
+					int heightPunchAir,
+					int widthJumping,
+					int heightJumping,
+					int widthJumpingLeft ,
+					int heightJumpingLeft);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos);
 
 private:

@@ -33,6 +33,14 @@ const int widthKickS = 146;
 const int heightKickS = 93;
 const int widthKickDownS = 136;
 const int heightKickDownS = 65;
+const int widthKickAirS = 144;
+const int heightKickAirS = 82;
+const int widthPunchAirS = 84;
+const int heightPunchAirS = 85;
+const int widthJumpingS = 99;
+const int heightJumpingS = 50;
+const int widthJumpingLeftS = 70;
+const int heightJumpingLeftS = 70;
 
 const int widthStandingW = 87;
 const int heightStandingW = 84;
@@ -44,10 +52,18 @@ const int widthPunchW = 131;
 const int heightPunchW = 95;
 const int widthPunchDownW = 156;
 const int heightPunchDownW = 56;
-const int widthKickW = 134;
+const int widthKickW = 164;
 const int heightKickW = 96;
 const int widthKickDownW = 146;
 const int heightKickDownW = 51;
+const int widthKickAirW = 164;
+const int heightKickAirW = 97;
+const int widthPunchAirW = 191;
+const int heightPunchAirW = 64;
+const int widthJumpingW = 119;
+const int heightJumpingW = 52;
+const int widthJumpingLeftW = 104;
+const int heightJumpingLeftW = 104;
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -600,7 +616,15 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 												  widthKickS,
 												  heightKickS,
 												  widthKickDownS,
-												  heightKickDownS);
+												  heightKickDownS,
+												  widthKickAirS,
+												  heightKickAirS,
+												  widthPunchAirS,
+												  heightPunchAirS,
+												  widthJumpingS,
+												  heightJumpingS,
+												  widthJumpingLeftS ,
+												  heightJumpingLeftS);
 
             break;
 
@@ -622,7 +646,15 @@ CharacterServer *TCPServer::createServerCharacterFromCursor(
 												  widthKickW,
 												  heightKickW,
 												  widthKickDownW,
-												  heightKickDownW);
+												  heightKickDownW,
+												  widthKickAirW,
+												  heightKickAirW,
+												  widthPunchAirW,
+												  heightPunchAirW,
+												  widthJumpingW,
+												  heightJumpingW,
+												  widthJumpingLeftW ,
+												  heightJumpingLeftW);
     }
     // characterServer->moverColisionable(); ??
     return characterServer;

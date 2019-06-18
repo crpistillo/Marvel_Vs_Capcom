@@ -73,7 +73,15 @@ protected:
 					int widthKick,
 					int heightKick,
 					int widthKickDown,
-					int heightKickDown);
+					int heightKickDown,
+					int widthKickAir,
+					int heightKickAir,
+					int widthPunchAir,
+					int heightPunchAir,
+					int widthJumping,
+					int heightJumping,
+					int widthJumpingLeft ,
+					int heightJumpingLeft);
 
     int currentClient; //indica el cliente al que pertence este personaje
 
@@ -110,6 +118,14 @@ protected:
 	int heightKick;
 	int widthKickDown;
 	int heightKickDown;
+	int widthKickAir;
+	int heightKickAir;
+	int widthPunchAir;
+	int heightPunchAir;
+	int widthJumping;
+	int heightJumping;
+	int widthJumpingLeft;
+	int heightJumpingLeft;
 
 
     int currentStandingSprite;

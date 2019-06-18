@@ -27,7 +27,15 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
 								 int widthKick,
 								 int heightKick,
 								 int widthKickDown,
-								 int heightKickDown) {
+								 int heightKickDown,
+								 int widthKickAir,
+								 int heightKickAir,
+								 int widthPunchAir,
+								 int heightPunchAir,
+								 int widthJumping,
+								 int heightJumping,
+								 int widthJumpingLeft ,
+								 int heightJumpingLeft) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -72,6 +80,14 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->heightKick = heightKick;
     this->widthKickDown = widthKickDown;
     this->heightKickDown = heightKickDown;
+    this->widthKickAir = widthKickAir;
+	this->heightKickAir = heightKickAir;
+	this->widthPunchAir = widthPunchAir;
+	this->heightPunchAir = heightPunchAir;
+	this->widthJumping = widthJumping;
+	this->heightJumping = heightJumping;
+	this->widthJumpingLeft = widthJumpingLeft;
+	this->heightJumpingLeft = heightJumpingLeft;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -285,6 +301,7 @@ void CharacterServer::stand() {
 
 
 void CharacterServer::renderDuckSprite() {
+	characterBox->updateBox(widthDuck, heightDuck);
     currentAction = DUCK;
 }
 
@@ -335,11 +352,13 @@ void CharacterServer::jump(int *currentSprite, int lastSprite) {
 }
 
 void CharacterServer::jumpVertical() {
+	characterBox->updateBox(widthJumping, heightJumping);
     this->currentAction = JUMPINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::jumpRight() {
+	characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite);
 
@@ -347,6 +366,7 @@ void CharacterServer::jumpRight() {
 
 
 void CharacterServer::jumpLeft() {
+	characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
@@ -483,32 +503,38 @@ void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t n
 }
 
 void CharacterServer::punchJumpVertical() {
+	characterBox->updateBox(widthPunchAir, heightPunchAir);
     currentAction = PUNCHINGVERTICAL;
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
     cout << currentPunchAirSprite << endl;
 }
 
 void CharacterServer::punchJumpLeft() {
+	characterBox->updateBox(widthPunchAir, heightPunchAir);
     currentAction = PUNCHINGJUMPLEFT;
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
 
 void CharacterServer::punchJumpRight() {
+	characterBox->updateBox(widthPunchAir, heightPunchAir);
     currentAction = PUNCHINGJUMPRIGHT;
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
 }
 
 void CharacterServer::kickJumpVertical() {
+	characterBox->updateBox(widthKickAir, heightKickAir);
     currentAction = KICKINGVERTICAL;
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::kickJumpRight() {
+	characterBox->updateBox(widthKickAir, heightKickAir);
     currentAction = KICKINGJUMPRIGHT;
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGRIGHT, currentJumpingRightSprite, lastJumpingRightSprite);
 }
 
 void CharacterServer::kickJumpLeft() {
+	characterBox->updateBox(widthKickAir, heightKickAir);
     currentAction = KICKINGJUMPLEFT;
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
