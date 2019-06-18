@@ -15,6 +15,7 @@
 #include "../data_structs.h"
 #include <vector>
 #include "../Box.h"
+#include "Projectile.h"
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -40,7 +41,7 @@ public:
     int getWidth();
     int getSobrante();
     int getCentro();
-    void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante);
+    virtual void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante);
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam, double pos) = 0;
@@ -56,6 +57,10 @@ public:
     actions_t currentAction;
 
     bool inTheGround();
+
+    virtual bool isProjectileActive();
+
+    virtual Projectile *getProjectile();
 
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -118,6 +123,8 @@ protected:
     int lastPunchAirSprite;
     int lastKickAirSprite;
 
+    virtual void throwPower();
+
 
     unsigned int lastTime;
 
@@ -157,7 +164,6 @@ private:
 
     virtual void kickDown();
 
-    virtual void throwPower();
 
     void hurtingGround();
 

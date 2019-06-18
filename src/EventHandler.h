@@ -27,6 +27,8 @@ public:
     void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int receiver);
 
     character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
+
+    character_updater_t * handleProjectiles(int teamNumber);
 };
 
 

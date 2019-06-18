@@ -480,6 +480,16 @@ void CharacterServer::kickJumpLeft() {
 }
 
 
+//default is false
+bool CharacterServer::isProjectileActive() {
+    return false;
+}
+
+Projectile *CharacterServer::getProjectile() {
+    return nullptr;
+}
+
+
 
 
 

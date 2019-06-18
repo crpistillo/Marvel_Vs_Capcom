@@ -63,7 +63,7 @@ set(SOURCE_FILES
         src/signal_handler.cpp src/signal_handler.h
         src/Box.cpp
         src/Box.h
-        src/EventHandler.cpp src/EventHandler.h)
+        src/EventHandler.cpp src/EventHandler.h src/CharactersServer/Projectile.cpp src/CharactersServer/Projectile.h)
 
 
 

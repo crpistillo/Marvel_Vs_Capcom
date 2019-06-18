@@ -4,6 +4,7 @@
 
 #include "SpidermanServer.h"
 #include "CharacterServer.h"
+#include "Projectile.h"
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
@@ -68,6 +69,9 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastThrowSprite = LAST_THROW_SPRITE;
     lastPunchAirSprite = LAST_PUNCH_AIR_SPRITE;
     lastKickAirSprite = LAST_KICK_AIR_SPRITE;
+
+    this->projectile = new Projectile();
+
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
 }
@@ -177,10 +181,35 @@ int SpidermanServer::getSpriteNumber(){
     return spriteNumber;
 }
 
+
+
 void SpidermanServer::stand() {
     currentAction = STANDING;
     resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);
+}
+
+void SpidermanServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
+    if(projectile->active)
+        projectile->travel();
+    CharacterServer::update(distance, posContrincante, actionRecieved, boxContrincante);
+}
+
+void SpidermanServer::throwPower() {
+    if(projectile->active)
+        return;
+    if(currentThrowSprite == lastThrowSprite)
+        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1);
+    CharacterServer::throwPower();
+
+}
+
+bool SpidermanServer::isProjectileActive() {
+    return projectile->active || projectile->itWasActiveAndDied;
+}
+
+Projectile *SpidermanServer::getProjectile() {
+    return projectile;
 }

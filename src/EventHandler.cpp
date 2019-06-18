@@ -3,6 +3,7 @@
 //
 
 #include "EventHandler.h"
+#include "CharactersServer/Projectile.h"
 
 EventHandler::EventHandler(Team **team, std::mutex *mutex) {
     this->team = team;
@@ -89,10 +90,6 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     }
 
     //in the air
-
-
-
-
     //grabbing
 
 
@@ -111,4 +108,19 @@ character_updater_t * EventHandler::makeUpdater(int teamToUpdate, actions_t acti
     updater->action = action;
 
     return updater;
+}
+
+character_updater_t * EventHandler::handleProjectiles(int teamNumber) {
+    if(!team[teamNumber]->getCurrentCharacter()->isProjectileActive())
+        return nullptr;
+    Projectile* projectile = team[teamNumber]->getCurrentCharacter()->getProjectile();
+    character_updater_t * projMsg = new character_updater_t;
+
+    projMsg->team = teamNumber; // projectile number nu se toy probando cosas
+    projMsg->action = PROJECTILE;
+    projMsg->posX = projectile->posX;
+    projMsg->posY = projectile->posY;
+    projMsg->currentSprite = projectile->currentSprite;
+
+    return projMsg;
 }
