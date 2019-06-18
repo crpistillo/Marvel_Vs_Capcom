@@ -69,9 +69,10 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
     switch (numberOfPlayers){
     case 2:
         this->menu = new MenuTwoPlayers(this);
+        break;
     case 4:
         this->menu = new MenuFourPlayers(this);
-
+        break;
     }
 
     this->incoming_msges_queue = new Queue<incoming_msg_t *>;
