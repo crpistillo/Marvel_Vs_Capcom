@@ -5,7 +5,7 @@
 #include "Projectile.h"
 const int RIGHTSHOT = 1;
 const int LEFTSHOT = -1;
-const int PROJECTILESPEED = 3;
+const int PROJECTILESPEED = 50;
 
 Projectile::Projectile() {
     active = false;

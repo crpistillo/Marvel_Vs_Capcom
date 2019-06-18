@@ -45,6 +45,12 @@ typedef struct{
 	actions_t action;
 	int team;
 	int client;
+
+	//projectile info;
+	actions_t projectile;
+	int currentProjectileSprite;
+	int pposX;
+	int pposY;
 	bool gameFinishedByDisconnections;
 } character_updater_t;
 

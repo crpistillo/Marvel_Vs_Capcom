@@ -20,9 +20,12 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
 
-    if(updater->action == PROJECTILEDEAD || updater->action == PROJECTILEALIVE){
-        projectile->update(updater->action == PROJECTILEALIVE , updater);
-        return;
+    if(updater->projectile == PROJECTILEDEAD || updater->projectile == PROJECTILEALIVE){
+        if(updater->projectile == PROJECTILEALIVE)
+            cout<<updater->projectile<< endl;
+        this->projectile->update(updater->projectile == PROJECTILEALIVE , updater);
+
+
     }
 
     if (updater->action == RECONNECT) {

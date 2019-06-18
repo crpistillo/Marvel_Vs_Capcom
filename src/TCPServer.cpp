@@ -995,13 +995,9 @@ void TCPServer::updateModel() {
             break;
         }
 
+        eventHandler->handleProjectiles(update_msg, teamToUpdate);
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
 
-        character_updater_t* projUpdater = eventHandler->handleProjectiles(teamToUpdate);
-        if(projUpdater){
-            putUpdatersInEachQueue(projUpdater, incoming_msg->client);
-        }
-        //disconnectionsManager(incoming_msg);
         std::unique_lock<std::mutex> lock(incoming_msg_mtx);
         incoming_msges_queue->delete_data();
 
@@ -1129,6 +1125,10 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
         update[j]->posX = update_msg->posX;
         update[j]->posY = update_msg->posY;
         update[j]->currentSprite = update_msg->currentSprite;
+        update[j]->currentProjectileSprite = update_msg->currentProjectileSprite;
+        update[j]->projectile = update_msg->projectile;
+        update[j]->pposX = update_msg->pposX;
+        update[j]->pposY = update_msg->pposY;
         update[j]->gameFinishedByDisconnections = false;
     }
 

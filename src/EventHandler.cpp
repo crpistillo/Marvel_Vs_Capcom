@@ -110,20 +110,20 @@ character_updater_t * EventHandler::makeUpdater(int teamToUpdate, actions_t acti
     return updater;
 }
 
-character_updater_t * EventHandler::handleProjectiles(int teamNumber) {
-    if(!team[teamNumber]->getCurrentCharacter()->isProjectileActive())
-        return nullptr;
-    Projectile* projectile = team[teamNumber]->getCurrentCharacter()->getProjectile();
-    character_updater_t * projMsg = new character_updater_t;
-
-    projMsg->team = teamNumber; // projectile number nu se toy probando cosas
-    projMsg->action = projectile->itWasActiveAndDied ? PROJECTILEDEAD : PROJECTILEALIVE ;
-    projMsg->posX = projectile->posX;
-    projMsg->posY = projectile->posY;
-    projMsg->currentSprite = projectile->currentSprite;
-
-    if(projectile->itWasActiveAndDied)
-        projectile->itWasActiveAndDied = false;
-
-    return projMsg;
+void EventHandler::handleProjectiles(character_updater_t *updater, int teamToUpdate) {
+    if (!team[teamToUpdate]->getCurrentCharacter()->isProjectileActive()){
+        updater->projectile = PROJECTILEDEAD;
+        updater->currentProjectileSprite = 0;
+        updater->pposX = 0;
+        updater->pposY = 0;
+    }
+    else {
+        Projectile *projectile = team[teamToUpdate]->getCurrentCharacter()->getProjectile();
+        updater->projectile = projectile->itWasActiveAndDied ? PROJECTILEDEAD : PROJECTILEALIVE;
+        updater->currentProjectileSprite = projectile->currentSprite;
+        updater->pposX = projectile->posX;
+        updater->pposY = projectile->posY;
+        if (projectile->itWasActiveAndDied)
+            projectile->itWasActiveAndDied = false;
+    }
 }

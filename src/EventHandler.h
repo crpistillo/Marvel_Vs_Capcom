@@ -28,7 +28,7 @@ public:
 
     character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
 
-    character_updater_t * handleProjectiles(int teamNumber);
+    void handleProjectiles(character_updater_t *updater, int teamToUpdate);
 };
 
 
