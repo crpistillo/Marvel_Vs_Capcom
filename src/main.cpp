@@ -85,7 +85,6 @@ int run_server(int cantArg, char *dirJson, int port) {
 	    config = parseConfigFile(dirJson);
     }
 
-    //ServerThread* serverThread = new ServerThread(tcpServer);  //No le veo utilidad a esta clase, por ahora.
 
     int numOfPlayers = config["server"]["players"];
 

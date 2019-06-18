@@ -33,6 +33,10 @@ using namespace std;
 #define MAXPACKETSIZE 4096
 #define MAXPLAYERS 4
 
+#define TWO_PLAYERS 2
+#define THREE_PLAYERS 3
+#define FOUR_PLAYERS 4
+
 //No tocar esto. "declaration forward"
 class Menu;
 

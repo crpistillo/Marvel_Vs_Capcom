@@ -65,7 +65,7 @@ set(SOURCE_FILES
         src/Box.h
         src/Menu/Menu.h
         src/Menu/Menu.cpp
-        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h)
+        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
 
 
 
@@ -82,7 +82,7 @@ include_directories(${SDL2_INCLUDE_DIR}
 
 
 
-add_executable(marvel_vs_capcom ${SOURCE_FILES})
+add_executable(marvel_vs_capcom ${SOURCE_FILES} src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
 target_link_libraries(marvel_vs_capcom ${SDL2_LIBRARY}
         ${SDL2_IMAGE_LIBRARIES})
 

@@ -14,6 +14,7 @@
 #include "signal_handler.h"
 #include "Menu/MenuTwoPlayers.h"
 #include "Menu/MenuFourPlayers.h"
+#include "Menu/MenuThreePlayers.h"
 
 
 Constants constants;
@@ -61,10 +62,13 @@ bool TCPServer::setup(int port, Logger *logger, int numberOfPlayers) {
 
 
     switch (numberOfPlayers){
-    case 2:
+    case TWO_PLAYERS:
         this->menu = new MenuTwoPlayers(this);
         break;
-    case 4:
+    case THREE_PLAYERS:
+        this->menu = new MenuThreePlayers(this);
+        break;
+    case FOUR_PLAYERS:
         this->menu = new MenuFourPlayers(this);
         break;
     }
