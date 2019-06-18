@@ -20,7 +20,7 @@ void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) 
         posX = positionInX + 150;
     else
         posX = positionInX - 150;
-    initialPosX = positionInX;
+    initialPosX = posX;
     direction = shotDirection;
     currentSprite = 0;
 }
@@ -39,7 +39,14 @@ void Projectile::travel() {
 }
 
 int Projectile::getCollitionX() {
-    return 0;
+    int x = posX;
+    if(!isLookingLeft)
+        x += 303;
+    else
+        x += 600;
+
+    return x;
+
 }
 
 

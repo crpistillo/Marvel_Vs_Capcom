@@ -111,7 +111,7 @@ int Box::getCenter() {
 
 bool Box::isProjectileColliding(Projectile *projectile) {
 
-    int posX = projectile->getCollitionX();
+    int positionX = projectile->getCollitionX();
     float leftBorder = getLeft();
     float rightBorder = getRight();
 
@@ -119,5 +119,5 @@ bool Box::isProjectileColliding(Projectile *projectile) {
     float topBorder = getTop();
 
     return isInsideParameters(bottomBorder, topBorder, 21) &&
-            isInsideParameters(leftBorder, rightBorder, projectile->posX);
+            isInsideParameters(leftBorder, rightBorder, positionX);
 }
