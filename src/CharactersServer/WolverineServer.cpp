@@ -4,7 +4,6 @@
 
 #include "WolverineServer.h"
 
-
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
 
@@ -22,6 +21,8 @@ const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
 const int LAST_THROW_POWER_SPRITE = 7;
 const int LAST_GRIP_SPRITE = 15;
+const int LAST_FALLING_SPRITE = 43;
+const int LAST_THROW_SPRITE = 27;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
@@ -65,6 +66,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastHurtingSprite = LAST_HURTING_SPRITE;
     lastThrowPowerSprite = LAST_THROW_POWER_SPRITE;
     lastGripSprite = LAST_GRIP_SPRITE;
+    lastFallingSprite = LAST_FALLING_SPRITE;
+    lastThrowSprite = LAST_THROW_SPRITE;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
@@ -176,11 +179,17 @@ int WolverineServer::getSpriteNumber(){
         case KICKDOWN:
             spriteNumber = currentKickDownSprite;
             break;
+        case THROW:
+        	spriteNumber = currentThrowSprite;
+        	break;
         case THROWPOWER:
             spriteNumber = currentThrowPowerSprite;
             break;
         case GRIP:
         	spriteNumber = currentGripSprite;
+        	break;
+        case FALLING:
+        	spriteNumber = currentFallingSprite;
         	break;
         default:
             spriteNumber = 0;
@@ -196,5 +205,4 @@ void WolverineServer::stand() {
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);
 }
-
 

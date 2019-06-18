@@ -44,6 +44,16 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+        case FALLING:
+        	if(isLookingLeft)
+        		this->loader->loadActionSprite(characterFilePath + "falling_left", MVC_FILEPATH, currentSprite,
+        										FILE_EXTENSION, renderer, &m_Texture);
+        	else
+        		this->loader->loadActionSprite(characterFilePath + "falling_right", MVC_FILEPATH, currentSprite,
+        		        										FILE_EXTENSION, renderer, &m_Texture);
+        	break;
+
+
         case GRIP:
         	if(isLookingLeft)
         		this->loader->loadActionSprite(characterFilePath + "grip_left", MVC_FILEPATH, currentSprite,
@@ -74,12 +84,23 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+        case THROW:
+       			if (isLookingLeft)
+       				this->loader->loadActionSprite(characterFilePath + "throw_left",
+       						MVC_FILEPATH, currentSprite, FILE_EXTENSION, renderer,
+       						&m_Texture);
+       			else
+       				this->loader->loadActionSprite(characterFilePath + "throw_right",
+       						MVC_FILEPATH, currentSprite, FILE_EXTENSION, renderer,
+       						&m_Texture);
+       			break;
+
         case THROWPOWER:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "throw_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "throw_power_left", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "throw_right", MVC_FILEPATH, currentSprite,
+                this->loader->loadActionSprite(characterFilePath + "throw_power_right", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;

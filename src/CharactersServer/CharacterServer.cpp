@@ -10,6 +10,7 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
+bool initialLookingLeft;
 
 // Protected
 CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -53,6 +54,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
 // Public:
 void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
 
+	cout<<mPosX<<endl;
 	if(this->getCentro() > posContrincante)
 	        isLookingLeft = true;
 	    else
@@ -320,61 +322,7 @@ void CharacterServer::grip()
 	}
 }
 
-void CharacterServer::falling(int distance, int posContrincante)
-{
-	//CASO SPIDERMAN FALLING
 
-	bool initialLookingLeft;
-
-	if(currentFallingSprite>=0 && currentFallingSprite<8)
-	{
-		if(isLookingLeft)
-		{
-			initialLookingLeft = true;
-			mPosX = posContrincante-sobrante-150;
-		}
-		else initialLookingLeft = false;
-	}
-
-	else if(currentFallingSprite==8)
-	{
-		if (isLookingLeft) {
-			initialLookingLeft = true;
-			mPosX = posContrincante - sobrante;
-		} else
-			initialLookingLeft = false;
-	}
-	if (currentFallingSprite > 8 && currentFallingSprite<36)
-	{
-		if (isLookingLeft) {
-			moveRight(distance, posContrincante, 2);
-		} else
-			moveRight(distance, posContrincante, 2);
-	}
-
-	if(currentFallingSprite>8 && currentFallingSprite<17)
-	{
-		mPosY -= 4 * CHARACTER_VEL;
-	}
-
-	else if(currentFallingSprite>17 && currentFallingSprite<36)
-	{
-		mPosY += 1.7 * CHARACTER_VEL;
-	}
-
-	this->currentAction = FALLING;
-	currentFallingSprite++;
-	if(currentFallingSprite > lastFallingSprite)
-	{
-		currentFallingSprite = 0;
-		this->currentAction = STANDING;
-		currentStandingSprite = 0;
-		mPosY = this->INITIAL_POS_Y;
-	}
-
-	isLookingLeft = initialLookingLeft;
-
-}
 
 void CharacterServer::punch() {
     this->currentAction = PUNCH;
@@ -545,5 +493,67 @@ void CharacterServer::hurting() {
 bool CharacterServer::inTheGround() {
     return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGLEFT);
 }
+
+void CharacterServer::falling(int distance, int posContrincante)
+{
+	//guardo el isLookingLeft inicial en el primer sprite
+	m.lock();
+	if (currentFallingSprite == 0) {
+		cout << "Esto pasa una vez" << endl;
+		if (isLookingLeft)
+			initialLookingLeft = true;
+		else
+			initialLookingLeft = false;
+	}
+	isLookingLeft = initialLookingLeft;
+	m.unlock();
+
+	cout << "InitialLookingLeft: " << initialLookingLeft << endl;
+	cout << "IsLookingLeft: " << isLookingLeft << endl;
+
+	if (currentFallingSprite >= 0 && currentFallingSprite < 8) {
+		if (isLookingLeft) {
+			mPosX = posContrincante - sobrante - 150;
+		} else
+			mPosX = posContrincante - sobrante - 90;
+	}
+
+	else if (currentFallingSprite == 8) {
+		if (isLookingLeft)
+			mPosX = posContrincante - sobrante;
+
+	}
+
+	if (currentFallingSprite > 8 && currentFallingSprite < 36) {
+		if (isLookingLeft) {
+			moveRight(distance, posContrincante, 2);
+		} else
+			moveLeft(distance, posContrincante, 2);
+	}
+
+	if (currentFallingSprite > 8 && currentFallingSprite < 17) {
+		mPosY -= 4 * CHARACTER_VEL;
+	}
+
+	else if (currentFallingSprite > 17 && currentFallingSprite < 36) {
+		mPosY += 1.7 * CHARACTER_VEL;
+	}
+
+	if (mPosX <= -418)
+		mPosX = -418;
+	else if (mPosX >= 2552)
+		mPosX = 2552;
+
+	this->currentAction = FALLING;
+	currentFallingSprite++;
+	if (currentFallingSprite > lastFallingSprite) {
+		currentFallingSprite = 0;
+		this->currentAction = STANDING;
+		currentStandingSprite = 0;
+		mPosY = this->INITIAL_POS_Y;
+	}
+
+}
+
 
 

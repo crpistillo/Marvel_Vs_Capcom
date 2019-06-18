@@ -54,7 +54,7 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case THROW:
 			if (isLookingLeft)
-				this->loader->loadActionSprite(characterFilePath + "throw_right",
+				this->loader->loadActionSprite(characterFilePath + "throw_left",
 						MVC_FILEPATH, currentSprite, FILE_EXTENSION, renderer,
 						&m_Texture);
 			else

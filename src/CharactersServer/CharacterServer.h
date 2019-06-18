@@ -15,6 +15,7 @@
 #include "../data_structs.h"
 #include <vector>
 #include "../Box.h"
+#include<mutex>
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -57,6 +58,8 @@ public:
 
     bool inTheGround();
 
+    std::mutex m;
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
@@ -65,6 +68,7 @@ protected:
 
     bool isLookingLeft;
     //The X and Y offsets of the character
+
     int mPosX, mPosY;
     //The velocity of the character
     int mVelX, mVelY;
@@ -122,6 +126,7 @@ protected:
 
     virtual void walkingSpriteUpdate();
 
+
 private:
 
     virtual void resetSpriteVariables() = 0;
@@ -160,9 +165,9 @@ private:
 
     virtual void grip();
 
-    virtual void falling(int distance, int posContrincante);
-
     virtual void throwCharacter();
+
+    virtual void falling(int distance, int posContrincante);
 
     void hurting();
 

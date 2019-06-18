@@ -39,8 +39,6 @@ const int heightKick = 93;
 const int widthKickDown = 136;
 const int heightKickDown = 65;
 
-
-
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                                  int numberOfClient)
         : CharacterServer(
@@ -180,3 +178,4 @@ void SpidermanServer::stand() {
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);
 }
+

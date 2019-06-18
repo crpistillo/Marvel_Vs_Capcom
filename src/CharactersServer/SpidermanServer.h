@@ -20,6 +20,7 @@ private:
     void resetSpriteVariables();
 
     int getSpriteNumber();
+
 };
 
 
