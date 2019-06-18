@@ -105,30 +105,33 @@ void MenuThreePlayers::runMenuThreePlayers() {
 }
 
 void MenuThreePlayers::sendSelectedCharacters(Constants *constants) {
-    int charactersPerClient;
 
-    if (2 == numberOfPlayers)   // si el maximo de players es 2 elijen 2
-        charactersPerClient = 2;
-    else
-        charactersPerClient = 1;
-
+    int charactersPerClient = 1;
     CharacterServer *characters[MAXPLAYERS];
     character_builder_t builders[MAXPLAYERS];
 
+    int firstFor = 2;
+    int secondFor = 3;
 
     int nclient = 0;
     int nCharacter = 0;
-    double pos;
+    int i = 0;
 
-    for (int i = 0; i < numberOfPlayers; i++) {    // de 0 a 4  o de 0 a 2
-        if (getTeamNumber(nclient) == 0)
-            pos = constants->INITIAL_POS_X_PLAYER_ONE;
-        else
-            pos = constants->INITIAL_POS_X_PLAYER_TWO;
+    for (; i < firstFor; i++) {    // de 0 a 4  o de 0 a 2
 
-        if(numberOfPlayers == 3 && i == 2){
-            charactersPerClient = 2;
+        for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
+            characters[nCharacter] = createServerCharacterFromCursor(
+                    serverCursors[nCharacter], nclient, nCharacter, constants);
+            characters[nCharacter]->makeBuilderStruct(&builders[nCharacter],
+                                                      nCharacter < 2);
+            nCharacter++;
         }
+        nclient++;
+    }
+
+    charactersPerClient = 2;
+
+    for (; i < secondFor; i++) {
 
         for (int j = 0; j < charactersPerClient; j++) { // si characters es 1 entra 1 vez
             characters[nCharacter] = createServerCharacterFromCursor(
