@@ -419,7 +419,6 @@ Box *CharacterServer::getColisionable() {
 void CharacterServer::hurtingGround() {
     this->currentAction = HURTINGGROUND;
     normalAction(&currentHurtingSprite, &lastHurtingSprite, STANDING);
-    cout<<currentHurtingSprite<< endl;
 }
 
 bool CharacterServer::inTheGround() {
@@ -433,9 +432,7 @@ void CharacterServer::hurtingAir() {
     currentAction = HURTINGAIR;
     currentHurtingAirSprite < 6 ? (mPosY -= 2.5 * CHARACTER_VEL) : (mPosY += 2.5 * CHARACTER_VEL);
     currentHurtingAirSprite++;
-    cout << currentHurtingAirSprite << endl;
     if (currentHurtingAirSprite > lastHurtingAirSprite) {
-        cout << currentHurtingAirSprite << endl;
         currentHurtingAirSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
@@ -465,7 +462,6 @@ void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t n
     }
     if (airSprite > lastAirSprite || airSprite == 0) {
         resetSpriteVariables();
-        cout<<"ENDS"<<endl;
         currentAction = STANDING;
     }
 
@@ -474,7 +470,6 @@ void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t n
 void CharacterServer::punchJumpVertical() {
     currentAction = PUNCHINGVERTICAL;
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
-    cout << currentPunchAirSprite << endl;
 }
 
 void CharacterServer::punchJumpLeft() {
@@ -541,7 +536,6 @@ void CharacterServer::throwCharacter()
  	//guardo el isLookingLeft inicial en el primer sprite
  	m.lock();
  	if (currentFallingSprite == 0) {
- 		cout << "Esto pasa una vez" << endl;
  		if (isLookingLeft)
  			initialLookingLeft = true;
  		else
@@ -550,8 +544,6 @@ void CharacterServer::throwCharacter()
  	isLookingLeft = initialLookingLeft;
  	m.unlock();
 
-  	cout << "InitialLookingLeft: " << initialLookingLeft << endl;
- 	cout << "IsLookingLeft: " << isLookingLeft << endl;
 
   	if (currentFallingSprite >= 0 && currentFallingSprite < 8) {
  		if (isLookingLeft) {

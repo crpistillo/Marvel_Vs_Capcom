@@ -378,7 +378,6 @@ void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
     numberOfConnections_mtx.lock();
     numberOfConnections--;
     numberOfConnections_mtx.unlock();
-    cout<<"The numberOfConnections after disconnect: "<< numberOfConnections<<endl;
 
 }
 
@@ -453,7 +452,6 @@ void TCPServer::runServer() {
     server_state_mtx.unlock();
 
     int teamSize = numberOfPlayers / 2;
-    cout<<teamSize<<endl;
 
 
     team[0] = new Team(teamSize);
@@ -945,7 +943,6 @@ void TCPServer::configJson(json config) {
                 ERROR);
 
     constants.spidermanSobrante = constants.widthSpiderman * 242 / 640;
-    cout << constants.spidermanSobrante<<endl;
     constants.spidermanAncho = constants.widthSpiderman * 110 / 640;
     constants.wolverineSobrante = constants.widthWolverine * 278 / 640;
     constants.wolverineAncho = constants.widthWolverine * 87 / 640;
@@ -984,32 +981,18 @@ void TCPServer::updateModel() {
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
-
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
 
         if (collition(teamToUpdate, enemyTeam, update_msg->action)) {
-            std::unique_lock<std::mutex> lock(incoming_msg_mtx);
-            teams_mtx.lock();
-            eventHandler->manageInteractiveActions(incoming_msges_queue, teamToUpdate, enemyTeam);
-            teams_mtx.unlock();
+            std::unique_lock<std::mutex> lock_queue(incoming_msg_mtx);
+            std::unique_lock<std::mutex> lock_team(teams_mtx);
+            eventHandler->manageInteractiveActions(incoming_msges_queue, teamToUpdate, enemyTeam, update_msg->action);
         }
 
         if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
             endgameForDisconnections();
             break;
         }
-
-		if ((incoming_msg->action == GRIP) && (update_msg->action == GRIP)
-				&& team[teamToUpdate]->collidesWith(team[enemyTeam])
-				&& !(team[enemyTeam]->getCurrentCharacter()->currentAction
-						== FALLING)) {
-			std::unique_lock<std::mutex> lock(incoming_msg_mtx);
-			teams_mtx.lock();
-			eventHandler->manageGrip(incoming_msges_queue, enemyTeam,
-					teamToUpdate);
-			teams_mtx.unlock();
-		}
-
         eventHandler->handleProjectiles(update_msg, teamToUpdate);
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
 
@@ -1039,14 +1022,11 @@ void TCPServer::manageDisconnection(int clientSocket) {
             teams_mtx.lock();
             team[0]->sizeOfTeam--;
             teams_mtx.unlock();
-            cout<<"The team size of 0 after disconnect: "<< team[0]->sizeOfTeam <<endl;
 
         } else {
             teams_mtx.lock();
             team[1]->sizeOfTeam--;
             teams_mtx.unlock();
-            cout<<"The the team size of 1 after disconnect: "<< team[1]->sizeOfTeam<<endl;
-
         }
     }
 }
@@ -1166,11 +1146,11 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
 // Esta colisionando...
 // Y no esta colisionando ya...
 bool TCPServer::collition(int teamToUpdate, int enemyTeam, actions_t action) {
-    return isActionInteractive(action, teamToUpdate) && isColliding() && !isAlreadyInteracting(enemyTeam);
+    return isActionInteractive(action, teamToUpdate) && isColliding(teamToUpdate, enemyTeam) && !isAlreadyInteracting(enemyTeam);
 }
 
-bool TCPServer::isColliding() {
-    return team[0]->collidesWith(team[1]) ;
+bool TCPServer::isColliding(int giver, int receiver) {
+    return team[giver]->collidesWith(team[receiver]);
 }
 
 bool TCPServer::isAlreadyInteracting(int teamToCheck) {
@@ -1180,7 +1160,7 @@ bool TCPServer::isAlreadyInteracting(int teamToCheck) {
 }
 
 bool TCPServer::isActionInteractive(actions_t actions, int teamToUpdate) {
-    return isActionPunch(actions) || isActionKick(actions) || isProjectileActive(teamToUpdate);
+    return isActionPunch(actions) || isActionKick(actions) || isProjectileActive(teamToUpdate) || actions == GRIP;
 }
 
 bool TCPServer::isProjectileActive(int teamToCheck) {

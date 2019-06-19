@@ -24,7 +24,7 @@ public:
 
     character_updater_t * handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam);
 
-    void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver);
+    void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action);
 
     character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
 
@@ -32,7 +32,7 @@ public:
 
     void insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert);
 
-    void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int emisor);
+    void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int giver);
 
 };
 

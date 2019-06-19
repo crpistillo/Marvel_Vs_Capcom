@@ -40,7 +40,7 @@ int EventHandler::computeDistance(CharacterServer *character1, CharacterServer *
 }
 
 
-character_updater_t * EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam) {
+character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam) {
     int *distancia = getTeamDistances();
     actions_t actionToUpdate;
 
@@ -71,26 +71,20 @@ character_updater_t * EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int
     return updater;
 }
 
-void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver) {
-
-    //projectile
-    if(team[giver]->getCurrentCharacter()->isProjectileActive()){
-        if(team[receiver]->getCurrentCharacter()->inTheGround())
-            insertAction(queue, HURTINGGROUND, receiver);
-        else
-            insertAction(queue, HURTINGAIR, receiver);
+void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action) {
+    //grip
+    if(action == GRIP){
+        manageGrip(queue, receiver, giver);
         return;
     }
-    //basic hit
+    //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
         insertAction(queue, HURTINGGROUND, receiver);
-    //in the air
-    else if(!team[receiver]->getCurrentCharacter()->inTheGround())
+    else if (!team[receiver]->getCurrentCharacter()->inTheGround())
         insertAction(queue, HURTINGAIR, receiver);
-    //grabbing
 }
 
-character_updater_t * EventHandler::makeUpdater(int teamToUpdate, actions_t action) {
+character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action) {
     character_updater_t *updater = new character_updater_t;
 
     updater->posX =
@@ -106,13 +100,12 @@ character_updater_t * EventHandler::makeUpdater(int teamToUpdate, actions_t acti
 }
 
 void EventHandler::handleProjectiles(character_updater_t *updater, int teamToUpdate) {
-    if (!team[teamToUpdate]->getCurrentCharacter()->isProjectileActive()){
+    if (!team[teamToUpdate]->getCurrentCharacter()->isProjectileActive()) {
         updater->projectile = PROJECTILEDEAD;
         updater->currentProjectileSprite = 0;
         updater->pposX = 0;
         updater->pposY = 0;
-    }
-    else {
+    } else {
         Projectile *projectile = team[teamToUpdate]->getCurrentCharacter()->getProjectile();
         updater->projectile = projectile->itWasActiveAndDied ? PROJECTILEDEAD : PROJECTILEALIVE;
         updater->currentProjectileSprite = projectile->currentSprite;
@@ -126,25 +119,14 @@ void EventHandler::handleProjectiles(character_updater_t *updater, int teamToUpd
 void EventHandler::insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert) {
     incoming_msg_t *beingHurtGround = new incoming_msg_t;
     beingHurtGround->client = team[teamToInsert]->getCurrentCharacter()->clientNumber;
-    beingHurtGround->action = HURTINGGROUND;
+    beingHurtGround->action = action;
     queue->insert(beingHurtGround);
 
 }
 
-void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int emisor)
-{
-	if(team[receiver]->getCurrentCharacter()->inTheGround())
-	{
-
- 		incoming_msg_t* throwing = new incoming_msg_t;
-		throwing->client = team[emisor]->getCurrentCharacter()->clientNumber;
-		throwing->action = THROW;
-		queue->insert(throwing);
-
-
- 		incoming_msg_t* beingCaught = new incoming_msg_t;
-		beingCaught->client = team[receiver]->getCurrentCharacter()->clientNumber;
-		beingCaught->action = FALLING;
-		queue->insert(beingCaught);
-	}
+void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int giver) {
+    if (team[receiver]->getCurrentCharacter()->inTheGround()) {
+        insertAction(queue, THROW, giver);
+        insertAction(queue, FALLING, receiver);
+    }
 }

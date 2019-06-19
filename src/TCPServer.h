@@ -165,7 +165,7 @@ public:
 
     bool collition(int teamToUpdate, int enemyTeam, actions_t action);
 
-    bool isColliding();
+    bool isColliding(int giver, int receiver);
 
     bool isAlreadyInteracting(int team);
 
