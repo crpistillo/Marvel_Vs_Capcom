@@ -6,7 +6,8 @@
 #include "../InputManager.h"
 #include <iostream>
 
-Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick, int block, int throwK, int grip) {
+Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick,
+		int block, int throwK, int grip, int punchStrong, int kickStrong) {
     upKey = up;
     downKey = down;
     rightKey = right;
@@ -17,6 +18,8 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     blockKey = block;
     throwKey = throwK;
     gripKey = grip;
+    punchStrongKey = punchStrong;
+    kickStrongKey = kickStrong;
 }
 
 actions_t Controls::getNewAction() {
@@ -36,10 +39,18 @@ actions_t Controls::getNewAction() {
         return PUNCHINGJUMPRIGHT;
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(punchKey))
         return PUNCHINGJUMPLEFT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey) && inputManager->isKeyDown(punchStrongKey))
+        return PUNCHINGSTRONGJUMPRIGHT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(punchStrongKey))
+        return PUNCHINGSTRONGJUMPLEFT;
+
 
     //dos teclas
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(punchKey))
         return PUNCHINGVERTICAL;
+
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(punchStrongKey))
+        return PUNCHINGSTRONGVERTICAL;
 
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey))
         return JUMPINGRIGHT;
@@ -50,8 +61,14 @@ actions_t Controls::getNewAction() {
     else if (inputManager->isKeyDown(downKey) && inputManager->isKeyDown(punchKey))
         return PUNCHDOWN;
 
+    else if (inputManager->isKeyDown(downKey) && inputManager->isKeyDown(punchStrongKey))
+        return PUNCHSTRONGDOWN;
+
     else if (inputManager->isKeyDown(downKey) && inputManager->isKeyDown(kickKey))
         return KICKDOWN;
+
+    else if (inputManager->isKeyDown(downKey) && inputManager->isKeyDown(kickStrongKey))
+        return KICKSTRONGDOWN;
 
     //Acciones de una sola tecla
 
@@ -67,8 +84,14 @@ actions_t Controls::getNewAction() {
     else if (inputManager->isKeyDown(punchKey))
         return PUNCH;
 
+    else if (inputManager->isKeyDown(punchStrongKey))
+        return PUNCHSTRONG;
+
     else if (inputManager->isKeyDown(kickKey))
         return KICK;
+
+    else if (inputManager->isKeyDown(kickStrongKey))
+        return KICKSTRONG;
 
     else if (inputManager->isKeyDown(blockKey))
         return BLOCK;
@@ -78,14 +101,6 @@ actions_t Controls::getNewAction() {
 
 	else if (inputManager->isKeyDown(gripKey))
 		return GRIP;
-
-	//prueba de falling
-	else if (inputManager->isKeyDown(KEY_0))
-		return FALLING;
-
-	//prueba de throw
-	else if (inputManager->isKeyDown(KEY_9))
-		return THROW;
 
     else if (inputManager->isKeyDown(rightKey) && !inputManager->isKeyUp(leftKey))
         return MOVINGRIGHT;

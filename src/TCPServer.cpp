@@ -1175,10 +1175,13 @@ bool TCPServer::isProjectileActive(int teamToCheck) {
 
 bool TCPServer::isActionPunch(actions_t actions) {
     return actions == PUNCH || actions == PUNCHDOWN || actions == PUNCHINGJUMPLEFT || actions == PUNCHINGJUMPRIGHT ||
-           actions == PUNCHINGVERTICAL;
+           actions == PUNCHINGVERTICAL || actions == PUNCHSTRONG || actions == PUNCHSTRONGDOWN ||
+		   actions == PUNCHINGSTRONGJUMPLEFT || actions == PUNCHINGSTRONGJUMPRIGHT || actions == PUNCHINGSTRONGVERTICAL;
 }
 
 bool TCPServer::isActionKick(actions_t action) {
     return action == KICK || action == KICKDOWN || action == KICKINGJUMPLEFT || action == KICKINGJUMPRIGHT ||
-           action == KICKINGVERTICAL;
+           action == KICKINGVERTICAL || action == KICKSTRONG || action == KICKSTRONGDOWN ||
+		   action == KICKINGSTRONGJUMPLEFT || action == KICKINGSTRONGJUMPRIGHT ||
+           action == KICKINGSTRONGVERTICAL ;
 }

@@ -173,30 +173,30 @@ private:
 
     virtual void makeIntro();
 
-    virtual void punch();
+    virtual void punch(actions_t punch);
 
-    virtual void kick();
+    virtual void kick(actions_t kick);
 
-    virtual void punchDown();
+    virtual void punchDown(actions_t punchDown);
 
-    virtual void kickDown();
+    virtual void kickDown(actions_t kickDown);
 
 
     void hurtingGround();
 
-    void punchJumpVertical();
+    void punchJumpVertical(actions_t punchVertical);
 
     void hurtingAir();
 
-    void punchJumpLeft();
+    void punchJumpLeft(actions_t punchJumpLeft);
 
-    void punchJumpRight();
+    void punchJumpRight(actions_t punchJumpRight);
 
-    void kickJumpVertical();
+    void kickJumpVertical(actions_t kickJumpVertical);
 
-    void kickJumpRight();
+    void kickJumpRight(actions_t kickJumpRight);
 
-    void kickJumpLeft();
+    void kickJumpLeft(actions_t kickJumpLeft);
 
     void normalAction(int *currentSprite, int *lastSprite, actions_t finalAction);
 

@@ -21,12 +21,15 @@ public:
     int blockKey;
     int throwKey;
     int gripKey;
+    int punchStrongKey;
+    int kickStrongKey;
 
     actions_t getNewAction();
     menu_action_t getNewMenuAction();
 
 protected:
-    Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey, int punchKey, int kickKey, int blockKey, int throwKey, int grip);
+    Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey, int punchKey,
+    		int kickKey, int blockKey, int throwKey, int grip, int punchStrong, int kickStrong);
 };
 
 

@@ -175,23 +175,33 @@ int WolverineServer::getSpriteNumber(){
         case PUNCHINGJUMPLEFT:
         case PUNCHINGJUMPRIGHT:
         case PUNCHINGVERTICAL:
+        case PUNCHINGSTRONGJUMPLEFT:
+        case PUNCHINGSTRONGJUMPRIGHT:
+        case PUNCHINGSTRONGVERTICAL:
             spriteNumber = currentPunchAirSprite;
             break;
         case PUNCH:
+        case PUNCHSTRONG:
             spriteNumber = currentPunchSprite;
             break;
         case KICKINGVERTICAL:
         case KICKINGJUMPRIGHT:
         case KICKINGJUMPLEFT:
+        case KICKINGSTRONGVERTICAL:
+        case KICKINGSTRONGJUMPRIGHT:
+        case KICKINGSTRONGJUMPLEFT:
             spriteNumber = currentKickAirSprite;
             break;
         case KICK:
+        case KICKSTRONG:
             spriteNumber = currentKickSprite;
             break;
         case PUNCHDOWN:
+        case PUNCHSTRONGDOWN:
             spriteNumber = currentPunchDownSprite;
             break;
         case KICKDOWN:
+        case KICKSTRONGDOWN:
             spriteNumber = currentKickDownSprite;
             break;
         case HURTINGAIR:
