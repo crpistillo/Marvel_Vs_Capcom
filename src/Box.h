@@ -54,6 +54,8 @@ public:
     int getCenter();
 
     bool isProjectileColliding(Projectile *projectile);
+
+    Projectile *hit();
 };
 
 

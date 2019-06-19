@@ -65,6 +65,8 @@ public:
 
     std::mutex m;
 
+    virtual bool isProjectileHurting();
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);

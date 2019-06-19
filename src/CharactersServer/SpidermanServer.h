@@ -15,6 +15,7 @@ public:
     Projectile* projectile;
     void throwPower() override ;
     bool isProjectileActive() override;
+    bool isProjectileHurting() override;
     virtual Projectile *getProjectile();
 
 

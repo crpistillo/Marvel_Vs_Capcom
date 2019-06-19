@@ -555,6 +555,10 @@ void CharacterServer::falling(int distance, int posContrincante) {
 
 }
 
+bool CharacterServer::isProjectileHurting() {
+    return false;
+}
+
 
 
 

@@ -9,7 +9,7 @@ const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
 const Uint8 SECONDARY_BLUE = 000;
 
-const string projectileFilePath = "images/spiderman/spiderman_projectile_right";
+const string projectileFilePath = "images/spiderman/spiderman_projectile_";
 const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
@@ -33,7 +33,9 @@ void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
 
 }
 
-void ProjectileClient::update(bool activate, character_updater_t* updater) {
+void ProjectileClient::update(bool activate, character_updater_t *updater, bool isLookingLeft) {
+    if(!active)
+        this->isLookingLeft = isLookingLeft;
     active = activate;
     if(active){
         currentSprite = updater->currentProjectileSprite;
@@ -43,7 +45,12 @@ void ProjectileClient::update(bool activate, character_updater_t* updater) {
 }
 
 void ProjectileClient::load(SDL_Renderer *renderer) {
-    this->loader->loadActionSprite(projectileFilePath , MVC_FILEPATH,
+    if(isLookingLeft)
+        this->loader->loadActionSprite(projectileFilePath + "left", MVC_FILEPATH,
                                    currentSprite, FILE_EXTENSION,
                                    renderer, &m_Texture);
+    else
+        this->loader->loadActionSprite(projectileFilePath + "right", MVC_FILEPATH,
+                                       currentSprite, FILE_EXTENSION,
+                                       renderer, &m_Texture);
 }

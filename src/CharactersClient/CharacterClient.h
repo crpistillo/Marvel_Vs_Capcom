@@ -54,7 +54,7 @@ public:
     actions_t currentAction;
 
     int clientNumber;
-
+    bool getDirection();
 
     void update(character_updater_t *ptr);
 

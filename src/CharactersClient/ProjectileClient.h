@@ -14,7 +14,7 @@
 class ProjectileClient {
 public:
     ProjectileClient(bool secondaryColor);
-    void update(bool activate, character_updater_t* updater);
+    void update(bool activate, character_updater_t *updater, bool isLookingLeft);
     void render(SDL_Renderer *mRenderer, int camX, int camY);
     void load(SDL_Renderer *renderer);
 
@@ -25,6 +25,7 @@ public:
     int posY;
     int currentSprite;
     Texture m_Texture;
+    bool isLookingLeft;
 };
 
 

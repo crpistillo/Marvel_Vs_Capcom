@@ -121,7 +121,9 @@ ProjectileClient *CharacterClient::getProjectile() {
     return nullptr;
 }
 
-
+bool CharacterClient::getDirection() {
+    return isLookingLeft;
+}
 
 
 

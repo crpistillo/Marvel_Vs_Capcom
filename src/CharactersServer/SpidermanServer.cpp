@@ -228,3 +228,7 @@ bool SpidermanServer::isProjectileActive() {
 Projectile *SpidermanServer::getProjectile() {
     return projectile;
 }
+
+bool SpidermanServer::isProjectileHurting() {
+    return !projectile->hitting && isProjectileActive();
+}

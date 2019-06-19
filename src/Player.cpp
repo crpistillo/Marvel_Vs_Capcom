@@ -21,7 +21,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
 
     ProjectileClient* projectile = currentCharacter->getProjectile();
     if(projectile)
-        projectile->update(updater->projectile == PROJECTILEALIVE , updater);
+        projectile->update(updater->projectile == PROJECTILEALIVE, updater, false);
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO

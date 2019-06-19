@@ -13,6 +13,7 @@
 #include <sys/poll.h>
 #include "signal_handler.h"
 #include "EventHandler.h"
+#include "Timer.h"
 
 
 Constants constants;
@@ -964,8 +965,13 @@ void TCPServer::configJson(json config) {
 void TCPServer::updateModel() {
 
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-
+    Timer* timer = new Timer(99);
     while (1) {
+
+        if(timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0)
+            timer->resetTimer();
+        cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
+
 
         if (numberOfConnections == 0) {
             cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
@@ -1164,7 +1170,7 @@ bool TCPServer::isActionInteractive(actions_t actions, int teamToUpdate) {
 }
 
 bool TCPServer::isProjectileActive(int teamToCheck) {
-    return team[teamToCheck]->getCurrentCharacter()->isProjectileActive();
+    return team[teamToCheck]->getCurrentCharacter()->isProjectileHurting();
 }
 
 bool TCPServer::isActionPunch(actions_t actions) {

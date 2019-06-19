@@ -118,6 +118,10 @@ bool Box::isProjectileColliding(Projectile *projectile) {
     float bottomBorder = getBottom();
     float topBorder = getTop();
 
-    return isInsideParameters(bottomBorder, topBorder, 21) &&
+    bool collition = isInsideParameters(bottomBorder, topBorder, 21) &&
             isInsideParameters(leftBorder, rightBorder, positionX);
+    if(collition)
+        projectile->hit();
+    return collition;
 }
+

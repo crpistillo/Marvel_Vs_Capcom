@@ -30,6 +30,15 @@ public:
     bool isLookingLeft;
 
     int getCollitionX();
+
+    void hit();
+
+    bool hitting;
+
+    void deactivate();
+
+    int lastHittingSprite = 5;
+    bool impact;
 };
 
 
