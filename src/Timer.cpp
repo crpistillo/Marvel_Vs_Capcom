@@ -2,7 +2,7 @@
 // Created by IgVelasco on 6/19/19.
 //
 
-#include <SDL_timer.h>
+#include <SDL2/SDL_timer.h>
 #include <iostream>
 #include "Timer.h"
 
