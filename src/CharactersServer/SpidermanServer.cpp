@@ -215,7 +215,7 @@ void SpidermanServer::update(int distance, int posContrincante, actions_t action
 void SpidermanServer::throwPower() {
     if(projectile->active)
         return;
-    if(currentThrowSprite == lastThrowPowerSprite)
+    if(currentThrowPowerSprite== lastThrowPowerSprite)
         projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
     CharacterServer::throwPower();
 
