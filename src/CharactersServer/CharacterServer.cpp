@@ -396,7 +396,6 @@ void CharacterServer::hurtingGround() {
 }
 
 bool CharacterServer::inTheGround() {
-    cout<<"current action of receiver: "<<currentAction <<endl;
     return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGVERTICAL ||
              currentAction == PUNCHINGVERTICAL || currentAction == PUNCHINGJUMPRIGHT ||
              currentAction == PUNCHINGJUMPLEFT ||

@@ -78,13 +78,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
     //any other interaction
-    if (team[receiver]->getCurrentCharacter()->inTheGround()){
-        cout<<"current action of giver: "<<action<<endl;
+    if (team[receiver]->getCurrentCharacter()->inTheGround())
         insertAction(queue, HURTINGGROUND, receiver);
-    }else{
-  //  else if (!team[receiver]->getCurrentCharacter()->inTheGround()){
+    else
         insertAction(queue, HURTINGAIR, receiver);
-    }
 }
 
 character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action) {
