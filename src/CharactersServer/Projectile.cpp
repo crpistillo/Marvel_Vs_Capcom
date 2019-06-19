@@ -17,7 +17,7 @@ void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) 
     active = true;
     itWasActiveAndDied = false;
     if(!isLookingLeft)
-        posX = positionInX + 150; //volor para salir bien ubicado
+        posX = positionInX + 150; //color para salir bien ubicado
     else
         posX = positionInX - 150;
     initialPosX = posX;

@@ -90,12 +90,12 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     } else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL ||
                currentAction == KICKINGVERTICAL) {
         if (actionRecieved == PUNCH || currentAction == PUNCHINGVERTICAL || actionRecieved == PUNCHINGVERTICAL) {
-            jumpVertical();
+            //jumpVertical();
             punchJumpVertical();
         } else if (actionRecieved == KICK || currentAction == KICKINGVERTICAL || actionRecieved == KICKINGVERTICAL) {
-            jumpVertical();
+            //jumpVertical();
             kickJumpVertical();
-        } else
+        } else if (currentAction == JUMPINGVERTICAL)
             jumpVertical();
 
 
@@ -396,10 +396,12 @@ void CharacterServer::hurtingGround() {
 }
 
 bool CharacterServer::inTheGround() {
+    cout<<"current action of receiver: "<<currentAction <<endl;
     return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGVERTICAL ||
              currentAction == PUNCHINGVERTICAL || currentAction == PUNCHINGJUMPRIGHT ||
              currentAction == PUNCHINGJUMPLEFT ||
-             currentAction == KICKINGVERTICAL || currentAction == KICKINGJUMPRIGHT || currentAction == KICKINGJUMPLEFT);
+             currentAction == KICKINGVERTICAL || currentAction == KICKINGJUMPRIGHT || currentAction == KICKINGJUMPLEFT
+             || currentAction == HURTINGAIR);
 }
 
 //Not working
@@ -447,6 +449,7 @@ void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t n
 
 void CharacterServer::punchJumpVertical() {
     currentAction = PUNCHINGVERTICAL;
+    jump(&currentJumpingSprite, lastJumpingSprite);
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
 }
 
@@ -469,6 +472,7 @@ void CharacterServer::kickJumpVertical() {
 
 void CharacterServer::kickJumpRight() {
     currentAction = KICKINGJUMPRIGHT;
+    jump(&currentJumpingSprite, lastJumpingSprite);
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGRIGHT, currentJumpingRightSprite,
                lastJumpingRightSprite);
 }
