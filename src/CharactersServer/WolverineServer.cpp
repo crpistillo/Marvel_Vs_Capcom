@@ -112,7 +112,7 @@ void WolverineServer::moveRight(int distance, int posContrincante, int vel) {
     currentAction = MOVINGRIGHT;
 
     //Mover
-    mPosX -= vel * CHARACTER_VEL;
+    mPosX += vel * CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
