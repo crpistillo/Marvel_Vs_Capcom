@@ -31,6 +31,9 @@ public:
     void handleProjectiles(character_updater_t *updater, int teamToUpdate);
 
     void insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert);
+
+    void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int emisor);
+
 };
 
 

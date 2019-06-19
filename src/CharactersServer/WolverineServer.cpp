@@ -21,9 +21,12 @@ const int LAST_PUNCH_DOWN_SPRITE = 5;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 3;
 const int LAST_HURTING_AIR_SPRITE = 12;
-const int LAST_THROW_SPRITE = 7;
 const int LAST_PUNCH_AIR_SPRITE = 5;
 const int LAST_KICK_AIR_SPRITE = 5;
+const int LAST_THROW_POWER_SPRITE = 7;
+const int LAST_GRIP_SPRITE = 15;
+const int LAST_FALLING_SPRITE = 43;
+const int LAST_THROW_SPRITE = 27;
 
 const int widthStanding = 87;
 const int heightStanding = 84;
@@ -66,20 +69,23 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
     lastKickDownSprite = LAST_KICK_DOWN_SPRITE;
     lastHurtingSprite = LAST_HURTING_SPRITE;
     lastHurtingAirSprite = LAST_HURTING_AIR_SPRITE;
-    lastThrowSprite = LAST_THROW_SPRITE;
     lastPunchAirSprite = LAST_PUNCH_AIR_SPRITE;
     lastKickAirSprite = LAST_KICK_AIR_SPRITE;
+	lastThrowPowerSprite = LAST_THROW_POWER_SPRITE;
+	lastGripSprite = LAST_GRIP_SPRITE;
+	lastFallingSprite = LAST_FALLING_SPRITE;
+    lastThrowSprite = LAST_THROW_SPRITE;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
 
 
-void WolverineServer::moveLeft(int distance, int posContrincante) {
+void WolverineServer::moveLeft(int distance, int posContrincante, int vel) {
     currentAction = MOVINGLEFT;
 
     //Mover
-    mPosX -= CHARACTER_VEL;
+    mPosX -= vel * CHARACTER_VEL;
 
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -102,11 +108,11 @@ void WolverineServer::moveLeft(int distance, int posContrincante) {
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::moveRight(int distance, int posContrincante) {
+void WolverineServer::moveRight(int distance, int posContrincante, int vel) {
     currentAction = MOVINGRIGHT;
 
     //Mover
-    mPosX += CHARACTER_VEL;
+    mPosX -= vel * CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -188,15 +194,24 @@ int WolverineServer::getSpriteNumber(){
         case KICKDOWN:
             spriteNumber = currentKickDownSprite;
             break;
-        case THROWPOWER:
-            spriteNumber = currentThrowSprite;
-            break;
         case HURTINGAIR:
             spriteNumber = currentHurtingAirSprite;
             break;
         case HURTINGGROUND:
             spriteNumber = currentHurtingAirSprite;
             break;
+		case THROW:
+			spriteNumber = currentThrowSprite;
+			break;
+		case THROWPOWER:
+			spriteNumber = currentThrowPowerSprite;
+			break;
+		case GRIP:
+			spriteNumber = currentGripSprite;
+			break;
+		case FALLING:
+			spriteNumber = currentFallingSprite;
+			break;
         default:
             spriteNumber = 0;
             break;

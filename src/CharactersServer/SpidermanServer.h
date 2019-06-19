@@ -19,8 +19,8 @@ public:
 
 
 private:
-    void moveRight(int distance, int posContrincante);
-    void moveLeft(int distance, int posContrincante);
+    void moveRight(int distance, int posContrincante, int vel);
+    void moveLeft(int distance, int posContrincante, int vel);
     void stand();
     void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante) override;
 

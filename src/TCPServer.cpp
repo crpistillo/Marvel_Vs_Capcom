@@ -999,6 +999,17 @@ void TCPServer::updateModel() {
             break;
         }
 
+		if ((incoming_msg->action == GRIP) && (update_msg->action == GRIP)
+				&& team[teamToUpdate]->collidesWith(team[enemyTeam])
+				&& !(team[enemyTeam]->getCurrentCharacter()->currentAction
+						== FALLING)) {
+			std::unique_lock<std::mutex> lock(incoming_msg_mtx);
+			teams_mtx.lock();
+			eventHandler->manageGrip(incoming_msges_queue, enemyTeam,
+					teamToUpdate);
+			teams_mtx.unlock();
+		}
+
         eventHandler->handleProjectiles(update_msg, teamToUpdate);
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
 

@@ -21,9 +21,12 @@ const int LAST_PUNCH_DOWN_SPRITE = 7;
 const int LAST_KICK_DOWN_SPRITE = 5;
 const int LAST_HURTING_SPRITE = 5;
 const int LAST_HURTING_AIR_SPRITE = 12;
-const int LAST_THROW_SPRITE = 9;
 const int LAST_PUNCH_AIR_SPRITE = 8;
 const int LAST_KICK_AIR_SPRITE = 8;
+const int LAST_THROW_POWER_SPRITE = 9;
+const int LAST_GRIP_SPRITE = 3;
+const int LAST_THROW_SPRITE = 28;
+const int LAST_FALLING_SPRITE = 52;
 
 const int widthStanding = 110;
 const int heightStanding = 96;
@@ -69,6 +72,9 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastThrowSprite = LAST_THROW_SPRITE;
     lastPunchAirSprite = LAST_PUNCH_AIR_SPRITE;
     lastKickAirSprite = LAST_KICK_AIR_SPRITE;
+    lastThrowPowerSprite = LAST_THROW_POWER_SPRITE;
+    lastGripSprite = LAST_GRIP_SPRITE;
+    lastFallingSprite = LAST_FALLING_SPRITE;
 
     this->projectile = new Projectile();
 
@@ -78,9 +84,9 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, int posContrincante) {
+void SpidermanServer::moveLeft(int distance, int posContrincante, int vel) {
     currentAction = MOVINGLEFT;
-    mPosX -= CHARACTER_VEL;
+    mPosX -= vel * CHARACTER_VEL;
 
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
@@ -94,10 +100,10 @@ void SpidermanServer::moveLeft(int distance, int posContrincante) {
 }
 
 
-void SpidermanServer::moveRight(int distance, int posContrincante) {
+void SpidermanServer::moveRight(int distance, int posContrincante, int vel) {
     currentAction = MOVINGRIGHT;
 
-    mPosX += CHARACTER_VEL;
+    mPosX += vel *CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -166,7 +172,7 @@ int SpidermanServer::getSpriteNumber(){
             spriteNumber = currentKickDownSprite;
             break;
         case THROWPOWER:
-            spriteNumber = currentThrowSprite;
+            spriteNumber = currentThrowPowerSprite;
             break;
         case HURTINGAIR:
             spriteNumber = currentHurtingAirSprite;
@@ -174,6 +180,15 @@ int SpidermanServer::getSpriteNumber(){
         case HURTINGGROUND:
             spriteNumber = currentHurtingSprite;
             break;
+		case GRIP:
+			spriteNumber = currentGripSprite;
+			break;
+		case THROW:
+			spriteNumber = currentThrowSprite;
+			break;
+		case FALLING:
+			spriteNumber = currentFallingSprite;
+			break;
         default:
             spriteNumber = 0;
             break;

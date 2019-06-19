@@ -6,7 +6,7 @@
 #define MARVEL_VS_CAPCOM_PROJECTILECLIENT_H
 
 
-#include <SDL_render.h>
+#include <SDL2/SDL_render.h>
 #include "../data_structs.h"
 #include "../Texture/Texture.h"
 #include "../tools/ImageLoader/ImageLoader.h"

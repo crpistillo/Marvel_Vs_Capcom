@@ -10,6 +10,7 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
+bool initialLookingLeft;
 
 // Protected
 CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -44,6 +45,9 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentHurtingSprite = 0;
     this->currentKickAirSprite = 0;
     this->currentPunchAirSprite = 0;
+    this->currentThrowPowerSprite = 0;
+    this->currentGripSprite = 0;
+    this->currentFallingSprite = 0;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -55,7 +59,8 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
 
 // Public:
 void CharacterServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
-    if(this->getCentro() > posContrincante)
+
+	if(this->getCentro() > posContrincante)
         isLookingLeft = true;
     else
         isLookingLeft = false;
@@ -68,7 +73,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         currentAction == PD || currentAction == KD || currentAction == HG ||
         currentAction == HA || currentAction == PV || currentAction == THP ||
         currentAction == PJR || currentAction == PJL || currentAction == KV
-        || currentAction == KJR || currentAction == KJL)
+        || currentAction == KJR || currentAction == KJL || currentAction == THP
+		|| currentAction == FA || currentAction == TH)
         actionStarted = true;
 
 
@@ -80,9 +86,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     else if (currentAction == HURTINGAIR || actionRecieved == HURTINGAIR) {
         if (!isLookingLeft)
-            moveLeft(distance, posContrincante);
+            moveLeft(distance, posContrincante, 1);
         else
-            moveRight(distance, posContrincante);
+            moveRight(distance, posContrincante, 1);
         hurtingAir();
     }
 
@@ -105,16 +111,16 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
                currentAction == KICKINGJUMPRIGHT) {
 
         if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPRIGHT || actionRecieved == PUNCHINGJUMPRIGHT){
-            moveRight(distance, posContrincante);
+            moveRight(distance, posContrincante, 1);
             jumpRight();
             punchJumpRight();
         }
         else if (actionRecieved == KICK || currentAction == KICKINGJUMPRIGHT || actionRecieved == KICKINGJUMPRIGHT){
-            moveRight(distance, posContrincante);
+            moveRight(distance, posContrincante, 1);
             jumpRight();
             kickJumpRight();
         } else   {
-            moveRight(distance, posContrincante);
+            moveRight(distance, posContrincante, 1);
             jumpRight();
         }
 
@@ -124,17 +130,17 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 
     else if (currentAction == JUMPINGLEFT || currentAction == PUNCHINGJUMPLEFT || currentAction == KICKINGJUMPLEFT) {
         if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPLEFT || actionRecieved == PUNCHINGJUMPLEFT){
-            moveLeft(distance, posContrincante);
+            moveLeft(distance, posContrincante, 1);
             jumpLeft();
             punchJumpLeft();
         }
         else if (actionRecieved == KICK || currentAction == KICKINGJUMPLEFT || actionRecieved == KICKINGJUMPLEFT){
-            moveLeft(distance, posContrincante);
+            moveLeft(distance, posContrincante, 1);
             jumpLeft();
             kickJumpLeft();
         }
         else{
-            moveLeft(distance, posContrincante);
+            moveLeft(distance, posContrincante,1);
             jumpLeft();
         }
 
@@ -150,6 +156,17 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     } else if (currentAction == THROWPOWER) {
         throwPower();
     }
+    else if (currentAction == GRIP) {
+		grip();
+	}
+
+	else if (currentAction == THROW) {
+		throwCharacter();
+	}
+
+	else if (currentAction == FALLING) {
+		falling(distance, posContrincante);
+	}
 
     if (actionStarted) {
         this->characterBox->setCenter(getCentro(), mPosY);
@@ -161,6 +178,7 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     //Acciones de dos teclas primero
     if (currentAction == JUMPINGRIGHT)
         jumpRight(); //send jump rigth
+    	//moveRight(distance, posContrincante, 1);
     else if (currentAction == JUMPINGLEFT)
         jumpLeft(); //send jump left
         //Acciones de una sola tecla
@@ -171,9 +189,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == BLOCK)
         renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
-        moveRight(distance, posContrincante);   //send move right
+        moveRight(distance, posContrincante, 1);   //send move right
     else if (currentAction == MOVINGLEFT)
-        moveLeft(distance, posContrincante);    //send move left
+        moveLeft(distance, posContrincante, 1);    //send move left
     else if (currentAction == PUNCH)
         punch();
     else if (currentAction == KICK)
@@ -244,7 +262,11 @@ void CharacterServer::resetSpriteVariables() {
     currentKickDownSprite = 0;
     currentPunchAirSprite = 0;
     currentKickAirSprite = 0;
+    currentThrowPowerSprite = 0;
+    currentFallingSprite = 0;
+    currentThrowSprite = 0;
 }
+
 
 
 void CharacterServer::stand() {
@@ -263,9 +285,9 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, int posContrincante) {
+void CharacterServer::moveLeft(int distance, int posContrincante, int vel) {
     currentAction = MOVINGLEFT;
-    mPosX -= CHARACTER_VEL;
+    mPosX -= vel * CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -CharacterServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -277,10 +299,10 @@ void CharacterServer::moveLeft(int distance, int posContrincante) {
 }
 
 
-void CharacterServer::moveRight(int distance, int posContrincante) {
+void CharacterServer::moveRight(int distance, int posContrincante, int vel) {
     currentAction = MOVINGRIGHT;
 
-    mPosX += CHARACTER_VEL;
+    mPosX += vel * CHARACTER_VEL;
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - CharacterServer::getSobrante() - CharacterServer::getWidth())) ||
         (distance > anchoPantalla)) {
@@ -346,9 +368,9 @@ void CharacterServer::kickDown() {
 //Tengo que ver si es normal
 void CharacterServer::throwPower() {
     this->currentAction = THROWPOWER;
-    currentThrowSprite++;
-    if (currentThrowSprite > lastThrowSprite) {
-        currentThrowSprite = 0;
+    currentThrowPowerSprite++;
+    if (currentThrowPowerSprite > lastThrowPowerSprite) {
+        currentThrowPowerSprite = 0;
         this->currentAction = STANDING;
         currentStandingSprite = 0;
     }
@@ -490,6 +512,90 @@ Projectile *CharacterServer::getProjectile() {
     return nullptr;
 }
 
+void CharacterServer::throwCharacter()
+{
+	this->currentAction = THROW;
+	currentThrowSprite++;
+	if(currentThrowSprite > lastThrowSprite)
+	{
+		currentThrowSprite = 0;
+		this->currentAction = STANDING;
+		currentStandingSprite = 0;
+	}
+}
+
+ void CharacterServer::grip()
+{
+	this->currentAction = GRIP;
+	currentGripSprite++;
+	if(currentGripSprite > lastGripSprite)
+	{
+		currentGripSprite = 0;
+		this->currentAction = STANDING;
+		currentStandingSprite = 0;
+	}
+}
+
+ void CharacterServer::falling(int distance, int posContrincante)
+ {
+ 	//guardo el isLookingLeft inicial en el primer sprite
+ 	m.lock();
+ 	if (currentFallingSprite == 0) {
+ 		cout << "Esto pasa una vez" << endl;
+ 		if (isLookingLeft)
+ 			initialLookingLeft = true;
+ 		else
+ 			initialLookingLeft = false;
+ 	}
+ 	isLookingLeft = initialLookingLeft;
+ 	m.unlock();
+
+  	cout << "InitialLookingLeft: " << initialLookingLeft << endl;
+ 	cout << "IsLookingLeft: " << isLookingLeft << endl;
+
+  	if (currentFallingSprite >= 0 && currentFallingSprite < 8) {
+ 		if (isLookingLeft) {
+ 			mPosX = posContrincante - sobrante - 150;
+ 		} else
+ 			mPosX = posContrincante - sobrante - 90;
+ 	}
+
+  	else if (currentFallingSprite == 8) {
+ 		if (isLookingLeft)
+ 			mPosX = posContrincante - sobrante;
+
+  	}
+
+  	if (currentFallingSprite > 8 && currentFallingSprite < 36) {
+ 		if (isLookingLeft) {
+ 			moveRight(distance, posContrincante, 2);
+ 		} else
+ 			moveLeft(distance, posContrincante, 2);
+ 	}
+
+  	if (currentFallingSprite > 8 && currentFallingSprite < 17) {
+ 		mPosY -= 4 * CHARACTER_VEL;
+ 	}
+
+  	else if (currentFallingSprite > 17 && currentFallingSprite < 36) {
+ 		mPosY += 1.7 * CHARACTER_VEL;
+ 	}
+
+  	if (mPosX <= -418)
+ 		mPosX = -418;
+ 	else if (mPosX >= 2552)
+ 		mPosX = 2552;
+
+  	this->currentAction = FALLING;
+ 	currentFallingSprite++;
+ 	if (currentFallingSprite > lastFallingSprite) {
+ 		currentFallingSprite = 0;
+ 		this->currentAction = STANDING;
+ 		currentStandingSprite = 0;
+ 		mPosY = this->INITIAL_POS_Y;
+ 	}
+
+  }
 
 
 

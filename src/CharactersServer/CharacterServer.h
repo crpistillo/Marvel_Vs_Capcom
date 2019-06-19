@@ -16,6 +16,7 @@
 #include <vector>
 #include "../Box.h"
 #include "Projectile.h"
+#include<mutex>
 /*
 typedef enum actions {
     STANDING = S, JUMPINGLEFT = JL, JUMPINGRIGHT = JR, JUMPINGVERTICAL = JV, MAKINGINTRO = MI, DUCK = D,
@@ -62,6 +63,8 @@ public:
 
     virtual Projectile *getProjectile();
 
+    std::mutex m;
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
@@ -104,6 +107,9 @@ protected:
     int currentHurtingAirSprite;
     int currentPunchAirSprite;
     int currentKickAirSprite;
+    int currentThrowPowerSprite;
+    int currentGripSprite;
+    int currentFallingSprite;
 
 
     int lastStandingSprite;
@@ -119,6 +125,9 @@ protected:
     int lastKickDownSprite;
     int lastHurtingSprite;
     int lastThrowSprite;
+    int lastThrowPowerSprite;
+    int lastGripSprite;
+    int lastFallingSprite;
     int lastHurtingAirSprite;
     int lastPunchAirSprite;
     int lastKickAirSprite;
@@ -140,9 +149,15 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int posContrincante) = 0;
+    virtual void moveRight(int distance, int posContrincante, int vel) = 0;
 
-    virtual void moveLeft(int distance, int posContrincante) = 0;
+    virtual void moveLeft(int distance, int posContrincante, int vel) = 0;
+
+    virtual void grip();
+
+	virtual void throwCharacter();
+
+	virtual void falling(int distance, int posContrincante);
 
     virtual void jumpVertical();
 

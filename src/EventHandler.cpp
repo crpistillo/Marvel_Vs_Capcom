@@ -62,6 +62,7 @@ character_updater_t * EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int
         actionToUpdate = team[teamToUpdate]->getCurrentCharacter()->currentAction;
     }
 
+
     character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate);
 
     mutex->unlock();
@@ -128,4 +129,22 @@ void EventHandler::insertAction(Queue<incoming_msg_t *> *queue, actions action, 
     beingHurtGround->action = HURTINGGROUND;
     queue->insert(beingHurtGround);
 
+}
+
+void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int emisor)
+{
+	if(team[receiver]->getCurrentCharacter()->inTheGround())
+	{
+
+ 		incoming_msg_t* throwing = new incoming_msg_t;
+		throwing->client = team[emisor]->getCurrentCharacter()->clientNumber;
+		throwing->action = THROW;
+		queue->insert(throwing);
+
+
+ 		incoming_msg_t* beingCaught = new incoming_msg_t;
+		beingCaught->client = team[receiver]->getCurrentCharacter()->clientNumber;
+		beingCaught->action = FALLING;
+		queue->insert(beingCaught);
+	}
 }
