@@ -970,7 +970,7 @@ void TCPServer::updateModel() {
 
         if(timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0)
             timer->resetTimer();
-        cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
+        //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 
         if (numberOfConnections == 0) {

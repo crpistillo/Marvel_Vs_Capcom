@@ -473,6 +473,7 @@ void CharacterServer::normalAction(int *currentSprite, int *lastSprite, actions_
         this->currentAction = finalAction;
         currentStandingSprite = 0;
     }
+    cout<<"Punch: "<<currentPunchSprite<<endl;
 
 }
 
