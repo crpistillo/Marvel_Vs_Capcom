@@ -42,6 +42,9 @@ SpidermanClient::~SpidermanClient() {
 void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
     isLookingLeft = this->getCentro() > posContrincante;
+
+    characterBanner.loadFromFile("images/barras/spidermanLeftBanner.png",renderer);
+
     switch (this->currentAction) {
         case STANDING:
             if (isLookingLeft)

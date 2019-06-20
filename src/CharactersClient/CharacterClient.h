@@ -77,6 +77,8 @@ protected:
     string characterFilePath;
 
     Texture m_Texture;
+    Texture characterBanner;
+
     ImageLoader *loader;
 
     int currentSprite;
