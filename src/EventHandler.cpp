@@ -73,6 +73,10 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
 
 void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action) {
     //grip
+
+    if(team[receiver]->getCurrentCharacter()->isHurting())
+        return;
+
     if(action == GRIP){
         manageGrip(queue, receiver, giver);
         return;
