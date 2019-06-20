@@ -68,9 +68,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     }
 
 
-    //roundBanner = new RoundBanner();
-    timeBanner[0] = new TimeBanner(380);
-    timeBanner[1] = new TimeBanner(400);
+    timeBanner[0] = new TimeBanner(FIRST_DIGIT_POSITION);
+    timeBanner[1] = new TimeBanner(SECOND_DIGIT_POSITION);
 
 
     Texture* waiting = new Texture();

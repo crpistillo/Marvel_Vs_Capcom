@@ -27,6 +27,10 @@
 #include "TimeBanner.h"
 #include <mutex>
 
+#define FIRST_DIGIT_POSITION 350
+#define SECOND_DIGIT_POSITION 390
+
+
 
 using namespace std;
 

@@ -48,6 +48,6 @@ void TimeBanner::load(SDL_Renderer *m_Renderer) {
 }
 
 void TimeBanner::render(SDL_Renderer *mRenderer) {
-    texture.render(300, 0, 50, 50 ,mRenderer);
+    texture.render(this->position, 0, 50, 50 ,mRenderer);
 }
 
