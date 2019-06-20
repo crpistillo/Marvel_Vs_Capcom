@@ -88,6 +88,7 @@ void MCGame::loadInitialTextures() {
     players[0]->loads(m_Renderer, 3200);
     players[1]->loads(m_Renderer, 0);
     loadGroundTextureByZIndex();
+    banner.loadFromFile("images/barras/banner.png",m_Renderer);
 }
 
 void MCGame::loadGroundTextureByZIndex() {
@@ -313,6 +314,7 @@ void MCGame::render() {
                 players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
             }
         }
+        banner.render(0,0,800,600,m_Renderer);
         roundBanner->render(m_Renderer);
         timeBanner[0]->render(m_Renderer);
         timeBanner[1]->render(m_Renderer);
@@ -355,6 +357,7 @@ void MCGame::clean() {
     middleGroundTexture.free();
     backGroundTexture.free();
     menuTexture.free();
+    banner.free();
     cliente1.free();
     cliente2.free();
     cliente3.free();

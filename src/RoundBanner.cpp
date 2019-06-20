@@ -2,7 +2,7 @@
 // Created by IgVelasco on 6/20/19.
 //
 
-#include <SDL_types.h>
+#include <SDL2/SDL_types.h>
 #include "RoundBanner.h"
 const string bannerFilePath = "images/letreros/";
 const string FILE_EXTENSION = ".png";
