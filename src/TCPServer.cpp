@@ -608,7 +608,6 @@ void TCPServer::updateModel() {
             cout<<"tiempo despues de resetiarlo: "<<timer->getTimeLeft()<<endl;
             ignoreMessages = false;
         }
-        //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 
         if (numberOfConnections == 0) {
@@ -620,6 +619,8 @@ void TCPServer::updateModel() {
         if (incoming_msges_queue->empty_queue())
             continue;
         incoming_msg = this->incoming_msges_queue->get_data();
+        if(!incoming_msg)
+            continue;
 
         int teamToUpdate;
         int enemyTeam;
