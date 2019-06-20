@@ -297,8 +297,7 @@ void MCGame::render() {
                                           &(*players[1])};
         orderRenderizableListByZIndex(renderizables);
 
-        timeBanner[0]->render(m_Renderer);
-        timeBanner[1]->render(m_Renderer);
+
         //roundBanner->render(nullptr);
 
         for (int i = 0; i < 5; i++) {
@@ -314,6 +313,8 @@ void MCGame::render() {
                 players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
             }
         }
+        timeBanner[0]->render(m_Renderer);
+        timeBanner[1]->render(m_Renderer);
     }
     logger->log("Fin render.", DEBUG);
   /*  SDL_Color color1 = color(255,255,0,1);
@@ -432,6 +433,7 @@ void MCGame::update() {
 		timeBanner[0]->digit = updater->firstDigitOfTime;
 		timeBanner[0]->load(m_Renderer);
 		timeBanner[1]->digit = updater->secondDigitOfTime;
+		cout<< updater->firstDigitOfTime << updater->secondDigitOfTime<<endl;
         timeBanner[1]->load(m_Renderer);
 
 
