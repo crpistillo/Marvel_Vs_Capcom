@@ -81,6 +81,16 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         manageGrip(queue, receiver, giver);
         return;
     }
+
+    if (action==P || action==K || action==PD || action==KD || action==PV || action==PJR || action==PJL ||
+    	action==KV || action==KJL || action==KJR)
+    	team[receiver]->getCurrentCharacter()->quitarVida(5);
+
+    if (action==PS || action==PSD || action==PSV || action==PSJR || action==PSJL ||
+    	action==KS || action==KSD || action==KSV || action==KSJR || action==KSJL)
+    	team[receiver]->getCurrentCharacter()->quitarVida(10);
+
+
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
         insertAction(queue, HURTINGGROUND, receiver);

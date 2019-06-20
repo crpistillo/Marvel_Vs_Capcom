@@ -52,6 +52,7 @@ public:
     bool isStanding();
     //vector<Box*> getColisionable();
     Box* getColisionable();
+    void quitarVida(int danio);
 
 
     int clientNumber;
@@ -93,6 +94,8 @@ protected:
 
     Box* characterBox; //por ahora una sola caja
     //vector<Box*> objetoColisionable;
+
+    int vida;
 
 
     int currentStandingSprite;

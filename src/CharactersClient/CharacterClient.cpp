@@ -32,6 +32,7 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
     this->characterControls = NULL;
 
     this->lastTime = SDL_GetTicks();
+    this->vida = 100;
 
 }
 

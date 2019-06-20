@@ -51,6 +51,7 @@ typedef struct{
 	actions_t action;
 	int team;
 	int client;
+	int vida;
 
 	//projectile info;
 	actions_t projectile;
