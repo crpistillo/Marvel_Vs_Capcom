@@ -35,7 +35,7 @@ void RoundBanner::load(SDL_Renderer *m_Renderer) {
 void RoundBanner::render(SDL_Renderer *mRenderer) {
     if(!active)
         return;
-    texture.render(100 , 200, 400, 200,mRenderer);
+    texture.render(200 , 150, 400, 200,mRenderer);
 
 }
 

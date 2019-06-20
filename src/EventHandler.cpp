@@ -153,9 +153,10 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
         roundAction = FIGHT;
 
     team[toUpdate]->update(distancia[toUpdate], STANDING, team[otherTeam]->getCurrentBox());
+    actions_t actionToUpdate = team[toUpdate]->getCurrentCharacter()->currentAction;
 
 
-    character_updater_t* roundUpdater = makeUpdater(toUpdate, STANDING, roundAction);
+    character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;
 }

@@ -595,17 +595,16 @@ void TCPServer::configJson(json config) {
 void TCPServer::updateModel() {
 
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer *timer = new Timer(5);
+    Timer *timer = new Timer(99);
     int roundsPlayed = 0;
     while (1) {
 
-        if (timer->getTimeLeft() == 0|| roundsPlayed == 3) {
-            cout <<"asd" <<endl;
+        if (timer->getTimeLeft() == 0 || roundsPlayed == 0) {
+
             roundsPlayed++;
-         //   resetRound();
-            roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
+            if(roundsPlayed != 4)
+                roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
             timer->resetTimer();
-            cout<<"tiempo despues de resetiarlo: "<<timer->getTimeLeft()<<endl;
             ignoreMessages = false;
         }
 
@@ -637,7 +636,7 @@ void TCPServer::updateModel() {
             eventHandler->manageInteractiveActions(incoming_msges_queue, teamToUpdate, enemyTeam, update_msg->action);
         }
 
-        if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
+        if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0 || roundsPlayed == 4) {
             endgameForDisconnections();
             break;
         }
@@ -841,7 +840,7 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
             roundUpdater->round.winner = whoWon;
-            roundUpdater->round.numberOfRound = roundNum + 1;
+            roundUpdater->round.numberOfRound = roundNum;
             roundUpdater->firstDigitOfTime = 9;
             roundUpdater->secondDigitOfTime = 9;
             putUpdatersInEachQueue(roundUpdater, team[i]->getCurrentCharacter()->clientNumber);
