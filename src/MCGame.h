@@ -27,8 +27,8 @@
 #include "TimeBanner.h"
 #include <mutex>
 
-#define FIRST_DIGIT_POSITION 350
-#define SECOND_DIGIT_POSITION 390
+#define FIRST_DIGIT_POSITION 370
+#define SECOND_DIGIT_POSITION 400
 
 
 
@@ -53,6 +53,7 @@ private:
     Texture cliente2;
     Texture cliente3;
     Texture cliente4;
+    Texture banner;
     Texture endgame_image;
     Layer *middleGround;
     Layer *backGround;
