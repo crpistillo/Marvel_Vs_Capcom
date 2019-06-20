@@ -17,6 +17,7 @@
 #include "Menu/MenuThreePlayers.h"
 #include "EventHandler.h"
 #include "Timer.h"
+#include "tools/FPSManager/FPSManager.h"
 
 
 Constants constants;
@@ -598,7 +599,7 @@ void TCPServer::updateModel() {
     int roundsPlayed = 0;
     while (1) {
 
-        if (timer->getTimeLeft() == 0|| roundsPlayed == 2) {
+        if (timer->getTimeLeft() == 0|| roundsPlayed == 3) {
             cout <<"asd" <<endl;
             roundsPlayed++;
             resetRound();
@@ -607,7 +608,6 @@ void TCPServer::updateModel() {
             cout<<"tiempo despues de resetiarlo: "<<timer->getTimeLeft()<<endl;
             ignoreMessages = false;
         }
-        cout<<"Tiempo es :"<< timer->getTimeLeft()<<endl;
         //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 
@@ -830,14 +830,19 @@ void TCPServer::resetRound() {
 
 void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     ignoreMessages = true;
+    FPSManager* fpsManager = new FPSManager(30);
     Timer *timer = new Timer(3);
     while (timer->getTimeThatPass() < 3) {
+        fpsManager->start();
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
             roundUpdater->round.winner = whoWon;
             roundUpdater->round.numberOfRound = roundNum;
+            roundUpdater->firstDigitOfTime = 9;
+            roundUpdater->secondDigitOfTime = 9;
             putUpdatersInEachQueue(roundUpdater, team[i]->getCurrentCharacter()->clientNumber);
         }
+        fpsManager->stop();
     }
     delete timer;
     cout<<timer->getTimeThatPass()<<endl;
