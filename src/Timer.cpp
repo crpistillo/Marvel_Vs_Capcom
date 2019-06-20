@@ -3,10 +3,12 @@
 //
 
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include "Timer.h"
 
 Timer::Timer(int maxTime) {
+    SDL_Init(SDL_INIT_TIMER);
     this->maxTime = maxTime;
     initialTime = SDL_GetTicks()/1000;
     currentTime = SDL_GetTicks()/1000;
@@ -15,13 +17,13 @@ Timer::Timer(int maxTime) {
 int Timer::getFirstDigit() {
     currentTime = SDL_GetTicks() / 1000;
     int time = maxTime - (currentTime - initialTime);
-    return  time % 10;
+    return time / 10;
 }
 
 int Timer::getSecondDigit() {
     currentTime = SDL_GetTicks() / 1000;
     int time = maxTime - (currentTime - initialTime);
-    return time / 10;
+    return  time % 10;
 }
 
 void Timer::resetTimer() {

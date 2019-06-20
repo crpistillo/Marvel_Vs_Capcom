@@ -433,7 +433,6 @@ void MCGame::update() {
 		timeBanner[0]->digit = updater->firstDigitOfTime;
 		timeBanner[0]->load(m_Renderer);
 		timeBanner[1]->digit = updater->secondDigitOfTime;
-		cout<< updater->firstDigitOfTime << updater->secondDigitOfTime<<endl;
         timeBanner[1]->load(m_Renderer);
 
 

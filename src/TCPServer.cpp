@@ -427,7 +427,6 @@ void TCPServer::sendToClient(int clientSocket) {
         updater = client_updater_queue[clientSocket]->get_data();
         updaters_queue_mtx[clientSocket].unlock();
 
-
         socket->sendData(updater, sizeof(character_updater_t));
 
         std::unique_lock<std::mutex> lock(updaters_queue_mtx[clientSocket]);
@@ -1128,10 +1127,17 @@ void TCPServer::setEndgame(bool condition) {
 void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
     character_updater_t *update[numberOfPlayers];
     for (int j = 0; j < numberOfPlayers; ++j) {
+
         update[j] = new character_updater_t;
-        update[j]->action = update_msg->action;
-        update[j]->team = update_msg->team;
+        memcpy( update[j], update_msg, sizeof(character_updater_t));
         update[j]->client = clientNumber;
+        update[j]->gameFinishedByDisconnections = false;
+
+        /*update[j] = new character_updater_t;
+        update[j]->action = update_msg->action;
+        update[j]->client = clientNumber;
+        update[j]->gameFinishedByDisconnections = false;
+        update[j]->team = update_msg->team;
         update[j]->posX = update_msg->posX;
         update[j]->posY = update_msg->posY;
         update[j]->currentSprite = update_msg->currentSprite;
@@ -1139,7 +1145,9 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
         update[j]->projectile = update_msg->projectile;
         update[j]->pposX = update_msg->pposX;
         update[j]->pposY = update_msg->pposY;
-        update[j]->gameFinishedByDisconnections = false;
+        update[j]->firstDigitOfTime = update_msg->firstDigitOfTime;
+        update[j]->secondDigitOfTime = update_msg->secondDigitOfTime;
+        update[j]->round = update_msg->round;*/
     }
 
     for (int i = 0; i < numberOfPlayers; ++i) {
