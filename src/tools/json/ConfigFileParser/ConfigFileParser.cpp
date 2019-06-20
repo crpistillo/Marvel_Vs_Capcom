@@ -283,7 +283,7 @@ void ConfigFileParser::validatePlayers(json defaultConfig) {
 			this->logError("players", "Players no especificado.");
 			this->replaceByDefault("server", defaultConfig);
 		} else {
-			if(!((server["players"] == 2) || (server["players"] == 4))){
+			if(!((server["players"] == 2) || (server["players"] == 4) || (server["players"] == 3))){
 				this->logError("players", "Players incorrecto.");
 				this->replaceByDefault("server", defaultConfig);
 			}

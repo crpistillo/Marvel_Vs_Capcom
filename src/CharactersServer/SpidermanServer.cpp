@@ -115,14 +115,14 @@ void SpidermanServer::moveRight(int distance, int vel) {
 }
 
 
-void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
+void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
     builder->personaje = SPIDERMAN;
     builder->cliente = clientNumber;
     builder->sprite = 0;
     builder->action = STANDING;
     builder->isFirstTeam = isFirstTeam;
-    builder->pos = pos;
+    builder->pos = this->mPosX;
 
 }
 

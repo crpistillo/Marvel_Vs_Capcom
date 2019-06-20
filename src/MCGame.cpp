@@ -522,10 +522,10 @@ void MCGame::sendMenuEvents() {
         	break;
         }
 
-        if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0 && !sendOnlyAlive){
+        /*if (menuActionToSend == ENTER && numberOfPlayers == 2 && charactersSelected == 0 && !sendOnlyAlive){
             menuActionToSend = SELECT;
             charactersSelected++;
-        }
+        }*/
         if (menuActionToSend != INVALID_MENU_ACTION && !sendOnlyAlive) {
             tcpClient->socketClient->sendData(&menuActionToSend, sizeof(menuActionToSend));
         }
@@ -535,8 +535,8 @@ void MCGame::sendMenuEvents() {
 
         if (!getRunningThread())
             break;
-        if (menuActionToSend == ENTER)
-            sendOnlyAlive = true;
+        /*if (menuActionToSend == ENTER)
+            sendOnlyAlive = true;*/
         fpsManager.stop();
 
     }

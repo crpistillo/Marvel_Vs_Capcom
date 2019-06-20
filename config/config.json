@@ -41,7 +41,7 @@
 		"height": 600
 	},
 	"server": {
-		"players": 2,
+		"players": 3,
 		"log": "INFO"
 	}
 }

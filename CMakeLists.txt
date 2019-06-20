@@ -63,6 +63,9 @@ set(SOURCE_FILES
         src/signal_handler.cpp src/signal_handler.h
         src/Box.cpp
         src/Box.h
+        src/Menu/Menu.h
+        src/Menu/Menu.cpp
+        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
         src/EventHandler.cpp src/EventHandler.h src/CharactersServer/Projectile.cpp src/CharactersServer/Projectile.h src/CharactersClient/ProjectileClient.cpp src/CharactersClient/ProjectileClient.h src/Timer.cpp src/Timer.h src/RoundBanner.cpp src/RoundBanner.h src/TimeBanner.cpp src/TimeBanner.h)
 
 
@@ -80,7 +83,7 @@ include_directories(${SDL2_INCLUDE_DIR}
 
 
 
-add_executable(marvel_vs_capcom ${SOURCE_FILES})
+add_executable(marvel_vs_capcom ${SOURCE_FILES} src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
 target_link_libraries(marvel_vs_capcom ${SDL2_LIBRARY}
         ${SDL2_IMAGE_LIBRARIES})
 

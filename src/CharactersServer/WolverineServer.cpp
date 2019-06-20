@@ -136,13 +136,13 @@ void WolverineServer::moveRight(int distance, int vel) {
 }
 
 
-void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam, double pos) {
+void WolverineServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     builder->personaje = WOLVERINE;
     builder->cliente = clientNumber;
     builder->sprite = 0;
     builder->action = STANDING;
     builder->isFirstTeam = isFirstTeam;
-    builder->pos = pos;
+    builder->pos = this->mPosX;
 }
 
 
