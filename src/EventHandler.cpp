@@ -149,7 +149,7 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     else if (timer->getTimeThatPass() == 1)
         roundAction = NUMBEROFROUND;
         //tell number of round
-    else if (timer->getTimeThatPass() == 2)
+    else
         roundAction = FIGHT;
 
     team[toUpdate]->update(distancia[toUpdate], STANDING, team[otherTeam]->getCurrentBox());

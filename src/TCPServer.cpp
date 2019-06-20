@@ -602,8 +602,8 @@ void TCPServer::updateModel() {
         if (timer->getTimeLeft() == 0|| roundsPlayed == 3) {
             cout <<"asd" <<endl;
             roundsPlayed++;
-            resetRound();
-            roundRun(getCurrentWinner(), eventHandler, 0);
+         //   resetRound();
+            roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
             timer->resetTimer();
             cout<<"tiempo despues de resetiarlo: "<<timer->getTimeLeft()<<endl;
             ignoreMessages = false;
@@ -640,6 +640,9 @@ void TCPServer::updateModel() {
             endgameForDisconnections();
             break;
         }
+        update_msg->round.roundInfo = FIGHTING;
+        update_msg->round.winner = 0;
+        update_msg->round.numberOfRound = roundsPlayed;
         eventHandler->handleProjectiles(update_msg, teamToUpdate);
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
 
@@ -837,7 +840,7 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
             roundUpdater->round.winner = whoWon;
-            roundUpdater->round.numberOfRound = roundNum;
+            roundUpdater->round.numberOfRound = roundNum + 1;
             roundUpdater->firstDigitOfTime = 9;
             roundUpdater->secondDigitOfTime = 9;
             putUpdatersInEachQueue(roundUpdater, team[i]->getCurrentCharacter()->clientNumber);
@@ -845,8 +848,6 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
         fpsManager->stop();
     }
     delete timer;
-    cout<<timer->getTimeThatPass()<<endl;
-
 }
 
 int TCPServer::getCurrentWinner() {

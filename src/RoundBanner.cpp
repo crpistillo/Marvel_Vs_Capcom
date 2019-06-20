@@ -14,10 +14,12 @@ RoundBanner::RoundBanner() {
 }
 
 void RoundBanner::load(SDL_Renderer *m_Renderer) {
+
     switch (currentAction) {
         case FIGHTING:
             break;
         case ROUNDWINNER:
+            this->loader->loadActionSprite(bannerFilePath, "round", numberOfRound, FILE_EXTENSION, m_Renderer, &texture);
             break;
         case NUMBEROFROUND:
             this->loader->loadActionSprite(bannerFilePath, "round", numberOfRound, FILE_EXTENSION, m_Renderer, &texture);
@@ -33,7 +35,7 @@ void RoundBanner::load(SDL_Renderer *m_Renderer) {
 void RoundBanner::render(SDL_Renderer *mRenderer) {
     if(!active)
         return;
-    texture.render(100 , 200, 50, 50,mRenderer);
+    texture.render(100 , 200, 400, 200,mRenderer);
 
 }
 
