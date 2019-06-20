@@ -10,6 +10,8 @@
 #include<iostream>
 #include <sys/poll.h>
 #include "signal_handler.h"
+#include "RoundBanner.h"
+#include "TimeBanner.h"
 #include <csignal>
 
 
@@ -64,6 +66,12 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
             }
         }
     }
+
+
+    //roundBanner = new RoundBanner();
+    timeBanner[0] = new TimeBanner(380);
+    timeBanner[1] = new TimeBanner(400);
+
 
     Texture* waiting = new Texture();
     SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -289,6 +297,10 @@ void MCGame::render() {
                                           &(*players[1])};
         orderRenderizableListByZIndex(renderizables);
 
+        timeBanner[0]->render(m_Renderer);
+        timeBanner[1]->render(m_Renderer);
+        //roundBanner->render(nullptr);
+
         for (int i = 0; i < 5; i++) {
             if (renderizables[i] == backGround) {
                 backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
@@ -304,9 +316,10 @@ void MCGame::render() {
         }
     }
     logger->log("Fin render.", DEBUG);
-    SDL_Color color1 = color(255,255,0,1);
+  /*  SDL_Color color1 = color(255,255,0,1);
     SDL_Color color2 = color(167,000,0,0.57);
     barra(40,5,300,30,0.7,color1,color2);
+    */
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
@@ -408,6 +421,19 @@ void MCGame::update() {
 		    endgame = true;
 		    return;
 		}
+
+
+		/*if(updater->round.roundInfo != FIGHTING){
+            roundBanner->updateRoundSprites(updater->round);
+            roundBanner->load();
+		} else
+		    disableRoundSprites();*/
+
+		timeBanner[0]->digit = updater->firstDigitOfTime;
+		timeBanner[0]->load(m_Renderer);
+		timeBanner[1]->digit = updater->secondDigitOfTime;
+        timeBanner[1]->load(m_Renderer);
+
 
         if (updater->team == 0) {
             players[0]->update(updater, &isSending, 0 == team, tcpClient->nclient);
@@ -713,6 +739,10 @@ void MCGame::barra(int posX, int posY, int width, int height, float health, SDL_
 SDL_Color MCGame::color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	SDL_Color col = {r,g,b,a};
 	return col;
+}
+
+void MCGame::disableRoundSprites() {
+    roundBanner->active = false;
 }
 
 

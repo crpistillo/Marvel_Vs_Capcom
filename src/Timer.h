@@ -6,6 +6,8 @@
 #define MARVEL_VS_CAPCOM_TIMER_H
 
 
+#include "data_structs.h"
+
 class Timer {
 
 
@@ -18,6 +20,10 @@ public:
     int getSecondDigit();
 
     void resetTimer();
+
+    int getTimeThatPass();
+
+    void setDigits(character_updater_t *updater);
 
 private:
     int initialTime;

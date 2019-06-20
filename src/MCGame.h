@@ -23,6 +23,8 @@
 #include "data_structs.h"
 #include "Constants.h"
 #include "ClientCursor.h"
+#include "RoundBanner.h"
+#include "TimeBanner.h"
 #include <mutex>
 
 
@@ -141,6 +143,11 @@ public:
 
 
     void barra(int posX, int posY, int width, int height, float health, SDL_Color FGColor, SDL_Color BGColor);
+
+    void disableRoundSprites();
+
+    RoundBanner *roundBanner;
+    TimeBanner* timeBanner[2];
 };
 
 

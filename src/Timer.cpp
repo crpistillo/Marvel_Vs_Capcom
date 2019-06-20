@@ -26,6 +26,17 @@ int Timer::getSecondDigit() {
 
 void Timer::resetTimer() {
     initialTime = SDL_GetTicks() / 1000;
+    getTimeThatPass();
+}
+
+int Timer::getTimeThatPass() {
+    currentTime = SDL_GetTicks() / 1000;
+    return (currentTime - initialTime);
+}
+
+void Timer::setDigits(character_updater_t *updater) {
+    updater->firstDigitOfTime = getFirstDigit();
+    updater->secondDigitOfTime = getSecondDigit();
 }
 
 

@@ -23,6 +23,7 @@
 #include "tools/json/ConfigFileParser/ConfigFileParser.h"
 #include "Queue/Queue.h"
 #include "ServerCursor.h"
+#include "EventHandler.h"
 #include <mutex>
 #include <thread>
 
@@ -170,6 +171,14 @@ public:
     bool isAlreadyInteracting(int team);
 
     bool isProjectileActive(int teamToCheck);
+
+    void resetRound();
+
+    void roundRun(int whoWon, EventHandler *handler, int roundNum);
+
+    bool ignoreMessages = false;
+
+    int getCurrentWinner();
 };
 
 #endif

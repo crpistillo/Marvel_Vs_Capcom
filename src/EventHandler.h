@@ -9,6 +9,7 @@
 #include <mutex>
 #include "Team.h"
 #include "Queue/Queue.h"
+#include "Timer.h"
 
 class EventHandler {
 
@@ -26,7 +27,7 @@ public:
 
     void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action);
 
-    character_updater_t * makeUpdater(int teamToUpdate, actions_t action);
+    character_updater_t *makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction);
 
     void handleProjectiles(character_updater_t *updater, int teamToUpdate);
 
@@ -34,6 +35,7 @@ public:
 
     void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int giver);
 
+    character_updater_t *getRoundUpdaters(int toUpdate, Timer *pTimer);
 };
 
 

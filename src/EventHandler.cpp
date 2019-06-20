@@ -63,7 +63,7 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
     }
 
 
-    character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate);
+    character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate, FIGHTING);
 
     mutex->unlock();
 
@@ -74,10 +74,10 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
 void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action) {
     //grip
 
-    if(team[receiver]->getCurrentCharacter()->isHurting())
+    if (team[receiver]->getCurrentCharacter()->isHurting())
         return;
 
-    if(action == GRIP){
+    if (action == GRIP) {
         manageGrip(queue, receiver, giver);
         return;
     }
@@ -88,9 +88,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         insertAction(queue, HURTINGAIR, receiver);
 }
 
-character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action) {
+character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction) {
     character_updater_t *updater = new character_updater_t;
 
+    updater->round.roundInfo = roundAction;
     updater->posX =
             team[teamToUpdate]->getCurrentCharacter()->getPosX();
     updater->posY =
@@ -134,3 +135,18 @@ void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int 
         insertAction(queue, FALLING, receiver);
     }
 }
+
+character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) {
+    round_action_t roundAction ;
+    if (timer->getTimeThatPass() == 0);
+        //tell who won
+    else if (timer->getTimeThatPass() == 1)
+        roundAction = NUMBEROFROUND;
+        //tell number of round
+    else if (timer->getTimeThatPass() == 2)
+        roundAction = FIGHT;
+    character_updater_t* roundUpdater = makeUpdater(toUpdate, STANDING, roundAction);
+    roundUpdater->firstDigitOfTime = 9;
+    roundUpdater->secondDigitOfTime = 9;
+}
+

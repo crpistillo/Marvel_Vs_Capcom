@@ -1,3 +1,8 @@
+
+#ifndef IMAGE_LOADER_H
+#define IMAGE_LOADER_H
+
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_events.h>
@@ -21,6 +26,8 @@ private:
     Uint8 g_value;
     Uint8 b_value;
 };
+
+#endif
 
 
 

@@ -965,15 +965,16 @@ void TCPServer::configJson(json config) {
 void TCPServer::updateModel() {
 
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer* timer = new Timer(99);
+    Timer *timer = new Timer(99);
     int roundsPlayed = 0;
     while (1) {
 
-        if((timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0) || roundsPlayed == 2){
+        /*if ((timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0) || roundsPlayed == 2) {
             roundsPlayed++;
-          //  resetRound();
+            resetRound();
+            roundRun(getCurrentWinner(), eventHandler, 0);
             timer->resetTimer();
-        }
+        }*/
         //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 
@@ -992,6 +993,9 @@ void TCPServer::updateModel() {
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
+        update_msg->round.winner = getCurrentWinner();
+        update_msg->round.numberOfRound = roundsPlayed;
+        timer->setDigits(update_msg);
 
         if (collition(teamToUpdate, enemyTeam, update_msg->action)) {
             std::unique_lock<std::mutex> lock_queue(incoming_msg_mtx);
@@ -1121,7 +1125,6 @@ void TCPServer::setEndgame(bool condition) {
 }
 
 
-
 void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clientNumber) {
     character_updater_t *update[numberOfPlayers];
     for (int j = 0; j < numberOfPlayers; ++j) {
@@ -1156,7 +1159,8 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
 // Esta colisionando...
 // Y no esta colisionando ya...
 bool TCPServer::collition(int teamToUpdate, int enemyTeam, actions_t action) {
-    return isActionInteractive(action, teamToUpdate) && isColliding(teamToUpdate, enemyTeam) && !isAlreadyInteracting(enemyTeam);
+    return isActionInteractive(action, teamToUpdate) && isColliding(teamToUpdate, enemyTeam) &&
+           !isAlreadyInteracting(enemyTeam);
 }
 
 bool TCPServer::isColliding(int giver, int receiver) {
@@ -1180,12 +1184,34 @@ bool TCPServer::isProjectileActive(int teamToCheck) {
 bool TCPServer::isActionPunch(actions_t actions) {
     return actions == PUNCH || actions == PUNCHDOWN || actions == PUNCHINGJUMPLEFT || actions == PUNCHINGJUMPRIGHT ||
            actions == PUNCHINGVERTICAL || actions == PUNCHSTRONG || actions == PUNCHSTRONGDOWN ||
-		   actions == PUNCHINGSTRONGJUMPLEFT || actions == PUNCHINGSTRONGJUMPRIGHT || actions == PUNCHINGSTRONGVERTICAL;
+           actions == PUNCHINGSTRONGJUMPLEFT || actions == PUNCHINGSTRONGJUMPRIGHT || actions == PUNCHINGSTRONGVERTICAL;
 }
 
 bool TCPServer::isActionKick(actions_t action) {
     return action == KICK || action == KICKDOWN || action == KICKINGJUMPLEFT || action == KICKINGJUMPRIGHT ||
            action == KICKINGVERTICAL || action == KICKSTRONG || action == KICKSTRONGDOWN ||
-		   action == KICKINGSTRONGJUMPLEFT || action == KICKINGSTRONGJUMPRIGHT ||
-           action == KICKINGSTRONGVERTICAL ;
+           action == KICKINGSTRONGJUMPLEFT || action == KICKINGSTRONGJUMPRIGHT ||
+           action == KICKINGSTRONGVERTICAL;
+}
+
+void TCPServer::resetRound() {
+
+}
+
+void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
+    ignoreMessages = true;
+    Timer *timer = new Timer(3);
+    while (timer->getTimeThatPass() < 3) {
+
+        for (int i = 0; i < 2; ++i) {
+            character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
+            roundUpdater->round.winner = whoWon;
+            roundUpdater->round.numberOfRound = roundNum;
+            putUpdatersInEachQueue(roundUpdater, team[i]->getCurrentCharacter()->clientNumber);
+        }
+    }
+}
+
+int TCPServer::getCurrentWinner() {
+    return 0;
 }

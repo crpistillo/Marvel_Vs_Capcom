@@ -38,6 +38,12 @@ typedef struct{
     bool isFirstTeam;
 } character_builder_t;
 
+typedef struct {
+    round_action_t roundInfo;
+    int winner;
+    int numberOfRound;
+} round_info_t;
+
 typedef struct{
 	int posX;
 	int posY;
@@ -52,6 +58,11 @@ typedef struct{
 	int pposX;
 	int pposY;
 	bool gameFinishedByDisconnections;
+
+	//round info
+	round_info_t round;
+    int firstDigitOfTime;
+    int secondDigitOfTime;
 } character_updater_t;
 
 
@@ -115,6 +126,9 @@ typedef struct {
     int players;
 
 } initializer_t;
+
+
+
 
 
 
