@@ -81,7 +81,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 }
 
 
-void WolverineServer::moveLeft(int distance, int posContrincante, int vel) {
+void WolverineServer::moveLeft(int distance, int vel) {
     currentAction = MOVINGLEFT;
 
     //Mover
@@ -108,7 +108,7 @@ void WolverineServer::moveLeft(int distance, int posContrincante, int vel) {
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::moveRight(int distance, int posContrincante, int vel) {
+void WolverineServer::moveRight(int distance, int vel) {
     currentAction = MOVINGRIGHT;
 
     //Mover

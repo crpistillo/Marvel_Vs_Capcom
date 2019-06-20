@@ -153,9 +153,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int posContrincante, int vel) = 0;
+    virtual void moveRight(int distance, int vel) = 0;
 
-    virtual void moveLeft(int distance, int posContrincante, int vel) = 0;
+    virtual void moveLeft(int distance, int vel) = 0;
 
     virtual void grip();
 

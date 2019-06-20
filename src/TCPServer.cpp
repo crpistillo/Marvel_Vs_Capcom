@@ -966,10 +966,14 @@ void TCPServer::updateModel() {
 
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
     Timer* timer = new Timer(99);
+    int roundsPlayed = 0;
     while (1) {
 
-        if(timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0)
+        if((timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0) || roundsPlayed == 2){
+            roundsPlayed++;
+          //  resetRound();
             timer->resetTimer();
+        }
         //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 

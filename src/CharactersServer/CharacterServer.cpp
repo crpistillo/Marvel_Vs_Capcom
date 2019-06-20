@@ -86,9 +86,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         hurtingGround();
     } else if (currentAction == HURTINGAIR || actionRecieved == HURTINGAIR) {
         if (!isLookingLeft)
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
         else
-            moveRight(distance, posContrincante, 1);
+            moveRight(distance, 1);
         hurtingAir();
     }
     else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL ||
@@ -115,23 +115,21 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
 			   || currentAction == KICKINGSTRONGJUMPRIGHT) {
 
         if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPRIGHT || actionRecieved == PUNCHINGJUMPRIGHT) {
-            moveRight(distance, posContrincante, 1);
+            moveRight(distance, 1);
             jumpRight();
             punchJumpRight(PUNCHINGJUMPRIGHT);
         } else if (actionRecieved == PUNCHSTRONG || currentAction == PUNCHINGSTRONGJUMPRIGHT || actionRecieved == PUNCHINGSTRONGJUMPRIGHT) {
-            moveRight(distance, posContrincante, 1);
+            moveRight(distance, 1);
             jumpRight();
             punchJumpRight(PUNCHINGSTRONGJUMPRIGHT);
         } else if (actionRecieved == KICK || currentAction == KICKINGJUMPRIGHT || actionRecieved == KICKINGJUMPRIGHT) {
-            moveRight(distance, posContrincante, 1);
-            jumpRight();
+            moveRight(distance, 1);
             kickJumpRight(KICKINGJUMPRIGHT);
         } else if (actionRecieved == KICKSTRONG || currentAction == KICKINGSTRONGJUMPRIGHT || actionRecieved == KICKINGSTRONGJUMPRIGHT) {
-            moveRight(distance, posContrincante, 1);
-            jumpRight();
+            moveRight(distance, 1);
             kickJumpRight(KICKINGSTRONGJUMPRIGHT);
         } else {
-            moveRight(distance, posContrincante, 1);
+            moveRight(distance, 1);
             jumpRight();
         }
 
@@ -139,23 +137,23 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     } else if (currentAction == JUMPINGLEFT || currentAction == PUNCHINGJUMPLEFT || currentAction == KICKINGJUMPLEFT
     		|| currentAction == PUNCHINGSTRONGJUMPLEFT || currentAction == KICKINGSTRONGJUMPLEFT) {
         if (actionRecieved == PUNCH || currentAction == PUNCHINGJUMPLEFT || actionRecieved == PUNCHINGJUMPLEFT) {
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
             jumpLeft();
             punchJumpLeft(PUNCHINGJUMPLEFT);
         } else if (actionRecieved == PUNCHSTRONG || currentAction == PUNCHINGSTRONGJUMPLEFT || actionRecieved == PUNCHINGSTRONGJUMPLEFT) {
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
             jumpLeft();
             punchJumpLeft(PUNCHINGSTRONGJUMPLEFT);
         } else if (actionRecieved == KICK || currentAction == KICKINGJUMPLEFT || actionRecieved == KICKINGJUMPLEFT) {
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
             jumpLeft();
             kickJumpLeft(KICKINGJUMPLEFT);
         } else if (actionRecieved == KICKSTRONG || currentAction == KICKINGSTRONGJUMPLEFT || actionRecieved == KICKINGSTRONGJUMPLEFT) {
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
             jumpLeft();
             kickJumpLeft(KICKINGSTRONGJUMPLEFT);
         } else {
-            moveLeft(distance, posContrincante, 1);
+            moveLeft(distance, 1);
             jumpLeft();
         }
 
@@ -206,9 +204,9 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     else if (currentAction == BLOCK)
         renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
-        moveRight(distance, posContrincante, 1);   //send move right
+        moveRight(distance, 1);   //send move right
     else if (currentAction == MOVINGLEFT)
-        moveLeft(distance, posContrincante, 1);    //send move left
+        moveLeft(distance, 1);    //send move left
     else if (currentAction == PUNCH)
         punch(PUNCH);
     else if (currentAction == PUNCHSTRONG)
@@ -308,7 +306,7 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, int posContrincante, int vel) {
+void CharacterServer::moveLeft(int distance, int vel) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -322,7 +320,7 @@ void CharacterServer::moveLeft(int distance, int posContrincante, int vel) {
 }
 
 
-void CharacterServer::moveRight(int distance, int posContrincante, int vel) {
+void CharacterServer::moveRight(int distance, int vel) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel * CHARACTER_VEL;
@@ -511,12 +509,13 @@ void CharacterServer::punchJumpRight(actions_t punchJumpRight) {
 
 void CharacterServer::kickJumpVertical(actions_t kickVertical) {
     currentAction = kickVertical;
+    jump(&currentJumpingSprite, lastJumpingSprite);
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGVERTICAL, currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::kickJumpRight(actions_t kickJumpRight) {
     currentAction = kickJumpRight;
-    jump(&currentJumpingSprite, lastJumpingSprite);
+    jump(&currentJumpingRightSprite, lastJumpingRightSprite);
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGRIGHT, currentJumpingRightSprite,
                lastJumpingRightSprite);
 }
@@ -573,9 +572,9 @@ void CharacterServer::falling(int distance, int posContrincante) {
 
     if (currentFallingSprite > 8 && currentFallingSprite < 36) {
         if (isLookingLeft) {
-            moveRight(distance, posContrincante, 2);
+            moveRight(distance, 2);
         } else
-            moveLeft(distance, posContrincante, 2);
+            moveLeft(distance, 2);
     }
 
     if (currentFallingSprite > 8 && currentFallingSprite < 17) {

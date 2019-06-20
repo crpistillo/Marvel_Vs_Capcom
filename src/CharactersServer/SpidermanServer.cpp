@@ -84,7 +84,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, int posContrincante, int vel) {
+void SpidermanServer::moveLeft(int distance, int vel) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -100,7 +100,7 @@ void SpidermanServer::moveLeft(int distance, int posContrincante, int vel) {
 }
 
 
-void SpidermanServer::moveRight(int distance, int posContrincante, int vel) {
+void SpidermanServer::moveRight(int distance, int vel) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
