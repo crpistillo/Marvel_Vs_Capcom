@@ -280,4 +280,8 @@ ProjectileClient *SpidermanClient::getProjectile() {
     return projectile;
 }
 
+void SpidermanClient::loadBanner(SDL_Renderer *renderer)
+{
+	characterBanner.loadFromFile("images/barras/spidermanLeftBanner.png",renderer);
+}
 

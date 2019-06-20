@@ -25,6 +25,7 @@
 #include "ClientCursor.h"
 #include "RoundBanner.h"
 #include "TimeBanner.h"
+#include "Banner.h"
 #include <mutex>
 
 #define FIRST_DIGIT_POSITION 370

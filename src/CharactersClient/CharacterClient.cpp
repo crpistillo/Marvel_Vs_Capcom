@@ -39,6 +39,7 @@ void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int po
     isLookingLeft = this->getCentro() > posContrincante;
     m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite,
                      mRenderer); //esto es los valores que se cambian la resolucion
+    characterBanner.render(0,0,800,600,mRenderer);
 }
 
 
@@ -67,6 +68,7 @@ int CharacterClient::getCentro() {
 CharacterClient::~CharacterClient() {
     delete loader;
     m_Texture.free();
+    characterBanner.free();
 }
 
 void CharacterClient::positionUpdate(int *x) {

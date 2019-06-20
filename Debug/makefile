@@ -13,6 +13,7 @@ RM := rm -rf
 -include src/tools/ImageLoader/subdir.mk
 -include src/tools/FPSManager/subdir.mk
 -include src/Texture/subdir.mk
+-include src/Menu/subdir.mk
 -include src/Controls/subdir.mk
 -include src/Client/subdir.mk
 -include src/CharactersServer/subdir.mk
@@ -47,19 +48,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Marvel_Vs_Capcom
+all: marvel-vs-capcom
 
 # Tool invocations
-Marvel_Vs_Capcom: $(OBJS) $(USER_OBJS)
+marvel-vs-capcom: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++  -o "Marvel_Vs_Capcom" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++  -o "marvel-vs-capcom" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) Marvel_Vs_Capcom
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) marvel-vs-capcom
 	-@echo ' '
 
 .PHONY: all clean dependents

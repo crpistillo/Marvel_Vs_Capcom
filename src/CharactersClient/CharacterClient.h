@@ -58,6 +58,10 @@ public:
 
     void update(character_updater_t *ptr);
 
+    virtual void loadBanner(SDL_Renderer *renderer) = 0;
+
+    Texture characterBanner;
+
 protected:
     CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numOfClient);
@@ -77,6 +81,7 @@ protected:
     string characterFilePath;
 
     Texture m_Texture;
+
     ImageLoader *loader;
 
     int currentSprite;

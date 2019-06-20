@@ -40,7 +40,7 @@ public:
     void load(SDL_Renderer *pRenderer, int posContrincante);
 
 
-    void setCurrentCharacter(int i);
+    void setCurrentCharacter(int i, SDL_Renderer *renderer);
     std::mutex m;
 
 private:

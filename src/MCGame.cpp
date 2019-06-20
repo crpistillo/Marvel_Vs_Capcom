@@ -301,20 +301,23 @@ void MCGame::render() {
 
         //roundBanner->render(nullptr);
 
-        for (int i = 0; i < 5; i++) {
+        //banner.render(0,0,800,600,m_Renderer);
+
+        for (int i = 0; i < 6; i++) {
             if (renderizables[i] == backGround) {
                 backGround->render(camera.x, camera.y, m_Renderer, &backGroundTexture, nullptr);
             } else if (renderizables[i] == middleGround) {
                 middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
             } else if (renderizables[i] == frontGround) {
                 frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
+                banner.render(0,0,800,600,m_Renderer);
             } else if (renderizables[i] == players[1]) {
                 players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
             } else if (renderizables[i] == players[0]) {
                 players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
             }
         }
-        banner.render(0,0,800,600,m_Renderer);
+
         roundBanner->render(m_Renderer);
         timeBanner[0]->render(m_Renderer);
         timeBanner[1]->render(m_Renderer);
@@ -357,7 +360,7 @@ void MCGame::clean() {
     middleGroundTexture.free();
     backGroundTexture.free();
     menuTexture.free();
-    banner.free();
+    //banner.free();
     cliente1.free();
     cliente2.free();
     cliente3.free();
@@ -669,8 +672,8 @@ void MCGame::loadSelectedCharacters() {
     tcpClient->socketClient->reciveData(&currentCharacter0, sizeof(int));
     tcpClient->socketClient->reciveData(&currentCharacter1, sizeof(int));
 
-    players[0]->setCurrentCharacter(currentCharacter0);
-    players[1]->setCurrentCharacter(currentCharacter1);
+    players[0]->setCurrentCharacter(currentCharacter0,m_Renderer);
+    players[1]->setCurrentCharacter(currentCharacter1,m_Renderer);
 
     isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
 
