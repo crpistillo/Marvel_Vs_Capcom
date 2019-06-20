@@ -68,6 +68,7 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     }
 
 
+    roundBanner = new RoundBanner();
     timeBanner[0] = new TimeBanner(FIRST_DIGIT_POSITION);
     timeBanner[1] = new TimeBanner(SECOND_DIGIT_POSITION);
 
@@ -312,6 +313,7 @@ void MCGame::render() {
                 players[0]->render(m_Renderer, camera.x, camera.y, players[1]->getCentro());
             }
         }
+        roundBanner->render(m_Renderer);
         timeBanner[0]->render(m_Renderer);
         timeBanner[1]->render(m_Renderer);
     }
@@ -423,11 +425,11 @@ void MCGame::update() {
 		}
 
 
-		/*if(updater->round.roundInfo != FIGHTING){
+		if(updater->round.roundInfo != FIGHTING){
             roundBanner->updateRoundSprites(updater->round);
-            roundBanner->load();
+            roundBanner->load(m_Renderer);
 		} else
-		    disableRoundSprites();*/
+		    disableRoundSprites();
 
 		timeBanner[0]->digit = updater->firstDigitOfTime;
 		timeBanner[0]->load(m_Renderer);

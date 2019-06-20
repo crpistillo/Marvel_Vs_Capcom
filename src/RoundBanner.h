@@ -19,15 +19,16 @@ public:
     int currentWinner;
     int numberOfRound;
 
-    void load();
+    void load(SDL_Renderer *m_Renderer);
 
     ImageLoader *loader;
 
     void render(SDL_Renderer *mRenderer);
 
-    Texture m_Texture;
 
     void updateRoundSprites(round_info_t round);
+
+    Texture texture;
 };
 
 

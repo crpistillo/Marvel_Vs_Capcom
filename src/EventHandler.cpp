@@ -137,14 +137,24 @@ void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int 
 }
 
 character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) {
+    int otherTeam;
+    otherTeam = (toUpdate == 1 )? 0 : 1;
     round_action_t roundAction ;
-    if (timer->getTimeThatPass() == 0);
-        //tell who won
+    int *distancia = getTeamDistances();
+
+
+    if (timer->getTimeThatPass() == 0)
+        roundAction = NUMBEROFROUND;
+    //tell who won
     else if (timer->getTimeThatPass() == 1)
         roundAction = NUMBEROFROUND;
         //tell number of round
     else if (timer->getTimeThatPass() == 2)
         roundAction = FIGHT;
+
+    team[toUpdate]->update(distancia[toUpdate], STANDING, team[otherTeam]->getCurrentBox());
+
+
     character_updater_t* roundUpdater = makeUpdater(toUpdate, STANDING, roundAction);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;

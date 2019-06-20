@@ -25,6 +25,8 @@ public:
 
     void setDigits(character_updater_t *updater);
 
+    int getTimeLeft();
+
 private:
     int initialTime;
     int currentTime;

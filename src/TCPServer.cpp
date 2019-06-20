@@ -594,16 +594,20 @@ void TCPServer::configJson(json config) {
 void TCPServer::updateModel() {
 
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer *timer = new Timer(99);
+    Timer *timer = new Timer(5);
     int roundsPlayed = 0;
     while (1) {
 
-        /*if ((timer->getSecondDigit() == 0 && timer->getFirstDigit() == 0) || roundsPlayed == 2) {
+        if (timer->getTimeLeft() == 0|| roundsPlayed == 2) {
+            cout <<"asd" <<endl;
             roundsPlayed++;
             resetRound();
             roundRun(getCurrentWinner(), eventHandler, 0);
             timer->resetTimer();
-        }*/
+            cout<<"tiempo despues de resetiarlo: "<<timer->getTimeLeft()<<endl;
+            ignoreMessages = false;
+        }
+        cout<<"Tiempo es :"<< timer->getTimeLeft()<<endl;
         //cout<<timer->getSecondDigit()<<timer->getFirstDigit()<<endl;
 
 
@@ -651,7 +655,7 @@ void TCPServer::updateModel() {
 bool TCPServer::clientIsActive(int clientSocket) {
     std::unique_lock<std::mutex> lock(teams_mtx);
     return (team[0]->clientActive == clientSocket
-            || team[1]->clientActive == clientSocket);
+            || team[1]->clientActive == clientSocket) && !ignoreMessages;
 }
 
 void TCPServer::manageDisconnection(int clientSocket) {
@@ -766,22 +770,6 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
         memcpy( update[j], update_msg, sizeof(character_updater_t));
         update[j]->client = clientNumber;
         update[j]->gameFinishedByDisconnections = false;
-
-        /*update[j] = new character_updater_t;
-        update[j]->action = update_msg->action;
-        update[j]->client = clientNumber;
-        update[j]->gameFinishedByDisconnections = false;
-        update[j]->team = update_msg->team;
-        update[j]->posX = update_msg->posX;
-        update[j]->posY = update_msg->posY;
-        update[j]->currentSprite = update_msg->currentSprite;
-        update[j]->currentProjectileSprite = update_msg->currentProjectileSprite;
-        update[j]->projectile = update_msg->projectile;
-        update[j]->pposX = update_msg->pposX;
-        update[j]->pposY = update_msg->pposY;
-        update[j]->firstDigitOfTime = update_msg->firstDigitOfTime;
-        update[j]->secondDigitOfTime = update_msg->secondDigitOfTime;
-        update[j]->round = update_msg->round;*/
     }
 
     for (int i = 0; i < numberOfPlayers; ++i) {
@@ -844,7 +832,6 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     ignoreMessages = true;
     Timer *timer = new Timer(3);
     while (timer->getTimeThatPass() < 3) {
-
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
             roundUpdater->round.winner = whoWon;
@@ -852,6 +839,9 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
             putUpdatersInEachQueue(roundUpdater, team[i]->getCurrentCharacter()->clientNumber);
         }
     }
+    delete timer;
+    cout<<timer->getTimeThatPass()<<endl;
+
 }
 
 int TCPServer::getCurrentWinner() {

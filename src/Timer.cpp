@@ -41,6 +41,11 @@ void Timer::setDigits(character_updater_t *updater) {
     updater->secondDigitOfTime = getSecondDigit();
 }
 
+int Timer::getTimeLeft() {
+    currentTime = SDL_GetTicks()/1000;
+    return maxTime - (currentTime - initialTime);
+}
+
 
 
 
