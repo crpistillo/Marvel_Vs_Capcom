@@ -269,10 +269,10 @@ void TCPServer::reconnections() {
 void TCPServer::sendCharacterBuildersToSocket(int socketNumber) {
     character_builder_t builders[MAXPLAYERS];
 
-    team[0]->get_firstCharacter()->makeBuilderStruct(&builders[0], true);
-    team[0]->get_secondCharacter()->makeBuilderStruct(&builders[1], true);
-    team[1]->get_firstCharacter()->makeBuilderStruct(&builders[2], false);
-    team[1]->get_secondCharacter()->makeBuilderStruct(&builders[3], false);
+    team[0]->getFirstCharacter()->makeBuilderStruct(&builders[0], true);
+    team[0]->getSecondCharacter()->makeBuilderStruct(&builders[1], true);
+    team[1]->getFirstCharacter()->makeBuilderStruct(&builders[2], false);
+    team[1]->getSecondCharacter()->makeBuilderStruct(&builders[3], false);
 
     for (auto &builder : builders) {
         clientsSockets[socketNumber]->sendData(&builder, sizeof(character_builder_t));

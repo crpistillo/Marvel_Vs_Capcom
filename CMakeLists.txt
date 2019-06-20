@@ -65,7 +65,7 @@ set(SOURCE_FILES
         src/Box.h
         src/Menu/Menu.h
         src/Menu/Menu.cpp
-        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
+        src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h
         src/EventHandler.cpp src/EventHandler.h src/CharactersServer/Projectile.cpp src/CharactersServer/Projectile.h src/CharactersClient/ProjectileClient.cpp src/CharactersClient/ProjectileClient.h src/Timer.cpp src/Timer.h src/RoundBanner.cpp src/RoundBanner.h src/TimeBanner.cpp src/TimeBanner.h)
 
 
