@@ -68,12 +68,15 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
     bool actionStarted = false;
 
     if (currentAction == MI || currentAction == JV || currentAction == JR ||
-        currentAction == JL || currentAction == P || currentAction == K ||
-        currentAction == PD || currentAction == KD || currentAction == HG ||
-        currentAction == HA || currentAction == PV || currentAction == THP ||
-        currentAction == PJR || currentAction == PJL || currentAction == KV
-        || currentAction == KJR || currentAction == KJL || currentAction == THP
-        || currentAction == FA || currentAction == TH)
+            currentAction == JL || currentAction == P || currentAction == K ||
+            currentAction == PD || currentAction == KD || currentAction == HG ||
+            currentAction == HA || currentAction == PV || currentAction == THP ||
+            currentAction == PJR || currentAction == PJL || currentAction == KV ||
+            currentAction == KJR || currentAction == KJL || currentAction == THP ||
+            currentAction == FA || currentAction == TH ||currentAction == PS ||
+            currentAction == PSD || currentAction == PSV || currentAction == PSJR ||
+            currentAction == PSJL || currentAction == KS || currentAction == KSD ||
+            currentAction == KSV || currentAction == KSJR || currentAction == KSJL)
         actionStarted = true;
 
 
@@ -87,7 +90,8 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         else
             moveRight(distance, posContrincante, 1);
         hurtingAir();
-    } else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL ||
+    }
+    else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL ||
                currentAction == KICKINGVERTICAL || currentAction == PUNCHINGSTRONGVERTICAL
 			   || currentAction == KICKINGSTRONGVERTICAL) {
         if (actionRecieved == PUNCH || currentAction == PUNCHINGVERTICAL || actionRecieved == PUNCHINGVERTICAL) {
@@ -96,15 +100,11 @@ void CharacterServer::update(int distance, int posContrincante, actions_t action
         }
 		else if (actionRecieved == PUNCHSTRONG || currentAction == PUNCHINGSTRONGVERTICAL
 				|| actionRecieved == PUNCHINGSTRONGVERTICAL) {
-			//jumpVertical();
 			punchJumpVertical(PUNCHINGSTRONGVERTICAL);
 		}
-        else if (actionRecieved == KICK || currentAction == KICKINGVERTICAL || actionRecieved == KICKINGVERTICAL) {
-            //jumpVertical();
-            kickJumpVertical(KICKINGVERTICAL);
+        else if (actionRecieved == KICK || currentAction == KICKINGVERTICAL || actionRecieved == KICKINGVERTICAL) {kickJumpVertical(KICKINGVERTICAL);
         }
             else if (actionRecieved == KICKSTRONG || currentAction == KICKINGSTRONGVERTICAL || actionRecieved == KICKINGSTRONGVERTICAL) {
-                //jumpVertical();
                 kickJumpVertical(KICKINGSTRONGVERTICAL);
         } else if (currentAction == JUMPINGVERTICAL)
             jumpVertical();
@@ -602,6 +602,10 @@ void CharacterServer::falling(int distance, int posContrincante) {
 
 bool CharacterServer::isProjectileHurting() {
     return false;
+}
+
+bool CharacterServer::isHurting() {
+    return currentAction == HURTINGAIR || currentAction == HURTINGGROUND;
 }
 
 
