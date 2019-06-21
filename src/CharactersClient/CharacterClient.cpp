@@ -37,7 +37,7 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
 
 void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;
-    m_Texture.render(mPosX - camX, mPosY - camY, 620, 480,
+    m_Texture.render(mPosX - camX, mPosY - camY, widthSprite, heightSprite,
                      mRenderer); //esto es los valores que se cambian la resolucion
 }
 
