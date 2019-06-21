@@ -69,6 +69,7 @@ public:
     virtual bool isProjectileHurting();
 
     bool isHurting();
+    int getVida();
 
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,

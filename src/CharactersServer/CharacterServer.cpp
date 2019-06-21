@@ -613,4 +613,8 @@ void CharacterServer::quitarVida(int danio) {
     else vida = vida - danio;
 }
 
+int CharacterServer::getVida() {
+    return vida;
+}
+
 

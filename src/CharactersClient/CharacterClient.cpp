@@ -118,6 +118,7 @@ void CharacterClient::update(character_updater_t *updater) {
     mPosX = updater->posX;
     mPosY = updater->posY;
     currentSprite = updater->currentSprite;
+    vida = updater->vida;
 }
 
 ProjectileClient *CharacterClient::getProjectile() {

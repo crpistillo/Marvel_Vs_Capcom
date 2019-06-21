@@ -644,6 +644,7 @@ void TCPServer::updateModel() {
         update_msg->round.winner = 0;
         update_msg->round.numberOfRound = roundsPlayed;
         eventHandler->handleProjectiles(update_msg, teamToUpdate);
+        update_msg->vida = team[teamToUpdate]->getCurrentCharacter()->getVida();
         putUpdatersInEachQueue(update_msg, incoming_msg->client);
 
         std::unique_lock<std::mutex> lock(incoming_msg_mtx);
