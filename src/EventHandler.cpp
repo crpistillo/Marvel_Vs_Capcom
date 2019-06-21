@@ -82,13 +82,20 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
+
     if (action==P || action==K || action==PD || action==KD || action==PV || action==PJR || action==PJL ||
     	action==KV || action==KJL || action==KJR)
-    	team[receiver]->getCurrentCharacter()->quitarVida(5);
+    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+    		team[receiver]->getCurrentCharacter()->quitarVida(1);
+    	else
+    		team[receiver]->getCurrentCharacter()->quitarVida(5);
 
     if (action==PS || action==PSD || action==PSV || action==PSJR || action==PSJL ||
     	action==KS || action==KSD || action==KSV || action==KSJR || action==KSJL)
-    	team[receiver]->getCurrentCharacter()->quitarVida(10);
+    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+    		team[receiver]->getCurrentCharacter()->quitarVida(2);
+    	else
+    		team[receiver]->getCurrentCharacter()->quitarVida(10);
 
 
     //any other interaction
