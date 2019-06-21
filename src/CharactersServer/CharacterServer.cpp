@@ -14,7 +14,29 @@ bool initialLookingLeft;
 
 // Protected
 CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
-                                 int heightSprite, int anchoPantalla, int numberOfClient) {
+                                 int heightSprite, int anchoPantalla, int numberOfClient,
+								 int widthStanding,
+								 int heightStanding,
+								 int widthWalking,
+								 int heightWalking,
+								 int widthDuck,
+								 int heightDuck,
+								 int widthPunch,
+								 int heightPunch,
+								 int widthPunchDown,
+								 int heightPunchDown,
+								 int widthKick,
+								 int heightKick,
+								 int widthKickDown,
+								 int heightKickDown,
+								 int widthKickAir,
+								 int heightKickAir,
+								 int widthPunchAir,
+								 int heightPunchAir,
+								 int widthJumping,
+								 int heightJumping,
+								 int widthJumpingLeft ,
+								 int heightJumpingLeft) {
     this->mPosX = mPosX;
     this->mPosY = mPosY;
     this->width = width;
@@ -47,6 +69,29 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentThrowPowerSprite = 0;
     this->currentGripSprite = 0;
     this->currentFallingSprite = 0;
+
+    this->widthStanding = widthStanding;
+    this->heightStanding = heightStanding;
+    this->widthWalking = widthWalking;
+    this->heightWalking = heightWalking;
+    this->widthDuck = widthDuck;
+    this->heightDuck = heightDuck;
+    this->widthPunch = widthPunch;
+    this->heightPunch = heightPunch;
+    this->widthPunchDown = widthPunchDown;
+    this->heightPunchDown = heightPunchDown;
+    this->widthKick = widthKick;
+    this->heightKick = heightKick;
+    this->widthKickDown = widthKickDown;
+    this->heightKickDown = heightKickDown;
+    this->widthKickAir = widthKickAir;
+	this->heightKickAir = heightKickAir;
+	this->widthPunchAir = widthPunchAir;
+	this->heightPunchAir = heightPunchAir;
+	this->widthJumping = widthJumping;
+	this->heightJumping = heightJumping;
+	this->widthJumpingLeft = widthJumpingLeft;
+	this->heightJumpingLeft = heightJumpingLeft;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -295,10 +340,12 @@ void CharacterServer::stand() {
     this->resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
         currentStandingSprite = 0;
+    characterBox->updateBox(widthStanding, heightStanding);
 }
 
 
 void CharacterServer::renderDuckSprite() {
+	characterBox->updateBox(widthDuck, heightDuck);
     currentAction = DUCK;
 }
 
@@ -349,11 +396,13 @@ void CharacterServer::jump(int *currentSprite, int lastSprite) {
 }
 
 void CharacterServer::jumpVertical() {
+	characterBox->updateBox(widthJumping, heightJumping);
     this->currentAction = JUMPINGVERTICAL;
     jump(&currentJumpingSprite, lastJumpingSprite);
 }
 
 void CharacterServer::jumpRight() {
+	characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite);
 
@@ -361,6 +410,7 @@ void CharacterServer::jumpRight() {
 
 
 void CharacterServer::jumpLeft() {
+	characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
