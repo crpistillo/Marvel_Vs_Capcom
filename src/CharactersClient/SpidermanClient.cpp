@@ -41,6 +41,8 @@ SpidermanClient::~SpidermanClient() {
 
 void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
+
+
     isLookingLeft = this->getCentro() > posContrincante;
     switch (this->currentAction) {
         case STANDING:
@@ -252,6 +254,8 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
             break;
 
         case MAKINGINTRO:
+        	this->loadBanner(renderer);
+
             if (!isLookingLeft && 10 <= currentSprite && currentSprite <= 16)
                 this->loader->loadActionSprite(characterFilePath + "intro", "/MVC2_SpiderManR_", currentSprite,
                                                FILE_EXTENSION,
@@ -283,6 +287,13 @@ ProjectileClient *SpidermanClient::getProjectile() {
 
 void SpidermanClient::loadBanner(SDL_Renderer *renderer)
 {
-	characterLeftBanner.loadFromFile("images/barras/spidermanLeftBanner.png",renderer);
-	characterRightBanner.loadFromFile("images/barras/spidermanRightBanner.png",renderer);
+	if (this->clientNumber == 0 || this->clientNumber == 1) {
+		this->loader->loadActionSprite(characterFilePath + "banner_left",
+				MVC_FILEPATH, 0, FILE_EXTENSION, renderer,
+				&characterLeftBanner);
+	} else {
+		this->loader->loadActionSprite(characterFilePath + "banner_right",
+				MVC_FILEPATH, 0, FILE_EXTENSION, renderer,
+				&characterRightBanner);
+	}
 }

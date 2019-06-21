@@ -44,8 +44,8 @@ void CharacterClient::render(SDL_Renderer *mRenderer, int camX, int camY, int po
 void CharacterClient::renderBanner(SDL_Renderer *mRenderer)
 {
 	if(clientNumber == 0 || clientNumber == 1)
-		characterLeftBanner.render(0,29,248,72,mRenderer);
-	else characterRightBanner.render(552,29,248,72,mRenderer);
+		characterLeftBanner.render(0,29,368,72,mRenderer);
+	else characterRightBanner.render(432,29,368,72,mRenderer);
 }
 
 int CharacterClient::getPosX() {

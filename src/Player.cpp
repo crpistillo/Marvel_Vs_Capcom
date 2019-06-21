@@ -158,7 +158,6 @@ void Player::setCurrentCharacter(int i, SDL_Renderer *renderer) {
     else
         currentCharacter = secondCharacter;
 
-    cout<<"esto pasa una vez"<<endl;
     currentCharacter->loadBanner(renderer);
 
 }

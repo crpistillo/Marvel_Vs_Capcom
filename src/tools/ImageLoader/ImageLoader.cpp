@@ -15,3 +15,4 @@ void ImageLoader::loadActionSprite(string actionPath, string characterMVC, int c
 	texture->loadFromFile(imagePath, renderer);
 	texture->setColor(r_value, g_value, b_value);
 }
+
