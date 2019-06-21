@@ -260,6 +260,7 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
                 this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
+
             break;
         case MOVINGLEFT:
         case MOVINGRIGHT:
@@ -280,4 +281,8 @@ ProjectileClient *SpidermanClient::getProjectile() {
     return projectile;
 }
 
-
+void SpidermanClient::loadBanner(SDL_Renderer *renderer)
+{
+	characterLeftBanner.loadFromFile("images/barras/spidermanLeftBanner.png",renderer);
+	characterRightBanner.loadFromFile("images/barras/spidermanRightBanner.png",renderer);
+}

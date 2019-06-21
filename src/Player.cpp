@@ -74,7 +74,14 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
     ProjectileClient *projectile = currentCharacter->getProjectile();
     if (projectile)
         projectile->render(mRenderer, camX, camY);
+
 }
+
+void Player::renderBanner(SDL_Renderer *mRenderer)
+{
+	currentCharacter->renderBanner(mRenderer);
+}
+
 
 void Player::free() {
     delete firstCharacter;
@@ -145,11 +152,15 @@ void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
     currentCharacter->load(pRenderer, posContrincante);
 }
 
-void Player::setCurrentCharacter(int i) {
+void Player::setCurrentCharacter(int i, SDL_Renderer *renderer) {
     if(i == 0)
         currentCharacter = firstCharacter;
     else
         currentCharacter = secondCharacter;
+
+    cout<<"esto pasa una vez"<<endl;
+    currentCharacter->loadBanner(renderer);
+
 }
 
 

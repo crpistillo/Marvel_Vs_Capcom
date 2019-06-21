@@ -270,3 +270,10 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
     }
 
 }
+
+
+void WolverineClient::loadBanner(SDL_Renderer *renderer)
+{
+	characterLeftBanner.loadFromFile("images/barras/wolverineLeftBanner.png",renderer);
+	characterRightBanner.loadFromFile("images/barras/wolverineRightBanner.png",renderer);
+}

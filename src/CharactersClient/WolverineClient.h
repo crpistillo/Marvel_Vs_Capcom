@@ -16,6 +16,7 @@ public:
                     int anchoPantalla, int numOfClient);
 
     void load(SDL_Renderer *renderer, int posContrincante);
+    void loadBanner(SDL_Renderer *renderer);
 };
 
 #endif //MARVEL_VS_CAPCOM_WOLVERINECLIENT_H
