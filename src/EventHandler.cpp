@@ -100,7 +100,8 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
-        insertAction(queue, HURTINGGROUND, receiver);
+    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK) return;
+    	else	insertAction(queue, HURTINGGROUND, receiver);
     else
         insertAction(queue, HURTINGAIR, receiver);
 }
