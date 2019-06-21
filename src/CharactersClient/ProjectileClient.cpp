@@ -28,7 +28,7 @@ ProjectileClient::ProjectileClient(bool secondaryColor) {
 void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
     if(!active)
         return;
-    m_Texture.render(posX - camX, posY - camY, 1000, 700,
+    m_Texture.render(posX - camX, posY - camY, 620, 480,
                      mRenderer);
 
 }
