@@ -39,8 +39,10 @@ public:
 
     void load(SDL_Renderer *pRenderer, int posContrincante);
 
+    void renderBanner(SDL_Renderer *mRenderer);
 
-    void setCurrentCharacter(int i);
+
+    void setCurrentCharacter(int i, SDL_Renderer *renderer);
     std::mutex m;
 
 private:
