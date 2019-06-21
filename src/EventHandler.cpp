@@ -151,6 +151,7 @@ void EventHandler::manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int 
     if (team[receiver]->getCurrentCharacter()->inTheGround()) {
         insertAction(queue, THROW, giver);
         insertAction(queue, FALLING, receiver);
+        team[receiver]->getCurrentCharacter()->quitarVida(5);
     }
 }
 
