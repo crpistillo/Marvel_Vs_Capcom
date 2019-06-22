@@ -11,7 +11,7 @@ const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
 const Uint8 SECONDARY_BLUE = 000;
 
-const string IronManPath = "images/IronMan/IronMan_";
+const string IronManPath = "images/iron_man/iron_man_";
 const string MVC_FILEPATH = "/MVC2_IronMan_";
 const string FILE_EXTENSION = ".png";
 
