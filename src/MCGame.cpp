@@ -649,7 +649,7 @@ void MCGame::renderMenu() {
 
 void MCGame::renderMenuBackImage() {
     Texture menuBackImage;
-    menuBackImage.loadFromFile("images/menu/nuevos_cursores/nuevoMenu.png", this->m_Renderer);
+    menuBackImage.loadFromFile("images/menu4/Menu4.png", this->m_Renderer);
     menuBackImage.render(0, 0, 800, 600, m_Renderer);
 }
 
