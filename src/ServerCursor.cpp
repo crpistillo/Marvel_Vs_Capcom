@@ -15,8 +15,8 @@ bool ServerCursor::moveRight(){
 	if(this->finalSelection)
 		return false;
 
-	if (posX == 97){
-		posX = 449;
+	if (posX == SPIDERMAN_POSITION){
+		posX = WOLVERINE_POSITION;
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
@@ -29,8 +29,8 @@ bool ServerCursor::moveLeft(){
 	if(this->finalSelection)
 		return false;
 
-	if (posX == 449){
-		posX = 97;
+	if (posX == WOLVERINE_POSITION){
+		posX = SPIDERMAN_POSITION;
 
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
@@ -43,11 +43,11 @@ bool ServerCursor::selectCharacter(){
 	if(this->finalSelection)
 		return false;
 
-	if(this->posX == 97){
+	if(this->posX == SPIDERMAN_POSITION){
 		this->characterSelected = SPIDERMAN;
 		this->finalSelection = true;
 	}
-	else if(this->posX == 449){
+	else if(this->posX == WOLVERINE_POSITION){
 		this->characterSelected = WOLVERINE;
 		this->finalSelection = true;
 	}

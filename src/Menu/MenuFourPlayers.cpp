@@ -11,10 +11,11 @@ MenuFourPlayers::MenuFourPlayers(TCPServer *pServer) : Menu(4, pServer) {
 }
 
 void MenuFourPlayers::runMenuFourPlayers() {
-    serverCursors[0] = new ServerCursor(97, 61, true);
-    serverCursors[1] = new ServerCursor(449, 61, true);
-    serverCursors[2] = new ServerCursor(97, 353, true);
-    serverCursors[3] = new ServerCursor(449, 353, true);
+    serverCursors[0] = new ServerCursor(SPIDERMAN_POSITION, TEAM_ONE_POSITION, true);
+    serverCursors[1] = new ServerCursor(WOLVERINE_POSITION, TEAM_ONE_POSITION, true);
+
+    serverCursors[2] = new ServerCursor(SPIDERMAN_POSITION, TEAM_TWO_POSITION, true);
+    serverCursors[3] = new ServerCursor(WOLVERINE_POSITION, TEAM_TWO_POSITION, true);
     sendUpdaters(false);
 
     int onlinePlayersTeamOne = 2;

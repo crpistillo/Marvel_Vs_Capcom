@@ -12,12 +12,12 @@ MenuTwoPlayers::MenuTwoPlayers(TCPServer *pServer) : Menu(2, pServer) {
 
 void MenuTwoPlayers::runMenuTwoPlayers() {
     //Los dos cursores del primer cliente
-    serverCursors[0] = new ServerCursor(97, 61, true);
-    serverCursors[1] = new ServerCursor(449, 61, false);
+    serverCursors[0] = new ServerCursor(SPIDERMAN_POSITION, TEAM_ONE_POSITION, true);
+    serverCursors[1] = new ServerCursor(WOLVERINE_POSITION, TEAM_ONE_POSITION, false);
 
     //Los dos cursores del segundo cliente
-    serverCursors[2] = new ServerCursor(97, 353, true);
-    serverCursors[3] = new ServerCursor(449, 353, false);
+    serverCursors[2] = new ServerCursor(SPIDERMAN_POSITION, TEAM_TWO_POSITION, true);
+    serverCursors[3] = new ServerCursor(WOLVERINE_POSITION, TEAM_TWO_POSITION, false);
 
     ServerCursor *actualCursorFirstClient = serverCursors[0];
     ServerCursor *actualCursorSecondClient = serverCursors[2];
