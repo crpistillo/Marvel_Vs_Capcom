@@ -32,6 +32,7 @@ CharacterClient::CharacterClient(int mPosX, int mPosY, int width, int sobrante, 
     this->characterControls = NULL;
 
     this->lastTime = SDL_GetTicks();
+    this->vida = 100;
 
 }
 
@@ -125,6 +126,7 @@ void CharacterClient::update(character_updater_t *updater) {
     mPosX = updater->posX;
     mPosY = updater->posY;
     currentSprite = updater->currentSprite;
+    vida = updater->vida;
 }
 
 ProjectileClient *CharacterClient::getProjectile() {

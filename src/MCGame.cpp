@@ -221,6 +221,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger,
                                       SCREEN_WIDTH);
+    //barra = new Barra(88,74,0.1,true);
 }
 
 
@@ -319,14 +320,14 @@ void MCGame::render() {
         roundBanner->render(m_Renderer);
         timeBanner[0]->render(m_Renderer);
         timeBanner[1]->render(m_Renderer);
+        //barra->render(m_Renderer);
         players[0]->renderBanner(m_Renderer);
         players[1]->renderBanner(m_Renderer);
     }
     logger->log("Fin render.", DEBUG);
-  /*  SDL_Color color1 = color(255,255,0,1);
-    SDL_Color color2 = color(167,000,0,0.57);
-    barra(40,5,300,30,0.7,color1,color2);
-    */
+
+
+
     SDL_RenderPresent(m_Renderer); // draw to the screen
 }
 
@@ -675,6 +676,9 @@ void MCGame::loadSelectedCharacters() {
     players[0]->setCurrentCharacter(currentCharacter0, m_Renderer);
     players[1]->setCurrentCharacter(currentCharacter1, m_Renderer);
 
+    players[0]->setBarra(true);
+    players[1]->setBarra(false);
+
     isSending = (this->tcpClient->nclient) == players[team]->getCurrentCharacter()->clientNumber;
 
 
@@ -720,33 +724,6 @@ bool MCGame::isActive() {
 bool MCGame::isRunning() {
     std::unique_lock<std::mutex> lock(m);
     return m_Running;
-}
-
-/*Nota: El juego, ademas de la barra amarilla tiene una barra roja que se vacia a una menor velocidad. No se que
- * representa. Posiblemente no sea necesaria. Preguntar.*/
-//La salud (health) varia de 0 a 1
-void MCGame::barra(int posX, int posY, int width, int height, float health, SDL_Color FGColor, SDL_Color BGColor) {
-	health = health > 1.f ? 1.f : health < 0.f ? 0.f : health;
-	SDL_Color old;
-	SDL_GetRenderDrawColor(m_Renderer, &old.r, &old.g, &old.g, &old.a);
-	SDL_Rect bgrect = { posX, posY, width, height };
-	SDL_SetRenderDrawColor(m_Renderer, BGColor.r, BGColor.g, BGColor.b, BGColor.a);
-	SDL_RenderFillRect(m_Renderer, &bgrect);
-	SDL_SetRenderDrawColor(m_Renderer, FGColor.r, FGColor.g, FGColor.b, FGColor.a);
-	int hw = (int)((float)width * health);
-
-	//Para que se vacie de izquierda a derecha (para el team 1)
-	int hx = posX + (width - hw);
-	//hx es posX para que se vacie de derecha a izquieirda (team 2)
-
-	SDL_Rect fgrect = { hx, posY, hw, height };
-	SDL_RenderFillRect(m_Renderer, &fgrect);
-	SDL_SetRenderDrawColor(m_Renderer, old.r, old.g, old.b, old.a);
-}
-
-SDL_Color MCGame::color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-	SDL_Color col = {r,g,b,a};
-	return col;
 }
 
 void MCGame::disableRoundSprites() {

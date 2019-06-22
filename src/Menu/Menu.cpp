@@ -7,51 +7,6 @@
 #include "../CharactersServer/SpidermanServer.h"
 #include "../CharactersServer/WolverineServer.h"
 
-const int widthStandingS = 90;
-const int heightStandingS = 96;
-const int widthWalkingS = 87;
-const int heightWalkingS = 91;
-const int widthDuckS = 100;
-const int heightDuckS = 52;
-const int widthPunchS = 152;
-const int heightPunchS = 77;
-const int widthPunchDownS = 150;
-const int heightPunchDownS = 51;
-const int widthKickS = 146;
-const int heightKickS = 93;
-const int widthKickDownS = 160;
-const int heightKickDownS = 65;
-const int widthKickAirS = 144;
-const int heightKickAirS = 82;
-const int widthPunchAirS = 84;
-const int heightPunchAirS = 85;
-const int widthJumpingS = 99;
-const int heightJumpingS = 50;
-const int widthJumpingLeftS = 70;
-const int heightJumpingLeftS = 70;
-
-const int widthStandingW = 80;
-const int heightStandingW = 84;
-const int widthWalkingW = 88;
-const int heightWalkingW = 86;
-const int widthDuckW = 92;
-const int heightDuckW = 59;
-const int widthPunchW = 131;
-const int heightPunchW = 95;
-const int widthPunchDownW = 156;
-const int heightPunchDownW = 56;
-const int widthKickW = 164;
-const int heightKickW = 96;
-const int widthKickDownW = 146;
-const int heightKickDownW = 51;
-const int widthKickAirW = 164;
-const int heightKickAirW = 97;
-const int widthPunchAirW = 191;
-const int heightPunchAirW = 64;
-const int widthJumpingW = 119;
-const int heightJumpingW = 52;
-const int widthJumpingLeftW = 104;
-const int heightJumpingLeftW = 104;
 
 
 using namespace std;
@@ -289,58 +244,14 @@ CharacterServer *Menu::createServerCharacterFromCursor(ServerCursor *pCursor, in
         case SPIDERMAN:
             characterServer = new SpidermanServer(pos, constants->widthSpiderman,
                                                   constants->heightSpiderman, constants->spidermanSobrante,
-                                                  constants->spidermanAncho, constants->screenWidth, nclient,
-												  widthStandingS,
-												  heightStandingS,
-												  widthWalkingS,
-												  heightWalkingS,
-												  widthDuckS,
-												  heightDuckS,
-												  widthPunchS,
-												  heightPunchS,
-												  widthPunchDownS,
-												  heightPunchDownS,
-												  widthKickS,
-												  heightKickS,
-												  widthKickDownS,
-												  heightKickDownS,
-												  widthKickAirS,
-												  heightKickAirS,
-												  widthPunchAirS,
-												  heightPunchAirS,
-												  widthJumpingS,
-												  heightJumpingS,
-												  widthJumpingLeftS ,
-												  heightJumpingLeftS);
+                                                  constants->spidermanAncho, constants->screenWidth, nclient);
 
             break;
 
         case WOLVERINE:
             characterServer = new WolverineServer(pos, constants->widthWolverine,
                                                   constants->heightWolverine, constants->wolverineSobrante,
-                                                  constants->wolverineAncho, constants->screenWidth, nclient,
-												  widthStandingW,
-												  heightStandingW,
-												  widthWalkingW,
-												  heightWalkingW,
-												  widthDuckW,
-												  heightDuckW,
-												  widthPunchW,
-												  heightPunchW,
-												  widthPunchDownW,
-												  heightPunchDownW,
-												  widthKickW,
-												  heightKickW,
-												  widthKickDownW,
-												  heightKickDownW,
-												  widthKickAirW,
-												  heightKickAirW,
-												  widthPunchAirW,
-												  heightPunchAirW,
-												  widthJumpingW,
-												  heightJumpingW,
-												  widthJumpingLeftW ,
-												  heightJumpingLeftW);
+                                                  constants->wolverineAncho, constants->screenWidth, nclient);
     }
     return characterServer;
 }

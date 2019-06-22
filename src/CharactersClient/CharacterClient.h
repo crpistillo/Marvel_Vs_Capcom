@@ -95,6 +95,8 @@ protected:
 
   //  int mVelX, mVelY;
 
+    int vida;
+
 };
 
 

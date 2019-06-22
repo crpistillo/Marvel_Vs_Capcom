@@ -27,6 +27,7 @@
 #include "TimeBanner.h"
 #include <mutex>
 
+
 #define FIRST_DIGIT_POSITION 370
 #define SECOND_DIGIT_POSITION 400
 
@@ -84,7 +85,6 @@ private:
     void renderMenuBackImage();
 
     void sendMenuAlive(Uint32* timer);
-    SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 
 protected:
@@ -145,9 +145,6 @@ public:
     int maxTimeouts = 0;
 
     std::mutex pipe_mtx;
-
-
-    void barra(int posX, int posY, int width, int height, float health, SDL_Color FGColor, SDL_Color BGColor);
 
     void disableRoundSprites();
 
