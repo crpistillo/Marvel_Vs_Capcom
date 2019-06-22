@@ -153,7 +153,7 @@ void IronManServer::moveRight(int distance, int vel) {
 
 void IronManServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
-    builder->personaje = SPIDERMAN;
+    builder->personaje = IRONMAN;
     builder->cliente = clientNumber;
     builder->sprite = 0;
     builder->action = STANDING;

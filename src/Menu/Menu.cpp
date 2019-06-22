@@ -6,6 +6,8 @@
 #include "../Constants.h"
 #include "../CharactersServer/SpidermanServer.h"
 #include "../CharactersServer/WolverineServer.h"
+#include "../CharactersServer/IronManServer.h"
+#include "../CharactersServer/RyuServer.h"
 
 
 
@@ -252,6 +254,18 @@ CharacterServer *Menu::createServerCharacterFromCursor(ServerCursor *pCursor, in
             characterServer = new WolverineServer(pos, constants->widthWolverine,
                                                   constants->heightWolverine, constants->wolverineSobrante,
                                                   constants->wolverineAncho, constants->screenWidth, nclient);
+            break;
+
+        case IRONMAN:
+        	characterServer = new IronManServer(pos, constants->widthSpiderman,
+        	                                                  constants->heightSpiderman, constants->spidermanSobrante,
+        	                                                  constants->spidermanAncho, constants->screenWidth, nclient);
+        	break;
+
+        case RYU:
+        	characterServer = new RyuServer(pos, constants->widthSpiderman,
+        	                                                  constants->heightSpiderman, constants->spidermanSobrante,
+        	                                                  constants->spidermanAncho, constants->screenWidth, nclient);
     }
     return characterServer;
 }
