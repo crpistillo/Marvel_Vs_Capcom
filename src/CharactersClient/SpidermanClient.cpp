@@ -11,8 +11,8 @@ const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
 const Uint8 SECONDARY_BLUE = 000;
 
-const string spidermanPath = "images/spiderman/spiderman_";
-const string MVC_FILEPATH = "/MVC2_SpiderMan_";
+const string spidermanPath = "images/ryu/ryu_";
+const string MVC_FILEPATH = "/MVC2_Ryu_";
 const string FILE_EXTENSION = ".png";
 
 SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
@@ -169,19 +169,19 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case DUCK:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 1, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 0, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
         case BLOCK:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 228, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 1, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 227, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 0, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
