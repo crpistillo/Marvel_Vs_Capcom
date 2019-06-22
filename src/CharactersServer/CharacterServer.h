@@ -73,29 +73,7 @@ public:
 
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
-                    int heightSprite, int anchoPantalla, int numberOfClient,
-					int widthStanding,
-					int heightStanding,
-					int widthWalking,
-					int heightWalking,
-					int widthDuck,
-					int heightDuck,
-					int widthPunch,
-					int heightPunch,
-					int widthPunchDown,
-					int heightPunchDown,
-					int widthKick,
-					int heightKick,
-					int widthKickDown,
-					int heightKickDown,
-					int widthKickAir,
-					int heightKickAir,
-					int widthPunchAir,
-					int heightPunchAir,
-					int widthJumping,
-					int heightJumping,
-					int widthJumpingLeft ,
-					int heightJumpingLeft);
+                    int heightSprite, int anchoPantalla, int numberOfClient);
 
     int currentClient; //indica el cliente al que pertence este personaje
 

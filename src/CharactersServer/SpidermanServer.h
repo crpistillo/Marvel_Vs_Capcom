@@ -10,29 +10,7 @@
 class SpidermanServer final : public CharacterServer {
 public:
     SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                    int numberOfClient,
-					int widthStanding,
-					int heightStanding,
-					int widthWalking,
-					int heightWalking,
-					int widthDuck,
-					int heightDuck,
-					int widthPunch,
-					int heightPunch,
-					int widthPunchDown,
-					int heightPunchDown,
-					int widthKick,
-					int heightKick,
-					int widthKickDown,
-					int heightKickDown,
-					int widthKickAir,
-					int heightKickAir,
-					int widthPunchAir,
-					int heightPunchAir,
-					int widthJumping,
-					int heightJumping,
-					int widthJumpingLeft ,
-					int heightJumpingLeft);
+                    int numberOfClient);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam);
     Projectile* projectile;
     void throwPower() override ;

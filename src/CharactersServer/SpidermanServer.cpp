@@ -28,34 +28,35 @@ const int LAST_GRIP_SPRITE = 3;
 const int LAST_THROW_SPRITE = 28;
 const int LAST_FALLING_SPRITE = 52;
 
+const int widthStandingS = 90;
+const int heightStandingS = 96;
+const int widthWalkingS = 87;
+const int heightWalkingS = 91;
+const int widthDuckS = 100;
+const int heightDuckS = 52;
+const int widthPunchS = 152;
+const int heightPunchS = 77;
+const int widthPunchDownS = 150;
+const int heightPunchDownS = 51;
+const int widthKickS = 146;
+const int heightKickS = 93;
+const int widthKickDownS = 160;
+const int heightKickDownS = 65;
+const int widthKickAirS = 144;
+const int heightKickAirS = 82;
+const int widthPunchAirS = 84;
+const int heightPunchAirS = 85;
+const int widthJumpingS = 99;
+const int heightJumpingS = 50;
+const int widthJumpingLeftS = 70;
+const int heightJumpingLeftS = 70;
+
 
 
 
 
 SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient,
-								 int widthStanding,
-								 int heightStanding,
-								 int widthWalking,
-								 int heightWalking,
-								 int widthDuck,
-								 int heightDuck,
-								 int widthPunch,
-								 int heightPunch,
-								 int widthPunchDown,
-								 int heightPunchDown,
-								 int widthKick,
-								 int heightKick,
-								 int widthKickDown,
-								 int heightKickDown,
-								 int widthKickAir,
-								 int heightKickAir,
-								 int widthPunchAir,
-								 int heightPunchAir,
-								 int widthJumping,
-								 int heightJumping,
-								 int widthJumpingLeft ,
-								 int heightJumpingLeft)
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -65,29 +66,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient,
-		widthStanding,
-		heightStanding,
-		widthWalking,
-		heightWalking,
-		widthDuck,
-		heightDuck,
-		widthPunch,
-		heightPunch,
-		widthPunchDown,
-		heightPunchDown,
-		widthKick,
-		heightKick,
-		widthKickDown,
-		heightKickDown,
-		widthKickAir,
-		heightKickAir,
-		widthPunchAir,
-		heightPunchAir,
-		widthJumping,
-		heightJumping,
-		widthJumpingLeft ,
-		heightJumpingLeft) {
+        numberOfClient) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;
@@ -108,6 +87,29 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastFallingSprite = LAST_FALLING_SPRITE;
 
     this->projectile = new Projectile();
+
+	widthStanding = widthStandingS;
+	heightStanding = heightStandingS;
+	widthWalking = widthWalkingS;
+	heightWalking = heightWalkingS;
+	widthDuck = widthDuckS;
+	heightDuck = heightDuckS;
+	widthPunch = widthPunchS;
+	heightPunch = heightPunchS;
+	widthPunchDown = widthPunchDownS;
+	heightPunchDown = heightPunchDownS;
+	widthKick = widthKickS;
+	heightKick = heightKickS;
+	widthKickDown = widthKickDownS;
+	heightKickDown = heightKickDownS;
+	widthKickAir = widthKickAirS;
+	heightKickAir = heightKickAirS;
+	widthPunchAir = widthPunchAirS;
+	heightPunchAir = heightPunchAirS;
+	widthJumping = widthJumpingS;
+	heightJumping = heightJumpingS;
+	widthJumpingLeft = widthJumpingLeftS;
+	heightJumpingLeft = heightJumpingLeftS;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);

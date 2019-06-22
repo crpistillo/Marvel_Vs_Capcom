@@ -28,33 +28,34 @@ const int LAST_GRIP_SPRITE = 3;
 const int LAST_FALLING_SPRITE = 43;
 const int LAST_THROW_SPRITE = 26;
 
+const int widthStandingW = 80;
+const int heightStandingW = 84;
+const int widthWalkingW = 88;
+const int heightWalkingW = 86;
+const int widthDuckW = 92;
+const int heightDuckW = 59;
+const int widthPunchW = 131;
+const int heightPunchW = 95;
+const int widthPunchDownW = 156;
+const int heightPunchDownW = 56;
+const int widthKickW = 164;
+const int heightKickW = 96;
+const int widthKickDownW = 146;
+const int heightKickDownW = 51;
+const int widthKickAirW = 164;
+const int heightKickAirW = 97;
+const int widthPunchAirW = 191;
+const int heightPunchAirW = 64;
+const int widthJumpingW = 119;
+const int heightJumpingW = 52;
+const int widthJumpingLeftW = 104;
+const int heightJumpingLeftW = 104;
+
 
 
 
 WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                                 int numberOfClient,
-								 int widthStanding,
-								 int heightStanding,
-								 int widthWalking,
-								 int heightWalking,
-								 int widthDuck,
-								 int heightDuck,
-								 int widthPunch,
-								 int heightPunch,
-								 int widthPunchDown,
-								 int heightPunchDown,
-								 int widthKick,
-								 int heightKick,
-								 int widthKickDown,
-								 int heightKickDown,
-								 int widthKickAir,
-								 int heightKickAir,
-								 int widthPunchAir,
-								 int heightPunchAir,
-								 int widthJumping,
-								 int heightJumping,
-								 int widthJumpingLeft ,
-								 int heightJumpingLeft)
+                                 int numberOfClient)
         : CharacterServer(
         PosX,
         556 - (height * 297 / 480),
@@ -64,29 +65,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
         width,
         height,
         anchoPantalla,
-        numberOfClient,
-		widthStanding,
-		heightStanding,
-		widthWalking,
-		heightWalking,
-		widthDuck,
-		heightDuck,
-		widthPunch,
-		heightPunch,
-		widthPunchDown,
-		heightPunchDown,
-		widthKick,
-		heightKick,
-		widthKickDown,
-		heightKickDown,
-		widthKickAir,
-		heightKickAir,
-		widthPunchAir,
-		heightPunchAir,
-		widthJumping,
-		heightJumping,
-		widthJumpingLeft ,
-		heightJumpingLeft) {
+        numberOfClient) {
     lastStandingSprite = LAST_STANDING_SPRITE;
     lastWalkingSprite = LAST_WALKING_SPRITE;
     lastJumpingSprite = LAST_JUMPING_SPRITE;
@@ -106,6 +85,29 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 	lastGripSprite = LAST_GRIP_SPRITE;
 	lastFallingSprite = LAST_FALLING_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
+
+	widthStanding = widthStandingW;
+	heightStanding = heightStandingW;
+	widthWalking = widthWalkingW;
+	heightWalking = heightWalkingW;
+	widthDuck = widthDuckW;
+	heightDuck = heightDuckW;
+	widthPunch = widthPunchW;
+	heightPunch = heightPunchW;
+	widthPunchDown = widthPunchDownW;
+	heightPunchDown = heightPunchDownW;
+	widthKick = widthKickW;
+	heightKick = heightKickW;
+	widthKickDown = widthKickDownW;
+	heightKickDown = heightKickDownW;
+	widthKickAir = widthKickAirW;
+	heightKickAir = heightKickAirW;
+	widthPunchAir = widthPunchAirW;
+	heightPunchAir = heightPunchAirW;
+	widthJumping = widthJumpingW;
+	heightJumping = heightJumpingW;
+	widthJumpingLeft = widthJumpingLeftW;
+	heightJumpingLeft = heightJumpingLeftW;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
