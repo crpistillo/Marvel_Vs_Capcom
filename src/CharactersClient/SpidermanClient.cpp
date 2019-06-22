@@ -11,8 +11,8 @@ const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
 const Uint8 SECONDARY_BLUE = 000;
 
-const string spidermanPath = "images/ryu/ryu_";
-const string MVC_FILEPATH = "/MVC2_Ryu_";
+const string spidermanPath = "images/iron_man/iron_man_";
+const string MVC_FILEPATH = "/MVC2_IronMan_";
 const string FILE_EXTENSION = ".png";
 
 SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
