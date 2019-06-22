@@ -118,7 +118,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, int vel) {
+void SpidermanServer::moveLeft(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -134,7 +134,7 @@ void SpidermanServer::moveLeft(int distance, int vel) {
 }
 
 
-void SpidermanServer::moveRight(int distance, int vel) {
+void SpidermanServer::moveRight(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
@@ -250,10 +250,10 @@ void SpidermanServer::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void SpidermanServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
+void SpidermanServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
     if(projectile->active)
         projectile->travel();
-    CharacterServer::update(distance, posContrincante, actionRecieved, boxContrincante);
+    CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
 void SpidermanServer::throwPower() {

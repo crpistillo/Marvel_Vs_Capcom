@@ -14,8 +14,8 @@ public:
     void makeBuilderStruct(character_builder_t* builder, bool isFirstTeam);
 
 private:
-    void moveRight(int distance, int vel);
-    void moveLeft(int distance, int vel);
+    void moveRight(int distance, int vel, Box *boxOfEnemy);
+    void moveLeft(int distance, int vel, Box *boxOfEnemy);
     void stand();
 
     int getSpriteNumber();

@@ -20,10 +20,10 @@ public:
 
 
 private:
-    void moveRight(int distance, int vel) override ;
-    void moveLeft(int distance, int vel) override ;
+    void moveRight(int distance, int vel, Box *boxOfEnemy) override ;
+    void moveLeft(int distance, int vel, Box *boxOfEnemy) override ;
     void stand() override ;
-    void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante) override;
+    void update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) override;
 
 
 

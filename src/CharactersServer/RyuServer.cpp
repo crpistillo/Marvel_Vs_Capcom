@@ -118,7 +118,7 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
 
 
 
-void RyuServer::moveLeft(int distance, int vel) {
+void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -134,7 +134,7 @@ void RyuServer::moveLeft(int distance, int vel) {
 }
 
 
-void RyuServer::moveRight(int distance, int vel) {
+void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
@@ -250,10 +250,10 @@ void RyuServer::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void RyuServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
+void RyuServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
     if(projectile->active)
         projectile->travel();
-    CharacterServer::update(distance, posContrincante, actionRecieved, boxContrincante);
+    CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
 void RyuServer::throwPower() {

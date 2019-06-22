@@ -120,7 +120,7 @@ IronManServer::IronManServer(int PosX, int width, int height, int sobrante, int 
 
 
 
-void IronManServer::moveLeft(int distance, int vel) {
+void IronManServer::moveLeft(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -136,7 +136,7 @@ void IronManServer::moveLeft(int distance, int vel) {
 }
 
 
-void IronManServer::moveRight(int distance, int vel) {
+void IronManServer::moveRight(int distance, int vel, Box *boxOfEnemy) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
@@ -252,10 +252,10 @@ void IronManServer::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void IronManServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
+void IronManServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
     if(projectile->active)
         projectile->travel();
-    CharacterServer::update(distance, posContrincante, actionRecieved, boxContrincante);
+    CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
 void IronManServer::throwPower() {

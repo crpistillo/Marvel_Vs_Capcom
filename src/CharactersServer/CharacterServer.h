@@ -42,7 +42,7 @@ public:
     int getWidth();
     int getSobrante();
     int getCentro();
-    virtual void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante);
+    virtual void update(int distance, int posEnemy, actions_t actionRecieved, Box *boxEnemy);
     void positionUpdate(int *x);
     void startIntro();
     virtual void makeBuilderStruct(character_builder_t *builder, bool firstTeam) = 0;
@@ -180,9 +180,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int vel) = 0;
+    virtual void moveRight(int distance, int vel, Box *boxOfEnemy) = 0;
 
-    virtual void moveLeft(int distance, int vel) = 0;
+    virtual void moveLeft(int distance, int vel, Box *boxOfEnemy) = 0;
 
     virtual void grip();
 
@@ -217,15 +217,15 @@ private:
 
     void hurtingAir();
 
-    void punchJumpLeft(actions_t punchJumpLeft);
+    void punchJumpLeft(actions_t punchJumpLeft, int distance, Box *boxOfEnemy);
 
-    void punchJumpRight(actions_t punchJumpRight);
+    void punchJumpRight(actions_t punchJumpRight, int distance, Box *boxOfEnemy);
 
     void kickJumpVertical(actions_t kickJumpVertical);
 
-    void kickJumpRight(actions_t kickJumpRight);
+    void kickJumpRight(actions_t kickJumpRight, int distance, Box *boxOfEnemy);
 
-    void kickJumpLeft(actions_t kickJumpLeft);
+    void kickJumpLeft(actions_t kickJumpLeft, int distance, Box *boxOfEnemy);
 
     void normalAction(int *currentSprite, int *lastSprite, actions_t finalAction);
 
