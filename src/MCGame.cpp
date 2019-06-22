@@ -487,6 +487,29 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder, int client
                                                   constants->wolverineAncho,
                                                   constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexWolverine);
+            break;
+
+        case IRONMAN:
+            characterClient = new IronManClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthSpiderman,
+                                                  constants->heightSpiderman,
+                                                  constants->spidermanSobrante,
+                                                  constants->spidermanAncho,
+                                                  constants->screenWidth, clientNumber);
+            characterClient->setZIndex(constants->zIndexSpiderman);
+            break;
+
+        case RYU:
+            characterClient = new RyuClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthSpiderman,
+                                                  constants->heightSpiderman,
+                                                  constants->spidermanSobrante,
+                                                  constants->spidermanAncho,
+                                                  constants->screenWidth, clientNumber);
+            characterClient->setZIndex(constants->zIndexSpiderman);
+            break;
     }
     return characterClient;
 }
