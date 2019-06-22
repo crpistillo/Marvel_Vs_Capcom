@@ -26,16 +26,16 @@ private:
 
 public:
 	Box();
-	Box(float x, float y,float width,float height);
+	Box(float x, float y, float width, float height, int posX);
 	virtual ~Box();
 
-    void setCenter(float x, float y);
+    void setCenter(float x, float y, int posX);
 	float getTop();
 	float getBottom();
 	float getLeft();
 	float getRight();
 	bool isColliding(Box* oponnentBox);
-	bool contactoPorLadoDerecho(Box* box);
+	bool contactFromRightSide(Box *box);
 	bool contactoPorLadoIzquierdo(Box* box);
 	bool contactInAxisY(Box *oponnentBox);
 
@@ -56,6 +56,12 @@ public:
     bool isProjectileColliding(Projectile *projectile);
 
     Projectile *hit();
+
+    bool contactFromLeftSide(Box *otherBox);
+
+    void fixCollision(int *characterX, Box *otherBox);
+
+    int characterPosX;
 };
 
 

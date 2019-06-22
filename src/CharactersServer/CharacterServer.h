@@ -180,9 +180,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int vel, Box *boxOfEnemy) = 0;
+    virtual void moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) = 0;
 
-    virtual void moveLeft(int distance, int vel, Box *boxOfEnemy) = 0;
+    virtual void moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) = 0;
 
     virtual void grip();
 
@@ -190,13 +190,13 @@ private:
 
 	virtual void falling(int distance, int posContrincante);
 
-    virtual void jumpVertical();
+    virtual void jumpVertical(Box *boxOfEnemy);
 
-    virtual void jump(int *currentSprite, int lastSprite);
+    virtual void jump(int *currentSprite, int lastSprite, Box *boxOfEnemy);
 
-    virtual void jumpRight();
+    virtual void jumpRight(int distance, Box *boxOfEnemy);
 
-    virtual void jumpLeft();
+    virtual void jumpLeft(int distance, Box *boxOfEnemy);
 
     virtual void updateStand();
 
@@ -213,7 +213,7 @@ private:
 
     void hurtingGround();
 
-    void punchJumpVertical(actions_t punchVertical);
+    void punchJumpVertical(actions_t punchVertical, Box *boxOfEnemy);
 
     void hurtingAir();
 
@@ -221,7 +221,7 @@ private:
 
     void punchJumpRight(actions_t punchJumpRight, int distance, Box *boxOfEnemy);
 
-    void kickJumpVertical(actions_t kickJumpVertical);
+    void kickJumpVertical(actions_t kickVertical, Box *boxOfEnemy);
 
     void kickJumpRight(actions_t kickJumpRight, int distance, Box *boxOfEnemy);
 

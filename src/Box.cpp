@@ -13,16 +13,17 @@
 
 using namespace std;
 
-Box::Box(float x, float y, float width,float height){
+Box::Box(float x, float y, float width, float height, int posX) {
 	this->centerX=x;
 	this->centerY=y;
 	this->width=width;
 	this->height=height;
+	this->characterPosX = posX;
 }
 
 Box::~Box(){};
 
-void Box::setCenter(float x, float y){
+void Box::setCenter(float x, float y, int posX) {
 	this->centerX=x;
 	this->centerY=y;
 }
@@ -48,12 +49,20 @@ float Box::getRight(){
 	return (this->centerX)+(this->width);
 }
 
-bool Box::contactoPorLadoIzquierdo(Box* anotherBox){
-	return contactOnAxisX(anotherBox);
+bool Box::contactFromRightSide(Box* anotherBox){
+    float rightBorder = getRight();
+    float oponnentLeftBorder = anotherBox->getLeft();
+    float oponnentRightBorder = anotherBox->getRight();
+
+    return isInsideParameters(oponnentLeftBorder,oponnentRightBorder, rightBorder);
 }
 
-bool Box::contactoPorLadoDerecho(Box* anotherBox){
-	return contactOnAxisX(anotherBox);
+bool Box::contactFromLeftSide(Box *anotherBox){
+    float leftBorder = getLeft();
+    float oponnentLeftBorder = anotherBox->getLeft();
+    float oponnentRightBorder = anotherBox->getRight();
+
+    return isInsideParameters(oponnentLeftBorder,oponnentRightBorder, leftBorder);
 }
 
 
@@ -124,4 +133,12 @@ bool Box::isProjectileColliding(Projectile *projectile) {
         projectile->hit();
     return collition;
 }
+
+void Box::fixCollision(int *characterX, Box *otherBox) {
+    if(*characterX > otherBox->characterPosX)
+        *characterX += 1 * 30;   //vel * CHARACTERVEL
+    else
+        *characterX -= 1* 30;
+}
+
 

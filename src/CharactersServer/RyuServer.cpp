@@ -118,7 +118,7 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
 
 
 
-void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy) {
+void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
@@ -134,7 +134,7 @@ void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy) {
 }
 
 
-void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy) {
+void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
