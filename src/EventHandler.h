@@ -36,6 +36,8 @@ public:
     void manageGrip(Queue<incoming_msg_t *> *queue, int receiver, int giver);
 
     character_updater_t *getRoundUpdaters(int toUpdate, Timer *pTimer);
+
+    void manageDamage(int receiver, const actions_t &action) const;
 };
 
 

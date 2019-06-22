@@ -82,21 +82,7 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
-
-    if (action==P || action==K || action==PD || action==KD || action==PV || action==PJR || action==PJL ||
-    	action==KV || action==KJL || action==KJR)
-    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
-    		team[receiver]->getCurrentCharacter()->quitarVida(1);
-    	else
-    		team[receiver]->getCurrentCharacter()->quitarVida(5);
-
-    if (action==PS || action==PSD || action==PSV || action==PSJR || action==PSJL ||
-    	action==KS || action==KSD || action==KSV || action==KSJR || action==KSJL)
-    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
-    		team[receiver]->getCurrentCharacter()->quitarVida(2);
-    	else
-    		team[receiver]->getCurrentCharacter()->quitarVida(10);
-
+    manageDamage(receiver, action);
 
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
@@ -104,6 +90,23 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     	else	insertAction(queue, HURTINGGROUND, receiver);
     else
         insertAction(queue, HURTINGAIR, receiver);
+}
+
+void EventHandler::manageDamage(int receiver, const actions_t &action) const {
+
+    if (action == P || action == K || action == PD || action == KD || action == PV || action == PJR || action == PJL ||
+        action == KV || action == KJL || action == KJR)
+        if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+            team[receiver]->getCurrentCharacter()->quitarVida(1);
+        else
+            team[receiver]->getCurrentCharacter()->quitarVida(5);
+
+    if (action == PS || action == PSD || action == PSV || action == PSJR || action == PSJL ||
+        action == KS || action == KSD || action == KSV || action == KSJR || action == KSJL)
+        if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+            team[receiver]->getCurrentCharacter()->quitarVida(2);
+        else
+            team[receiver]->getCurrentCharacter()->quitarVida(10);
 }
 
 character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction) {
