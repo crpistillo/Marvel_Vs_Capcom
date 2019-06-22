@@ -66,7 +66,7 @@ set(SOURCE_FILES
         src/Menu/Menu.h
         src/Menu/Menu.cpp
         src/Menu/MenuTwoPlayers.cpp src/Menu/MenuTwoPlayers.h src/Menu/MenuFourPlayers.cpp src/Menu/MenuFourPlayers.h src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h
-        src/EventHandler.cpp src/EventHandler.h src/CharactersServer/Projectile.cpp src/CharactersServer/Projectile.h src/CharactersClient/ProjectileClient.cpp src/CharactersClient/ProjectileClient.h src/Timer.cpp src/Timer.h src/RoundBanner.cpp src/RoundBanner.h src/TimeBanner.cpp src/TimeBanner.h)
+        src/EventHandler.cpp src/EventHandler.h src/CharactersServer/Projectile.cpp src/CharactersServer/Projectile.h src/CharactersClient/ProjectileClient.cpp src/CharactersClient/ProjectileClient.h src/Timer.cpp src/Timer.h src/RoundBanner.cpp src/RoundBanner.h src/TimeBanner.cpp src/TimeBanner.h src/CharactersServer/IronManServer.cpp src/CharactersServer/IronManServer.h src/CharactersServer/RyuServer.cpp src/CharactersServer/RyuServer.h src/CharactersClient/RyuClient.cpp src/CharactersClient/RyuClient.h src/CharactersClient/IronManClient.cpp src/CharactersClient/IronManClient.h)
 
 
 

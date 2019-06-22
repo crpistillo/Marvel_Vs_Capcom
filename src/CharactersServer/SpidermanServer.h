@@ -11,7 +11,7 @@ class SpidermanServer final : public CharacterServer {
 public:
     SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                     int numberOfClient);
-    void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam);
+    void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) override ;
     Projectile* projectile;
     void throwPower() override ;
     bool isProjectileActive() override;
@@ -20,14 +20,14 @@ public:
 
 
 private:
-    void moveRight(int distance, int vel);
-    void moveLeft(int distance, int vel);
-    void stand();
+    void moveRight(int distance, int vel) override ;
+    void moveLeft(int distance, int vel) override ;
+    void stand() override ;
     void update(int distance, int posContrincante, actions_t actionRecieved, Box* boxContrincante) override;
 
 
 
-    int getSpriteNumber();
+    int getSpriteNumber() override ;
 
 };
 
