@@ -52,7 +52,7 @@ public:
     bool isStanding();
     //vector<Box*> getColisionable();
     Box* getColisionable();
-    void quitarVida(int danio);
+    void quitarVida(float danio);
 
 
     int clientNumber;
@@ -69,7 +69,7 @@ public:
     virtual bool isProjectileHurting();
 
     bool isHurting();
-    int getVida();
+    float getVida();
 
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -118,7 +118,7 @@ protected:
     Box* characterBox; //por ahora una sola caja
     //vector<Box*> objetoColisionable;
 
-    int vida;
+    float vida;
 
 	int widthStanding;
 	int heightStanding;

@@ -15,6 +15,7 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
+	barra = new Barra();
 }
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
@@ -59,6 +60,8 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         setCharacterToChanging();
     }
 
+    barra->update(updater->vida);
+
     currentCharacter->update(updater);
     Logger *logger = Logger::getInstance();
     InputManager *inputManager = InputManager::getInstance();
@@ -74,6 +77,7 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
     ProjectileClient *projectile = currentCharacter->getProjectile();
     if (projectile)
         projectile->render(mRenderer, camX, camY);
+    this->barra->render(mRenderer);
 
 }
 
@@ -160,6 +164,11 @@ void Player::setCurrentCharacter(int i, SDL_Renderer *renderer) {
 
     currentCharacter->loadBanner(renderer);
 
+}
+
+void Player::setBarra(bool left)
+{
+	barra->setBarra(left);
 }
 
 

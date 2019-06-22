@@ -12,6 +12,7 @@
 #include "data_structs.h"
 #include "CharactersClient/ProjectileClient.h"
 #include <mutex>
+#include "Barra.h"
 
 
 class Player: public Renderizable {
@@ -36,6 +37,7 @@ public:
     int getCentro();
     int getZIndex();
 
+    void setBarra(bool left);
 
     void load(SDL_Renderer *pRenderer, int posContrincante);
 
@@ -50,6 +52,7 @@ private:
     CharacterClient* firstCharacter;
     CharacterClient* secondCharacter;
     Controls* controls;
+    Barra* barra;
 
     void changeCharacter();
     void setCharacterToChanging();

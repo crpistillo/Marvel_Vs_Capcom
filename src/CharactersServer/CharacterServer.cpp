@@ -668,12 +668,12 @@ bool CharacterServer::isHurting() {
     return currentAction == HURTINGAIR || currentAction == HURTINGGROUND;
 }
 
-void CharacterServer::quitarVida(int danio) {
+void CharacterServer::quitarVida(float danio) {
     if ((vida-danio)<0) vida = 0;
     else vida = vida - danio;
 }
 
-int CharacterServer::getVida() {
+float CharacterServer::getVida() {
     return vida;
 }
 
