@@ -25,7 +25,9 @@ typedef struct{
 typedef enum character_number{
 	NOT_VALID = -1,
 	SPIDERMAN = 0,
-	WOLVERINE = 1
+	WOLVERINE = 1,
+	IRONMAN = 2,
+	RYU = 3
 } character_number_t;
 
 
