@@ -55,7 +55,7 @@ const int heightJumpingLeftS = 70;
 
 
 
-RyuClient::RyuClient(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                                  int numberOfClient)
         : CharacterServer(
         PosX,
@@ -118,13 +118,13 @@ RyuClient::RyuClient(int PosX, int width, int height, int sobrante, int ancho, i
 
 
 
-void RyuClient::moveLeft(int distance, int vel) {
+void RyuServer::moveLeft(int distance, int vel) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
-    if ((mPosX - CHARACTER_VEL < -RyuClient::getSobrante()) || (distance < (-anchoPantalla))) {
+    if ((mPosX - CHARACTER_VEL < -RyuServer::getSobrante()) || (distance < (-anchoPantalla))) {
         //Move back
         mPosX += CHARACTER_VEL;
     }
@@ -134,12 +134,12 @@ void RyuClient::moveLeft(int distance, int vel) {
 }
 
 
-void RyuClient::moveRight(int distance, int vel) {
+void RyuServer::moveRight(int distance, int vel) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - RyuClient::getSobrante() - RyuClient::getWidth())) ||
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - RyuServer::getSobrante() - RyuServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
@@ -149,7 +149,7 @@ void RyuClient::moveRight(int distance, int vel) {
 }
 
 
-void RyuClient::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
+void RyuServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
     builder->personaje = SPIDERMAN;
     builder->cliente = clientNumber;
@@ -161,7 +161,7 @@ void RyuClient::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam
 }
 
 
-int RyuClient::getSpriteNumber(){
+int RyuServer::getSpriteNumber(){
     int spriteNumber;
     switch (this->currentAction){
         case STANDING:
@@ -242,7 +242,7 @@ int RyuClient::getSpriteNumber(){
 
 
 
-void RyuClient::stand() {
+void RyuServer::stand() {
     currentAction = STANDING;
     resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
@@ -250,13 +250,13 @@ void RyuClient::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void RyuClient::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
+void RyuServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxContrincante) {
     if(projectile->active)
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxContrincante);
 }
 
-void RyuClient::throwPower() {
+void RyuServer::throwPower() {
     if(projectile->active)
         return;
     if(currentThrowPowerSprite== lastThrowPowerSprite)
@@ -265,14 +265,14 @@ void RyuClient::throwPower() {
 
 }
 
-bool RyuClient::isProjectileActive() {
+bool RyuServer::isProjectileActive() {
     return projectile->active || projectile->itWasActiveAndDied;
 }
 
-Projectile *RyuClient::getProjectile() {
+Projectile *RyuServer::getProjectile() {
     return projectile;
 }
 
-bool RyuClient::isProjectileHurting() {
+bool RyuServer::isProjectileHurting() {
     return !projectile->hitting && isProjectileActive();
 }

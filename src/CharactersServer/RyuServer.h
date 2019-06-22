@@ -2,14 +2,14 @@
 // Created by IgVelasco on 5/17/19.
 //
 
-#ifndef MARVEL_VS_CAPCOM_RYU_H
-#define MARVEL_VS_CAPCOM_RYU_H
+#ifndef MARVEL_VS_CAPCOM_RYUSERVER_H
+#define MARVEL_VS_CAPCOM_RYUSERVER_H
 
 #include "./CharacterServer.h"
 
-class RyuClient final : public CharacterServer {
+class RyuServer final : public CharacterServer {
 public:
-    RyuClient(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+    RyuServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                   int numberOfClient);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam);
     Projectile* projectile;
@@ -32,4 +32,4 @@ private:
 };
 
 
-#endif //MARVEL_VS_CAPCOM_RYU_H
+#endif //MARVEL_VS_CAPCOM_RYUSERVER_H
