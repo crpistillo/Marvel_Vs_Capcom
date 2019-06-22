@@ -49,7 +49,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
                                  int numberOfClient)
         : CharacterServer(
         PosX,
-        556 - (height * 297 / 480),
+        636 - (height * 297 / 480),		//556 - (height * 297 / 480), PARA SPIDERMAN Y WOLVERINE
         ancho,
         sobrante,
         false,
