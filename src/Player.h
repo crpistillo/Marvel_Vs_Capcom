@@ -13,6 +13,7 @@
 #include "CharactersClient/ProjectileClient.h"
 #include <mutex>
 #include "Barra.h"
+#include "Music.h"
 
 
 class Player: public Renderizable {

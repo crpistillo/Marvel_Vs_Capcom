@@ -7,5 +7,5 @@
 
 
 WASDControls::WASDControls() :
-        Controls(KEY_W, KEY_S, KEY_D, KEY_A, KEY_2, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_T, KEY_Y){
+        Controls(KEY_W, KEY_S, KEY_D, KEY_A, KEY_2, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_T, KEY_Y,KEY_9){
 }

@@ -18,8 +18,8 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 	barra = new Barra();
 }
 
-void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
-
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber)
+{
     ProjectileClient* projectile = currentCharacter->getProjectile();
     if(projectile)
         projectile->update(updater->projectile == PROJECTILEALIVE, updater, false);
@@ -61,6 +61,8 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     }
 
     barra->update(updater->vida);
+
+    //(*music)->playBackGroundMusic(soundKey);
 
     currentCharacter->update(updater);
     Logger *logger = Logger::getInstance();
