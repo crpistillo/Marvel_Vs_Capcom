@@ -28,7 +28,6 @@ public:
     int posY;
     int currentSprite;
     Texture m_Texture;
-    bool isLookingLeft;
     string projectileFilePath;
     string mvcFilePath;
 };

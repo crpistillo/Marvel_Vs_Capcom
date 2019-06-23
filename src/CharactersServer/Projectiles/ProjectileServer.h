@@ -25,7 +25,6 @@ public:
 
     int initialPosX;
     int currentSprite = 0;
-    int lastSprite = 4;
     bool itWasActiveAndDied;
     bool isLookingLeft;
 
@@ -37,7 +36,9 @@ public:
 
     void deactivate();
 
-    int lastHittingSprite = 5;
+protected:
+    int lastSprite;
+    int lastHittingSprite;
     bool impact;
 };
 

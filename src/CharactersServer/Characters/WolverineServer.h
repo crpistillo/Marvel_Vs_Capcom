@@ -19,6 +19,8 @@ private:
     void stand();
 
     int getSpriteNumber();
+
+    void update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy);
 };
 
 #endif //MARVEL_VS_CAPCOM_WOLVERINESERVER_H

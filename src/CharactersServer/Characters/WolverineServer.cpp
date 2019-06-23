@@ -3,6 +3,7 @@
 //
 
 #include "WolverineServer.h"
+#include "../Projectiles/ProjectileWolverineServer.h"
 
 
 const int LEVEL_WIDTH = 3200;
@@ -86,7 +87,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 	lastFallingSprite = LAST_FALLING_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
 
-    this->projectile = new ProjectileServer();
+    this->projectile = new ProjectileWolverineServer();
 
 	widthStanding = widthStandingW;
 	heightStanding = heightStandingW;
@@ -252,7 +253,7 @@ int WolverineServer::getSpriteNumber(){
             spriteNumber = currentHurtingAirSprite;
             break;
         case HURTINGGROUND:
-            spriteNumber = currentHurtingAirSprite;
+            spriteNumber = currentHurtingSprite;
             break;
 		case THROW:
 			spriteNumber = currentThrowSprite;
@@ -280,5 +281,12 @@ void WolverineServer::stand() {
         currentStandingSprite = 0;
     characterBox->updateBox(widthStanding, heightStanding);
 }
+
+void WolverineServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
+    if(projectile->active)
+        projectile->travel();
+    CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
+}
+
 
 

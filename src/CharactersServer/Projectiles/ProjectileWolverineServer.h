@@ -8,8 +8,9 @@
 #include "ProjectileServer.h"
 
 class ProjectileWolverineServer final : public ProjectileServer{
-    ProjectileWolverineServer();
 
+public:
+    ProjectileWolverineServer();
 };
 
 

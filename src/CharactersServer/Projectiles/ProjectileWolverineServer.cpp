@@ -7,6 +7,6 @@
 
 ProjectileWolverineServer::ProjectileWolverineServer() : ProjectileServer() {
     lastSprite = 1; //6 maybe
-    lastHittingSprite = 5;
+    lastHittingSprite = 4;
 
 }
