@@ -17,11 +17,11 @@ void MenuThreePlayers::runCorrespondingMenu() {
 void MenuThreePlayers::runMenuThreePlayers() {
     //Los dos cursores del primer cliente
     serverCursors[0] = new ServerCursor(SPIDERMAN_POSITION, TEAM_ONE_POSITION, true);
-    serverCursors[1] = new ServerCursor(WOLVERINE_POSITION, TEAM_ONE_POSITION, true);
+    serverCursors[1] = new ServerCursor(RYU_POSITION, TEAM_ONE_POSITION, true);
 
     //Los cursores de los clientes que son compañeros
     serverCursors[2] = new ServerCursor(SPIDERMAN_POSITION, TEAM_TWO_POSITION, true);
-    serverCursors[3] = new ServerCursor(WOLVERINE_POSITION, TEAM_TWO_POSITION, false);
+    serverCursors[3] = new ServerCursor(RYU_POSITION, TEAM_TWO_POSITION, false);
 
     ServerCursor *actualCursorFirstClient = serverCursors[0];
     ServerCursor *actualCursorSecondClient = serverCursors[1];
