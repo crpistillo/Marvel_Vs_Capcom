@@ -25,7 +25,8 @@ C_DEPS :=
 SUBDIRS := \
 src \
 src/CharactersClient \
-src/CharactersServer \
+src/CharactersServer/Characters \
+src/CharactersServer/Projectiles \
 src/Client \
 src/Controls \
 src/Menu \

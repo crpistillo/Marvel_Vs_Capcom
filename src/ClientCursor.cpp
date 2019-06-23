@@ -64,6 +64,6 @@ void ClientCursor::render(SDL_Renderer* mRenderer){
 		}
 
 
-	cursorTexture.render(posX, posY, 254, 221, mRenderer);
+	cursorTexture.render(posX, posY, 185, 158, mRenderer);
 }
 

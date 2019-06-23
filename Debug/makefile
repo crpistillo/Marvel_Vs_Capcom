@@ -16,7 +16,8 @@ RM := rm -rf
 -include src/Menu/subdir.mk
 -include src/Controls/subdir.mk
 -include src/Client/subdir.mk
--include src/CharactersServer/subdir.mk
+-include src/CharactersServer/Projectiles/subdir.mk
+-include src/CharactersServer/Characters/subdir.mk
 -include src/CharactersClient/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
