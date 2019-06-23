@@ -1,0 +1,6 @@
+#!/bin/bash
+ 
+
+for f in `ls -v *.png`; do
+        mv -n "$f" "MVC2_IronMan_"$number".png";
+	done
