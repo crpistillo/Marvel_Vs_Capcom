@@ -396,7 +396,23 @@ void CharacterServer::kickDown(actions_t kickDown) {
 //Tengo que ver si es normal
 void CharacterServer::throwPower() {
     this->currentAction = THROWPOWER;
+    if(projectile->active)
+        return;
+    if(currentThrowPowerSprite== lastThrowPowerSprite)
+        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
     normalAction(&currentThrowPowerSprite,&lastThrowPowerSprite,STANDING);
+}
+
+bool CharacterServer::isProjectileActive() {
+    return projectile->active || projectile->itWasActiveAndDied;
+}
+
+ProjectileServer *CharacterServer::getProjectile() {
+    return projectile;
+}
+
+bool CharacterServer::isProjectileHurting() {
+    return !projectile->hitting && isProjectileActive();
 }
 
 
@@ -546,15 +562,6 @@ void CharacterServer::kickJumpLeft(actions_t kickJumpLeft, int distance, Box *bo
 }
 
 
-//default is false
-bool CharacterServer::isProjectileActive() {
-    return false;
-}
-
-ProjectileServer *CharacterServer::getProjectile() {
-    return nullptr;
-}
-
 void CharacterServer::throwCharacter() {
     this->currentAction = THROW;
     normalAction(&currentThrowSprite, &lastThrowSprite, STANDING);
@@ -617,9 +624,6 @@ void CharacterServer::falling(int distance, int posContrincante, Box *boxOfEnemy
 
 }
 
-bool CharacterServer::isProjectileHurting() {
-    return false;
-}
 
 bool CharacterServer::isHurting() {
     return currentAction == HURTINGAIR || currentAction == HURTINGGROUND;

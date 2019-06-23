@@ -17,8 +17,7 @@ public:
                     int anchoPantalla, int numOfClient);
     ~IronmanClient();
     void load(SDL_Renderer *renderer, int posContrincante) override;
-    ProjectileClient* projectile;
-    virtual ProjectileClient* getProjectile() override ;
+
     void loadBanner(SDL_Renderer *renderer);
 
 };

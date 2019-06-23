@@ -267,24 +267,3 @@ void SpidermanServer::update(int distance, int posContrincante, actions_t action
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
-
-void SpidermanServer::throwPower() {
-    if(projectile->active)
-        return;
-    if(currentThrowPowerSprite== lastThrowPowerSprite)
-        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
-    CharacterServer::throwPower();
-
-}
-
-bool SpidermanServer::isProjectileActive() {
-    return projectile->active || projectile->itWasActiveAndDied;
-}
-
-ProjectileServer *SpidermanServer::getProjectile() {
-    return projectile;
-}
-
-bool SpidermanServer::isProjectileHurting() {
-    return !projectile->hitting && isProjectileActive();
-}

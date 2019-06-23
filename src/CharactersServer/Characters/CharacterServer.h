@@ -54,19 +54,21 @@ public:
     Box* getColisionable();
     void quitarVida(float danio);
 
+    ProjectileServer* projectile;
+
 
     int clientNumber;
     actions_t currentAction;
 
     bool inTheGround();
 
-    virtual bool isProjectileActive();
+    bool isProjectileActive();
 
-    virtual ProjectileServer *getProjectile();
+    ProjectileServer *getProjectile();
 
     std::mutex m;
 
-    virtual bool isProjectileHurting();
+    bool isProjectileHurting();
 
     bool isHurting();
     float getVida();
@@ -163,7 +165,7 @@ protected:
     int lastPunchAirSprite;
     int lastKickAirSprite;
 
-    virtual void throwPower();
+    void throwPower();
 
 
     unsigned int lastTime;

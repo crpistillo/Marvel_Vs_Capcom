@@ -270,24 +270,3 @@ void IronmanServer::update(int distance, int posContrincante, actions_t actionRe
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
-
-void IronmanServer::throwPower() {
-    if(projectile->active)
-        return;
-    if(currentThrowPowerSprite== lastThrowPowerSprite)
-        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
-    CharacterServer::throwPower();
-
-}
-
-bool IronmanServer::isProjectileActive() {
-    return projectile->active || projectile->itWasActiveAndDied;
-}
-
-ProjectileServer *IronmanServer::getProjectile() {
-    return projectile;
-}
-
-bool IronmanServer::isProjectileHurting() {
-    return !projectile->hitting && isProjectileActive();
-}

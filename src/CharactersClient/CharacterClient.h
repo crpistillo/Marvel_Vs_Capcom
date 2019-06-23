@@ -34,7 +34,7 @@ public:
     //Takes key presses and adjusts the character's velocity
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
     //Shows the character on the screen
-    virtual ProjectileClient* getProjectile();
+    ProjectileClient* getProjectile();
     virtual void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante);
     int getPosX();
     int getPosY();
@@ -64,6 +64,8 @@ public:
 
     Texture characterLeftBanner;
     Texture characterRightBanner;
+
+    ProjectileClient* projectile;
 
 protected:
     CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,

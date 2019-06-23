@@ -86,6 +86,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 	lastFallingSprite = LAST_FALLING_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
 
+    this->projectile = new ProjectileServer();
+
 	widthStanding = widthStandingW;
 	heightStanding = heightStandingW;
 	widthWalking = widthWalkingW;

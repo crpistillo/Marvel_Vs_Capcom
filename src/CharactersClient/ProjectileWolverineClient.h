@@ -6,8 +6,6 @@
 #define MARVEL_VS_CAPCOM_PROJECTILEWOLVERINECLIENT_H
 
 
-
-
 #include "ProjectileClient.h"
 
 class ProjectileWolverineClient final : public ProjectileClient {

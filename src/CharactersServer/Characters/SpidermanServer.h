@@ -12,11 +12,6 @@ public:
     SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                     int numberOfClient);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) override ;
-    ProjectileServer* projectile;
-    void throwPower() override ;
-    bool isProjectileActive() override;
-    bool isProjectileHurting() override;
-    virtual ProjectileServer *getProjectile();
 
 
 private:

@@ -29,6 +29,8 @@ WolverineClient::WolverineClient(int PosX, bool secondaryColor, int width, int h
         this->loader = new ImageLoader((Uint8) SECONDARY_RED, (Uint8) SECONDARY_GREEN, (Uint8) SECONDARY_BLUE);
     else
         this->loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
+
+    projectile = new ProjectileWolverineClient(secondaryColor);
 }
 
 void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {

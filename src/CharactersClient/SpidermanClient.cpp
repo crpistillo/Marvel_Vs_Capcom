@@ -284,9 +284,6 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
 }
 
-ProjectileClient *SpidermanClient::getProjectile() {
-    return projectile;
-}
 
 void SpidermanClient::loadBanner(SDL_Renderer *renderer)
 {

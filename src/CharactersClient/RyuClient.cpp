@@ -276,9 +276,6 @@ void RyuClient::load(SDL_Renderer *renderer, int posContrincante) {
     projectile->load(renderer, isLookingLeft);
 }
 
-ProjectileClient *RyuClient::getProjectile() {
-    return projectile;
-}
 
 void RyuClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;

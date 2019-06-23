@@ -8,6 +8,7 @@
 #include <SDL2/SDL_events.h>
 #include "../Texture/Texture.h"
 #include "./CharacterClient.h"
+#include "ProjectileWolverineClient.h"
 
 class WolverineClient final: public CharacterClient {
 public:

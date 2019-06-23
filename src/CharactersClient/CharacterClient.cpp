@@ -129,13 +129,11 @@ void CharacterClient::update(character_updater_t *updater) {
     vida = updater->vida;
 }
 
-ProjectileClient *CharacterClient::getProjectile() {
-    return nullptr;
-}
 
 bool CharacterClient::getDirection() {
     return isLookingLeft;
 }
-
-
+ProjectileClient *CharacterClient::getProjectile() {
+    return projectile;
+}
 

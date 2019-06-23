@@ -268,24 +268,3 @@ void RyuServer::update(int distance, int posContrincante, actions_t actionReciev
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
-
-void RyuServer::throwPower() {
-    if(projectile->active)
-        return;
-    if(currentThrowPowerSprite== lastThrowPowerSprite)
-        projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
-    CharacterServer::throwPower();
-
-}
-
-bool RyuServer::isProjectileActive() {
-    return projectile->active || projectile->itWasActiveAndDied;
-}
-
-ProjectileServer *RyuServer::getProjectile() {
-    return projectile;
-}
-
-bool RyuServer::isProjectileHurting() {
-    return !projectile->hitting && isProjectileActive();
-}

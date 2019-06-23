@@ -15,8 +15,6 @@ public:
                     int anchoPantalla, int numOfClient);
     ~RyuClient();
     void load(SDL_Renderer *renderer, int posContrincante);
-    ProjectileClient* projectile;
-    virtual ProjectileClient* getProjectile() override ;
     void loadBanner(SDL_Renderer *renderer);
 
     virtual void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante)  ;

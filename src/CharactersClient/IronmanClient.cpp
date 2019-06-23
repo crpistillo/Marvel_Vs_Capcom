@@ -280,9 +280,6 @@ void IronmanClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posC
                      mRenderer); //esto es los valores que se cambian la resolucion
 }
 
-ProjectileClient *IronmanClient::getProjectile() {
-    return projectile;
-}
 
 void IronmanClient::loadBanner(SDL_Renderer *renderer)
 {
