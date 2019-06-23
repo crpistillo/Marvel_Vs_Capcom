@@ -49,6 +49,7 @@ typedef struct{
 	int posY;
 	int currentSprite;
 	actions_t action;
+	music_action_t effect;
 	int team;
 	int client;
 	int vida;
@@ -65,6 +66,8 @@ typedef struct{
     int firstDigitOfTime;
     int secondDigitOfTime;
 } character_updater_t;
+
+
 
 
 //centro de 2 currentPlayers

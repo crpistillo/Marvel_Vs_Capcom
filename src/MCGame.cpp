@@ -315,7 +315,7 @@ void MCGame::render() {
                 middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
             } else if (renderizables[i] == frontGround) {
                 frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
-                banner.render(0,10,800,91,m_Renderer);
+                banner.render(0,10,800,92,m_Renderer);
 
             } else if (renderizables[i] == players[1]) {
                 players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
@@ -358,8 +358,7 @@ void orderRenderizableListByZIndex(Renderizable **list) {
 
 void MCGame::clean() {
     //m_Texture.free();
-	Mix_FreeMusic(music->gMusic);
-	music->gMusic = NULL;
+	music->free();
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
@@ -461,6 +460,7 @@ void MCGame::update() {
 		}
 
         music->playBackGroundMusic(clientControls->soundKey);
+        music->updateEffects(updater);
 
         parallaxController->centerLayers(&players[0], &players[1]);
         maxTimeouts = 0 ;
@@ -741,6 +741,7 @@ void MCGame::disableRoundSprites() {
 
 void MCGame::loadMusic()
 {
-	string nombre = "music/music.wav";
-	this->music->loadMusic(nombre.c_str());
+	//string nombre = "music/music.wav";
+	this->music->loadMusic();
+	this->music->loadEffects();
 }

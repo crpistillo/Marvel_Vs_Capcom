@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lSDL2 -lpthread -lSDL2_image -lSDL2main
+LIBS := -lSDL2 -lpthread -lSDL2_image -lSDL2main -lSDL2_mixer
 

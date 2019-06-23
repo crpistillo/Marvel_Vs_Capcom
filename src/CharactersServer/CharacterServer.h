@@ -71,6 +71,30 @@ public:
     bool isHurting();
     float getVida();
 
+
+    int currentStandingSprite;
+    int currentWalkingSprite;
+    int currentJumpingSprite;
+    int currentJumpingRightSprite;
+    int currentJumpingLeftSprite;
+    int currentWalkbackSprite;
+    int currentIntroSprite;
+    int currentPunchSprite;
+    int currentKickSprite;
+    int currentPunchDownSprite;
+    int currentKickDownSprite;
+    int currentHurtingSprite;
+    int currentThrowSprite;
+    int currentHurtingAirSprite;
+    int currentPunchAirSprite;
+    int currentKickAirSprite;
+    int currentThrowPowerSprite;
+    int currentGripSprite;
+    int currentFallingSprite;
+
+    string name;
+
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient,
@@ -142,27 +166,6 @@ protected:
 	int heightJumping;
 	int widthJumpingLeft;
 	int heightJumpingLeft;
-
-
-    int currentStandingSprite;
-    int currentWalkingSprite;
-    int currentJumpingSprite;
-    int currentJumpingRightSprite;
-    int currentJumpingLeftSprite;
-    int currentWalkbackSprite;
-    int currentIntroSprite;
-    int currentPunchSprite;
-    int currentKickSprite;
-    int currentPunchDownSprite;
-    int currentKickDownSprite;
-    int currentHurtingSprite;
-    int currentThrowSprite;
-    int currentHurtingAirSprite;
-    int currentPunchAirSprite;
-    int currentKickAirSprite;
-    int currentThrowPowerSprite;
-    int currentGripSprite;
-    int currentFallingSprite;
 
 
     int lastStandingSprite;

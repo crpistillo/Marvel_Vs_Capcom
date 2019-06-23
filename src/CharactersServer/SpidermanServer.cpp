@@ -108,6 +108,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastFallingSprite = LAST_FALLING_SPRITE;
 
     this->projectile = new Projectile();
+    this->name = "spiderman";
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);

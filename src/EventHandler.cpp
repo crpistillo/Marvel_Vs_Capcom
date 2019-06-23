@@ -4,6 +4,7 @@
 
 #include "EventHandler.h"
 #include "CharactersServer/Projectile.h"
+#include "actions_bools.h"
 
 EventHandler::EventHandler(Team **team, std::mutex *mutex) {
     this->team = team;
@@ -43,6 +44,7 @@ int EventHandler::computeDistance(CharacterServer *character1, CharacterServer *
 character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam) {
     int *distancia = getTeamDistances();
     actions_t actionToUpdate;
+    music_action_t effect;
 
     mutex->lock();
 
@@ -62,8 +64,9 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
         actionToUpdate = team[teamToUpdate]->getCurrentCharacter()->currentAction;
     }
 
+    effect = this->handleEffects(msgToUpdate,teamToUpdate,enemyTeam);
 
-    character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate, FIGHTING);
+    character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate, FIGHTING, effect);
 
     mutex->unlock();
 
@@ -106,7 +109,7 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         insertAction(queue, HURTINGAIR, receiver);
 }
 
-character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction) {
+character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction, music_action effect) {
     character_updater_t *updater = new character_updater_t;
 
     updater->round.roundInfo = roundAction;
@@ -118,6 +121,7 @@ character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t actio
     updater->currentSprite =
             team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber();
     updater->action = action;
+    updater->effect = effect;
 
     return updater;
 }
@@ -175,8 +179,59 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     actions_t actionToUpdate = team[toUpdate]->getCurrentCharacter()->currentAction;
 
 
-    character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction);
+    character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction, NEW_ROUND);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;
 }
+
+music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam)
+{
+	music_action_t effect;
+    if(isWeakPunch(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    //|| isHurting(msgToUpdate->action) && isWeakPunch(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    	effect = WEAK_PUNCH;
+
+    else if (isWeakKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    //|| isHurting(msgToUpdate->action) && isWeakKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    	effect = WEAK_KICK;
+
+    else if(isHit(msgToUpdate->action) && !isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))// ||
+			//!isHurting(msgToUpdate->action) && isHit(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    	effect = HIT_MISS;
+
+    else if(isStrongPunch(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    // || isHurting(msgToUpdate->action) && isStrongPunch(team[enemyTeam]->getCurrentCharacter()->currentAction))
+     	effect = STRONG_PUNCH;
+
+    else if (isStrongKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    //|| isHurting(msgToUpdate->action) && isStrongKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    	effect = STRONG_KICK;
+
+    else if(isJump(msgToUpdate->action) &&
+    		(team[teamToUpdate]->getCurrentCharacter()->currentJumpingSprite == 1
+    		|| team[teamToUpdate]->getCurrentCharacter()->currentJumpingLeftSprite == 1
+			|| team[teamToUpdate]->getCurrentCharacter()->currentJumpingRightSprite == 1) )
+		effect = JUMP;
+
+    else if(msgToUpdate->action == FALLING)
+    	effect  = FALL;
+
+    else if(msgToUpdate->action == THROW)
+    	effect = THROWS;
+
+	else if (msgToUpdate->action == CHANGEME)
+	{
+		if(team[teamToUpdate]->getCurrentCharacter()->name == "spiderman")
+			effect = SPIDERINTRO;
+		else if(team[teamToUpdate]->getCurrentCharacter()->name == "wolverine")
+			effect = WOLVERINTRO;
+
+	}
+
+
+
+
+    return effect;
+}
+
 

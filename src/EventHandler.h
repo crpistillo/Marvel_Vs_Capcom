@@ -27,9 +27,11 @@ public:
 
     void manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action);
 
-    character_updater_t *makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction);
+    character_updater_t *makeUpdater(int teamToUpdate, actions_t action, round_action_t roundAction, music_action effect);
 
     void handleProjectiles(character_updater_t *updater, int teamToUpdate);
+
+    music_action_t handleEffects(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam);
 
     void insertAction(Queue<incoming_msg_t *> *queue, actions action, int teamToInsert);
 

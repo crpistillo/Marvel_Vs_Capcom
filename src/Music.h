@@ -8,10 +8,10 @@
  #ifndef MARVEL_VS_CAPCOM_MUSIC_H
 #define MARVEL_VS_CAPCOM_MUSIC_H
 
- #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include "tools/logger/Logger.h"
-#include <mutex>
-
+#include "data_structs.h"
+#include<mutex>
 
  class Music
 {
@@ -20,15 +20,38 @@
 
      //Logger* logger;
     bool soundOn;
+    bool effectsOn;
+    Mix_Music *gMusic;
+    Mix_Chunk *punch;
+    Mix_Chunk *strongPunch;
+    Mix_Chunk *kick;
+    Mix_Chunk *strongKick;
+    Mix_Chunk* hitMiss;
+    Mix_Chunk* jump;
+    Mix_Chunk* throws;
+    Mix_Chunk* falling;
+    Mix_Chunk* spiderIntro;
+    Mix_Chunk* wolverIntro;
 
  public:
-    Mix_Music *gMusic;
+
     Music();
     bool initialize();
-    void loadMusic(const char* file);
+    void playHitMiss();
+    void loadMusic();
+    void playPunch();
+    void playKick();
+    void playStrongPunch();
+    void playStrongKick();
+    void playJump();
+    void playFalling();
+    void playThrow();
+    void playSpiderIntro();
+    void playWolverIntro();
+    void loadEffects();
     void free();
     void playBackGroundMusic(int soundKey);
-    std::mutex m;
+    void updateEffects(character_updater_t *updater);
 
 
 

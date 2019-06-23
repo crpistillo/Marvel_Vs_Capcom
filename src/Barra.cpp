@@ -31,7 +31,6 @@ Barra::~Barra() {
 void Barra::render(SDL_Renderer* m_Renderer)
 {
 	health = health > 1.f ? 1.f : health < 0.f ? 0.f : health;
-	std::cout<<"Health es: "<<health<<std::endl;
 	SDL_Color old;
 	SDL_GetRenderDrawColor(m_Renderer, &old.r, &old.g, &old.g, &old.a);
 	SDL_Rect bgrect = { posX, posY, width, height };

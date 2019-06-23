@@ -107,6 +107,7 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 	lastFallingSprite = LAST_FALLING_SPRITE;
     lastThrowSprite = LAST_THROW_SPRITE;
 
+    this->name = "wolverine";
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
 }
