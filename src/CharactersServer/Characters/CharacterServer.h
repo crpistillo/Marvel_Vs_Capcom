@@ -6,16 +6,16 @@
 #define MARVEL_VS_CAPCOM_CHARACTERSERVER_H
 
 #include <SDL2/SDL_events.h>
-#include "../Texture/Texture.h"
-#include "../InputTable.h"
-#include "../InputManager.h"
-#include "../Controls/Controls.h"
-#include "../tools/logger/Logger.h"
-#include "../action_constants.h"
-#include "../data_structs.h"
+#include "../../Texture/Texture.h"
+#include "../../InputTable.h"
+#include "../../InputManager.h"
+#include "../../Controls/Controls.h"
+#include "../../tools/logger/Logger.h"
+#include "../../action_constants.h"
+#include "../../data_structs.h"
 #include <vector>
-#include "../Box.h"
-#include "Projectile.h"
+#include "../../Box.h"
+#include "../Projectiles/ProjectileServer.h"
 #include<mutex>
 /*
 typedef enum actions {
@@ -62,7 +62,7 @@ public:
 
     virtual bool isProjectileActive();
 
-    virtual Projectile *getProjectile();
+    virtual ProjectileServer *getProjectile();
 
     std::mutex m;
 

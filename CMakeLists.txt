@@ -41,18 +41,18 @@ set(SOURCE_FILES
         src/Socket.h
         src/Client/TCPClient.cpp
         src/Client/TCPClient.h
-        src/CharactersServer/CharacterServer.cpp
-        src/CharactersServer/CharacterServer.h
+        src/CharactersServer/Characters/CharacterServer.cpp
+        src/CharactersServer/Characters/CharacterServer.h
         src/CharactersClient/CharacterClient.cpp
         src/CharactersClient/CharacterClient.h
         src/CharactersClient/SpidermanClient.cpp
         src/CharactersClient/SpidermanClient.h
         src/CharactersClient/WolverineClient.cpp
         src/CharactersClient/WolverineClient.h
-        src/CharactersServer/SpidermanServer.cpp
-        src/CharactersServer/SpidermanServer.h
-        src/CharactersServer/WolverineServer.cpp
-        src/CharactersServer/WolverineServer.h
+        src/CharactersServer/Characters/SpidermanServer.cpp
+        src/CharactersServer/Characters/SpidermanServer.h
+        src/CharactersServer/Characters/WolverineServer.cpp
+        src/CharactersServer/Characters/WolverineServer.h
         src/Team.h
         src/Team.cpp
         src/action_constants.h
@@ -73,8 +73,8 @@ set(SOURCE_FILES
         src/Menu/MenuThreePlayers.h
         src/EventHandler.cpp
         src/EventHandler.h
-        src/CharactersServer/Projectile.cpp
-        src/CharactersServer/Projectile.h
+        src/CharactersServer/Projectiles/ProjectileServer.cpp
+        src/CharactersServer/Projectiles/ProjectileServer.h
         src/CharactersClient/ProjectileClient.cpp
         src/CharactersClient/ProjectileClient.h
         src/Timer.cpp
@@ -83,17 +83,17 @@ set(SOURCE_FILES
         src/RoundBanner.h
         src/TimeBanner.cpp
         src/TimeBanner.h
-        src/CharactersServer/IronManServer.cpp
-        src/CharactersServer/IronManServer.h
-        src/CharactersServer/RyuServer.cpp
-        src/CharactersServer/RyuServer.h
+        src/CharactersServer/Characters/IronmanServer.cpp
+        src/CharactersServer/Characters/IronmanServer.h
+        src/CharactersServer/Characters/RyuServer.cpp
+        src/CharactersServer/Characters/RyuServer.h
         src/CharactersClient/RyuClient.cpp
         src/CharactersClient/RyuClient.h
-        src/CharactersClient/IronManClient.cpp
-        src/CharactersClient/IronManClient.h
+        src/CharactersClient/IronmanClient.cpp
+        src/CharactersClient/IronmanClient.h
         src/Barra.cpp
         src/Barra.h
-        )
+        src/CharactersServer/Projectiles/ProjectileSpidermanServer.cpp src/CharactersServer/Projectiles/ProjectileSpidermanServer.h src/CharactersServer/Projectiles/ProjectileIronmanServer.cpp src/CharactersServer/Projectiles/ProjectileIronmanServer.h src/CharactersServer/Projectiles/ProjectileRyuServer.cpp src/CharactersServer/Projectiles/ProjectileRyuServer.h src/CharactersClient/ProjectileIronmanClient.cpp src/CharactersClient/ProjectileIronmanClient.h src/CharactersClient/ProjectileRyuClient.cpp src/CharactersClient/ProjectileRyuClient.h src/CharactersClient/ProjectileSpidermanClient.cpp src/CharactersClient/ProjectileSpidermanClient.h)
 
 
 

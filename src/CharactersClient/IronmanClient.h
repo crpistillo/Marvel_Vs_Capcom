@@ -8,14 +8,14 @@
 #include "../Texture/Texture.h"
 #include "./CharacterClient.h"
 
-class IronManClient final: public CharacterClient{
+class IronmanClient final: public CharacterClient{
 public:
     //Initializes the variables
     void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) override ;
 
-    IronManClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
+    IronmanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
                     int anchoPantalla, int numOfClient);
-    ~IronManClient();
+    ~IronmanClient();
     void load(SDL_Renderer *renderer, int posContrincante) override;
     ProjectileClient* projectile;
     virtual ProjectileClient* getProjectile() override ;

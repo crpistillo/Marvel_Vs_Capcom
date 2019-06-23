@@ -2,9 +2,9 @@
 // Created by IgVelasco on 5/17/19.
 //
 
-#include "IronManServer.h"
+#include "IronmanServer.h"
 #include "CharacterServer.h"
-#include "Projectile.h"
+#include "../Projectiles/ProjectileServer.h"
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
@@ -57,7 +57,7 @@ const int heightJumpingLeftS = 70;
 
 
 
-IronManServer::IronManServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+IronmanServer::IronmanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                                  int numberOfClient)
         : CharacterServer(
         PosX,
@@ -89,7 +89,7 @@ IronManServer::IronManServer(int PosX, int width, int height, int sobrante, int 
     lastGripSprite = LAST_GRIP_SPRITE;
     lastFallingSprite = LAST_FALLING_SPRITE;
 
-    this->projectile = new Projectile();
+    this->projectile = new ProjectileServer();
 
     widthStanding = widthStandingS;
     heightStanding = heightStandingS;
@@ -120,14 +120,14 @@ IronManServer::IronManServer(int PosX, int width, int height, int sobrante, int 
 
 
 
-void IronManServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void IronmanServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
     if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
         mPosX += vel *CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
-    if ((mPosX - CHARACTER_VEL < -IronManServer::getSobrante()) || (distance < (-anchoPantalla))) {
+    if ((mPosX - CHARACTER_VEL < -IronmanServer::getSobrante()) || (distance < (-anchoPantalla))) {
         //Move back
         mPosX += CHARACTER_VEL;
     }
@@ -137,14 +137,14 @@ void IronManServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrou
 }
 
 
-void IronManServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void IronmanServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
     if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
         mPosX -= vel *CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - IronManServer::getSobrante() - IronManServer::getWidth())) ||
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - IronmanServer::getSobrante() - IronmanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
@@ -154,7 +154,7 @@ void IronManServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGro
 }
 
 
-void IronManServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
+void IronmanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
     builder->personaje = IRONMAN;
     builder->cliente = clientNumber;
@@ -166,7 +166,7 @@ void IronManServer::makeBuilderStruct(character_builder_t *builder, bool isFirst
 }
 
 
-int IronManServer::getSpriteNumber(){
+int IronmanServer::getSpriteNumber(){
     int spriteNumber;
     switch (this->currentAction){
         case STANDING:
@@ -247,7 +247,7 @@ int IronManServer::getSpriteNumber(){
 
 
 
-void IronManServer::stand() {
+void IronmanServer::stand() {
     currentAction = STANDING;
     resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
@@ -255,13 +255,13 @@ void IronManServer::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void IronManServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
+void IronmanServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
     if(projectile->active)
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
-void IronManServer::throwPower() {
+void IronmanServer::throwPower() {
     if(projectile->active)
         return;
     if(currentThrowPowerSprite== lastThrowPowerSprite)
@@ -270,14 +270,14 @@ void IronManServer::throwPower() {
 
 }
 
-bool IronManServer::isProjectileActive() {
+bool IronmanServer::isProjectileActive() {
     return projectile->active || projectile->itWasActiveAndDied;
 }
 
-Projectile *IronManServer::getProjectile() {
+ProjectileServer *IronmanServer::getProjectile() {
     return projectile;
 }
 
-bool IronManServer::isProjectileHurting() {
+bool IronmanServer::isProjectileHurting() {
     return !projectile->hitting && isProjectileActive();
 }

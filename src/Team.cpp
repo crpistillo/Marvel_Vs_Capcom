@@ -6,8 +6,8 @@
  */
 
 #include "Team.h"
-#include "CharactersServer/SpidermanServer.h"
-#include "CharactersServer/WolverineServer.h"
+#include "CharactersServer/Characters/SpidermanServer.h"
+#include "CharactersServer/Characters/WolverineServer.h"
 
 const int MAX_PLAYERS = 4;
 

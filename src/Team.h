@@ -8,7 +8,7 @@
 #ifndef TEAM_H_
 #define TEAM_H_
 
-#include "CharactersServer/CharacterServer.h"
+#include "CharactersServer/Characters/CharacterServer.h"
 #include "Socket.h"
 
 class Team

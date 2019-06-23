@@ -2,16 +2,16 @@
 // Created by IgVelasco on 6/17/19.
 //
 
-#ifndef MARVEL_VS_CAPCOM_PROJECTILE_H
-#define MARVEL_VS_CAPCOM_PROJECTILE_H
+#ifndef MARVEL_VS_CAPCOM_PROJECTILESERVER_H
+#define MARVEL_VS_CAPCOM_PROJECTILESERVER_H
 
 
 class SpidermanServer;
 
-class Projectile {
+class ProjectileServer {
 
 public:
-    Projectile();
+    ProjectileServer();
 
     bool active;
 
@@ -24,7 +24,7 @@ public:
     void travel();
 
     int initialPosX;
-    int currentSprite;
+    int currentSprite = 0;
     int lastSprite = 4;
     bool itWasActiveAndDied;
     bool isLookingLeft;
@@ -42,4 +42,4 @@ public:
 };
 
 
-#endif //MARVEL_VS_CAPCOM_PROJECTILE_H
+#endif //MARVEL_VS_CAPCOM_PROJECTILESERVER_H

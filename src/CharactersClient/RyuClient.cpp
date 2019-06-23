@@ -4,6 +4,7 @@
 
 #include "RyuClient.h"
 #include "../InputTable.h"
+#include "ProjectileRyuClient.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ RyuClient::RyuClient(int PosX, bool secondaryColor, int width, int height, int s
     else
         loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     currentAction = STANDING;
-    projectile = new ProjectileClient(secondaryColor);
+    projectile = new ProjectileRyuClient(secondaryColor);
 
 }
 

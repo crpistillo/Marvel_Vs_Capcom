@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <map>
 #include <iostream>
-#include "CharactersServer/Projectile.h"
+#include "CharactersServer/Projectiles/ProjectileServer.h"
 
 using namespace std;
 
@@ -53,9 +53,9 @@ public:
 
     int getCenter();
 
-    bool isProjectileColliding(Projectile *projectile);
+    bool isProjectileColliding(ProjectileServer *projectile);
 
-    Projectile *hit();
+    ProjectileServer *hit();
 
     bool contactFromLeftSide(Box *otherBox);
 

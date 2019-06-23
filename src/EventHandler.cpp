@@ -3,7 +3,7 @@
 //
 
 #include "EventHandler.h"
-#include "CharactersServer/Projectile.h"
+#include "CharactersServer/Projectiles/ProjectileServer.h"
 
 EventHandler::EventHandler(Team **team, std::mutex *mutex) {
     this->team = team;
@@ -132,7 +132,7 @@ void EventHandler::handleProjectiles(character_updater_t *updater, int teamToUpd
         updater->pposX = 0;
         updater->pposY = 0;
     } else {
-        Projectile *projectile = team[teamToUpdate]->getCurrentCharacter()->getProjectile();
+        ProjectileServer *projectile = team[teamToUpdate]->getCurrentCharacter()->getProjectile();
         updater->projectile = projectile->itWasActiveAndDied ? PROJECTILEDEAD : PROJECTILEALIVE;
         updater->currentProjectileSprite = projectile->currentSprite;
         updater->pposX = projectile->posX;

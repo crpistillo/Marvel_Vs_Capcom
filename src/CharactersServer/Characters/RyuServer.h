@@ -2,21 +2,21 @@
 // Created by IgVelasco on 5/17/19.
 //
 
-#ifndef MARVEL_VS_CAPCOM_IRONMANSERVER_H
-#define MARVEL_VS_CAPCOM_IRONMANSERVER_H
+#ifndef MARVEL_VS_CAPCOM_RYUSERVER_H
+#define MARVEL_VS_CAPCOM_RYUSERVER_H
 
 #include "./CharacterServer.h"
 
-class IronManServer final : public CharacterServer {
+class RyuServer final : public CharacterServer {
 public:
-    IronManServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
-                    int numberOfClient);
+    RyuServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+                  int numberOfClient);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam);
-    Projectile* projectile;
+    ProjectileServer* projectile;
     void throwPower() override ;
     bool isProjectileActive() override;
     bool isProjectileHurting() override;
-    virtual Projectile *getProjectile();
+    virtual ProjectileServer *getProjectile();
 
 
 private:
@@ -32,4 +32,4 @@ private:
 };
 
 
-#endif //MARVEL_VS_CAPCOM_IRONMANSERVER_H
+#endif //MARVEL_VS_CAPCOM_RYUSERVER_H

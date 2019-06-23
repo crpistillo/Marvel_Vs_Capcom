@@ -2,18 +2,18 @@
 // Created by IgVelasco on 6/17/19.
 //
 
-#include "Projectile.h"
+#include "ProjectileServer.h"
 
 const int PROJECTILESPEED = 50;
 
-Projectile::Projectile() {
+ProjectileServer::ProjectileServer() {
     active = false;
     hitting = false;
     itWasActiveAndDied = false;
     posY = 70; // DEFAULTPOS Y para estar a la altura del disparo
 }
 
-void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) {
+void ProjectileServer::launch(int positionInX, int shotDirection, bool isLookingLeft) {
     this->isLookingLeft = isLookingLeft;
     active = true;
     impact = false;
@@ -28,7 +28,7 @@ void Projectile::launch(int positionInX, int shotDirection, bool isLookingLeft) 
     currentSprite = 0;
 }
 
-void Projectile::travel() {
+void ProjectileServer::travel() {
 
     currentSprite++;
     if(impact)
@@ -49,13 +49,13 @@ void Projectile::travel() {
 
 }
 
-void Projectile::deactivate() {
+void ProjectileServer::deactivate() {
     itWasActiveAndDied = true;
     active = false;
     currentSprite = 0;
 }
 
-int Projectile::getCollitionX() {
+int ProjectileServer::getCollitionX() {
     int x = posX;
     if(!isLookingLeft)
         x += 603;  //al tneer otra resolucion los valores en x son distintos que los de spiderman por lo que tiene que tener un corrimiento
@@ -66,7 +66,7 @@ int Projectile::getCollitionX() {
 
 }
 
-void Projectile::hit() {
+void ProjectileServer::hit() {
     impact = true;
     currentSprite = lastSprite;
 

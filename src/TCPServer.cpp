@@ -4,10 +4,10 @@
 
 #include "TCPServer.h"
 #include "netdb.h"
-#include "CharactersServer/SpidermanServer.h"
-#include "CharactersServer/WolverineServer.h"
-#include "CharactersServer/IronManServer.h"
-#include "CharactersServer/RyuServer.h"
+#include "CharactersServer/Characters/SpidermanServer.h"
+#include "CharactersServer/Characters/WolverineServer.h"
+#include "CharactersServer/Characters/IronmanServer.h"
+#include "CharactersServer/Characters/RyuServer.h"
 #include <string>
 #include <pthread.h>
 #include <thread>

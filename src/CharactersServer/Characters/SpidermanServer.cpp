@@ -2,9 +2,9 @@
 // Created by IgVelasco on 5/17/19.
 //
 
-#include "RyuServer.h"
+#include "SpidermanServer.h"
 #include "CharacterServer.h"
-#include "Projectile.h"
+#include "../Projectiles/ProjectileServer.h"
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
@@ -55,7 +55,7 @@ const int heightJumpingLeftS = 70;
 
 
 
-RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
+SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                                  int numberOfClient)
         : CharacterServer(
         PosX,
@@ -87,30 +87,30 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
     lastGripSprite = LAST_GRIP_SPRITE;
     lastFallingSprite = LAST_FALLING_SPRITE;
 
-    this->projectile = new Projectile();
+    this->projectile = new ProjectileServer();
 
-    widthStanding = widthStandingS;
-    heightStanding = heightStandingS;
-    widthWalking = widthWalkingS;
-    heightWalking = heightWalkingS;
-    widthDuck = widthDuckS;
-    heightDuck = heightDuckS;
-    widthPunch = widthPunchS;
-    heightPunch = heightPunchS;
-    widthPunchDown = widthPunchDownS;
-    heightPunchDown = heightPunchDownS;
-    widthKick = widthKickS;
-    heightKick = heightKickS;
-    widthKickDown = widthKickDownS;
-    heightKickDown = heightKickDownS;
-    widthKickAir = widthKickAirS;
-    heightKickAir = heightKickAirS;
-    widthPunchAir = widthPunchAirS;
-    heightPunchAir = heightPunchAirS;
-    widthJumping = widthJumpingS;
-    heightJumping = heightJumpingS;
-    widthJumpingLeft = widthJumpingLeftS;
-    heightJumpingLeft = heightJumpingLeftS;
+	widthStanding = widthStandingS;
+	heightStanding = heightStandingS;
+	widthWalking = widthWalkingS;
+	heightWalking = heightWalkingS;
+	widthDuck = widthDuckS;
+	heightDuck = heightDuckS;
+	widthPunch = widthPunchS;
+	heightPunch = heightPunchS;
+	widthPunchDown = widthPunchDownS;
+	heightPunchDown = heightPunchDownS;
+	widthKick = widthKickS;
+	heightKick = heightKickS;
+	widthKickDown = widthKickDownS;
+	heightKickDown = heightKickDownS;
+	widthKickAir = widthKickAirS;
+	heightKickAir = heightKickAirS;
+	widthPunchAir = widthPunchAirS;
+	heightPunchAir = heightPunchAirS;
+	widthJumping = widthJumpingS;
+	heightJumping = heightJumpingS;
+	widthJumpingLeft = widthJumpingLeftS;
+	heightJumpingLeft = heightJumpingLeftS;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
@@ -118,13 +118,16 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
 
 
 
-void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void SpidermanServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 
+    cout<<isGrounded<<endl;
+    if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
+        mPosX += vel *CHARACTER_VEL;
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
-    if ((mPosX - CHARACTER_VEL < -RyuServer::getSobrante()) || (distance < (-anchoPantalla))) {
+    if ((mPosX - CHARACTER_VEL < -SpidermanServer::getSobrante()) || (distance < (-anchoPantalla))) {
         //Move back
         mPosX += CHARACTER_VEL;
     }
@@ -134,12 +137,14 @@ void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded
 }
 
 
-void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void SpidermanServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
-
     mPosX += vel *CHARACTER_VEL;
 
-    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - RyuServer::getSobrante() - RyuServer::getWidth())) ||
+    if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
+        mPosX -= vel *CHARACTER_VEL;
+
+    if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
         mPosX -= CHARACTER_VEL;
@@ -149,9 +154,9 @@ void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounde
 }
 
 
-void RyuServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
+void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
-    builder->personaje = RYU;
+    builder->personaje = SPIDERMAN;
     builder->cliente = clientNumber;
     builder->sprite = 0;
     builder->action = STANDING;
@@ -161,7 +166,7 @@ void RyuServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam
 }
 
 
-int RyuServer::getSpriteNumber(){
+int SpidermanServer::getSpriteNumber(){
     int spriteNumber;
     switch (this->currentAction){
         case STANDING:
@@ -224,15 +229,15 @@ int RyuServer::getSpriteNumber(){
         case HURTINGGROUND:
             spriteNumber = currentHurtingSprite;
             break;
-        case GRIP:
-            spriteNumber = currentGripSprite;
-            break;
-        case THROW:
-            spriteNumber = currentThrowSprite;
-            break;
-        case FALLING:
-            spriteNumber = currentFallingSprite;
-            break;
+		case GRIP:
+			spriteNumber = currentGripSprite;
+			break;
+		case THROW:
+			spriteNumber = currentThrowSprite;
+			break;
+		case FALLING:
+			spriteNumber = currentFallingSprite;
+			break;
         default:
             spriteNumber = 0;
             break;
@@ -242,7 +247,7 @@ int RyuServer::getSpriteNumber(){
 
 
 
-void RyuServer::stand() {
+void SpidermanServer::stand() {
     currentAction = STANDING;
     resetSpriteVariables();
     if (currentStandingSprite >= lastStandingSprite)
@@ -250,13 +255,13 @@ void RyuServer::stand() {
     characterBox->updateBox(widthStanding, heightStanding);
 }
 
-void RyuServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
+void SpidermanServer::update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) {
     if(projectile->active)
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
-void RyuServer::throwPower() {
+void SpidermanServer::throwPower() {
     if(projectile->active)
         return;
     if(currentThrowPowerSprite== lastThrowPowerSprite)
@@ -265,14 +270,14 @@ void RyuServer::throwPower() {
 
 }
 
-bool RyuServer::isProjectileActive() {
+bool SpidermanServer::isProjectileActive() {
     return projectile->active || projectile->itWasActiveAndDied;
 }
 
-Projectile *RyuServer::getProjectile() {
+ProjectileServer *SpidermanServer::getProjectile() {
     return projectile;
 }
 
-bool RyuServer::isProjectileHurting() {
+bool SpidermanServer::isProjectileHurting() {
     return !projectile->hitting && isProjectileActive();
 }

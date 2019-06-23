@@ -4,10 +4,10 @@
 
 #include "Menu.h"
 #include "../Constants.h"
-#include "../CharactersServer/SpidermanServer.h"
-#include "../CharactersServer/WolverineServer.h"
-#include "../CharactersServer/IronManServer.h"
-#include "../CharactersServer/RyuServer.h"
+#include "../CharactersServer/Characters/SpidermanServer.h"
+#include "../CharactersServer/Characters/WolverineServer.h"
+#include "../CharactersServer/Characters/IronmanServer.h"
+#include "../CharactersServer/Characters/RyuServer.h"
 
 
 
@@ -257,7 +257,7 @@ CharacterServer *Menu::createServerCharacterFromCursor(ServerCursor *pCursor, in
             break;
 
         case IRONMAN:
-        	characterServer = new IronManServer(pos, constants->widthSpiderman,
+        	characterServer = new IronmanServer(pos, constants->widthSpiderman,
         	                                                  constants->heightSpiderman, constants->spidermanSobrante,
         	                                                  constants->spidermanAncho, constants->screenWidth, nclient);
         	break;

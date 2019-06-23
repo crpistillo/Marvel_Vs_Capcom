@@ -2,8 +2,9 @@
 // Created by IgVelasco on 6/22/19.
 //
 
-#include "IronManClient.h"
+#include "IronmanClient.h"
 #include "../InputTable.h"
+#include "ProjectileIronmanClient.h"
 
 
 const Uint8 SECONDARY_RED = 255;
@@ -14,7 +15,7 @@ const string IronManPath = "images/iron_man/iron_man_";
 const string MVC_FILEPATH = "/MVC2_IronMan_";
 const string FILE_EXTENSION = ".png";
 
-IronManClient::IronManClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
+IronmanClient::IronmanClient(int PosX, bool secondaryColor, int width, int height, int sobrante, int ancho,
                                  int anchoPantalla, int numOfClient)
         : CharacterClient(
         PosX,
@@ -31,14 +32,14 @@ IronManClient::IronManClient(int PosX, bool secondaryColor, int width, int heigh
     else
         loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     currentAction = STANDING;
-    projectile = new ProjectileClient(secondaryColor);
+    projectile = new ProjectileIronmanClient(secondaryColor);
 
 }
 
-IronManClient::~IronManClient() {
+IronmanClient::~IronmanClient() {
 }
 
-void IronManClient::load(SDL_Renderer *renderer, int posContrincante) {
+void IronmanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
 
 
@@ -280,17 +281,17 @@ void IronManClient::load(SDL_Renderer *renderer, int posContrincante) {
 
 }
 
-void IronManClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+void IronmanClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;
     m_Texture.render(mPosX - camX, mPosY - camY + 85, widthSprite, heightSprite,
                      mRenderer); //esto es los valores que se cambian la resolucion
 }
 
-ProjectileClient *IronManClient::getProjectile() {
+ProjectileClient *IronmanClient::getProjectile() {
     return projectile;
 }
 
-void IronManClient::loadBanner(SDL_Renderer *renderer)
+void IronmanClient::loadBanner(SDL_Renderer *renderer)
 {
 	if (this->clientNumber == 0 || this->clientNumber == 1) {
 		this->loader->loadActionSprite(characterFilePath + "banner_left",

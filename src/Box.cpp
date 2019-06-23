@@ -117,7 +117,7 @@ int Box::getCenter() {
     return centerX;
 }
 
-bool Box::isProjectileColliding(Projectile *projectile) {
+bool Box::isProjectileColliding(ProjectileServer *projectile) {
 
     int positionX = projectile->getCollitionX();
     float leftBorder = getLeft();

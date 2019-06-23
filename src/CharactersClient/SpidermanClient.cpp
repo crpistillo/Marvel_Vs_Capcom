@@ -4,6 +4,7 @@
 
 #include "SpidermanClient.h"
 #include "../InputTable.h"
+#include "ProjectileSpidermanClient.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ SpidermanClient::SpidermanClient(int PosX, bool secondaryColor, int width, int h
     else
         loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     currentAction = STANDING;
-    projectile = new ProjectileClient(secondaryColor);
+    projectile = new ProjectileSpidermanClient(secondaryColor);
 
 }
 

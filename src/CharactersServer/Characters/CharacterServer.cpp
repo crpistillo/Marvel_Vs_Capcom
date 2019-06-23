@@ -3,8 +3,8 @@
 //
 
 #include "CharacterServer.h"
-#include "../tools/logger/Logger.h"
-#include "../Layer.h"
+#include "../../tools/logger/Logger.h"
+#include "../../Layer.h"
 
 const string ERROR = "ERROR";
 const string INFO = "INFO";
@@ -551,7 +551,7 @@ bool CharacterServer::isProjectileActive() {
     return false;
 }
 
-Projectile *CharacterServer::getProjectile() {
+ProjectileServer *CharacterServer::getProjectile() {
     return nullptr;
 }
 

@@ -9,11 +9,9 @@ const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
 const Uint8 SECONDARY_BLUE = 000;
 
-const string projectileFilePath = "images/spiderman/spiderman_projectile_";
-const string MVC_FILEPATH = "/MVC2_SpiderMan_";
 const string FILE_EXTENSION = ".png";
 
-ProjectileClient::ProjectileClient(bool secondaryColor) {
+ProjectileClient::ProjectileClient(bool secondaryColor){
     active = false;
     posX = 0;
     posY = 0;
@@ -22,7 +20,6 @@ ProjectileClient::ProjectileClient(bool secondaryColor) {
         loader = new ImageLoader((Uint8) 255, (Uint8) 255, (Uint8) 255);
     else
         loader = new ImageLoader(SECONDARY_RED, SECONDARY_GREEN, SECONDARY_BLUE);
-
 }
 
 void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
@@ -33,9 +30,9 @@ void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
 
 }
 
-void ProjectileClient::update(bool activate, character_updater_t *updater, bool isLookingLeft) {
+void ProjectileClient::update(bool activate, character_updater_t *updater, bool lookingLeft) {
     if(!active)
-        this->isLookingLeft = isLookingLeft;
+        this->isLookingLeft = lookingLeft;
     active = activate;
     if(active){
         currentSprite = updater->currentProjectileSprite;
@@ -46,11 +43,12 @@ void ProjectileClient::update(bool activate, character_updater_t *updater, bool 
 
 void ProjectileClient::load(SDL_Renderer *renderer) {
     if(isLookingLeft)
-        this->loader->loadActionSprite(projectileFilePath + "left", MVC_FILEPATH,
+        this->loader->loadActionSprite(projectileFilePath + "left", mvcFilePath,
                                    currentSprite, FILE_EXTENSION,
                                    renderer, &m_Texture);
     else
-        this->loader->loadActionSprite(projectileFilePath + "right", MVC_FILEPATH,
+        this->loader->loadActionSprite(projectileFilePath + "right", mvcFilePath,
                                        currentSprite, FILE_EXTENSION,
                                        renderer, &m_Texture);
 }
+
