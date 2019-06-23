@@ -838,6 +838,10 @@ void TCPServer::resetRound() {
 
 void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     ignoreMessages = true;
+    incoming_msg_mtx.lock();
+    while(!incoming_msges_queue->empty_queue())
+        incoming_msges_queue->delete_data();
+    incoming_msg_mtx.unlock();
     FPSManager* fpsManager = new FPSManager(30);
     Timer *timer = new Timer(3);
     while (timer->getTimeThatPass() < 3) {

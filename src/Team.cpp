@@ -17,6 +17,7 @@ Team::Team(int teamSize) {
 
 void Team::changeCharacter() {
 	int updateX = currentCharacter->getCentro();
+	//currentCharacter->getProjectile()->deactivate();  // falta projectil de wolverine esto rompe si no
 
 	if (currentCharacter == firstCharacter) {
 		currentCharacter = secondCharacter;
