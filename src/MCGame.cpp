@@ -487,6 +487,29 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder, int client
                                                   constants->wolverineAncho,
                                                   constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexWolverine);
+            break;
+
+        case IRONMAN:
+            characterClient = new IronManClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthSpiderman,
+                                                  constants->heightSpiderman,
+                                                  constants->spidermanSobrante,
+                                                  constants->spidermanAncho,
+                                                  constants->screenWidth, clientNumber);
+            characterClient->setZIndex(constants->zIndexSpiderman);
+            break;
+
+        case RYU:
+            characterClient = new RyuClient(pos,
+                                                  !builder->isFirstTeam,
+                                                  constants->widthSpiderman,
+                                                  constants->heightSpiderman,
+                                                  constants->spidermanSobrante,
+                                                  constants->spidermanAncho,
+                                                  constants->screenWidth, clientNumber);
+            characterClient->setZIndex(constants->zIndexSpiderman);
+            break;
     }
     return characterClient;
 }
@@ -649,7 +672,7 @@ void MCGame::renderMenu() {
 
 void MCGame::renderMenuBackImage() {
     Texture menuBackImage;
-    menuBackImage.loadFromFile("images/menu/nuevos_cursores/nuevoMenu.png", this->m_Renderer);
+    menuBackImage.loadFromFile("images/menu4/Menu4.png", this->m_Renderer);
     menuBackImage.render(0, 0, 800, 600, m_Renderer);
 }
 

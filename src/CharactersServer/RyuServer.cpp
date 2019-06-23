@@ -151,7 +151,7 @@ void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounde
 
 void RyuServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar
-    builder->personaje = SPIDERMAN;
+    builder->personaje = RYU;
     builder->cliente = clientNumber;
     builder->sprite = 0;
     builder->action = STANDING;

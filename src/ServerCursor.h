@@ -4,6 +4,17 @@
 #include "data_structs.h"
 #include <iostream>
 
+
+
+#define TEAM_ONE_POSITION 61
+#define TEAM_TWO_POSITION 353
+
+#define SPIDERMAN_POSITION 30
+#define WOLVERINE_POSITION 160
+#define IRONMAN_POSITION 290
+#define RYU_POSITION 420
+
+
 class ServerCursor{
 public:
 

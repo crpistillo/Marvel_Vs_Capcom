@@ -15,12 +15,26 @@ bool ServerCursor::moveRight(){
 	if(this->finalSelection)
 		return false;
 
-	if (posX == 97){
-		posX = 449;
+	switch (posX){
+	case SPIDERMAN_POSITION:
+		posX = WOLVERINE_POSITION;
+		return true;
+	case WOLVERINE_POSITION:
+		posX = IRONMAN_POSITION;
+		return true;
+	case IRONMAN_POSITION:
+		posX = RYU_POSITION;
+		return true;
+	default:
+		return false;
+	}
+
+	/*if (posX == SPIDERMAN_POSITION){
+		posX = WOLVERINE_POSITION;
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
-	return false;		//Si el movimiento es invalido, devuelvo false
+	return false;		//Si el movimiento es invalido, devuelvo false*/
 }
 
 
@@ -29,29 +43,68 @@ bool ServerCursor::moveLeft(){
 	if(this->finalSelection)
 		return false;
 
-	if (posX == 449){
-		posX = 97;
+	switch (posX){
+	case RYU_POSITION:
+		posX = IRONMAN_POSITION;
+		return true;
+	case IRONMAN_POSITION:
+		posX = WOLVERINE_POSITION;
+		return true;
+	case WOLVERINE_POSITION:
+		posX = SPIDERMAN_POSITION;
+		return true;
+	default:
+		return false;
+	}
+
+
+	/*if (posX == WOLVERINE_POSITION){
+		posX = SPIDERMAN_POSITION;
 
 		return true;	//Si el movimiento es válido, devuelvo true
 	}
 
 
-	return false;		//Si el movimiento es invalido, devuelvo false
+	return false;		//Si el movimiento es invalido, devuelvo false*/
 }
 
 bool ServerCursor::selectCharacter(){
 	if(this->finalSelection)
 		return false;
 
-	if(this->posX == 97){
+	switch (posX){
+	case SPIDERMAN_POSITION:
+		this->characterSelected = SPIDERMAN;
+		this->finalSelection = true;
+		break;
+
+	case WOLVERINE_POSITION:
+		this->characterSelected = WOLVERINE;
+		this->finalSelection = true;
+		break;
+
+	case IRONMAN_POSITION:
+		this->characterSelected = IRONMAN;
+		this->finalSelection = true;
+		break;
+
+	case RYU_POSITION:
+		this->characterSelected = RYU;
+		this->finalSelection = true;
+		break;
+
+	}
+
+	return true;
+	/*if(this->posX == SPIDERMAN_POSITION){
 		this->characterSelected = SPIDERMAN;
 		this->finalSelection = true;
 	}
-	else if(this->posX == 449){
+	else if(this->posX == WOLVERINE_POSITION){
 		this->characterSelected = WOLVERINE;
 		this->finalSelection = true;
 	}
-	return true;
+	return true;*/
 
 }
 
