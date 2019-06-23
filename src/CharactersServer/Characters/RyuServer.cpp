@@ -121,6 +121,8 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
 void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
+    if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
+        mPosX += vel *CHARACTER_VEL;
 
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
@@ -138,6 +140,10 @@ void RyuServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounde
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
+    if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
+        mPosX -= vel *CHARACTER_VEL;
+
+
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - RyuServer::getSobrante() - RyuServer::getWidth())) ||
         (distance > anchoPantalla)) {
