@@ -597,7 +597,6 @@ void TCPServer::configJson(json config) {
 }
 
 void TCPServer::updateModel() {
-
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
     Timer *timer = new Timer(99);
     int roundsPlayed = 0;
