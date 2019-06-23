@@ -568,7 +568,6 @@ void CharacterServer::grip() {
 
 void CharacterServer::falling(int distance, int posContrincante, Box *boxOfEnemy) {
     //guardo el isLookingLeft inicial en el primer sprite
-    m.lock();
     if (currentFallingSprite == 0) {
         if (isLookingLeft)
             initialLookingLeft = true;
@@ -576,7 +575,6 @@ void CharacterServer::falling(int distance, int posContrincante, Box *boxOfEnemy
             initialLookingLeft = false;
     }
     isLookingLeft = initialLookingLeft;
-    m.unlock();
 
 
     if (currentFallingSprite >= 0 && currentFallingSprite < 8) {
