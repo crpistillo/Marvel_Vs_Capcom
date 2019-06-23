@@ -285,6 +285,12 @@ ProjectileClient *RyuClient::getProjectile() {
     return projectile;
 }
 
+void RyuClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+    isLookingLeft = this->getCentro() > posContrincante;
+    m_Texture.render(mPosX - camX, mPosY - camY + 23, widthSprite, heightSprite,
+                     mRenderer); //esto es los valores que se cambian la resolucion
+}
+
 void RyuClient::loadBanner(SDL_Renderer *renderer)
 {
     if (this->clientNumber == 0 || this->clientNumber == 1) {

@@ -35,7 +35,7 @@ public:
 //	void handleEvent(SDL_Event &e, SDL_Renderer* renderer, int distance);
     //Shows the character on the screen
     virtual ProjectileClient* getProjectile();
-    void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante);
+    virtual void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante);
     int getPosX();
     int getPosY();
     int getWidth();

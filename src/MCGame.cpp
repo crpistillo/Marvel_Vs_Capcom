@@ -492,7 +492,7 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder, int client
         case IRONMAN:
             characterClient = new IronManClient(pos,
                                                   !builder->isFirstTeam,
-                                                  constants->widthSpiderman,
+                                                  constants->widthSpiderman - 100,
                                                   constants->heightSpiderman,
                                                   constants->spidermanSobrante,
                                                   constants->spidermanAncho,

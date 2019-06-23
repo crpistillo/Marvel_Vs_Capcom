@@ -5,7 +5,6 @@
 #include "IronManClient.h"
 #include "../InputTable.h"
 
-using namespace std;
 
 const Uint8 SECONDARY_RED = 255;
 const Uint8 SECONDARY_GREEN = 200;
@@ -279,6 +278,12 @@ void IronManClient::load(SDL_Renderer *renderer, int posContrincante) {
             break;
     }
 
+}
+
+void IronManClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
+    isLookingLeft = this->getCentro() > posContrincante;
+    m_Texture.render(mPosX - camX, mPosY - camY + 85, widthSprite, heightSprite,
+                     mRenderer); //esto es los valores que se cambian la resolucion
 }
 
 ProjectileClient *IronManClient::getProjectile() {

@@ -19,6 +19,7 @@ public:
     virtual ProjectileClient* getProjectile() override ;
     void loadBanner(SDL_Renderer *renderer);
 
+    virtual void render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante)  ;
 };
 
 
