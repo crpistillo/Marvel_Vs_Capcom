@@ -118,7 +118,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
 

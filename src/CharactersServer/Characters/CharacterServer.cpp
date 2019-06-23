@@ -294,7 +294,7 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void CharacterServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
     cout<<isGrounded<<endl;
@@ -354,7 +354,7 @@ void CharacterServer::jumpVertical(Box *boxOfEnemy) {
 }
 
 void CharacterServer::jumpRight(int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
@@ -362,7 +362,7 @@ void CharacterServer::jumpRight(int distance, Box *boxOfEnemy) {
 
 
 void CharacterServer::jumpLeft(int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
     this->currentAction = JUMPINGLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);
@@ -504,7 +504,7 @@ void CharacterServer::punchJumpVertical(actions_t punchVertical, Box *boxOfEnemy
 }
 
 void CharacterServer::punchJumpLeft(actions_t punchJumpLeft, int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthPunchAir, heightPunchAir);
     currentAction = punchJumpLeft;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);
@@ -513,7 +513,7 @@ void CharacterServer::punchJumpLeft(actions_t punchJumpLeft, int distance, Box *
 }
 
 void CharacterServer::punchJumpRight(actions_t punchJumpRight, int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthPunchAir, heightPunchAir);
     currentAction = punchJumpRight;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
@@ -529,7 +529,7 @@ void CharacterServer::kickJumpVertical(actions_t kickVertical, Box *boxOfEnemy) 
 }
 
 void CharacterServer::kickJumpRight(actions_t kickJumpRight, int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthKickAir, heightKickAir);
     currentAction = kickJumpRight;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
@@ -538,7 +538,7 @@ void CharacterServer::kickJumpRight(actions_t kickJumpRight, int distance, Box *
 }
 
 void CharacterServer::kickJumpLeft(actions_t kickJumpLeft, int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false);
     characterBox->updateBox(widthKickAir, heightKickAir);
     currentAction = kickJumpLeft;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);

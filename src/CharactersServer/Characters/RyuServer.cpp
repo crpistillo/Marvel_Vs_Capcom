@@ -118,7 +118,7 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
 
 
 
-void RyuServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void RyuServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
     mPosX -= vel * CHARACTER_VEL;
     if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
