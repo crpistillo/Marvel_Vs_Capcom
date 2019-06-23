@@ -171,19 +171,19 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case DUCK:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 220, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 1, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 219, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "duck", MVC_FILEPATH, 0, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 
         case BLOCK:
             if (isLookingLeft)
-                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 228, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 1, FILE_EXTENSION,
                                                renderer, &m_Texture);
             else
-                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 227, FILE_EXTENSION,
+                this->loader->loadActionSprite(characterFilePath + "block", MVC_FILEPATH, 0, FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
 

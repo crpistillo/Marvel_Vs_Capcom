@@ -166,7 +166,7 @@ void CharacterServer::update(int distance, int posEnemy, actions_t actionRecieve
     } else if (currentAction == THROW) {
         throwCharacter();
     } else if (currentAction == FALLING) {
-        falling(distance, posEnemy);
+        falling(distance, posEnemy, boxEnemy);
     }
 
     if (actionStarted) {
@@ -566,7 +566,7 @@ void CharacterServer::grip() {
     normalAction(&currentGripSprite, &lastGripSprite, STANDING);
 }
 
-void CharacterServer::falling(int distance, int posContrincante) {
+void CharacterServer::falling(int distance, int posContrincante, Box *boxOfEnemy) {
     //guardo el isLookingLeft inicial en el primer sprite
     m.lock();
     if (currentFallingSprite == 0) {
@@ -592,9 +592,9 @@ void CharacterServer::falling(int distance, int posContrincante) {
 
     if (currentFallingSprite > 8 && currentFallingSprite < 36) {
         if (isLookingLeft) {
-            moveRight(distance, 2, nullptr, false);
+            moveRight(distance, 2, boxOfEnemy, false);
         } else
-            moveLeft(distance, 2, nullptr, false);
+            moveLeft(distance, 2, boxOfEnemy, false);
     }
 
     if (currentFallingSprite > 8 && currentFallingSprite < 17) {

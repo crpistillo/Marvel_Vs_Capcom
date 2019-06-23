@@ -188,7 +188,7 @@ private:
 
 	virtual void throwCharacter();
 
-	virtual void falling(int distance, int posContrincante);
+	virtual void falling(int distance, int posContrincante, Box *boxOfEnemy);
 
     virtual void jumpVertical(Box *boxOfEnemy);
 
