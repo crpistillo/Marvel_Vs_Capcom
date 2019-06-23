@@ -118,7 +118,10 @@ void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
     currentAction = MOVINGLEFT;
 
     //Mover
-    mPosX -= vel * CHARACTER_VEL;
+    mPosX -= int(vel * float(CHARACTER_VEL));
+
+    if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
+        mPosX += int(vel * float(CHARACTER_VEL));
 
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
@@ -147,7 +150,10 @@ void WolverineServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool i
     currentAction = MOVINGRIGHT;
 
     //Mover
-    mPosX += vel * CHARACTER_VEL;
+    mPosX += int(vel * float(CHARACTER_VEL));
+
+    if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
+        mPosX -= int(vel * float(CHARACTER_VEL));
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
