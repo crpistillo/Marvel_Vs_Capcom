@@ -20,6 +20,8 @@ public:
 
 
 private:
+    void moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded);
+    void moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded);
     void stand();
     void update(int distance, int posContrincante, actions_t actionRecieved, Box *boxEnemy) override;
 
