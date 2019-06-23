@@ -26,7 +26,7 @@ private:
 
 public:
 	Box();
-	Box(float x, float y, float width, float height, int posX);
+	Box(float x, float y, float width, float height);
 	virtual ~Box();
 
     void setCenter(float x, float y, int posX);
@@ -61,7 +61,6 @@ public:
 
     void fixCollision(int *characterX, Box *otherBox);
 
-    int characterPosX;
 };
 
 

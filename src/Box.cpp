@@ -13,12 +13,11 @@
 
 using namespace std;
 
-Box::Box(float x, float y, float width, float height, int posX) {
+Box::Box(float x, float y, float width, float height) {
 	this->centerX=x;
 	this->centerY=y;
 	this->width=width;
 	this->height=height;
-	this->characterPosX = posX;
 }
 
 Box::~Box(){};
@@ -135,7 +134,7 @@ bool Box::isProjectileColliding(Projectile *projectile) {
 }
 
 void Box::fixCollision(int *characterX, Box *otherBox) {
-    if(*characterX > otherBox->characterPosX)
+    if((this->getLeft()+this->getRight()/2) > otherBox->getLeft()+otherBox->getRight()/2)
         *characterX += 1 * 30;   //vel * CHARACTERVEL
     else
         *characterX -= 1* 30;

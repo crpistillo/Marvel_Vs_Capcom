@@ -50,7 +50,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->vida = 100;
 
 
-    this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite, mPosX);
+    this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
 
 
     this->lastTime = SDL_GetTicks();
