@@ -82,6 +82,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
+    //Disparo
+    if (team[receiver]->getCurrentCharacter()->getColisionable()->isProjectileColliding(team[giver]->getCurrentCharacter()->getProjectile()))
+    		team[receiver]->getCurrentCharacter()->quitarVida(5);
+
     manageDamage(receiver, action);
 
     //any other interaction
