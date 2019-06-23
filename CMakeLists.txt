@@ -93,7 +93,7 @@ set(SOURCE_FILES
         src/CharactersClient/IronmanClient.h
         src/Barra.cpp
         src/Barra.h
-        src/CharactersServer/Projectiles/ProjectileSpidermanServer.cpp src/CharactersServer/Projectiles/ProjectileSpidermanServer.h src/CharactersServer/Projectiles/ProjectileIronmanServer.cpp src/CharactersServer/Projectiles/ProjectileIronmanServer.h src/CharactersServer/Projectiles/ProjectileRyuServer.cpp src/CharactersServer/Projectiles/ProjectileRyuServer.h src/CharactersClient/ProjectileIronmanClient.cpp src/CharactersClient/ProjectileIronmanClient.h src/CharactersClient/ProjectileRyuClient.cpp src/CharactersClient/ProjectileRyuClient.h src/CharactersClient/ProjectileSpidermanClient.cpp src/CharactersClient/ProjectileSpidermanClient.h)
+        src/CharactersServer/Projectiles/ProjectileSpidermanServer.cpp src/CharactersServer/Projectiles/ProjectileSpidermanServer.h src/CharactersServer/Projectiles/ProjectileIronmanServer.cpp src/CharactersServer/Projectiles/ProjectileIronmanServer.h src/CharactersServer/Projectiles/ProjectileRyuServer.cpp src/CharactersServer/Projectiles/ProjectileRyuServer.h src/CharactersClient/ProjectileIronmanClient.cpp src/CharactersClient/ProjectileIronmanClient.h src/CharactersClient/ProjectileRyuClient.cpp src/CharactersClient/ProjectileRyuClient.h src/CharactersClient/ProjectileSpidermanClient.cpp src/CharactersClient/ProjectileSpidermanClient.h src/CharactersClient/ProjectileWolverineClient.cpp src/CharactersClient/ProjectileWolverineClient.h)
 
 
 
