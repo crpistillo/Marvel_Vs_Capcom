@@ -256,13 +256,7 @@ void RyuClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case MAKINGINTRO:
             this->loadBanner(renderer);
-
-            if (!isLookingLeft && 10 <= currentSprite && currentSprite <= 16)
-                this->loader->loadActionSprite(characterFilePath + "intro", "/MVC2_SpiderManR_", currentSprite,
-                                               FILE_EXTENSION,
-                                               renderer, &m_Texture);
-            else
-                this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite,
+            this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
 

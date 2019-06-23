@@ -255,7 +255,7 @@ void IronmanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case MAKINGINTRO:
         	this->loadBanner(renderer);
-         	this->loader->loadActionSprite(characterFilePath + "intro", "/MVC2_IronManR_", currentSprite,
+         	this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
             break;
