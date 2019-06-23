@@ -715,19 +715,19 @@ void MCGame::setCursors() {
     bool visible;
     for (int i = 0; i < 4; i++) {
         if (i == 0) {
-            posX = 20;
+            posX = 18;
             posY = 108;
         }
         if (i == 2) {
-            posX = 20;
-            posY = 408;
+            posX = 18;
+            posY = 406;
         }
         if (i == 3) {
-            posX = 605;
-            posY = 408;
+            posX = 603;
+            posY = 406;
         }
         if (i == 1) {
-            posX = 605;
+            posX = 603;
             posY = 108;
         }
         visible = !(numberOfPlayers == 2 && (i == 1 || i == 3));
