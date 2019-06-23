@@ -22,7 +22,7 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
 
     ProjectileClient* projectile = currentCharacter->getProjectile();
     if(projectile)
-        projectile->update(updater->projectile == PROJECTILEALIVE, updater, false);
+        projectile->update(updater->projectile == PROJECTILEALIVE, updater);
 
     if (updater->action == RECONNECT) {
         //SI ES DE MI EQUIPO ME TENGO QUE FIJAR SI TENGO QUE ESTAR ACTIVO
@@ -74,11 +74,14 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
     Logger *logger = Logger::getInstance();
     logger->log("Renderizado de personaje - Render.", DEBUG);
     currentCharacter->render(mRenderer, camX, camY, posContrincante);
+    this->barra->render(mRenderer);
+
+}
+
+void Player::renderProyectiles(SDL_Renderer *mRenderer, int camX, int camY){
     ProjectileClient *projectile = currentCharacter->getProjectile();
     if (projectile)
         projectile->render(mRenderer, camX, camY);
-    this->barra->render(mRenderer);
-
 }
 
 void Player::renderBanner(SDL_Renderer *mRenderer)
@@ -152,7 +155,7 @@ int Player::getZIndex() {
 void Player::load(SDL_Renderer *pRenderer, int posContrincante) {
     ProjectileClient* projectile = currentCharacter->getProjectile();
     if(projectile)
-        projectile->load(pRenderer);
+        projectile->load(pRenderer, false);
     currentCharacter->load(pRenderer, posContrincante);
 }
 

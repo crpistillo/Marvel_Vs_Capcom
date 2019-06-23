@@ -280,6 +280,8 @@ void SpidermanClient::load(SDL_Renderer *renderer, int posContrincante) {
             break;
     }
 
+    projectile->load(renderer, isLookingLeft);
+
 }
 
 ProjectileClient *SpidermanClient::getProjectile() {

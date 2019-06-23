@@ -30,9 +30,7 @@ void ProjectileClient::render(SDL_Renderer *mRenderer, int camX, int camY) {
 
 }
 
-void ProjectileClient::update(bool activate, character_updater_t *updater, bool lookingLeft) {
-    if(!active)
-        this->isLookingLeft = lookingLeft;
+void ProjectileClient::update(bool activate, character_updater_t *updater) {
     active = activate;
     if(active){
         currentSprite = updater->currentProjectileSprite;
@@ -41,7 +39,7 @@ void ProjectileClient::update(bool activate, character_updater_t *updater, bool 
     }
 }
 
-void ProjectileClient::load(SDL_Renderer *renderer) {
+void ProjectileClient::load(SDL_Renderer *renderer, bool isLookingLeft) {
     if(isLookingLeft)
         this->loader->loadActionSprite(projectileFilePath + "left", mvcFilePath,
                                    currentSprite, FILE_EXTENSION,

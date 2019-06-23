@@ -47,6 +47,8 @@ public:
     void setCurrentCharacter(int i, SDL_Renderer *renderer);
     std::mutex m;
 
+    void renderProyectiles(SDL_Renderer *mRenderer, int camX, int camY);
+
 private:
     CharacterClient* currentCharacter;
     CharacterClient* firstCharacter;

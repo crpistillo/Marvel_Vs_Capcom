@@ -279,7 +279,7 @@ void RyuClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
     }
-
+    projectile->load(renderer, isLookingLeft);
 }
 
 ProjectileClient *RyuClient::getProjectile() {

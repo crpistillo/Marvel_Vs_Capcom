@@ -278,7 +278,7 @@ void IronmanClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
     }
-
+    projectile->load(renderer, isLookingLeft);
 }
 
 void IronmanClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
