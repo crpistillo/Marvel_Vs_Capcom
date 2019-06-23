@@ -180,9 +180,9 @@ private:
 
     virtual void renderBlockSprite();
 
-    virtual void moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) = 0;
+    virtual void moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded);
 
-    virtual void moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) = 0;
+    virtual void moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded);
 
     virtual void grip();
 

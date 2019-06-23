@@ -114,11 +114,13 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 }
 
 
-void WolverineServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
 
     //Mover
     mPosX -= vel * CHARACTER_VEL;
+    if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
+        mPosX += vel *CHARACTER_VEL;
 
 
     if ((mPosX - CHARACTER_VEL <= -WolverineServer::getSobrante()) || (distance < (-anchoPantalla))) {
@@ -141,11 +143,14 @@ void WolverineServer::moveLeft(int distance, int vel, Box *boxOfEnemy, bool isGr
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void WolverineServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
 
     //Mover
     mPosX += vel * CHARACTER_VEL;
+    if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
+        mPosX -= vel *CHARACTER_VEL;
+
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - WolverineServer::getSobrante() - WolverineServer::getWidth())) ||
         (distance > anchoPantalla)) {
