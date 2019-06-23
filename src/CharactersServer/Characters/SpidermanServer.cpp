@@ -120,39 +120,46 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGLEFT;
-    mPosX -= vel * CHARACTER_VEL;
+    mPosX -= int(vel * float(CHARACTER_VEL));
 
-    cout<<isGrounded<<endl;
     if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
-        mPosX += vel *CHARACTER_VEL;
+        mPosX += int(vel * float(CHARACTER_VEL));
+
 
     /*distance va de -800 a 800 (ancho de la pantalla)*/
     if ((mPosX - CHARACTER_VEL < -SpidermanServer::getSobrante()) || (distance < (-anchoPantalla))) {
         //Move back
-        mPosX += CHARACTER_VEL;
+        if(!isGrounded)
+            vel += 0.1;
+        mPosX += int(vel * float(CHARACTER_VEL));
     }
+
 
     characterBox->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
 
 
-void SpidermanServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void SpidermanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
-    mPosX += vel *CHARACTER_VEL;
+
+    mPosX += int(vel * float(CHARACTER_VEL));
 
     if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
-        mPosX -= vel *CHARACTER_VEL;
+        mPosX -= int(vel * float(CHARACTER_VEL));
+
 
     if ((mPosX + CHARACTER_VEL >= (LEVEL_WIDTH - SpidermanServer::getSobrante() - SpidermanServer::getWidth())) ||
         (distance > anchoPantalla)) {
         //Move back
-        mPosX -= CHARACTER_VEL;
+        if(!isGrounded)
+            vel += 0.1;
+        mPosX -= int(vel * float(CHARACTER_VEL));
     }
+
     characterBox->updateBox(widthWalking, heightWalking);
     walkingSpriteUpdate();
 }
-
 
 void SpidermanServer::makeBuilderStruct(character_builder_t *builder, bool isFirstTeam) {
     //Completar

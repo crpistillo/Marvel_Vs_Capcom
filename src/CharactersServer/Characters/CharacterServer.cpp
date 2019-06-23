@@ -314,7 +314,7 @@ void CharacterServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
 }
 
 
-void CharacterServer::moveRight(int distance, int vel, Box *boxOfEnemy, bool isGrounded) {
+void CharacterServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
     currentAction = MOVINGRIGHT;
 
     mPosX += vel *CHARACTER_VEL;
