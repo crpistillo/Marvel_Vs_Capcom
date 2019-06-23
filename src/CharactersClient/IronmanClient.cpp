@@ -255,16 +255,9 @@ void IronmanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
         case MAKINGINTRO:
         	this->loadBanner(renderer);
-
-            if (!isLookingLeft && 10 <= currentSprite && currentSprite <= 16)
-                this->loader->loadActionSprite(characterFilePath + "intro", "/MVC2_IronManR_", currentSprite,
+         	this->loader->loadActionSprite(characterFilePath + "intro", "/MVC2_IronManR_", currentSprite,
                                                FILE_EXTENSION,
                                                renderer, &m_Texture);
-            else
-                this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite,
-                                               FILE_EXTENSION,
-                                               renderer, &m_Texture);
-
             break;
         case MOVINGLEFT:
         case MOVINGRIGHT:
