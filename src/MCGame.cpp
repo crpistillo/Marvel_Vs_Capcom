@@ -500,10 +500,10 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder, int client
         case IRONMAN:
             characterClient = new IronmanClient(pos,
                                                   !builder->isFirstTeam,
-                                                  constants->widthSpiderman - 100,
+                                                  constants->widthSpiderman,
                                                   constants->heightSpiderman,
-                                                  constants->spidermanSobrante,
-                                                  constants->spidermanAncho,
+                                                  276,
+                                                  102,
                                                   constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexSpiderman);
             break;
@@ -513,8 +513,8 @@ CharacterClient *MCGame::characterBuild(character_builder_t *builder, int client
                                                   !builder->isFirstTeam,
                                                   constants->widthSpiderman,
                                                   constants->heightSpiderman,
-                                                  constants->spidermanSobrante,
-                                                  constants->spidermanAncho,
+                                                  274,
+                                                  66,
                                                   constants->screenWidth, clientNumber);
             characterClient->setZIndex(constants->zIndexSpiderman);
             break;
