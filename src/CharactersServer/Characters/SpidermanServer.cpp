@@ -123,8 +123,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 
 
 
-void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGLEFT;
+void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
     mPosX -= int(vel * float(CHARACTER_VEL));
 
     if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
@@ -145,7 +145,7 @@ void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
 }
 
 
-void SpidermanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
+void SpidermanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
     currentAction = MOVINGRIGHT;
 
     mPosX += int(vel * float(CHARACTER_VEL));

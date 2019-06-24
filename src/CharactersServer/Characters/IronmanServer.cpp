@@ -124,8 +124,8 @@ IronmanServer::IronmanServer(int PosX, int width, int height, int sobrante, int 
 
 
 
-void IronmanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGLEFT;
+void IronmanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
     mPosX -= int(vel * float(CHARACTER_VEL));
 
     if(this->characterBox->contactFromLeftSide(boxOfEnemy) && isGrounded)
@@ -146,8 +146,8 @@ void IronmanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGr
 }
 
 
-void IronmanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGRIGHT;
+void IronmanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
 
     mPosX += int(vel * float(CHARACTER_VEL));
 

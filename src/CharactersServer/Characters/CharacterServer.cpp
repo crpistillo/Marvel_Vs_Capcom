@@ -87,9 +87,9 @@ void CharacterServer::update(int distance, int posEnemy, actions_t actionRecieve
         hurtingGround();
     } else if (currentAction == HURTINGAIR || actionRecieved == HURTINGAIR) {
         if (!isLookingLeft)
-            moveLeft(distance, 1, boxEnemy, false);
+            moveLeft(distance, 1, boxEnemy, false, MOVINGLEFT);
         else
-            moveRight(distance, 1, boxEnemy, false);
+            moveRight(distance, 1, boxEnemy, false, MOVINGRIGHT);
         hurtingAir();
     }
     else if (currentAction == JUMPINGVERTICAL || currentAction == PUNCHINGVERTICAL ||
@@ -190,9 +190,9 @@ void CharacterServer::update(int distance, int posEnemy, actions_t actionRecieve
     else if (currentAction == BLOCK)
         renderBlockSprite();
     else if (currentAction == MOVINGRIGHT)
-        moveRight(distance, 1, boxEnemy, true);   //send move right
+        moveRight(distance, 1, boxEnemy, true, MOVINGRIGHT);   //send move right
     else if (currentAction == MOVINGLEFT)
-        moveLeft(distance, 1, boxEnemy, true);    //send move left
+        moveLeft(distance, 1, boxEnemy, true, MOVINGLEFT);    //send move left
     else if (currentAction == PUNCH)
         punch(PUNCH);
     else if (currentAction == PUNCHSTRONG)
@@ -295,8 +295,8 @@ void CharacterServer::renderBlockSprite() {
     currentAction = BLOCK;
 }
 
-void CharacterServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGLEFT;
+void CharacterServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
     mPosX -= vel * CHARACTER_VEL;
     cout<<isGrounded<<endl;
     if(characterBox){
@@ -315,8 +315,8 @@ void CharacterServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
 }
 
 
-void CharacterServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGRIGHT;
+void CharacterServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
 
     mPosX += vel *CHARACTER_VEL;
     /*if(this->characterBox->contactFromRightSide(boxOfEnemy) && isGrounded)
@@ -355,17 +355,15 @@ void CharacterServer::jumpVertical(Box *boxOfEnemy) {
 }
 
 void CharacterServer::jumpRight(int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1.5, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false, JUMPINGRIGHT);
     characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
-    this->currentAction = JUMPINGRIGHT;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
 }
 
 
 void CharacterServer::jumpLeft(int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1.5, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false, JUMPINGLEFT);
     characterBox->updateBox(widthJumpingLeft, heightJumpingLeft);
-    this->currentAction = JUMPINGLEFT;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);
 }
 
@@ -522,18 +520,16 @@ void CharacterServer::punchJumpVertical(actions_t punchVertical, Box *boxOfEnemy
 }
 
 void CharacterServer::punchJumpLeft(actions_t punchJumpLeft, int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1.5, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false, punchJumpLeft);
     characterBox->updateBox(widthPunchAir, heightPunchAir);
-    currentAction = punchJumpLeft;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGLEFT, currentJumpingLeftSprite,
                lastJumpingLeftSprite);
 }
 
 void CharacterServer::punchJumpRight(actions_t punchJumpRight, int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1.5, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false, punchJumpRight);
     characterBox->updateBox(widthPunchAir, heightPunchAir);
-    currentAction = punchJumpRight;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
     airActions(&currentPunchAirSprite, lastPunchAirSprite, JUMPINGRIGHT, currentJumpingRightSprite,
                lastJumpingRightSprite);
@@ -547,18 +543,16 @@ void CharacterServer::kickJumpVertical(actions_t kickVertical, Box *boxOfEnemy) 
 }
 
 void CharacterServer::kickJumpRight(actions_t kickJumpRight, int distance, Box *boxOfEnemy) {
-    moveRight(distance, 1.5, boxOfEnemy, false);
+    moveRight(distance, 1.5, boxOfEnemy, false, kickJumpRight);
     characterBox->updateBox(widthKickAir, heightKickAir);
-    currentAction = kickJumpRight;
     jump(&currentJumpingRightSprite, lastJumpingRightSprite, boxOfEnemy);
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGRIGHT, currentJumpingRightSprite,
                lastJumpingRightSprite);
 }
 
 void CharacterServer::kickJumpLeft(actions_t kickJumpLeft, int distance, Box *boxOfEnemy) {
-    moveLeft(distance, 1.5, boxOfEnemy, false);
+    moveLeft(distance, 1.5, boxOfEnemy, false, kickJumpLeft);
     characterBox->updateBox(widthKickAir, heightKickAir);
-    currentAction = kickJumpLeft;
     jump(&currentJumpingLeftSprite, lastJumpingLeftSprite, boxOfEnemy);
     airActions(&currentKickAirSprite, lastKickAirSprite, JUMPINGLEFT, currentJumpingLeftSprite, lastJumpingLeftSprite);
 }
@@ -599,9 +593,9 @@ void CharacterServer::falling(int distance, int posContrincante, Box *boxOfEnemy
 
     if (currentFallingSprite > 8 && currentFallingSprite < 36) {
         if (isLookingLeft) {
-            moveRight(distance, 2, boxOfEnemy, false);
+            moveRight(distance, 2, boxOfEnemy, false, MOVINGRIGHT);
         } else
-            moveLeft(distance, 2, boxOfEnemy, false);
+            moveLeft(distance, 2, boxOfEnemy, false, MOVINGLEFT);
     }
 
     if (currentFallingSprite > 8 && currentFallingSprite < 17) {

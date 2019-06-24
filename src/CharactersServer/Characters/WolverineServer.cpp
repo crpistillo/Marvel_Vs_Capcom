@@ -121,8 +121,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 }
 
 
-void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGLEFT;
+void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
 
     //Mover
     mPosX -= int(vel * float(CHARACTER_VEL));
@@ -153,8 +153,8 @@ void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
     characterBox->updateBox(widthWalking, heightWalking);
 }
 
-void WolverineServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded) {
-    currentAction = MOVINGRIGHT;
+void WolverineServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
+    currentAction = action;
 
     //Mover
     mPosX += int(vel * float(CHARACTER_VEL));

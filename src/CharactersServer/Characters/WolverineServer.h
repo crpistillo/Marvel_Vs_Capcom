@@ -14,8 +14,8 @@ public:
     void makeBuilderStruct(character_builder_t* builder, bool isFirstTeam);
 
 private:
-    void moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded);
-    void moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded);
+    void moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action);
+    void moveLeft(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action);
     void stand();
 
     int getSpriteNumber();
