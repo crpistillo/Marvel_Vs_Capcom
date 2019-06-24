@@ -258,14 +258,14 @@ CharacterServer *Menu::createServerCharacterFromCursor(ServerCursor *pCursor, in
 
         case IRONMAN:
         	characterServer = new IronmanServer(pos, constants->widthSpiderman,
-        	                                                  constants->heightSpiderman, constants->spidermanSobrante,
-        	                                                  constants->spidermanAncho, constants->screenWidth, nclient);
+        	                                                  constants->heightSpiderman, 276,
+        	                                                  102, constants->screenWidth, nclient);
         	break;
 
         case RYU:
         	characterServer = new RyuServer(pos, constants->widthSpiderman,
-        	                                                  constants->heightSpiderman, constants->spidermanSobrante,
-        	                                                  constants->spidermanAncho, constants->screenWidth, nclient);
+        	                                                  constants->heightSpiderman, 274,
+        	                                                  66, constants->screenWidth, nclient);
     }
     return characterServer;
 }
