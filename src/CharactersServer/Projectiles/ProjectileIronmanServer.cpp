@@ -5,6 +5,6 @@
 #include "ProjectileIronmanServer.h"
 
 ProjectileIronmanServer::ProjectileIronmanServer() : ProjectileServer() {
-    lastSprite = 11;
-    lastHittingSprite = 0; //?
+    lastSprite = 1;
+    lastHittingSprite = 6; //?
 }
