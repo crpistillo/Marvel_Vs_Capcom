@@ -464,9 +464,12 @@ void CharacterServer::hurtingGround() {
 bool CharacterServer::inTheGround() {
     return !(currentAction == JUMPINGRIGHT || currentAction == JUMPINGLEFT || currentAction == JUMPINGVERTICAL ||
              currentAction == PUNCHINGVERTICAL || currentAction == PUNCHINGJUMPRIGHT ||
-             currentAction == PUNCHINGJUMPLEFT ||
-             currentAction == KICKINGVERTICAL || currentAction == KICKINGJUMPRIGHT || currentAction == KICKINGJUMPLEFT
-             || currentAction == HURTINGAIR);
+             currentAction == PUNCHINGJUMPLEFT || currentAction == KICKINGVERTICAL ||
+             currentAction == KICKINGJUMPRIGHT || currentAction == KICKINGJUMPLEFT
+             || currentAction == HURTINGAIR || currentAction == KICKINGSTRONGJUMPLEFT
+             ||currentAction == KICKINGJUMPRIGHT|| currentAction == KICKINGSTRONGVERTICAL
+             ||currentAction ==  PUNCHINGSTRONGJUMPLEFT ||currentAction == PUNCHINGSTRONGJUMPRIGHT
+             || currentAction == PUNCHINGSTRONGVERTICAL );
 }
 
 //Not working
