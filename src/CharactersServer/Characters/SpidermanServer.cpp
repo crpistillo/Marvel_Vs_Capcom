@@ -5,6 +5,7 @@
 #include "SpidermanServer.h"
 #include "CharacterServer.h"
 #include "../Projectiles/ProjectileServer.h"
+#include "../Projectiles/ProjectileSpidermanServer.h"
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
@@ -87,7 +88,7 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
     lastGripSprite = LAST_GRIP_SPRITE;
     lastFallingSprite = LAST_FALLING_SPRITE;
 
-    this->projectile = new ProjectileServer();
+    this->projectile = new ProjectileSpidermanServer();
 
 	widthStanding = widthStandingS;
 	heightStanding = heightStandingS;

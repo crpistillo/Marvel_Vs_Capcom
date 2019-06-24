@@ -194,7 +194,7 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
 
 
     if (timer->getTimeThatPass() == 0)
-        roundAction = NUMBEROFROUND;
+        roundAction = ROUNDWINNER;
     //tell who won
     else if (timer->getTimeThatPass() == 1)
         roundAction = NUMBEROFROUND;
