@@ -869,6 +869,8 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     incoming_msg_mtx.unlock();
 
     this->team[whoWon]->incrementRoundsWon();
+    if(this->team[whoWon]->getRoundsWon() == 2)
+    	return;
 
     FPSManager* fpsManager = new FPSManager(30);
     Timer *timer = new Timer(3);
