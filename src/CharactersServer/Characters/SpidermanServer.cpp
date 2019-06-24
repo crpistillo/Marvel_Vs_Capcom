@@ -51,6 +51,8 @@ const int widthJumpingS = 99;
 const int heightJumpingS = 50;
 const int widthJumpingLeftS = 70;
 const int heightJumpingLeftS = 70;
+const int widthBlockS = 102;
+const int heightBlockS = 100;
 
 
 
@@ -112,6 +114,8 @@ SpidermanServer::SpidermanServer(int PosX, int width, int height, int sobrante, 
 	heightJumping = heightJumpingS;
 	widthJumpingLeft = widthJumpingLeftS;
 	heightJumpingLeft = heightJumpingLeftS;
+	widthBlock = widthBlockS;
+	heightBlock = heightBlockS;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);

@@ -291,6 +291,7 @@ void CharacterServer::renderDuckSprite() {
 }
 
 void CharacterServer::renderBlockSprite() {
+	characterBox->updateBox(widthBlock, heightBlock);
     currentAction = BLOCK;
 }
 

@@ -29,29 +29,28 @@ const int LAST_THROW_SPRITE = 28;
 const int LAST_FALLING_SPRITE = 52;
 
 
-//estos hay que cambiarlos
-const int widthStandingS = 90;
-const int heightStandingS = 96;
-const int widthWalkingS = 87;
-const int heightWalkingS = 91;
-const int widthDuckS = 100;
-const int heightDuckS = 52;
-const int widthPunchS = 152;
-const int heightPunchS = 77;
-const int widthPunchDownS = 150;
-const int heightPunchDownS = 51;
-const int widthKickS = 146;
-const int heightKickS = 93;
-const int widthKickDownS = 160;
-const int heightKickDownS = 65;
-const int widthKickAirS = 144;
-const int heightKickAirS = 82;
-const int widthPunchAirS = 84;
-const int heightPunchAirS = 85;
-const int widthJumpingS = 99;
-const int heightJumpingS = 50;
-const int widthJumpingLeftS = 70;
-const int heightJumpingLeftS = 70;
+const int widthStandingI = 102;
+const int heightStandingI = 103;
+const int widthWalkingI = 96;
+const int heightWalkingI = 116;
+const int widthDuckI = 114;
+const int heightDuckI = 72;
+const int widthPunchI = 133;
+const int heightPunchI = 102;
+const int widthPunchDownI = 151;
+const int heightPunchDownI = 75;
+const int widthKickI = 187;
+const int heightKickI = 90;
+const int widthKickDownI = 143;
+const int heightKickDownI = 64;
+const int widthKickAirI = 123;
+const int heightKickAirI = 105;
+const int widthPunchAirI = 165;
+const int heightPunchAirI = 122;
+const int widthJumpingI = 101;
+const int heightJumpingI = 103;
+const int widthJumpingLeftI = 109;
+const int heightJumpingLeftI = 145;
 
 
 
@@ -91,28 +90,28 @@ IronmanServer::IronmanServer(int PosX, int width, int height, int sobrante, int 
 
     this->projectile = new ProjectileServer();
 
-    widthStanding = widthStandingS;
-    heightStanding = heightStandingS;
-    widthWalking = widthWalkingS;
-    heightWalking = heightWalkingS;
-    widthDuck = widthDuckS;
-    heightDuck = heightDuckS;
-    widthPunch = widthPunchS;
-    heightPunch = heightPunchS;
-    widthPunchDown = widthPunchDownS;
-    heightPunchDown = heightPunchDownS;
-    widthKick = widthKickS;
-    heightKick = heightKickS;
-    widthKickDown = widthKickDownS;
-    heightKickDown = heightKickDownS;
-    widthKickAir = widthKickAirS;
-    heightKickAir = heightKickAirS;
-    widthPunchAir = widthPunchAirS;
-    heightPunchAir = heightPunchAirS;
-    widthJumping = widthJumpingS;
-    heightJumping = heightJumpingS;
-    widthJumpingLeft = widthJumpingLeftS;
-    heightJumpingLeft = heightJumpingLeftS;
+    widthStanding = widthStandingI;
+    heightStanding = heightStandingI;
+    widthWalking = widthWalkingI;
+    heightWalking = heightWalkingI;
+    widthDuck = widthDuckI;
+    heightDuck = heightDuckI;
+    widthPunch = widthPunchI;
+    heightPunch = heightPunchI;
+    widthPunchDown = widthPunchDownI;
+    heightPunchDown = heightPunchDownI;
+    widthKick = widthKickI;
+    heightKick = heightKickI;
+    widthKickDown = widthKickDownI;
+    heightKickDown = heightKickDownI;
+    widthKickAir = widthKickAirI;
+    heightKickAir = heightKickAirI;
+    widthPunchAir = widthPunchAirI;
+    heightPunchAir = heightPunchAirI;
+    widthJumping = widthJumpingI;
+    heightJumping = heightJumpingI;
+    widthJumpingLeft = widthJumpingLeftI;
+    heightJumpingLeft = heightJumpingLeftI;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);

@@ -51,6 +51,8 @@ const int widthJumpingW = 119;
 const int heightJumpingW = 52;
 const int widthJumpingLeftW = 104;
 const int heightJumpingLeftW = 104;
+const int widthBlockW = 86;
+const int heightBlockW = 97;
 
 
 
@@ -111,6 +113,8 @@ WolverineServer::WolverineServer(int PosX, int width, int height, int sobrante, 
 	heightJumping = heightJumpingW;
 	widthJumpingLeft = widthJumpingLeftW;
 	heightJumpingLeft = heightJumpingLeftW;
+	widthBlock = widthBlockW;
+	heightBlock = heightBlockW;
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthStanding,heightStanding);
     //Probablemnte a ese mPosY hay que sumarle la mitad de la altura, pero no estoy seguro
