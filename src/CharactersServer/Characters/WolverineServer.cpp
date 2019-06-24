@@ -144,7 +144,8 @@ void WolverineServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
             currentWalkbackSprite = 0;
-        currentAction = WALKBACK;
+        if(action == MOVINGLEFT)
+            currentAction = WALKBACK;
 
         ++currentWalkbackSprite;
         isLookingLeft = false;
@@ -175,7 +176,8 @@ void WolverineServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool i
     } else {
         if (currentWalkbackSprite >= LAST_WALKBACK_SPRITE)
             currentWalkbackSprite = 0;
-        currentAction = WALKBACK;
+        if(action == MOVINGRIGHT)
+            currentAction = WALKBACK;
 
         ++currentWalkbackSprite;
         isLookingLeft = true;
