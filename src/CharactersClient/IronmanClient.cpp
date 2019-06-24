@@ -7,9 +7,9 @@
 #include "ProjectileIronmanClient.h"
 
 
-const Uint8 SECONDARY_RED = 255;
+const Uint8 SECONDARY_RED = 0;
 const Uint8 SECONDARY_GREEN = 200;
-const Uint8 SECONDARY_BLUE = 000;
+const Uint8 SECONDARY_BLUE = 255;
 
 const string IronManPath = "images/iron_man/iron_man_";
 const string MVC_FILEPATH = "/MVC2_IronMan_";

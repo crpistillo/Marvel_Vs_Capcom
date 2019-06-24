@@ -9,6 +9,7 @@
 #include "ProjectileServer.h"
 
 class ProjectileIronmanServer final : public ProjectileServer{
+public:
     ProjectileIronmanServer();
 };
 

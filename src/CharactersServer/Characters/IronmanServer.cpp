@@ -5,6 +5,7 @@
 #include "IronmanServer.h"
 #include "CharacterServer.h"
 #include "../Projectiles/ProjectileServer.h"
+#include "../Projectiles/ProjectileIronmanServer.h"
 
 const int LEVEL_WIDTH = 3200;
 const int LEVEL_HEIGHT = 600;
@@ -90,7 +91,7 @@ IronmanServer::IronmanServer(int PosX, int width, int height, int sobrante, int 
     lastGripSprite = LAST_GRIP_SPRITE;
     lastFallingSprite = LAST_FALLING_SPRITE;
 
-    this->projectile = new ProjectileServer();
+    this->projectile = new ProjectileIronmanServer();
 
     widthStanding = widthStandingI;
     heightStanding = heightStandingI;
