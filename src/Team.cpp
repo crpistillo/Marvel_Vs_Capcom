@@ -13,6 +13,7 @@ const int MAX_PLAYERS = 4;
 
 Team::Team(int teamSize) {
 	this->sizeOfTeam = teamSize;
+	this->roundsWon = 0;
 }
 
 void Team::changeCharacter() {
