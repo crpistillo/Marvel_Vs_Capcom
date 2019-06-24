@@ -51,6 +51,8 @@ public:
 
     void resetLifeBanners();
 
+    void renderWinners(SDL_Renderer *mRenderer);
+
 private:
     CharacterClient* currentCharacter;
     CharacterClient* firstCharacter;

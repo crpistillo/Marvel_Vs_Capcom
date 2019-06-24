@@ -13,6 +13,7 @@ const int MAX_PLAYERS = 4;
 
 Team::Team(int teamSize) {
 	this->sizeOfTeam = teamSize;
+	this->roundsWon = 0;
 }
 
 void Team::changeCharacter() {
@@ -164,6 +165,14 @@ float Team::lifeOfCharacterInactive() {
         return secondCharacter->life;
     else
         return firstCharacter->life;
+}
+
+void Team::incrementRoundsWon() {
+    this->roundsWon++;
+}
+
+int Team::getRoundsWon() {
+    return this->roundsWon;
 }
 
 

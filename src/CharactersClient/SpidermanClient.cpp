@@ -306,3 +306,8 @@ void SpidermanClient::loadBanner(SDL_Renderer *renderer)
 					&characterRightSecondaryBanner);
 	}
 }
+
+void SpidermanClient::renderVictoryPose(SDL_Renderer *mRenderer, int posX){
+	victoryTexture.loadFromFile("images/pantalla_final/spiderman.png", mRenderer);
+	victoryTexture.render(posX, 0, 640, 480, mRenderer);
+}

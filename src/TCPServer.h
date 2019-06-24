@@ -174,6 +174,8 @@ public:
     bool anyTeamLost();
 
     void resetCharactersLife();
+
+    void endgameByWinningTeam(Team **winningTeam, int teamno);
 };
 
 #endif

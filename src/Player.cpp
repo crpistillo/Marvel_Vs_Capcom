@@ -206,5 +206,10 @@ void Player::resetLifeBanners() {
     secondCharacter->vida = 100;
 }
 
+void Player::renderWinners(SDL_Renderer *mRenderer){
+	firstCharacter->renderVictoryPose(mRenderer, -100);
+	secondCharacter->renderVictoryPose(mRenderer, 300);
+}
+
 
 

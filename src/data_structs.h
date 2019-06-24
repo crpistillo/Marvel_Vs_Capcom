@@ -60,7 +60,11 @@ typedef struct{
 	int currentProjectileSprite;
 	int pposX;
 	int pposY;
+
 	bool gameFinishedByDisconnections;
+
+	bool gameFinishedByWinningTeam;
+	int winningTeam;
 
 	//round info
 	round_info_t round;

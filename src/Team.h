@@ -18,6 +18,8 @@ private:
 	CharacterServer* firstCharacter; //personaje del clienteA (cada personaje tiene un cliente)
 	CharacterServer* secondCharacter; //personaje del clienteB
 
+	unsigned int roundsWon;
+
     //numberOfClientsActive
 
 public:
@@ -74,6 +76,10 @@ public:
     void resetCharacterLife();
 
     float lifeOfCharacterInactive();
+
+    void incrementRoundsWon();
+
+    int getRoundsWon();
 };
 
 

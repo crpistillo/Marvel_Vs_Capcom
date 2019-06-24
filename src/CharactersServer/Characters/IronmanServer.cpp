@@ -51,6 +51,8 @@ const int widthJumpingI = 101;
 const int heightJumpingI = 103;
 const int widthJumpingLeftI = 109;
 const int heightJumpingLeftI = 145;
+const int widthBlockI = 93;
+const int heightBlockI = 130;
 
 
 
@@ -112,6 +114,8 @@ IronmanServer::IronmanServer(int PosX, int width, int height, int sobrante, int 
     heightJumping = heightJumpingI;
     widthJumpingLeft = widthJumpingLeftI;
     heightJumpingLeft = heightJumpingLeftI;
+    widthBlock = widthBlockI;
+    heightBlock = heightBlockI;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);

@@ -298,3 +298,8 @@ void WolverineClient::loadBanner(SDL_Renderer *renderer)
 					&characterRightSecondaryBanner);
 	}
 }
+
+void WolverineClient::renderVictoryPose(SDL_Renderer *mRenderer, int posX){
+	victoryTexture.loadFromFile("images/pantalla_final/wolverine.png", mRenderer);
+	victoryTexture.render(posX, 120, 640, 480, mRenderer);
+}

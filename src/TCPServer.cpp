@@ -565,7 +565,7 @@ void TCPServer::configJson(json config) {
 
 void TCPServer::updateModel() {
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer *timer = new Timer(99);
+    Timer *timer = new Timer(5);
     int roundsPlayed = 0;
     bool debugMode = false;
 
@@ -579,6 +579,15 @@ void TCPServer::updateModel() {
             resetCharactersLife();
             timer->resetTimer();
             ignoreMessages = false;
+        }
+
+        if(team[0]->getRoundsWon() == 2){
+            endgameByWinningTeam(&team[0], 0);
+            break;
+        }
+        else if(team[1]->getRoundsWon() == 2){
+            endgameByWinningTeam(&team[1], 1);
+            break;
         }
 
 
@@ -732,6 +741,23 @@ void TCPServer::endgameForDisconnections() {
     }
 }
 
+void TCPServer::endgameByWinningTeam(Team **winningTeam, int teamno) {
+    character_updater_t *update[numberOfPlayers];
+    for (int j = 0; j < numberOfPlayers; ++j) {
+        update[j] = new character_updater_t;
+        memset(update[j], 0, sizeof(character_updater_t));
+        update[j]->gameFinishedByWinningTeam = true;
+        update[j]->winningTeam = teamno;
+    }
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        updaters_queue_mtx[i].lock();
+        this->client_updater_queue[i]->insert(update[i]);
+        updaters_queue_mtx[i].unlock();
+    }
+}
+
+
 bool TCPServer::getEndgame() {
     bool var;
     endgame_mtx.lock();
@@ -819,12 +845,20 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     while(!incoming_msges_queue->empty_queue())
         incoming_msges_queue->delete_data();
     incoming_msg_mtx.unlock();
+
+    if(roundNum != 1){
+		this->team[whoWon]->incrementRoundsWon();
+		if(this->team[whoWon]->getRoundsWon() == 2)
+			return;
+    }
+
     FPSManager* fpsManager = new FPSManager(30);
     Timer *timer = new Timer(3);
     while (timer->getTimeThatPass() < 3) {
         fpsManager->start();
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
+            roundUpdater->gameFinishedByWinningTeam = false;
             roundUpdater->round.winner = whoWon;
             roundUpdater->round.numberOfRound = roundNum;
             roundUpdater->firstDigitOfTime = 9;
@@ -838,7 +872,7 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
 
 int TCPServer::getCurrentWinner() {
     bool didTeamOneWon = (team[0]->getSumOfLife() > team[1]->getSumOfLife());
-    return didTeamOneWon ? 1 : 2;
+    return didTeamOneWon ? 0 : 1;
 }
 
 bool TCPServer::anyTeamLost() {
