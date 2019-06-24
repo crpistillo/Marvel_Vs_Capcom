@@ -18,7 +18,7 @@ public:
     ProjectileClient();
 
     void update(bool activate, character_updater_t *updater);
-    void render(SDL_Renderer *mRenderer, int camX, int camY);
+    virtual void render(SDL_Renderer *mRenderer, int camX, int camY);
     void load(SDL_Renderer *renderer, bool isLookingLeft);
 
     ImageLoader *loader;
