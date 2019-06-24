@@ -47,7 +47,7 @@ CharacterServer::CharacterServer(int mPosX, int mPosY, int width, int sobrante, 
     this->currentThrowPowerSprite = 0;
     this->currentGripSprite = 0;
     this->currentFallingSprite = 0;
-    this->vida = 100;
+    this->life = 100;
 
 
     this->characterBox = new Box(mPosX, mPosY, widthSprite, heightSprite);
@@ -630,12 +630,12 @@ bool CharacterServer::isHurting() {
 }
 
 void CharacterServer::quitarVida(float danio) {
-    if ((vida-danio)<0) vida = 0;
-    else vida = vida - danio;
+    if ((life-danio)<0) life = 0;
+    else life = life - danio;
 }
 
 float CharacterServer::getVida() {
-    return vida;
+    return life;
 }
 
 

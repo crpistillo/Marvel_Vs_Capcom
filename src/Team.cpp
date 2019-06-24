@@ -139,4 +139,15 @@ Box *Team::getCurrentBox() {
     return  currentCharacter->getColisionable();
 }
 
+float Team::getSumOfLife() {
+    return firstCharacter->life + secondCharacter->life;
+}
+
+bool Team::partnerNotDead() {
+    if(currentCharacter == firstCharacter)
+        return secondCharacter->life > 0;
+    else
+        return firstCharacter->life > 0;
+}
+
 

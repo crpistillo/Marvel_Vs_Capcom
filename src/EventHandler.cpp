@@ -47,7 +47,7 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
     mutex->lock();
 
     if (msgToUpdate->action == CHANGEME) {
-        if (team[teamToUpdate]->getCurrentCharacter()->isStanding()) {
+        if (team[teamToUpdate]->getCurrentCharacter()->isStanding() && team[teamToUpdate]->partnerNotDead()) {
             if (team[teamToUpdate]->sizeOfTeam == 1)
                 actionToUpdate = CHANGEME_ONEPLAYER;
             else
@@ -100,6 +100,11 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     		team[receiver]->getCurrentCharacter()->quitarVida(5);
 
     manageDamage(receiver, action);
+
+    if(team[receiver]->getCurrentCharacter()->life <= 0){
+        insertAction(queue, CHANGEME, receiver);
+        return;
+    }
 
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
@@ -198,5 +203,9 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;
+}
+
+void EventHandler::manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *queue) {
+
 }
 

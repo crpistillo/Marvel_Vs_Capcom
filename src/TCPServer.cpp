@@ -859,5 +859,6 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
 }
 
 int TCPServer::getCurrentWinner() {
-    return 0;
+    bool didTeamOneWon = (team[0]->getSumOfLife() > team[1]->getSumOfLife());
+    return didTeamOneWon ? 1 : 2;
 }

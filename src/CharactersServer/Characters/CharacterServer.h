@@ -72,6 +72,8 @@ public:
 
     bool isHurting();
     float getVida();
+    float life;
+
 
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -98,7 +100,6 @@ protected:
     Box* characterBox; //por ahora una sola caja
     //vector<Box*> objetoColisionable;
 
-    float vida;
 
 	int widthStanding;
 	int heightStanding;
