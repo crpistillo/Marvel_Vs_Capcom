@@ -82,6 +82,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
+    //No hacer daño si golpeas (estando parado) y tu contrincante está agachado
+    if ((action == P || action == K) && team[receiver]->getCurrentCharacter()->currentAction == DUCK)
+    	return;
+
     //Daño solo al primer sprite de la animacion del golpe
     int spriteNumber;
     if (action == P || action == K || action == PD || action == KD || action == PV ||
