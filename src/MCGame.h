@@ -153,6 +153,7 @@ public:
 
     RoundBanner *roundBanner;
     TimeBanner* timeBanner[2];
+    bool resetLifeBanners = true;
 };
 
 

@@ -199,5 +199,12 @@ void Player::setBarra(bool left)
 	barraSecondary->setBarra(left,false);
 }
 
+void Player::resetLifeBanners() {
+    barraCurrent->update(1);
+    barraSecondary->update(1);
+    firstCharacter->vida = 100;
+    secondCharacter->vida = 100;
+}
+
 
 

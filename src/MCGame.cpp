@@ -436,6 +436,11 @@ void MCGame::update() {
 
 
 		if(updater->round.roundInfo != FIGHTING){
+		    if(resetLifeBanners) {
+                players[0]->resetLifeBanners();
+                players[1]->resetLifeBanners();
+                resetLifeBanners = false;
+            }
             roundBanner->updateRoundSprites(updater->round);
             roundBanner->load(m_Renderer);
 		} else
@@ -753,6 +758,7 @@ bool MCGame::isRunning() {
 }
 
 void MCGame::disableRoundSprites() {
+    resetLifeBanners = true;
     roundBanner->active = false;
 }
 

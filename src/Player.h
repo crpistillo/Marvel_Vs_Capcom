@@ -49,6 +49,8 @@ public:
 
     void renderProyectiles(SDL_Renderer *mRenderer, int camX, int camY);
 
+    void resetLifeBanners();
+
 private:
     CharacterClient* currentCharacter;
     CharacterClient* firstCharacter;

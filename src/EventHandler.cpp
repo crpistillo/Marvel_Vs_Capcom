@@ -74,7 +74,7 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
 void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int giver, int receiver, actions_t action) {
     //grip
 
-    if (team[receiver]->getCurrentCharacter()->isHurting())
+    if (team[receiver]->getCurrentCharacter()->isHurting() || team[receiver]->getCurrentCharacter()->currentAction == MI)
         return;
 
     if (action == GRIP) {
@@ -108,6 +108,7 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     //if mod != debug
     if(team[receiver]->getCurrentCharacter()->life <= 0){
+        insertAction(queue,STANDING,receiver);
         insertAction(queue, CHANGEME, receiver);
         return;
     }
@@ -149,6 +150,8 @@ character_updater_t *EventHandler::makeUpdater(int teamToUpdate, actions_t actio
     updater->currentSprite =
             team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber();
     updater->action = action;
+    updater->vida = team[teamToUpdate]->getCurrentCharacter()->getVida();
+
 
     return updater;
 }

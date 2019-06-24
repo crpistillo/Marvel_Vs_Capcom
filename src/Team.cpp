@@ -159,4 +159,11 @@ void Team::resetCharacterLife() {
     secondCharacter->life = 100;
 }
 
+float Team::lifeOfCharacterInactive() {
+    if(currentCharacter == firstCharacter)
+        return secondCharacter->life;
+    else
+        return firstCharacter->life;
+}
+
 
