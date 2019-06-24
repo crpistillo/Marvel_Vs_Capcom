@@ -598,16 +598,16 @@ void TCPServer::configJson(json config) {
 
 void TCPServer::updateModel() {
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer *timer = new Timer(99);
+    Timer *timer = new Timer(10);
     int roundsPlayed = 0;
     while (1) {
 
         if (timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) {
 
             roundsPlayed++;
-            resetCharactersLife();
             if(roundsPlayed != 4)
                 roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
+            resetCharactersLife();
             timer->resetTimer();
             ignoreMessages = false;
         }
