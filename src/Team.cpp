@@ -167,4 +167,9 @@ float Team::lifeOfCharacterInactive() {
         return firstCharacter->life;
 }
 
+void Team::incrementRoundsWon() {
+    this->roundsWon++;
+    cout << "Rondas del team ganador: " << this->roundsWon << endl;
+}
+
 

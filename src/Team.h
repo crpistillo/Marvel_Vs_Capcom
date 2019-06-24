@@ -76,6 +76,8 @@ public:
     void resetCharacterLife();
 
     float lifeOfCharacterInactive();
+
+    void incrementRoundsWon();
 };
 
 
