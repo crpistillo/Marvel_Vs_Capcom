@@ -81,6 +81,11 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     waiting->render(0, 0, 800, 600, m_Renderer);
     SDL_RenderPresent(m_Renderer); // draw to the screen
     // everything inited successfully,
+
+    winningTeam_background_image.loadFromFile("images/pantalla_final/fondo.png", m_Renderer);
+    winningTeam_banner[0].loadFromFile("images/pantalla_final/team1wins.png", m_Renderer);
+    winningTeam_banner[1].loadFromFile("images/pantalla_final/team2wins.png", m_Renderer);
+
     return true;
 }
 
@@ -296,8 +301,9 @@ void MCGame::render() {
         endgame_image.render(0,0,800,600,m_Renderer);
     }
     else if(weHaveAWinner){
-        winningTeam_background_image.loadFromFile("images/pantalla_final/fondo.png", m_Renderer);
+        //winningTeam_background_image.loadFromFile("images/pantalla_final/fondo.png", m_Renderer);
         winningTeam_background_image.render(0,0,800,600,m_Renderer);
+        winningTeam_banner[winningTeam].render(0,0,800,600,m_Renderer);
     }
     else {
 

@@ -60,6 +60,7 @@ private:
     Texture banner;
     Texture endgame_image;
     Texture winningTeam_background_image;
+    Texture winningTeam_banner[2];
     Layer *middleGround;
     Layer *backGround;
     Layer *frontGround;
