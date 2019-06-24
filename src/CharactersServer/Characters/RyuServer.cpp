@@ -50,6 +50,8 @@ const int widthJumpingR = 61;
 const int heightJumpingR = 65;
 const int widthJumpingLeftR = 55;
 const int heightJumpingLeftR = 77;
+const int widthBlockR = 68;
+const int heightBlockR = 91;
 
 
 
@@ -111,6 +113,8 @@ RyuServer::RyuServer(int PosX, int width, int height, int sobrante, int ancho, i
     heightJumping = heightJumpingR;
     widthJumpingLeft = widthJumpingLeftR;
     heightJumpingLeft = heightJumpingLeftR;
+    widthBlock = widthBlockR;
+    heightBlock = heightBlockR;
 
 
     //Box* objetoColisionable = new Box(this->getCentro(),mPosY,widthWalking,heightWalking);
