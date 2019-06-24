@@ -68,6 +68,10 @@ public:
     float getSumOfLife();
 
     bool partnerNotDead();
+
+    bool areBothCharactersDead();
+
+    void resetCharacterLife();
 };
 
 

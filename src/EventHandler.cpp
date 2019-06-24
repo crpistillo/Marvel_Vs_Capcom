@@ -101,6 +101,8 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     manageDamage(receiver, action);
 
+
+    //if mod != debug
     if(team[receiver]->getCurrentCharacter()->life <= 0){
         insertAction(queue, CHANGEME, receiver);
         return;

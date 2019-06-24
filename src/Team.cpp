@@ -150,4 +150,13 @@ bool Team::partnerNotDead() {
         return firstCharacter->life > 0;
 }
 
+bool Team::areBothCharactersDead() {
+    return firstCharacter->life <= 0 && secondCharacter->life <= 0;
+}
+
+void Team::resetCharacterLife() {
+    firstCharacter->life = 100;
+    secondCharacter->life = 100;
+}
+
 

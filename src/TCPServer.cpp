@@ -602,9 +602,10 @@ void TCPServer::updateModel() {
     int roundsPlayed = 0;
     while (1) {
 
-        if (timer->getTimeLeft() == 0 || roundsPlayed == 0) {
+        if (timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) {
 
             roundsPlayed++;
+            resetCharactersLife();
             if(roundsPlayed != 4)
                 roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
             timer->resetTimer();
@@ -861,4 +862,14 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
 int TCPServer::getCurrentWinner() {
     bool didTeamOneWon = (team[0]->getSumOfLife() > team[1]->getSumOfLife());
     return didTeamOneWon ? 1 : 2;
+}
+
+bool TCPServer::anyTeamLost() {
+    return team[0]->areBothCharactersDead() || team[1]->areBothCharactersDead();
+}
+
+void TCPServer::resetCharactersLife() {
+    team[0]->resetCharacterLife();
+    team[1]->resetCharacterLife();
+
 }
