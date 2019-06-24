@@ -627,7 +627,7 @@ void TCPServer::updateModel() {
             eventHandler->manageInteractiveActions(incoming_msges_queue, teamToUpdate, enemyTeam, update_msg->action);
         }
 
-        if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0 || roundsPlayed == 4) {
+        if (team[teamToUpdate]->sizeOfTeam == 0 || team[enemyTeam]->sizeOfTeam == 0) {
             endgameForDisconnections();
             break;
         }
