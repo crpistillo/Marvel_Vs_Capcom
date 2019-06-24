@@ -598,15 +598,16 @@ void TCPServer::configJson(json config) {
 
 void TCPServer::updateModel() {
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
-    Timer *timer = new Timer(99);
+    Timer *timer = new Timer(10);
     int roundsPlayed = 0;
     while (1) {
 
-        if (timer->getTimeLeft() == 0 || roundsPlayed == 0) {
+        if (timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) {
 
             roundsPlayed++;
             if(roundsPlayed != 4)
                 roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
+            resetCharactersLife();
             timer->resetTimer();
             ignoreMessages = false;
         }
@@ -859,5 +860,16 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
 }
 
 int TCPServer::getCurrentWinner() {
-    return 0;
+    bool didTeamOneWon = (team[0]->getSumOfLife() > team[1]->getSumOfLife());
+    return didTeamOneWon ? 1 : 2;
+}
+
+bool TCPServer::anyTeamLost() {
+    return team[0]->areBothCharactersDead() || team[1]->areBothCharactersDead();
+}
+
+void TCPServer::resetCharactersLife() {
+    team[0]->resetCharacterLife();
+    team[1]->resetCharacterLife();
+
 }

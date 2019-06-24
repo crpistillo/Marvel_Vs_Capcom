@@ -19,7 +19,10 @@ void RoundBanner::load(SDL_Renderer *m_Renderer) {
         case FIGHTING:
             break;
         case ROUNDWINNER:
-            this->loader->loadActionSprite(bannerFilePath, "round", numberOfRound, FILE_EXTENSION, m_Renderer, &texture);
+            if(numberOfRound != 1)
+                this->loader->loadActionSprite(bannerFilePath, "team", currentWinner, "winsR" + FILE_EXTENSION, m_Renderer, &texture);
+            else
+                this->loader->loadActionSprite(bannerFilePath, "round", numberOfRound, FILE_EXTENSION, m_Renderer, &texture);
             break;
         case NUMBEROFROUND:
             this->loader->loadActionSprite(bannerFilePath, "round", numberOfRound, FILE_EXTENSION, m_Renderer, &texture);

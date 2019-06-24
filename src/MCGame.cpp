@@ -309,7 +309,7 @@ void MCGame::render() {
                 middleGround->render(camera.x, camera.y, m_Renderer, &middleGroundTexture, nullptr);
             } else if (renderizables[i] == frontGround) {
                 frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
-                banner.render(0, 10, 800, 91, m_Renderer);
+                banner.render(0, 11, 800, 104, m_Renderer);
 
             } else if (renderizables[i] == players[1]) {
                 players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());

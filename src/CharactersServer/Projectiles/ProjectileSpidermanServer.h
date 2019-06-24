@@ -9,8 +9,9 @@
 #include "ProjectileServer.h"
 
 class ProjectileSpidermanServer final : public ProjectileServer{
-    ProjectileSpidermanServer();
 
+public:
+    ProjectileSpidermanServer();
 };
 
 

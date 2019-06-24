@@ -38,6 +38,8 @@ public:
     character_updater_t *getRoundUpdaters(int toUpdate, Timer *pTimer);
 
     void manageDamage(int receiver, const actions_t &action) const;
+
+    void manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *queue);
 };
 
 

@@ -64,6 +64,14 @@ public:
     bool collidesWith(Team *enemyTeam);
 
     Box *getCurrentBox();
+
+    float getSumOfLife();
+
+    bool partnerNotDead();
+
+    bool areBothCharactersDead();
+
+    void resetCharacterLife();
 };
 
 

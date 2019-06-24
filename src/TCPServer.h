@@ -172,6 +172,10 @@ public:
     bool ignoreMessages = false;
 
     int getCurrentWinner();
+
+    bool anyTeamLost();
+
+    void resetCharactersLife();
 };
 
 #endif

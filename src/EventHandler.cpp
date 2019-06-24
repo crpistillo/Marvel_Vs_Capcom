@@ -47,7 +47,7 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
     mutex->lock();
 
     if (msgToUpdate->action == CHANGEME) {
-        if (team[teamToUpdate]->getCurrentCharacter()->isStanding()) {
+        if (team[teamToUpdate]->getCurrentCharacter()->isStanding() && team[teamToUpdate]->partnerNotDead()) {
             if (team[teamToUpdate]->sizeOfTeam == 1)
                 actionToUpdate = CHANGEME_ONEPLAYER;
             else
@@ -82,6 +82,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
+    //No hacer daño si golpeas (estando parado) y tu contrincante está agachado
+    if ((action == P || action == K) && team[receiver]->getCurrentCharacter()->currentAction == DUCK)
+    	return;
+
     //Daño solo al primer sprite de la animacion del golpe
     int spriteNumber;
     if (action == P || action == K || action == PD || action == KD || action == PV ||
@@ -100,6 +104,13 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
     		team[receiver]->getCurrentCharacter()->quitarVida(5);
 
     manageDamage(receiver, action);
+
+
+    //if mod != debug
+    if(team[receiver]->getCurrentCharacter()->life <= 0){
+        insertAction(queue, CHANGEME, receiver);
+        return;
+    }
 
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
@@ -183,7 +194,7 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
 
 
     if (timer->getTimeThatPass() == 0)
-        roundAction = NUMBEROFROUND;
+        roundAction = ROUNDWINNER;
     //tell who won
     else if (timer->getTimeThatPass() == 1)
         roundAction = NUMBEROFROUND;
@@ -198,5 +209,9 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;
+}
+
+void EventHandler::manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *queue) {
+
 }
 
