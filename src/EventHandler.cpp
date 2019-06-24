@@ -82,8 +82,21 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
         return;
     }
 
+    //Daño solo al primer sprite de la animacion del golpe
+    int spriteNumber;
+    if (action == P || action == K || action == PD || action == KD || action == PV ||
+    	action == PJR || action == PJL || action == KV || action == KJL || action == KJR ||
+		action == PS || action == PSD || action == PSV || action == PSJR || action == PSJL ||
+		action == KS || action == KSD || action == KSV || action == KSJR || action == KSJL){
+    	spriteNumber = team[giver]->getCurrentCharacter()->getSpriteNumber();
+    	if (spriteNumber!=1) return;
+    }
+
     //Disparo
     if (team[receiver]->getCurrentCharacter()->getColisionable()->isProjectileColliding(team[giver]->getCurrentCharacter()->getProjectile()))
+    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+    		team[receiver]->getCurrentCharacter()->quitarVida(1);
+    	else
     		team[receiver]->getCurrentCharacter()->quitarVida(5);
 
     manageDamage(receiver, action);
