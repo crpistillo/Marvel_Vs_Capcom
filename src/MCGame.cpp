@@ -303,7 +303,9 @@ void MCGame::render() {
     else if(weHaveAWinner){
         //winningTeam_background_image.loadFromFile("images/pantalla_final/fondo.png", m_Renderer);
         winningTeam_background_image.render(0,0,800,600,m_Renderer);
+        players[winningTeam]->renderWinners(m_Renderer);
         winningTeam_banner[winningTeam].render(0,0,800,600,m_Renderer);
+
     }
     else {
 

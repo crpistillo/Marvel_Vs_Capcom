@@ -61,6 +61,7 @@ public:
     virtual void loadBanner(SDL_Renderer *renderer) = 0;
 
     void renderBanner(SDL_Renderer *mRenderer, bool isCurrent);
+    virtual void renderVictoryPose(SDL_Renderer *mRenderer, int posX) = 0;
 
     Texture characterLeftCurrentBanner;
     Texture characterRightCurrentBanner;
@@ -90,6 +91,8 @@ protected:
     string characterFilePath;
 
     Texture m_Texture;
+    Texture victoryTexture;
+
 
     ImageLoader *loader;
 

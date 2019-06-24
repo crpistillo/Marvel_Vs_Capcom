@@ -302,3 +302,11 @@ void IronmanClient::loadBanner(SDL_Renderer *renderer)
 					&characterRightSecondaryBanner);
 	}
 }
+
+void IronmanClient::renderVictoryPose(SDL_Renderer *mRenderer, int posX){
+	victoryTexture.loadFromFile("images/pantalla_final/ironman.png", mRenderer);
+	victoryTexture.render(posX, 120, 640, 480, mRenderer);
+}
+
+
+
