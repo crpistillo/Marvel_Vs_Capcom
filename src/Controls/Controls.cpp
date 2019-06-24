@@ -44,6 +44,15 @@ actions_t Controls::getNewAction() {
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(punchStrongKey))
         return PUNCHINGSTRONGJUMPLEFT;
 
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey) && inputManager->isKeyDown(kickKey))
+        return KICKINGJUMPRIGHT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(kickKey))
+        return KICKINGJUMPLEFT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(rightKey) && inputManager->isKeyDown(kickStrongKey))
+        return KICKINGSTRONGJUMPRIGHT;
+    else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(leftKey) && inputManager->isKeyDown(kickStrongKey))
+        return KICKINGSTRONGJUMPLEFT;
+
 
     //dos teclas
     else if (inputManager->isKeyDown(upKey) && inputManager->isKeyDown(punchKey))
