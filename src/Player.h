@@ -54,7 +54,9 @@ private:
     CharacterClient* firstCharacter;
     CharacterClient* secondCharacter;
     Controls* controls;
-    Barra* barra;
+    Barra* barraCurrent;
+    Barra* barraSecondary;
+    int vidaSecondary;
 
     void changeCharacter();
     void setCharacterToChanging();

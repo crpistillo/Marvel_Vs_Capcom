@@ -22,15 +22,18 @@ private:
 	SDL_Color frontColor;
 	int hx;
 	int hw;
+    Uint8 r_value;
+    Uint8 g_value;
+    Uint8 b_value;
 
 	//SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 public:
-	void render(SDL_Renderer* m_Renderer);
+	void render(SDL_Renderer* m_Renderer, SDL_Color frontColor, SDL_Color backColor);
 	SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	Barra();
 	void update(float life);
-	void setBarra(bool left);
+	void setBarra(bool left, bool isCurrent);
 	virtual ~Barra();
 };
 

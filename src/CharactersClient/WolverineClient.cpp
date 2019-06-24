@@ -247,6 +247,7 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                renderer, &m_Texture);
             break;
 
+
         case MAKINGINTRO:
         	this->loadBanner(renderer);
             this->loader->loadActionSprite(characterFilePath + "intro", MVC_FILEPATH, currentSprite, FILE_EXTENSION,
@@ -278,14 +279,22 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
 
 void WolverineClient::loadBanner(SDL_Renderer *renderer)
 {
-	if(this->clientNumber == 0 || this->clientNumber == 1)
-	{
-		this->loader->loadActionSprite(characterFilePath + "banner_left", MVC_FILEPATH, 0,
-		                                               FILE_EXTENSION, renderer, &characterLeftBanner);
-	}
-	else
-	{
-		this->loader->loadActionSprite(characterFilePath + "banner_right", MVC_FILEPATH, 0,
-				                                               FILE_EXTENSION, renderer, &characterRightBanner);
+	if (this->clientNumber == 0 || this->clientNumber == 1) {
+			this->loader->loadActionSprite(characterFilePath + "banner_left",
+					MVC_FILEPATH, 0, FILE_EXTENSION, renderer,
+					&characterLeftCurrentBanner);
+
+			this->loader->loadActionSprite(characterFilePath + "banner_left",
+					MVC_FILEPATH, 1, FILE_EXTENSION, renderer,
+					&characterLeftSecondaryBanner);
+	} else {
+
+		this->loader->loadActionSprite(characterFilePath + "banner_right",
+				MVC_FILEPATH, 0, FILE_EXTENSION, renderer,
+				&characterRightCurrentBanner);
+
+			this->loader->loadActionSprite(characterFilePath + "banner_right",
+					MVC_FILEPATH, 1, FILE_EXTENSION, renderer,
+					&characterRightSecondaryBanner);
 	}
 }

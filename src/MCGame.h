@@ -31,7 +31,7 @@
 #include <mutex>
 
 
-#define FIRST_DIGIT_POSITION 370
+#define FIRST_DIGIT_POSITION 374
 #define SECOND_DIGIT_POSITION 400
 
 

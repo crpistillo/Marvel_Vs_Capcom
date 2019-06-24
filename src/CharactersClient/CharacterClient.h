@@ -60,12 +60,16 @@ public:
 
     virtual void loadBanner(SDL_Renderer *renderer) = 0;
 
-    void renderBanner(SDL_Renderer *mRenderer);
+    void renderBanner(SDL_Renderer *mRenderer, bool isCurrent);
 
-    Texture characterLeftBanner;
-    Texture characterRightBanner;
+    Texture characterLeftCurrentBanner;
+    Texture characterRightCurrentBanner;
+    Texture characterLeftSecondaryBanner;
+    Texture characterRightSecondaryBanner;
 
     ProjectileClient* projectile;
+
+    int vida;
 
 protected:
     CharacterClient(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
@@ -97,7 +101,6 @@ protected:
 
   //  int mVelX, mVelY;
 
-    int vida;
 
 };
 

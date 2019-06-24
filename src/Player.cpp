@@ -9,13 +9,26 @@ const string ERROR = "ERROR";
 const string INFO = "INFO";
 const string DEBUG = "DEBUG";
 
+SDL_Color color(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+		SDL_Color col = {r,g,b,a};
+		return col;
+}
+
+const SDL_Color frontCurrentColor = color(255,255,0,1);
+const SDL_Color backCurrentColor = color(167,000,0,0.57);
+const SDL_Color frontSecondaryColor = color(153,128,0,0.4);
+const SDL_Color backSecondaryColor = color(77,0,0,0.57);
+
 Player::Player(CharacterClient *first, CharacterClient *second) {
     Logger *logger = Logger::getInstance();
     logger->log("Inicializacion de personajes para jugador.", DEBUG);
     currentCharacter = first;
     firstCharacter = first;
     secondCharacter = second;
-	barra = new Barra();
+	barraCurrent = new Barra();
+	barraSecondary = new Barra();
+	vidaSecondary = 50;
 }
 
 void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
@@ -60,7 +73,10 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
         setCharacterToChanging();
     }
 
-    barra->update(updater->vida);
+    barraCurrent->update(updater->vida);
+    if(currentCharacter == firstCharacter)
+    	barraSecondary->update(secondCharacter->vida);
+    else barraSecondary->update(firstCharacter->vida);
 
     currentCharacter->update(updater);
     Logger *logger = Logger::getInstance();
@@ -74,7 +90,8 @@ void Player::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrinc
     Logger *logger = Logger::getInstance();
     logger->log("Renderizado de personaje - Render.", DEBUG);
     currentCharacter->render(mRenderer, camX, camY, posContrincante);
-    this->barra->render(mRenderer);
+    this->barraCurrent->render(mRenderer,frontCurrentColor, backCurrentColor);
+    this->barraSecondary->render(mRenderer,frontSecondaryColor,backSecondaryColor);
 
 }
 
@@ -86,7 +103,10 @@ void Player::renderProyectiles(SDL_Renderer *mRenderer, int camX, int camY){
 
 void Player::renderBanner(SDL_Renderer *mRenderer)
 {
-	currentCharacter->renderBanner(mRenderer);
+	currentCharacter->renderBanner(mRenderer, true);
+	if(currentCharacter == firstCharacter)
+		secondCharacter->renderBanner(mRenderer,false);
+	else firstCharacter->renderBanner(mRenderer,false);
 }
 
 
@@ -167,11 +187,16 @@ void Player::setCurrentCharacter(int i, SDL_Renderer *renderer) {
 
     currentCharacter->loadBanner(renderer);
 
+	if(currentCharacter == firstCharacter)
+		secondCharacter->loadBanner(renderer);
+	else firstCharacter->loadBanner(renderer);
+
 }
 
 void Player::setBarra(bool left)
 {
-	barra->setBarra(left);
+	barraCurrent->setBarra(left,true);
+	barraSecondary->setBarra(left,false);
 }
 
 
