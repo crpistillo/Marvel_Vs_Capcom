@@ -501,7 +501,7 @@ void CharacterServer::normalAction(int *currentSprite, int *lastSprite, actions_
 void CharacterServer::airActions(int *currentSprite, int lastSprite, actions_t nextAction, int airSprite,
                                  int lastAirSprite) {
     (*currentSprite)++;
-    if (*currentSprite > lastSprite || 2 + airSprite + *currentSprite > lastAirSprite) { //not sure
+    if (*currentSprite > lastSprite ) { //not sure  || 2 + airSprite + *currentSprite > lastAirSprite
         *currentSprite = 0;
         this->currentAction = nextAction; //falling
     }
