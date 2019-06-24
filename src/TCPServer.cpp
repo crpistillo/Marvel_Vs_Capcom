@@ -498,39 +498,6 @@ void TCPServer::runServer() {
 
 }
 
-//nclient = numero del cliente
-//characterNumber  = numero del personaje es decir el team 1 tiene 1 y 2 y el team 2 tiene 3 y 4 no importa el numero
-//de clientes
-CharacterServer *TCPServer::createServerCharacterFromCursor(
-        ServerCursor *cursor, int nclient, int characterNumber) {
-
-    CharacterServer *characterServer;
-    Box *caja;
-    int pos;
-    if (characterNumber < 2)
-        pos = constants.INITIAL_POS_X_PLAYER_ONE;
-    else
-        pos = constants.INITIAL_POS_X_PLAYER_TWO;
-
-    switch (cursor->getCharacterSelected()) {
-        case SPIDERMAN:
-            //caja = new Box(0,0,100,100);
-            characterServer = new SpidermanServer(pos, constants.widthSpiderman,
-                                                  constants.heightSpiderman, constants.spidermanSobrante,
-                                                  constants.spidermanAncho, constants.screenWidth, nclient);
-
-            break;
-
-        case WOLVERINE:
-            //	caja = new Box(600,0,100,100);
-            characterServer = new WolverineServer(pos, constants.widthWolverine,
-                                                  constants.heightWolverine, constants.wolverineSobrante,
-                                                  constants.wolverineAncho, constants.screenWidth, nclient);
-    }
-    // characterServer->moverColisionable(); ??
-    return characterServer;
-}
-
 void TCPServer::configJson(json config) {
     this->logger = Logger::getInstance();
 
@@ -600,9 +567,11 @@ void TCPServer::updateModel() {
     EventHandler *eventHandler = new EventHandler(team, &teams_mtx);
     Timer *timer = new Timer(99);
     int roundsPlayed = 0;
+    bool debugMode = false;
+
     while (1) {
 
-        if (timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) {
+        if ((timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) && !debugMode) {
 
             roundsPlayed++;
             if(roundsPlayed != 4)
@@ -624,6 +593,15 @@ void TCPServer::updateModel() {
         incoming_msg = this->incoming_msges_queue->get_data();
         if(!incoming_msg)
             continue;
+
+        if(incoming_msg->action == SWITCHDEBUG) {
+            debugMode = !debugMode;
+            if(debugMode)
+                cout<<"Modo debug activado!"<<endl;
+            else
+                cout<<"Mode debug desactivado!"<<endl;
+            eventHandler->switchDebug();
+        }
 
         int teamToUpdate;
         int enemyTeam;

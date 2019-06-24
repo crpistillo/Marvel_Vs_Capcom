@@ -4,10 +4,11 @@
 
 #include "Controls.h"
 #include "../InputManager.h"
+#include "../Timer.h"
 #include <iostream>
 
 Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick,
-		int block, int throwK, int grip, int punchStrong, int kickStrong) {
+		int block, int throwK, int grip, int punchStrong, int kickStrong, int debug) {
     upKey = up;
     downKey = down;
     rightKey = right;
@@ -20,6 +21,8 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     gripKey = grip;
     punchStrongKey = punchStrong;
     kickStrongKey = kickStrong;
+    debugKey = debug;
+    timer = new Timer(2);
 }
 
 actions_t Controls::getNewAction() {
@@ -27,6 +30,13 @@ actions_t Controls::getNewAction() {
     InputManager *inputManager = InputManager::getInstance();
 
     //Acciones de dos teclas primero
+
+    if(inputManager->isKeyDown(debugKey)){
+        if(timer->getTimeLeft() <= 0){
+            timer->resetTimer();
+            return SWITCHDEBUG;
+        }
+    }
 
     if (inputManager->closeWindowRequested()) {
         inputManager->windowNotClosing();

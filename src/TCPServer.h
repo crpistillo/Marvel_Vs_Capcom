@@ -116,8 +116,6 @@ public:
 
     bool invalidIntroAction(actions_t action);
 
-    CharacterServer *createServerCharacterFromCursor(ServerCursor *cursor, int nclient, int characterNumber);
-
     int numberOfPlayers;
 
     void updateModel();
