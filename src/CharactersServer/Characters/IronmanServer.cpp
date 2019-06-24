@@ -25,7 +25,7 @@ const int LAST_PUNCH_AIR_SPRITE = 8;
 const int LAST_KICK_AIR_SPRITE = 8;
 const int LAST_THROW_POWER_SPRITE = 9;
 const int LAST_GRIP_SPRITE = 3;
-const int LAST_THROW_SPRITE = 28;
+const int LAST_THROW_SPRITE = 22;
 const int LAST_FALLING_SPRITE = 52;
 
 
