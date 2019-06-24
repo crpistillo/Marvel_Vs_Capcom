@@ -876,6 +876,7 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
         fpsManager->start();
         for (int i = 0; i < 2; ++i) {
             character_updater_t *roundUpdater = handler->getRoundUpdaters(i, timer);
+            roundUpdater->gameFinishedByWinningTeam = false;
             roundUpdater->round.winner = whoWon;
             roundUpdater->round.numberOfRound = roundNum;
             roundUpdater->firstDigitOfTime = 9;
