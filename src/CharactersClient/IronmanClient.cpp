@@ -276,7 +276,7 @@ void IronmanClient::load(SDL_Renderer *renderer, int posContrincante) {
 
 void IronmanClient::render(SDL_Renderer *mRenderer, int camX, int camY, int posContrincante) {
     isLookingLeft = this->getCentro() > posContrincante;
-    m_Texture.render(mPosX - camX, mPosY - camY + 85, widthSprite, heightSprite,
+    m_Texture.render(mPosX - camX + 260, mPosY - camY + 85 + 180, widthSprite, heightSprite,
                      mRenderer); //esto es los valores que se cambian la resolucion
 }
 
