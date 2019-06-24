@@ -131,6 +131,8 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
     m_Running = true;
     appCloseFromMenu = false;
     endgame = false;
+    weHaveAWinner = false;
+    winningTeam = -1;
 
     endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
 
@@ -292,8 +294,12 @@ void MCGame::render() {
     if(endgame){
         endgame_image.loadFromFile("images/gameOver.png",m_Renderer);
         endgame_image.render(0,0,800,600,m_Renderer);
-
-    } else {
+    }
+    else if(weHaveAWinner){
+        winningTeam_background_image.loadFromFile("images/pantalla_final/fondo.png", m_Renderer);
+        winningTeam_background_image.render(0,0,800,600,m_Renderer);
+    }
+    else {
 
         Renderizable *renderizables[5] = {&(*middleGround), &(*backGround), &(*frontGround), &(*players[0]),
                                           &(*players[1])};
@@ -432,6 +438,11 @@ void MCGame::update() {
 		if(updater->gameFinishedByDisconnections || !receiveCorrect ){
 		    endgame = true;
 		    return;
+		}
+		else if(updater->gameFinishedByWinningTeam){
+		    weHaveAWinner = true;
+		    winningTeam = updater->winningTeam;
+            return;
 		}
 
 

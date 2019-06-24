@@ -59,6 +59,7 @@ private:
     Texture cliente4;
     Texture banner;
     Texture endgame_image;
+    Texture winningTeam_background_image;
     Layer *middleGround;
     Layer *backGround;
     Layer *frontGround;
@@ -154,6 +155,9 @@ public:
     RoundBanner *roundBanner;
     TimeBanner* timeBanner[2];
     bool resetLifeBanners = true;
+    bool weHaveAWinner;
+    int winningTeam;
+
 };
 
 

@@ -78,6 +78,8 @@ public:
     float lifeOfCharacterInactive();
 
     void incrementRoundsWon();
+
+    int getRoundsWon();
 };
 
 

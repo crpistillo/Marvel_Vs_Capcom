@@ -612,6 +612,15 @@ void TCPServer::updateModel() {
             ignoreMessages = false;
         }
 
+        if(team[0]->getRoundsWon() == 2){
+            endgameByWinningTeam(&team[0], 0);
+            break;
+        }
+        else if(team[1]->getRoundsWon() == 2){
+            endgameByWinningTeam(&team[1], 1);
+            break;
+        }
+
 
         if (numberOfConnections == 0) {
             cout << "Se han desconectado todos los clientes. Server se desconecta" << endl;
@@ -753,6 +762,23 @@ void TCPServer::endgameForDisconnections() {
         updaters_queue_mtx[i].unlock();
     }
 }
+
+void TCPServer::endgameByWinningTeam(Team **winningTeam, int teamno) {
+    character_updater_t *update[numberOfPlayers];
+    for (int j = 0; j < numberOfPlayers; ++j) {
+        update[j] = new character_updater_t;
+        memset(update[j], 0, sizeof(character_updater_t));
+        update[j]->gameFinishedByWinningTeam = true;
+        update[j]->winningTeam = teamno;
+    }
+
+    for (int i = 0; i < numberOfPlayers; ++i) {
+        updaters_queue_mtx[i].lock();
+        this->client_updater_queue[i]->insert(update[i]);
+        updaters_queue_mtx[i].unlock();
+    }
+}
+
 
 bool TCPServer::getEndgame() {
     bool var;

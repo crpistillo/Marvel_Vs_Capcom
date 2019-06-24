@@ -169,7 +169,10 @@ float Team::lifeOfCharacterInactive() {
 
 void Team::incrementRoundsWon() {
     this->roundsWon++;
-    cout << "Rondas del team ganador: " << this->roundsWon << endl;
+}
+
+int Team::getRoundsWon() {
+    return this->roundsWon;
 }
 
 
