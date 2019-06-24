@@ -123,6 +123,8 @@ protected:
 	int heightJumping;
 	int widthJumpingLeft;
 	int heightJumpingLeft;
+	int widthBlock;
+	int heightBlock;
 
 
     int currentStandingSprite;
