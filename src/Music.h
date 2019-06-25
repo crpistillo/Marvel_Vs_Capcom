@@ -31,14 +31,20 @@
     Mix_Chunk* jump;
     Mix_Chunk* throws;
     Mix_Chunk* falling;
+    Mix_Chunk* projectile;
     Mix_Chunk* spiderIntro;
     Mix_Chunk* wolverIntro;
+    Mix_Chunk* ironIntro;
+    Mix_Chunk* ryuIntro;
+
     Timer* timer;
+    bool firstTime;
 
  public:
 
     Music();
     bool initialize();
+    void endGame();
     void playHitMiss();
     void loadMusic();
     void playPunch();
@@ -48,8 +54,11 @@
     void playJump();
     void playFalling();
     void playThrow();
+    void playProjectile();
     void playSpiderIntro();
     void playWolverIntro();
+    void playIronIntro();
+    void playRyuIntro();
     void loadEffects();
     void free();
     void playBackGroundMusic(int soundKey);

@@ -264,7 +264,13 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     	effect  = FALL;
 
     else if(msgToUpdate->action == THROW)
-    	effect = THROWS;
+    	effect = THROWS; //uso el mismo sonido para estas 2 acciones
+    else if (msgToUpdate->action == GRIP && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
+		effect = THROWS;
+
+    else if(msgToUpdate->action == THROWPOWER)
+    	effect = PROJECTILE;
+
 
 	else if (msgToUpdate->action == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
 	{
@@ -276,8 +282,10 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
                 effect = WOLVERINTRO;
                 break;
             case IRONMAN:
+            	effect = IRONINTRO;
+            	break;
             case RYU:
-                effect = WOLVERINTRO;
+                effect = RYUINTRO;
                 break;
         }
 	}

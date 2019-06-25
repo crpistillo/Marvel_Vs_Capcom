@@ -454,10 +454,12 @@ void MCGame::update() {
         character_updater_t *updater = (character_updater_t *) buf1;
 
 		if(updater->gameFinishedByDisconnections || !receiveCorrect ){
+			music->endGame();
 		    endgame = true;
 		    return;
 		}
 		else if(updater->gameFinishedByWinningTeam){
+			music->endGame();
 		    weHaveAWinner = true;
 		    winningTeam = updater->winningTeam;
             return;

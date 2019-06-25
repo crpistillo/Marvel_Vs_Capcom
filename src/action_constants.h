@@ -85,8 +85,11 @@ typedef enum music_action{
 	JUMP = 306,
 	FALL = 307,
 	THROWS = 308,
-	SPIDERINTRO = 309,
-	WOLVERINTRO = 400,
+	PROJECTILE = 309,
+	SPIDERINTRO = 400,
+	WOLVERINTRO = 401,
+	IRONINTRO = 402,
+	RYUINTRO = 403,
 
 }music_action_t;
 

@@ -22,11 +22,15 @@ Music::Music() {
     this->jump = NULL;
     this->throws = NULL;
     this->falling = NULL;
+    this->projectile = NULL;
     this->spiderIntro = NULL;
     this->wolverIntro = NULL;
+    this->ironIntro = NULL;
+    this->ryuIntro = NULL;
     this->soundOn = true;
     effectsOn = false;
     this->timer = new Timer(1);
+    firstTime = true;
 }
 
 bool Music::initialize() {
@@ -42,7 +46,7 @@ bool Music::initialize() {
 void Music::loadMusic() {
     this->gMusic = Mix_LoadMUS("music/music.wav");
     if (gMusic == NULL) {
-        printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
+        printf("Failed to load backGround music! SDL_mixer Error: %s\n", Mix_GetError());
         //logger->log("No se pudo cargar la musica de fondo", ERROR);
     }
 }
@@ -80,13 +84,25 @@ void Music::loadEffects() {
     if (falling == NULL)
         cout << "Failed to load throw effect! SDL_mixer Error: " << Mix_GetError() << endl;
 
+    this->projectile = Mix_LoadWAV("music/projectile.wav");
+        if (projectile == NULL)
+            cout << "Failed to load projectile effect! SDL_mixer Error: " << Mix_GetError() << endl;
+
     this->spiderIntro = Mix_LoadWAV("music/spiderIntro.wav");
-    if (falling == NULL)
+    if (spiderIntro == NULL)
         cout << "Failed to load spiderIntro effect! SDL_mixer Error: " << Mix_GetError() << endl;
 
     this->wolverIntro = Mix_LoadWAV("music/wolverIntro.wav");
-    if (falling == NULL)
+    if (wolverIntro == NULL)
         cout << "Failed to load wolverIntro effect! SDL_mixer Error: " << Mix_GetError() << endl;
+
+    this->ironIntro = Mix_LoadWAV("music/ironIntro.wav");
+      if (ironIntro == NULL)
+          cout << "Failed to load ironIntro effect! SDL_mixer Error: " << Mix_GetError() << endl;
+
+    this->ryuIntro = Mix_LoadWAV("music/ryuIntro.wav");
+		if (ryuIntro == NULL)
+			cout << "Failed to load ryuIntro effect! SDL_mixer Error: " << Mix_GetError() << endl;
 
 }
 
@@ -100,8 +116,11 @@ void Music::free() {
     Mix_FreeChunk(jump);
     Mix_FreeChunk(falling);
     Mix_FreeChunk(throws);
+    Mix_FreeChunk(projectile);
     Mix_FreeChunk(spiderIntro);
     Mix_FreeChunk(wolverIntro);
+    Mix_FreeChunk(ironIntro);
+    Mix_FreeChunk(ryuIntro);
     gMusic = NULL;
     punch = NULL;
     kick = NULL;
@@ -111,8 +130,11 @@ void Music::free() {
     jump = NULL;
     falling = NULL;
     throws = NULL;
+    projectile = NULL;
     spiderIntro = NULL;
     wolverIntro = NULL;
+    ironIntro = NULL;
+    ryuIntro = NULL;
 
 }
 
@@ -148,6 +170,10 @@ void Music::playThrow() {
     Mix_PlayChannel(-1, throws, 0);
 }
 
+void Music::playProjectile(){
+	Mix_PlayChannel(-1, projectile, 0);
+}
+
 void Music::playSpiderIntro() {
     Mix_PlayChannel(-1, spiderIntro, 0);
 }
@@ -156,29 +182,44 @@ void Music::playWolverIntro() {
     Mix_PlayChannel(-1, wolverIntro, 0);
 }
 
+void Music::playIronIntro() {
+	Mix_PlayChannel(-1, ironIntro, 0);
+}
+
+void Music::playRyuIntro() {
+	Mix_PlayChannel(-1, ryuIntro, 0);
+}
+
 void Music::updateEffects(character_updater_t *updater) {
-    if (effectsOn) {
-        if (updater->effect == WEAK_PUNCH) {
-            playPunch();
-        } else if (updater->effect == WEAK_KICK) {
-            playKick();
-        } else if (updater->effect == HIT_MISS) {
-            playHitMiss();
-        } else if (updater->effect == STRONG_PUNCH) {
-            playStrongPunch();
-        } else if (updater->effect == STRONG_KICK) {
-            playStrongKick();
-        } else if (updater->effect == JUMP) {
-            playJump();
-        } else if (updater->effect == FALL) {
-            playFalling();
-        } else if (updater->effect == THROWS) {
-            playThrow();
-        } else if (updater->effect == SPIDERINTRO) {
-            playSpiderIntro();
-        } else if (updater->effect == WOLVERINTRO) {
-            playWolverIntro();
-        }
+	if (effectsOn) {
+		if (updater->effect == WEAK_PUNCH) {
+			playPunch();
+		} else if (updater->effect == WEAK_KICK) {
+			playKick();
+		} else if (updater->effect == HIT_MISS) {
+			playHitMiss();
+		} else if (updater->effect == STRONG_PUNCH) {
+			playStrongPunch();
+		} else if (updater->effect == STRONG_KICK) {
+			playStrongKick();
+		} else if (updater->effect == JUMP) {
+			playJump();
+		} else if (updater->effect == FALL) {
+			playFalling();
+		} else if (updater->effect == THROWS) {
+			playThrow();
+		} else if (updater->effect == PROJECTILE) {
+			playProjectile();
+		} else if (updater->effect == SPIDERINTRO) {
+			playSpiderIntro();
+		} else if (updater->effect == WOLVERINTRO) {
+			playWolverIntro();
+		} else if (updater->effect == IRONINTRO) {
+			playIronIntro();
+		} else if (updater->effect == RYUINTRO) {
+			playRyuIntro();
+		}
+
 
 
     }
@@ -188,6 +229,14 @@ void Music::updateEffects(character_updater_t *updater) {
 
 
 void Music::playBackGroundMusic(int soundKey) {
+
+	if(firstTime)
+	{
+		Mix_PlayMusic(gMusic, -1);
+		effectsOn = true;
+		firstTime = false;
+	}
+
     InputManager *inputManager = InputManager::getInstance();
     bool input = false;
     if(timer->getTimeLeft() <= 0){
@@ -229,5 +278,10 @@ void Music::playBackGroundMusic(int soundKey) {
     }
 }
 
+void Music::endGame()
+{
+	Mix_HaltMusic();
+
+}
 
 
