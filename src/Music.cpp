@@ -26,7 +26,7 @@ Music::Music() {
     this->wolverIntro = NULL;
     this->soundOn = true;
     effectsOn = false;
-    this->timer = new Timer(2);
+    this->timer = new Timer(1);
 }
 
 bool Music::initialize() {
@@ -226,11 +226,6 @@ void Music::playBackGroundMusic(int soundKey) {
             soundOn = false;
             effectsOn = false;
         }
-
-        //m.unlock();
-
-        while (inputManager->isKeyUp(soundKey))
-            continue;
     }
 }
 
