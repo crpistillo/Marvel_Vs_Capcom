@@ -146,7 +146,7 @@ void SpidermanServer::moveLeft(int distance, float vel, Box *boxOfEnemy, bool is
 
 
 void SpidermanServer::moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action) {
-    currentAction = MOVINGRIGHT;
+    currentAction = action;
 
     mPosX += int(vel * float(CHARACTER_VEL));
 
