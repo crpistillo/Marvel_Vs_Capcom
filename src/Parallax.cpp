@@ -29,8 +29,8 @@ Parallax::Parallax(Layer** middleGround, Layer** backGround, SDL_Rect* camera, i
 	this->screenWidth = screenWidth;
 	logger->log("Definicion levelWidth Parallax.", DEBUG);
 	this->levelWidth= 3200;
-	(*middleGround)->changeVel(1.665);
-	(*backGround)->changeVel(3.3575);
+	(*middleGround)->changeVel(1.665);//1.665
+	(*backGround)->changeVel(3.3575); //3.3575
 	bool layersCentered = false;
 }
 
@@ -116,11 +116,13 @@ void Parallax::centerLayers(Player** player1, Player** player2)
 	double posPlayer1 = (*player1)->getPosX();
 	double posPlayer2 = (*player2)->getPosX();
 
- 	double center = (posPlayer1+posPlayer2)/2 + 534;
-	double dif = center-1578;
+ 	double center = (posPlayer1+posPlayer2)/2 + 424;
+	double dif = center-1468;
 
-	(*(this->middleGround))->adjustPosX(399.06+dif*0.3218);//0,32359, //0,32156774 /0,322539
+
+	(*(this->middleGround))->adjustPosX(399.06+dif*0.3333333);//0,32359, //0,32156774 /0,322539
 	(*(this->backGround))->adjustPosX(799.09+dif*0.6667);//910
+
 
 
  }
