@@ -274,6 +274,7 @@ void WolverineClient::load(SDL_Renderer *renderer, int posContrincante) {
                                                currentSprite, FILE_EXTENSION, renderer, &m_Texture);
             break;
     }
+    projectile->load(renderer, isLookingLeft);
 }
 
 

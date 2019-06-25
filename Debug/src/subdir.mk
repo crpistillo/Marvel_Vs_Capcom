@@ -12,6 +12,7 @@ CPP_SRCS += \
 ../src/InputManager.cpp \
 ../src/Layer.cpp \
 ../src/MCGame.cpp \
+../src/Music.cpp \
 ../src/Parallax.cpp \
 ../src/Player.cpp \
 ../src/RoundBanner.cpp \
@@ -33,6 +34,7 @@ OBJS += \
 ./src/InputManager.o \
 ./src/Layer.o \
 ./src/MCGame.o \
+./src/Music.o \
 ./src/Parallax.o \
 ./src/Player.o \
 ./src/RoundBanner.o \
@@ -54,6 +56,7 @@ CPP_DEPS += \
 ./src/InputManager.d \
 ./src/Layer.d \
 ./src/MCGame.d \
+./src/Music.d \
 ./src/Parallax.d \
 ./src/Player.d \
 ./src/RoundBanner.d \
