@@ -108,7 +108,7 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     //if mod != debug
     if(team[receiver]->getCurrentCharacter()->life <= 0 && !debugMode){
-        insertAction(queue,HURTINGAIR,receiver);
+        team[receiver]->getCurrentCharacter()->currentAction = HURTINGAIR;
         return;
     }
 

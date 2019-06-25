@@ -572,7 +572,6 @@ void TCPServer::updateModel() {
     while (1) {
 
         if ((timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) && !debugMode) {
-
             roundsPlayed++;
             if(roundsPlayed != 4)
                 roundRun(getCurrentWinner(), eventHandler, roundsPlayed);

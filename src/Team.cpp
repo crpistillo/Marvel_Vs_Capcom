@@ -155,7 +155,7 @@ bool Team::partnerNotDead() {
 }
 
 bool Team::areBothCharactersDead() {
-    return firstCharacter->life <= 0 && secondCharacter->life <= 0  && currentCharacter->isStanding();
+    return firstCharacter->life <= 0 && secondCharacter->life <= 0;
 }
 
 void Team::resetCharacterLife() {
