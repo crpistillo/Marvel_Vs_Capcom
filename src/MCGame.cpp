@@ -473,7 +473,8 @@ void MCGame::update() {
                 players[0]->resetLifeBanners();
                 players[1]->resetLifeBanners();
                 resetLifeBanners = false;
-                this->roundCounters[updater->round.winner]->incrementCounter();
+                if(updater->round.numberOfRound != 1)
+                    this->roundCounters[updater->round.winner]->incrementCounter();
             }
             roundBanner->updateRoundSprites(updater->round);
             roundBanner->load(m_Renderer);

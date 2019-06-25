@@ -16,6 +16,6 @@ void RoundCounter::incrementCounter() {
 }
 
 void RoundCounter::render(SDL_Renderer *pRenderer) {
-    texture.loadFromFile("images/round_counter/0.png", pRenderer);
+    texture.loadFromFile("images/round_counter/" + to_string(counter) + ".png", pRenderer);
     texture.render(posX , 28, 27, 27, pRenderer);
 }
