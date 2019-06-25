@@ -24,6 +24,7 @@ public:
     int gripKey;
     int punchStrongKey;
     int kickStrongKey;
+    int soundKey;
     int debugKey;
 
     actions_t getNewAction();
@@ -31,7 +32,7 @@ public:
 
 protected:
     Controls(int upKey, int downKey, int rightKey, int leftKey, int changeKey, int punchKey,
-    		int kickKey, int blockKey, int throwKey, int grip, int punchStrong, int kickStrong, int debug);
+    		int kickKey, int blockKey, int throwKey, int grip, int punchStrong, int kickStrong, int debug, int sound);
 
     Timer *timer;
 };

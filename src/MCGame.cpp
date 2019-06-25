@@ -63,6 +63,12 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
                     logger->log("SDL_image no pudo inicializarse.", ERROR);
                     return false;
                 }
+
+                //Inicializo SDL MIxer
+				if (!music->initialize()) {
+					logger->log("SDL_mixer no pudo inicializarse", ERROR);
+					return false;
+				}
             }
         }
     }
@@ -228,7 +234,7 @@ MCGame::MCGame(json config, int ancho, int alto, TCPClient *client) {
 
     parallaxController = new Parallax(&middleGround, &backGround, &camera, &centerBefore, &centerLater, logger,
                                       SCREEN_WIDTH);
-    //barra = new Barra(88,74,0.1,true);
+    music = new Music();
 }
 
 
@@ -369,6 +375,7 @@ void orderRenderizableListByZIndex(Renderizable **list) {
 
 void MCGame::clean() {
     //m_Texture.free();
+	music->free();
     free(constants);
     logger->log("Inicio limpieza MCGame.", INFO);
     delete players[0];
@@ -482,6 +489,8 @@ void MCGame::update() {
 			players[1]->load(m_Renderer, players[0]->getCentro());
 		}
 
+        music->playBackGroundMusic(clientControls->soundKey);
+        music->updateEffects(updater);
 
         parallaxController->centerLayers(&players[0], &players[1]);
         maxTimeouts = 0 ;
@@ -784,4 +793,9 @@ void MCGame::disableRoundSprites() {
     roundBanner->active = false;
 }
 
-
+void MCGame::loadMusic()
+{
+	//string nombre = "music/music.wav";
+	this->music->loadMusic();
+	this->music->loadEffects();
+}

@@ -54,6 +54,9 @@ public:
     actions_t currentAction;
 
     int clientNumber;
+
+    int currentSprite;
+
     bool getDirection();
 
     void update(character_updater_t *ptr);
@@ -95,8 +98,6 @@ protected:
 
 
     ImageLoader *loader;
-
-    int currentSprite;
 
     Controls *characterControls;
 

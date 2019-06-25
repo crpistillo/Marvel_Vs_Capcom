@@ -8,7 +8,7 @@
 #include <iostream>
 
 Controls::Controls(int up, int down, int right, int left, int change, int punch, int kick,
-		int block, int throwK, int grip, int punchStrong, int kickStrong, int debug) {
+		int block, int throwK, int grip, int punchStrong, int kickStrong, int debug, int sound) {
     upKey = up;
     downKey = down;
     rightKey = right;
@@ -21,6 +21,7 @@ Controls::Controls(int up, int down, int right, int left, int change, int punch,
     gripKey = grip;
     punchStrongKey = punchStrong;
     kickStrongKey = kickStrong;
+    soundKey = sound;
     debugKey = debug;
     timer = new Timer(2);
 }

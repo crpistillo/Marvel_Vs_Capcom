@@ -31,8 +31,8 @@ Player::Player(CharacterClient *first, CharacterClient *second) {
 	vidaSecondary = 50;
 }
 
-void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber) {
-
+void Player::update(character_updater_t *updater, bool *isSending, bool becomeActive, int clientNumber)
+{
     ProjectileClient* projectile = currentCharacter->getProjectile();
     if(projectile)
         projectile->update(updater->projectile == PROJECTILEALIVE, updater);
@@ -77,6 +77,8 @@ void Player::update(character_updater_t *updater, bool *isSending, bool becomeAc
     if(currentCharacter == firstCharacter)
     	barraSecondary->update(secondCharacter->vida);
     else barraSecondary->update(firstCharacter->vida);
+
+    //(*music)->playBackGroundMusic(soundKey);
 
     currentCharacter->update(updater);
     Logger *logger = Logger::getInstance();

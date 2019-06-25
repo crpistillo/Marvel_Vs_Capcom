@@ -128,6 +128,7 @@ void TCPClient::runAfterMenu() const {
     mcGame->loadSelectedCharacters();
     mcGame->loadInitialTextures();
     mcGame->render();
+    mcGame->loadMusic();
     mcGame->run();
 }
 

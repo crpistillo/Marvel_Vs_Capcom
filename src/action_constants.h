@@ -5,6 +5,7 @@
 #ifndef MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H
 #define MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H
 
+
 //TODO ADD MOVINGLEFT AND MOVINGRIGHT
 #define S 0
 #define JR 1
@@ -74,6 +75,21 @@ typedef  enum round_action{
 
 }round_action_t;
 
+typedef enum music_action{
+	HIT_MISS = 300,
+	WEAK_PUNCH = 301,
+	STRONG_PUNCH = 302,
+	WEAK_KICK = 303,
+	STRONG_KICK = 304,
+	NEW_ROUND = 305,
+	JUMP = 306,
+	FALL = 307,
+	THROWS = 308,
+	SPIDERINTRO = 309,
+	WOLVERINTRO = 400,
+
+}music_action_t;
+
 
 
 typedef enum menuAction {
@@ -87,5 +103,6 @@ typedef enum menuAction {
     DISCONNECTED_MENU = 101,
     RECONNECTION_MENU = 102
 } menu_action_t;
+
 
 #endif //MARVEL_VS_CAPCOM_ORIENTATION_CONSTANTS_H

@@ -29,6 +29,7 @@
 #include "RoundBanner.h"
 #include "TimeBanner.h"
 #include <mutex>
+#include "Music.h"
 
 
 #define FIRST_DIGIT_POSITION 374
@@ -48,6 +49,7 @@ private:
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     Logger *logger;
+    Music* music;
     // Scene textures
     Texture frontGroundTexture;
     Texture middleGroundTexture;
@@ -133,6 +135,7 @@ public:
 
     void loadSelectedCharacters();
 
+    void loadMusic();
 
     void setCursors();
 
