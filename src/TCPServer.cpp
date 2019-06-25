@@ -618,8 +618,9 @@ void TCPServer::updateModel() {
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
 
+        incoming_msg_mtx.lock();
         eventHandler->manageDeadCharacter(teamToUpdate, incoming_msges_queue);
-
+        incoming_msg_mtx.unlock();
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
         update_msg->round.winner = getCurrentWinner();

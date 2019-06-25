@@ -20,13 +20,12 @@ void Team::changeCharacter() {
 	int updateX = currentCharacter->getCentro();
 	currentCharacter->getProjectile()->deactivate();
 
-	currentCharacter->getColisionable()->getCenter();
 
 	if (currentCharacter == firstCharacter) {
-        secondCharacter->getColisionable()->setCenterX(currentCharacter->getColisionable()->getCenter());
+        secondCharacter->getColisionable()->setCenterX(firstCharacter->getColisionable()->getCenter());
 		currentCharacter = secondCharacter;
 	} else {
-        firstCharacter->getColisionable()->setCenterX(currentCharacter->getColisionable()->getCenter());
+        firstCharacter->getColisionable()->setCenterX(secondCharacter->getColisionable()->getCenter());
         currentCharacter = firstCharacter;
 	}
 	currentCharacter->positionUpdate(&updateX);
