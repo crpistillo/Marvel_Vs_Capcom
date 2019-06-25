@@ -22,7 +22,7 @@ Box::Box(float x, float y, float width, float height) {
 
 Box::~Box(){};
 
-void Box::setCenter(float x, float y, int posX) {
+void Box::setCenter(float x, float y) {
 	this->centerX=x;
 	this->centerY=y;
 }
@@ -138,6 +138,11 @@ void Box::fixCollision(int *characterX, Box *otherBox) {
         *characterX += 1 * 30;   //vel * CHARACTERVEL
     else
         *characterX -= 1* 30;
+}
+
+void Box::setCenterX(int posX) {
+    centerX = posX;
+
 }
 
 

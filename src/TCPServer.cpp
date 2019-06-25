@@ -596,12 +596,14 @@ void TCPServer::updateModel() {
             break;
         }
 
+        incoming_msg_mtx.lock();
         incoming_msg_t *incoming_msg;
-        if (incoming_msges_queue->empty_queue())
+        if (incoming_msges_queue->empty_queue()){
+            incoming_msg_mtx.unlock();
             continue;
+        }
         incoming_msg = this->incoming_msges_queue->get_data();
-        if(!incoming_msg)
-            continue;
+        incoming_msg_mtx.unlock();
 
         if(incoming_msg->action == SWITCHDEBUG) {
             debugMode = !debugMode;
@@ -615,6 +617,9 @@ void TCPServer::updateModel() {
         int teamToUpdate;
         int enemyTeam;
         getTeams(&teamToUpdate, &enemyTeam, incoming_msg->client);
+
+        eventHandler->manageDeadCharacter(teamToUpdate, incoming_msges_queue);
+
 
         character_updater_t *update_msg = eventHandler->handleEvent(incoming_msg, teamToUpdate, enemyTeam);
         update_msg->round.winner = getCurrentWinner();

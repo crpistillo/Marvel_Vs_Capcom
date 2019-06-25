@@ -170,7 +170,7 @@ void CharacterServer::update(int distance, int posEnemy, actions_t actionRecieve
     }
 
     if (actionStarted) {
-        this->characterBox->setCenter(getCentro(), mPosY, mPosX);
+        this->characterBox->setCenter(getCentro(), mPosY);
         return;
     }
 
@@ -217,7 +217,7 @@ void CharacterServer::update(int distance, int posEnemy, actions_t actionRecieve
     if (currentAction == STANDING)
         this->stand(); //send stand
 
-    this->characterBox->setCenter(getCentro(), mPosY, mPosX);
+    this->characterBox->setCenter(getCentro(), mPosY);
     updateStand();
 }
 

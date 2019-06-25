@@ -18,12 +18,16 @@ Team::Team(int teamSize) {
 
 void Team::changeCharacter() {
 	int updateX = currentCharacter->getCentro();
-	//currentCharacter->getProjectile()->deactivate();  // falta projectil de wolverine esto rompe si no
+	currentCharacter->getProjectile()->deactivate();
+
+	currentCharacter->getColisionable()->getCenter();
 
 	if (currentCharacter == firstCharacter) {
+        secondCharacter->getColisionable()->setCenterX(currentCharacter->getColisionable()->getCenter());
 		currentCharacter = secondCharacter;
 	} else {
-		currentCharacter = firstCharacter;
+        firstCharacter->getColisionable()->setCenterX(currentCharacter->getColisionable()->getCenter());
+        currentCharacter = firstCharacter;
 	}
 	currentCharacter->positionUpdate(&updateX);
 }
@@ -152,7 +156,7 @@ bool Team::partnerNotDead() {
 }
 
 bool Team::areBothCharactersDead() {
-    return firstCharacter->life <= 0 && secondCharacter->life <= 0;
+    return firstCharacter->life <= 0 && secondCharacter->life <= 0  && currentCharacter->isStanding();
 }
 
 void Team::resetCharacterLife() {
