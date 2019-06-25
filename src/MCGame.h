@@ -65,6 +65,7 @@ private:
     Texture cliente3;
     Texture cliente4;
     Texture banner;
+    Texture musicBanner;
     Texture endgame_image;
     Texture winningTeam_background_image;
     Texture winningTeam_banner[2];

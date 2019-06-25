@@ -102,6 +102,8 @@ void MCGame::loadInitialTextures() {
     players[1]->loads(m_Renderer, 0);
     loadGroundTextureByZIndex();
     banner.loadFromFile("images/barras/banner.png",m_Renderer);
+    musicBanner.loadFromFile("images/press.png",m_Renderer);
+
 }
 
 void MCGame::loadGroundTextureByZIndex() {
@@ -332,6 +334,7 @@ void MCGame::render() {
             } else if (renderizables[i] == frontGround) {
                 frontGround->render(0, 0, m_Renderer, &frontGroundTexture, &camera);
                 banner.render(0, 11, 800, 104, m_Renderer);
+                musicBanner.render(579, 2, 219, 11, m_Renderer);
 
             } else if (renderizables[i] == players[1]) {
                 players[1]->render(m_Renderer, camera.x, camera.y, players[0]->getCentro());
@@ -390,6 +393,7 @@ void MCGame::clean() {
     backGroundTexture.free();
     menuTexture.free();
     banner.free();
+    musicBanner.free();
     cliente1.free();
     cliente2.free();
     cliente3.free();
