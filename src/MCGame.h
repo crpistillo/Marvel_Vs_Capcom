@@ -30,10 +30,15 @@
 #include "TimeBanner.h"
 #include <mutex>
 #include "Music.h"
+#include "RoundCounter.h"
 
 
 #define FIRST_DIGIT_POSITION 374
 #define SECOND_DIGIT_POSITION 400
+
+#define FIRST_ROUND_COUNTER_POSITION 270
+#define SECOND_ROUND_COUNTER_POSITION 510
+
 
 
 
@@ -158,6 +163,9 @@ public:
 
     RoundBanner *roundBanner;
     TimeBanner* timeBanner[2];
+    RoundCounter* roundCounters[2];
+
+
     bool resetLifeBanners = true;
     bool weHaveAWinner;
     int winningTeam;
