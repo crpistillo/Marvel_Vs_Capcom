@@ -168,4 +168,11 @@ int Team::getRoundsWon() {
     return this->roundsWon;
 }
 
+CharacterServer *Team::getCharacterInactive() {
+    if(currentCharacter == firstCharacter)
+        return secondCharacter;
+    else
+        return firstCharacter;
+}
+
 

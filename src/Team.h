@@ -76,6 +76,8 @@ public:
     void incrementRoundsWon();
 
     int getRoundsWon();
+
+    CharacterServer *getCharacterInactive();
 };
 
 

@@ -45,6 +45,7 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
     int *distancia = getTeamDistances();
     actions_t actionToUpdate;
     music_action_t effect;
+    effect = this->handleEffects(msgToUpdate,teamToUpdate,enemyTeam);
 
     mutex->lock();
 
@@ -64,7 +65,6 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
         actionToUpdate = team[teamToUpdate]->getCurrentCharacter()->currentAction;
     }
 
-    effect = this->handleEffects(msgToUpdate,teamToUpdate,enemyTeam);
 
     character_updater_t *updater = makeUpdater(teamToUpdate, actionToUpdate, FIGHTING, effect);
 
@@ -243,7 +243,8 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     //|| isHurting(msgToUpdate->action) && isWeakKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = WEAK_KICK;
 
-    else if(isHit(msgToUpdate->action) && !isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))// ||
+    else if(isHit(msgToUpdate->action) && !isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction)
+            && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)// ||
 			//!isHurting(msgToUpdate->action) && isHit(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = HIT_MISS;
 
@@ -256,9 +257,7 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     	effect = STRONG_KICK;
 
     else if(isJump(msgToUpdate->action) &&
-    		(team[teamToUpdate]->getCurrentCharacter()->currentJumpingSprite == 1
-    		|| team[teamToUpdate]->getCurrentCharacter()->currentJumpingLeftSprite == 1
-			|| team[teamToUpdate]->getCurrentCharacter()->currentJumpingRightSprite == 1) )
+    		 team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = JUMP;
 
     else if(msgToUpdate->action == FALLING)
@@ -267,9 +266,9 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     else if(msgToUpdate->action == THROW)
     	effect = THROWS;
 
-	else if (msgToUpdate->action == CHANGEME)
+	else if (msgToUpdate->action == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
 	{
-		switch (team[teamToUpdate]->getCurrentCharacter()->nameOfCharacter()){
+		switch (team[teamToUpdate]->getCharacterInactive()->nameOfCharacter()){
             case SPIDERMAN:
                 effect = SPIDERINTRO;
                 break;
