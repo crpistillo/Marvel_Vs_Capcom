@@ -445,7 +445,7 @@ void TCPServer::sendToClient(int clientSocket) {
         std::unique_lock<std::mutex> lock(updaters_queue_mtx[clientSocket]);
         client_updater_queue[clientSocket]->delete_data();
 
-        if (updater->gameFinishedByDisconnections)
+        if (updater->gameFinishedByDisconnections || updater->gameFinishedByWinningTeam)
             break;
     }
 }

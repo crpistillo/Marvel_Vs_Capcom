@@ -408,6 +408,9 @@ void MCGame::handleEvents() {
 
 void MCGame::update() {
 
+	if(weHaveAWinner)
+		return;
+
 	struct pollfd fds[1];
 	memset(fds, 0, sizeof(fds));
 
