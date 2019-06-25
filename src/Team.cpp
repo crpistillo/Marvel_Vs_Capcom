@@ -22,13 +22,12 @@ void Team::changeCharacter() {
 
 
 	if (currentCharacter == firstCharacter) {
-        secondCharacter->getColisionable()->setCenterX(firstCharacter->getColisionable()->getCenter());
 		currentCharacter = secondCharacter;
 	} else {
-        firstCharacter->getColisionable()->setCenterX(secondCharacter->getColisionable()->getCenter());
         currentCharacter = firstCharacter;
 	}
 	currentCharacter->positionUpdate(&updateX);
+	currentCharacter->updateBox();
 }
 
 void Team::update(int distance, actions_t action, Box *boxContrincante) {
@@ -115,15 +114,6 @@ void Team::setCharacters(CharacterServer *firstCharact, CharacterServer *secondC
     this->secondCharacter = secondCharact;
     clientActive = currentCharacter->clientNumber;
 
-}
-
-void Team::setSecondClientAsActive() {
-    clientActive = secondCharacter->clientNumber;
-
-}
-
-void Team::setFirstClientAsActive() {
-    clientActive = firstCharacter->clientNumber;
 }
 
 void Team::connectClient() {

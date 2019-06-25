@@ -430,7 +430,7 @@ void CharacterServer::makeIntro() {
         currentAction = STANDING;
         currentStandingSprite = 0;
     }
-
+    characterBox->updateBox(widthStanding, heightStanding);
 }
 
 void CharacterServer::updateStand() {
@@ -632,6 +632,10 @@ void CharacterServer::quitarVida(float danio) {
 
 float CharacterServer::getVida() {
     return life;
+}
+
+void CharacterServer::updateBox() {
+    characterBox->setCenter(getCentro(),mPosY);
 }
 
 

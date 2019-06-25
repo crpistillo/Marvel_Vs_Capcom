@@ -57,10 +57,6 @@ public:
 
     void setCharacters(CharacterServer *firstCharact, CharacterServer *secondCharact);
 
-    void setSecondClientAsActive();
-
-    void setFirstClientAsActive();
-
     void connectClient();
 
     bool collidesWith(Team *enemyTeam);

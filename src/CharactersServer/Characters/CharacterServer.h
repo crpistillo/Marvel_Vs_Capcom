@@ -75,6 +75,8 @@ public:
     float life;
 
 
+    void updateBox();
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
