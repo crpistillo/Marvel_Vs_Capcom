@@ -163,8 +163,6 @@ public:
 
     bool isProjectileActive(int teamToCheck);
 
-    void resetRound();
-
     void roundRun(int whoWon, EventHandler *handler, int roundNum);
 
     bool ignoreMessages = false;

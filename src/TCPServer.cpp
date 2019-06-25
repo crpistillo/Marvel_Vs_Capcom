@@ -573,10 +573,11 @@ void TCPServer::updateModel() {
 
         if ((timer->getTimeLeft() == 0 || roundsPlayed == 0 || anyTeamLost()) && !debugMode) {
             roundsPlayed++;
-            if(roundsPlayed != 4)
+            if(roundsPlayed != 4){
                 roundRun(getCurrentWinner(), eventHandler, roundsPlayed);
-            resetCharactersLife();
-            timer->resetTimer();
+                resetCharactersLife();
+                timer->resetTimer();
+            }
             ignoreMessages = false;
         }
 
@@ -840,10 +841,6 @@ bool TCPServer::isActionKick(actions_t action) {
            action == KICKINGSTRONGVERTICAL;
 }
 
-void TCPServer::resetRound() {
-
-}
-
 void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
     ignoreMessages = true;
     incoming_msg_mtx.lock();
@@ -885,6 +882,7 @@ bool TCPServer::anyTeamLost() {
 }
 
 void TCPServer::resetCharactersLife() {
+    cout<<"asd"<<endl;
     team[0]->resetCharacterLife();
     team[1]->resetCharacterLife();
 
