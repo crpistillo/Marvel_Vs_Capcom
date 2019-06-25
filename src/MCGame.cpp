@@ -78,6 +78,8 @@ bool MCGame::init(const char *title, int xpos, int ypos, int width, int height, 
     timeBanner[0] = new TimeBanner(FIRST_DIGIT_POSITION);
     timeBanner[1] = new TimeBanner(SECOND_DIGIT_POSITION);
 
+    roundCounters[0] = new RoundCounter(FIRST_ROUND_COUNTER_POSITION);
+    roundCounters[1] = new RoundCounter(SECOND_ROUND_COUNTER_POSITION);
 
     Texture* waiting = new Texture();
     SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -341,6 +343,8 @@ void MCGame::render() {
         players[1]->renderProyectiles(m_Renderer, camera.x, camera.y);
 
         roundBanner->render(m_Renderer);
+        roundCounters[0]->render(m_Renderer);
+        roundCounters[1]->render(m_Renderer);
         timeBanner[0]->render(m_Renderer);
         timeBanner[1]->render(m_Renderer);
         //barra->render(m_Renderer);
@@ -471,11 +475,14 @@ void MCGame::update() {
                 players[0]->resetLifeBanners();
                 players[1]->resetLifeBanners();
                 resetLifeBanners = false;
+                if(updater->round.numberOfRound != 1)
+                    this->roundCounters[updater->round.winner]->incrementCounter();
             }
             roundBanner->updateRoundSprites(updater->round);
             roundBanner->load(m_Renderer);
 		} else
 		    disableRoundSprites();
+
 
 		timeBanner[0]->digit = updater->firstDigitOfTime;
 		timeBanner[0]->load(m_Renderer);
