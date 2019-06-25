@@ -223,6 +223,12 @@ void EventHandler::manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *qu
         return;
     }
 }
+
+void EventHandler::switchDebug() {
+    debugMode = !debugMode;
+
+}
+
 music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam)
 {
 	music_action_t effect;
@@ -230,10 +236,7 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     //|| isHurting(msgToUpdate->action) && isWeakPunch(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = WEAK_PUNCH;
 
-void EventHandler::switchDebug() {
-    debugMode = !debugMode;
 
-}
 
 
     else if (isWeakKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
@@ -266,16 +269,19 @@ void EventHandler::switchDebug() {
 
 	else if (msgToUpdate->action == CHANGEME)
 	{
-		if(team[teamToUpdate]->getCurrentCharacter()->name == "spiderman")
-			effect = SPIDERINTRO;
-		else if(team[teamToUpdate]->getCurrentCharacter()->name == "wolverine")
-			effect = WOLVERINTRO;
-
+		switch (team[teamToUpdate]->getCurrentCharacter()->nameOfCharacter()){
+            case SPIDERMAN:
+                effect = SPIDERINTRO;
+                break;
+            case WOLVERINE:
+                effect = WOLVERINTRO;
+                break;
+            case IRONMAN:
+            case RYU:
+                effect = WOLVERINTRO;
+                break;
+        }
 	}
-
-
-
-
     return effect;
 }
 

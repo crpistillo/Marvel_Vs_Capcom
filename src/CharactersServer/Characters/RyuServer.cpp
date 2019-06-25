@@ -272,3 +272,7 @@ void RyuServer::update(int distance, int posContrincante, actions_t actionReciev
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
+
+character_number_t RyuServer::nameOfCharacter() {
+    return RYU;
+}

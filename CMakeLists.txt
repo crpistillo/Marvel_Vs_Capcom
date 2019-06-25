@@ -93,7 +93,26 @@ set(SOURCE_FILES
         src/CharactersClient/IronmanClient.h
         src/Barra.cpp
         src/Barra.h
-        src/CharactersServer/Projectiles/ProjectileSpidermanServer.cpp src/CharactersServer/Projectiles/ProjectileSpidermanServer.h src/CharactersServer/Projectiles/ProjectileIronmanServer.cpp src/CharactersServer/Projectiles/ProjectileIronmanServer.h src/CharactersServer/Projectiles/ProjectileRyuServer.cpp src/CharactersServer/Projectiles/ProjectileRyuServer.h src/CharactersClient/ProjectileIronmanClient.cpp src/CharactersClient/ProjectileIronmanClient.h src/CharactersClient/ProjectileRyuClient.cpp src/CharactersClient/ProjectileRyuClient.h src/CharactersClient/ProjectileSpidermanClient.cpp src/CharactersClient/ProjectileSpidermanClient.h src/CharactersClient/ProjectileWolverineClient.cpp src/CharactersClient/ProjectileWolverineClient.h src/CharactersServer/Projectiles/ProjectileWolverineServer.cpp src/CharactersServer/Projectiles/ProjectileWolverineServer.h)
+        src/CharactersServer/Projectiles/ProjectileSpidermanServer.cpp
+        src/CharactersServer/Projectiles/ProjectileSpidermanServer.h
+        src/CharactersServer/Projectiles/ProjectileIronmanServer.cpp
+        src/CharactersServer/Projectiles/ProjectileIronmanServer.h
+        src/CharactersServer/Projectiles/ProjectileRyuServer.cpp
+        src/CharactersServer/Projectiles/ProjectileRyuServer.h
+        src/CharactersClient/ProjectileIronmanClient.cpp
+        src/CharactersClient/ProjectileIronmanClient.h
+        src/CharactersClient/ProjectileRyuClient.cpp
+        src/CharactersClient/ProjectileRyuClient.h
+        src/CharactersClient/ProjectileSpidermanClient.cpp
+        src/CharactersClient/ProjectileSpidermanClient.h
+        src/CharactersClient/ProjectileWolverineClient.cpp
+        src/CharactersClient/ProjectileWolverineClient.h
+        src/CharactersServer/Projectiles/ProjectileWolverineServer.cpp
+        src/CharactersServer/Projectiles/ProjectileWolverineServer.h
+        src/Music.cpp
+        src/Music.h
+
+        )
 
 
 
@@ -104,13 +123,16 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-build-debug/CMakeFiles/marvel_
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR}
-        ${SDL2_IMAGE_INCLUDE_DIR})
+        ${SDL2_IMAGE_INCLUDE_DIR}
+        ${SDL2_MIXER_INCLUDE_DIR})
 
 
 
 add_executable(marvel_vs_capcom ${SOURCE_FILES} src/Menu/MenuThreePlayers.cpp src/Menu/MenuThreePlayers.h)
 target_link_libraries(marvel_vs_capcom ${SDL2_LIBRARY}
-        ${SDL2_IMAGE_LIBRARIES})
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_MIXER_LIBRARIES})
 

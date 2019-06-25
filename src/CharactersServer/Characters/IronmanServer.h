@@ -12,6 +12,8 @@ public:
     IronmanServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                     int numberOfClient);
     void makeBuilderStruct(character_builder_t *builder, bool isFirstTeam);
+    character_number_t nameOfCharacter() override;
+
 
 
 private:

@@ -11,6 +11,7 @@
 #include <SDL2/SDL_mixer.h>
 #include "tools/logger/Logger.h"
 #include "data_structs.h"
+#include "Timer.h"
 #include<mutex>
 
  class Music
@@ -32,6 +33,7 @@
     Mix_Chunk* falling;
     Mix_Chunk* spiderIntro;
     Mix_Chunk* wolverIntro;
+    Timer* timer;
 
  public:
 

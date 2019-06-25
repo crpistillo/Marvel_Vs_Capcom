@@ -77,6 +77,12 @@ public:
 
     void updateBox();
 
+    int currentJumpingSprite;
+    int currentJumpingLeftSprite;
+    int currentJumpingRightSprite;
+
+    virtual character_number_t nameOfCharacter() = 0;
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);
@@ -131,9 +137,6 @@ protected:
 
     int currentStandingSprite;
     int currentWalkingSprite;
-    int currentJumpingSprite;
-    int currentJumpingRightSprite;
-    int currentJumpingLeftSprite;
     int currentWalkbackSprite;
     int currentIntroSprite;
     int currentPunchSprite;

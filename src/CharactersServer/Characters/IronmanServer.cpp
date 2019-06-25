@@ -274,3 +274,9 @@ void IronmanServer::update(int distance, int posContrincante, actions_t actionRe
         projectile->travel();
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
+
+character_number_t IronmanServer::nameOfCharacter() {
+    return IRONMAN;
+}
+
+

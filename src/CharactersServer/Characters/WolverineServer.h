@@ -12,6 +12,8 @@ public:
     WolverineServer(int PosX, int width, int height, int sobrante, int ancho, int anchoPantalla,
                     int numberOfClient);
     void makeBuilderStruct(character_builder_t* builder, bool isFirstTeam);
+    character_number_t nameOfCharacter() override;
+
 
 private:
     void moveRight(int distance, float vel, Box *boxOfEnemy, bool isGrounded, actions_t action);

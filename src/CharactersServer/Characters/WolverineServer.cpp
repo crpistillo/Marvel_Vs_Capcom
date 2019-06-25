@@ -294,5 +294,9 @@ void WolverineServer::update(int distance, int posContrincante, actions_t action
     CharacterServer::update(distance, posContrincante, actionRecieved, boxEnemy);
 }
 
+character_number_t WolverineServer::nameOfCharacter() {
+    return WOLVERINE;
+}
+
 
 
