@@ -273,7 +273,7 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     	effect = PROJECTILE;
 
 
-	else if (team[teamToUpdate]->getCurrentCharacter()->currentAction == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
+	else if (msgToUpdate->action == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
 	{
 		switch (team[teamToUpdate]->getCharacterInactive()->nameOfCharacter()){
             case SPIDERMAN:
