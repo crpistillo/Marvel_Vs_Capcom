@@ -252,7 +252,7 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
      	effect = STRONG_PUNCH;
 
     else if (isStrongKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
-    //|| isHurting(msgToUpdate->action) && isStrongKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    //|| isHurting(msgToUpdatce->action) && isStrongKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = STRONG_KICK;
 
     else if(isJump(msgToUpdate->action) &&
@@ -267,7 +267,9 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     else if (msgToUpdate->action == GRIP && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = THROWS;
 
-    else if(msgToUpdate->action == THROWPOWER)
+    else if(msgToUpdate->action == THROWPOWER && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1
+
+    && team[teamToUpdate]->getCurrentCharacter()->currentAction == THROWPOWER)
     	effect = PROJECTILE;
 
 

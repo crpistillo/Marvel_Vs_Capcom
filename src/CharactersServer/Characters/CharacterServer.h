@@ -83,6 +83,8 @@ public:
 
     virtual character_number_t nameOfCharacter() = 0;
 
+    bool isProjectileFirstSprite();
+
 protected:
     CharacterServer(int mPosX, int mPosY, int width, int sobrante, bool isLookingLeft, int widthSprite,
                     int heightSprite, int anchoPantalla, int numberOfClient);

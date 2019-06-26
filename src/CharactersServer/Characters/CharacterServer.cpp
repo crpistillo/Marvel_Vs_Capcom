@@ -640,5 +640,9 @@ void CharacterServer::updateBox() {
     characterBox->setCenter(getCentro(),mPosY);
 }
 
+bool CharacterServer::isProjectileFirstSprite() {
+    return projectile->currentSprite == 1;
+}
+
 
 
