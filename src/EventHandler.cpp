@@ -231,49 +231,49 @@ void EventHandler::switchDebug() {
 music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam)
 {
 	music_action_t effect;
-    if(isWeakPunch(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    if(isWeakPunch(team[teamToUpdate]->getCurrentCharacter()->currentAction) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
     //|| isHurting(msgToUpdate->action) && isWeakPunch(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = WEAK_PUNCH;
 
 
 
 
-    else if (isWeakKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    else if (isWeakKick(team[teamToUpdate]->getCurrentCharacter()->currentAction) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
     //|| isHurting(msgToUpdate->action) && isWeakKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = WEAK_KICK;
 
-    else if(isHit(msgToUpdate->action) && !isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction)
+    else if(isHit(team[teamToUpdate]->getCurrentCharacter()->currentAction) && !isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction)
             && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)// ||
 			//!isHurting(msgToUpdate->action) && isHit(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = HIT_MISS;
 
-    else if(isStrongPunch(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    else if(isStrongPunch(team[teamToUpdate]->getCurrentCharacter()->currentAction) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
     // || isHurting(msgToUpdate->action) && isStrongPunch(team[enemyTeam]->getCurrentCharacter()->currentAction))
      	effect = STRONG_PUNCH;
 
-    else if (isStrongKick(msgToUpdate->action) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
+    else if (isStrongKick(team[teamToUpdate]->getCurrentCharacter()->currentAction) && isHurting(team[enemyTeam]->getCurrentCharacter()->currentAction))
     //|| isHurting(msgToUpdatce->action) && isStrongKick(team[enemyTeam]->getCurrentCharacter()->currentAction))
     	effect = STRONG_KICK;
 
-    else if(isJump(msgToUpdate->action) &&
+    else if(isJump(team[teamToUpdate]->getCurrentCharacter()->currentAction) &&
     		 team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = JUMP;
 
-    else if(msgToUpdate->action == FALLING)
+    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == FALLING)
     	effect  = FALL;
 
-    else if(msgToUpdate->action == THROW)
+    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == THROW)
     	effect = THROWS; //uso el mismo sonido para estas 2 acciones
-    else if (msgToUpdate->action == GRIP && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
+    else if (team[teamToUpdate]->getCurrentCharacter()->currentAction == GRIP && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = THROWS;
 
-    else if(msgToUpdate->action == THROWPOWER && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1
+    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == THROWPOWER && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1
 
     && team[teamToUpdate]->getCurrentCharacter()->currentAction == THROWPOWER)
     	effect = PROJECTILE;
 
 
-	else if (msgToUpdate->action == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
+	else if (team[teamToUpdate]->getCurrentCharacter()->currentAction == CHANGEME && team[teamToUpdate]->getCurrentCharacter()->isStanding() && (team[teamToUpdate]->partnerNotDead()))
 	{
 		switch (team[teamToUpdate]->getCharacterInactive()->nameOfCharacter()){
             case SPIDERMAN:
