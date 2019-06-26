@@ -259,10 +259,10 @@ music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int team
     		 team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = JUMP;
 
-    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == FALLING)
+    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == FALLING && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
     	effect  = FALL;
 
-    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == THROW)
+    else if(team[teamToUpdate]->getCurrentCharacter()->currentAction == THROW && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
     	effect = THROWS; //uso el mismo sonido para estas 2 acciones
     else if (team[teamToUpdate]->getCurrentCharacter()->currentAction == GRIP && team[teamToUpdate]->getCurrentCharacter()->getSpriteNumber() == 1)
 		effect = THROWS;
