@@ -91,11 +91,14 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     //Daño solo al primer sprite de la animacion del golpe
     int spriteNumber;
-    if (action == P || action == K || action == PD || action == KD ||
-    	action == PS || action == PSD ||  action == KS || action == KSD){
-    	spriteNumber = team[giver]->getCurrentCharacter()->getSpriteNumber();
-    	if (spriteNumber!=1) return;
+    if(team[receiver]->getCurrentCharacter()->inTheGround()){
+        if (action == P || action == K || action == PD || action == KD ||
+            action == PS || action == PSD ||  action == KS || action == KSD){
+            spriteNumber = team[giver]->getCurrentCharacter()->getSpriteNumber();
+            if (spriteNumber!=1) return;
+        }
     }
+
 
     //Disparo
     if (team[receiver]->getCurrentCharacter()->getColisionable()->isProjectileColliding(team[giver]->getCurrentCharacter()->getProjectile()))
