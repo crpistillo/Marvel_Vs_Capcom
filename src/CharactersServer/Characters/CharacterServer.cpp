@@ -395,8 +395,10 @@ void CharacterServer::kickDown(actions_t kickDown) {
 //Tengo que ver si es normal
 void CharacterServer::throwPower() {
     this->currentAction = THROWPOWER;
-    if(projectile->active)
+    if(projectile->active){
+        currentAction = STANDING;
         return;
+    }
     if(currentThrowPowerSprite== lastThrowPowerSprite)
         projectile->launch(this->getPosX(), isLookingLeft ? -1 : 1, isLookingLeft);
     normalAction(&currentThrowPowerSprite,&lastThrowPowerSprite,STANDING);
