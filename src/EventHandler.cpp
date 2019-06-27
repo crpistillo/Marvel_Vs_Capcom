@@ -11,8 +11,7 @@ EventHandler::EventHandler(Team **team, std::mutex *mutex) {
     this->mutex = mutex;
 }
 
-int *EventHandler::getTeamDistances() {
-    int *distancia = new int[2];
+void EventHandler::getTeamDistances(int *distancia) {
     int posPlayers[2];
 
     mutex->lock();
@@ -21,9 +20,6 @@ int *EventHandler::getTeamDistances() {
     distancia[0] = computeDistance(team[0]->getCurrentCharacter(), team[1]->getCurrentCharacter());
     distancia[1] = computeDistance(team[1]->getCurrentCharacter(), team[0]->getCurrentCharacter());
     mutex->unlock();
-
-    return distancia;
-
 }
 
 int EventHandler::computeDistance(CharacterServer *character1, CharacterServer *character2) {
@@ -42,7 +38,8 @@ int EventHandler::computeDistance(CharacterServer *character1, CharacterServer *
 
 
 character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam) {
-    int *distancia = getTeamDistances();
+    int distancia[2];
+    getTeamDistances(distancia);
     actions_t actionToUpdate;
     music_action_t effect;
     effect = this->handleEffects(msgToUpdate,teamToUpdate,enemyTeam);
@@ -70,7 +67,6 @@ character_updater_t *EventHandler::handleEvent(incoming_msg_t *msgToUpdate, int 
 
     mutex->unlock();
 
-    delete distancia;
     return updater;
 }
 
@@ -118,8 +114,10 @@ void EventHandler::manageInteractiveActions(Queue<incoming_msg_t *> *queue, int 
 
     //any other interaction
     if (team[receiver]->getCurrentCharacter()->inTheGround())
-    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK) return;
-    	else	insertAction(queue, HURTINGGROUND, receiver);
+    	if (team[receiver]->getCurrentCharacter()->currentAction == BLOCK)
+    	    return;
+    	else
+    	    insertAction(queue, HURTINGGROUND, receiver);
     else
         insertAction(queue, HURTINGAIR, receiver);
 }
@@ -197,7 +195,8 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     int otherTeam;
     otherTeam = (toUpdate == 1 )? 0 : 1;
     round_action_t roundAction ;
-    int *distancia = getTeamDistances();
+    int distancia[2];
+    getTeamDistances(distancia);
 
 
     if (timer->getTimeThatPass() == 0)
@@ -216,6 +215,7 @@ character_updater_t *EventHandler::getRoundUpdaters(int toUpdate, Timer *timer) 
     character_updater_t* roundUpdater = makeUpdater(toUpdate,actionToUpdate , roundAction, NEW_ROUND);
     roundUpdater->firstDigitOfTime = 9;
     roundUpdater->secondDigitOfTime = 9;
+
 }
 
 void EventHandler::manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *queue) {
@@ -228,7 +228,6 @@ void EventHandler::manageDeadCharacter(int receiver, Queue<incoming_msg_t *> *qu
 
 void EventHandler::switchDebug() {
     debugMode = !debugMode;
-
 }
 
 music_action_t EventHandler::handleEffects(incoming_msg_t *msgToUpdate, int teamToUpdate, int enemyTeam)

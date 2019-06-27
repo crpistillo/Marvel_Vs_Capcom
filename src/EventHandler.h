@@ -19,7 +19,7 @@ public:
     Team **team;
     std::mutex *mutex;
 
-    int *getTeamDistances();
+    void getTeamDistances(int *distancia);
 
     int computeDistance(CharacterServer *character1, CharacterServer *character2);
 

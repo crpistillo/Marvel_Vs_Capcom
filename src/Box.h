@@ -62,6 +62,10 @@ public:
     void fixCollision(int *characterX, Box *otherBox);
 
     void setCenterX(int posX);
+
+    bool contactFromLeftSideRyu(Box *pBox);
+
+    bool contactFromRightSideRyu(Box *pBox);
 };
 
 

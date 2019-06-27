@@ -30,9 +30,9 @@ const int LAST_THROW_SPRITE = 22;
 const int LAST_FALLING_SPRITE = 52;
 
 
-const int widthStandingI = 102;
+const int widthStandingI = 42;
 const int heightStandingI = 103;
-const int widthWalkingI = 96;
+const int widthWalkingI = 80;
 const int heightWalkingI = 116;
 const int widthDuckI = 114;
 const int heightDuckI = 72;

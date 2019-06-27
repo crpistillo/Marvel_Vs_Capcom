@@ -323,6 +323,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
 
     int timeout = (1 * 100);
     int maxTimeouts = 0;
+    actions_t *accion = new actions_t;
+
 
     while (!getEndgame()) {
 
@@ -342,7 +344,6 @@ void TCPServer::receiveFromClient(int clientSocket) {
             iplist[clientSocket].isActive = true;
             connection_mtx[clientSocket].unlock();
 
-            actions_t *accion = new actions_t;
 
             if (socket->reciveData(bufAction, sizeof(actions_t)))
                 accion = (actions_t *) bufAction;
@@ -362,6 +363,8 @@ void TCPServer::receiveFromClient(int clientSocket) {
                 this->incoming_msges_queue->insert(msgQueue);
                 incoming_msg_mtx.unlock();
                 clientConnected = true;
+            } else{
+                delete msgQueue;
             }
         } else if ((rc == 0 || fds[0].revents != POLLIN)) {
             maxTimeouts++;
@@ -378,6 +381,7 @@ void TCPServer::receiveFromClient(int clientSocket) {
             }
         }
     }
+    delete accion;
 }
 
 void TCPServer::disconnectSocket(int clientSocket, Socket *socket) {
@@ -464,7 +468,6 @@ void TCPServer::runServer() {
     this->server_state = MENU_PHASE;
     server_state_mtx.unlock();
 
-    //TODO MENU PHASE CON CLASE MENU
     this->menu->runMenuPhase();
     this->menu->buildTeams(team);
     this->menu->sendSelectedCharacters(&constants);
@@ -647,7 +650,8 @@ void TCPServer::updateModel() {
         incoming_msges_queue->delete_data();
 
     }
-
+    delete timer;
+    delete eventHandler;
     setEndgame(true);
 }
 
@@ -687,7 +691,6 @@ void TCPServer::getTeams(int *teamToUpdate, int *enemyTeam, int client) {
         *teamToUpdate = 1;
         *enemyTeam = 0;
     }
-    return;
 }
 
 int TCPServer::getTeamNumber(int client) {
@@ -798,7 +801,7 @@ void TCPServer::putUpdatersInEachQueue(character_updater_t *update_msg, int clie
         }
         connection_mtx[i].unlock();
     }
-
+    delete update_msg;
 }
 
 
@@ -870,6 +873,7 @@ void TCPServer::roundRun(int whoWon, EventHandler *handler, int roundNum) {
         fpsManager->stop();
     }
     delete timer;
+    delete fpsManager;
 }
 
 int TCPServer::getCurrentWinner() {
