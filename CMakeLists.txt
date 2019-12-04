@@ -1,4 +1,4 @@
-    cmake_minimum_required(VERSION 3.13)
+    cmake_minimum_required(VERSION 3.10.2)
 project(marvel_vs_capcom)
 
 
@@ -119,7 +119,7 @@ set(SOURCE_FILES
 
 
 # includes cmake/FindSDL2.cmake
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-build-debug/CMakeFiles/marvel_vs_capcom.dir)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake-findsdls)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
