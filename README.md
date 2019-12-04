@@ -30,7 +30,7 @@ $ sudo apt install libsdl2-mixer-dev
 ```
 - compile 
 ```
-$ cmake CmakeLists.txt"
+$ cmake CmakeLists.txt
 $ make
 ```
 
@@ -40,11 +40,11 @@ $ make
 
 Running server: 
 ```
-./server.sh
+$ ./server.sh
 ```
 Running client:
 ```
-.client.sh 
+$ .client.sh 
 ```
 ##### Notes: 
 1- The client is set as local by default, if you want to use a different IP you can change it in the shell script "client.sh".
