@@ -50,3 +50,22 @@ $ .client.sh
 1- The client is set as local by default, if you want to use a different IP you can change it in the shell script "client.sh".
 
 2- You can change the quantity of players from 2 to 4 in the config.json file located on the folder config.
+
+3- As long as the team haves players connected the game will continue and the players that disconnected could return
+
+
+# Controls
+Use:
+Arrows to move
+1 to change character
+N to thrown projectile
+M to grab
+C to soft punch
+D for strong punch
+V for soft kick
+F for strong kick
+
+0 to mute sound
+
+
+
